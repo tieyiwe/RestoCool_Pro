@@ -12,3 +12,4 @@ next-env.d.ts
 /backups/
 /public/demo/
 .DS_Store
+/.data/

@@ -1,15 +1,20 @@
 import { boolean, index, jsonb, smallint, text, time, timestamp, uniqueIndex, uuid, pgTable, type AnyPgColumn } from "drizzle-orm/pg-core";
-import { id, timestamps } from "./_shared";
+import { id, timestamps, type I18nText } from "./_shared";
 import { memberRoleEnum, planEnum, planStatusEnum, themeEnum } from "./enums";
 
 export type RestaurantSettings = {
+  /** Set when the owner finishes (or skips) the setup wizard. */
+  onboardedAt?: string;
   seatingModes?: Array<"table" | "room" | "area" | "counter" | "takeaway" | "delivery">;
   qrStrategy?: "per_seat" | "generic";
   orderValidation?: "direct" | "server_confirms";
   enabledLocales?: string[];
-  features?: Partial<Record<"welcomeScreen" | "fortuneCookie" | "takeawayWhatsapp" | "share" | "localBadge", boolean>>;
+  features?: Partial<Record<FeatureFlag, boolean>>;
   inactivity?: { warnAfterSec: number; releaseAfterSec: number };
 };
+
+export const FEATURE_FLAGS = ["welcomeScreen", "fortuneCookie", "takeawayWhatsapp", "share", "localBadge"] as const;
+export type FeatureFlag = (typeof FEATURE_FLAGS)[number];
 
 export const restaurants = pgTable(
   "restaurants",
@@ -22,6 +27,8 @@ export const restaurants = pgTable(
     parentRestaurantId: uuid("parent_restaurant_id").references((): AnyPgColumn => restaurants.id, { onDelete: "set null" }),
     slug: text("slug").notNull(),
     name: text("name").notNull(),
+    /** Short presentation shown under the name on the public menu. */
+    description: jsonb("description").$type<I18nText>(),
     legalName: text("legal_name"),
     logoUrl: text("logo_url"),
     coverUrl: text("cover_url"),

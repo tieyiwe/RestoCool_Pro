@@ -4,3 +4,4 @@ export * from "./restaurants";
 export * from "./seating";
 export * from "./menu";
 export * from "./platform";
+export * from "./media";

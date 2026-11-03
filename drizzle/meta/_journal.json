@@ -15,6 +15,13 @@
       "when": 1793713229453,
       "tag": "0001_brand_accent_default",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793713789518,
+      "tag": "0002_m2_media_description",
+      "breakpoints": true
     }
   ]
 }
