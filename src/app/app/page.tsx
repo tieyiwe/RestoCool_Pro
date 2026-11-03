@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
@@ -9,13 +10,8 @@ export default async function DashboardPage() {
   const format = await getFormatter();
   const ctx = await getMemberContext();
 
-  if (!ctx) {
-    return (
-      <Card className="mx-auto max-w-md text-center">
-        <p className="text-muted-foreground">{t("noRestaurant")}</p>
-      </Card>
-    );
-  }
+  // Signed in but no restaurant yet: start onboarding.
+  if (!ctx) redirect("/app/new");
 
   const r = await ctx.repo.restaurant.get();
   if (!r) return null;

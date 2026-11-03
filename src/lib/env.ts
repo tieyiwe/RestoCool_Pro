@@ -1,7 +1,11 @@
 /** Server-only environment access with clear messages. */
 export const env = {
+  /** Accepts the Next.js name and the plain name Replit-managed Clerk may provide. */
+  clerkPublishableKey(): string {
+    return process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY || "";
+  },
   clerkConfigured(): boolean {
-    return Boolean(process.env.CLERK_SECRET_KEY && process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+    return Boolean(process.env.CLERK_SECRET_KEY && env.clerkPublishableKey());
   },
   /**
    * Local development without Clerk keys: act as the owner of DEV_RESTAURANT_SLUG.

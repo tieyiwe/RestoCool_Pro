@@ -1,22 +1,29 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server";
 
-const isProtected = createRouteMatcher(["/app(.*)", "/admin(.*)", "/api/app(.*)", "/api/admin(.*)"]);
+const PROTECTED = [/^\/app(\/|$)/, /^\/admin(\/|$)/, /^\/api\/app(\/|$)/, /^\/api\/admin(\/|$)/];
+const isProtected = (req: NextRequest) => PROTECTED.some((re) => re.test(req.nextUrl.pathname));
 
-const clerkConfigured = Boolean(process.env.CLERK_SECRET_KEY && process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY || "";
+const clerkConfigured = Boolean(process.env.CLERK_SECRET_KEY && publishableKey);
 const devBypass = process.env.NODE_ENV !== "production" && process.env.DEV_AUTH_BYPASS === "1";
 
-const withClerk = clerkMiddleware(async (auth, req) => {
-  if (isProtected(req)) await auth.protect();
-});
+const withClerk = clerkConfigured
+  ? clerkMiddleware(
+      async (auth, req) => {
+        if (isProtected(req)) await auth.protect();
+      },
+      { publishableKey, signInUrl: "/sign-in", signUpUrl: "/sign-up" },
+    )
+  : null;
 
 /**
- * Auth gate for the staff/owner app and admin. It also runs (server-side only, no client JS)
- * on the public menu so owners can preview an unpublished menu.
- * Fine-grained permissions (can()) are still checked in every handler.
+ * Sign-in gate for the owner app and admin. Clerk only proves identity; which restaurant a
+ * user may act in, and what they may do there, is checked in every handler (members + can()).
+ * It also runs (server-side only, no client JS) on the public menu so owners can preview drafts.
  */
 export default function middleware(req: NextRequest, event: NextFetchEvent) {
-  if (clerkConfigured) return withClerk(req, event);
+  if (withClerk) return withClerk(req, event);
   if (isProtected(req) && !devBypass) {
     if (req.nextUrl.pathname.startsWith("/api/")) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     return NextResponse.redirect(new URL("/sign-in", req.url));

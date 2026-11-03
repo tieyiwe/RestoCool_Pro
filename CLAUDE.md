@@ -393,3 +393,12 @@ Real payment provider integrations (the plumbing from section 8b is in scope, th
 2. Ask me any blocking question (maximum 5, multiple choice where possible).
 3. Post the M1 plan: folder structure, Drizzle schema for M1 tables, Clerk setup steps I must do in the Clerk dashboard, and Replit Secrets I must add.
 4. Wait for my "go".
+
+---
+
+## 18. Decisions taken during the build (these override the sections above)
+
+- **Tenants are app-managed (no Clerk Organizations).** Clerk only proves identity (`clerk_user_id`). Restaurant membership and the RestoCool role (owner, manager, server, kitchen, cashier) live in the `members` table. A signed-in user with no restaurant is sent to `/app/new` to create one; a user in several restaurants switches with the header switcher (active restaurant stored in an http-only cookie and always re-checked against `members`). There is no Clerk webhook and no `CLERK_WEBHOOK_SECRET`. Works with Replit-managed Clerk.
+- **Branches** are full restaurants with `parent_restaurant_id`.
+- **Public menu URLs have no locale**: `/r/{slug}`, always French on a new visit; the visitor's language lives in sessionStorage. The staff app remembers the language in a cookie.
+- **Price display**: `5 300 F` with U+202F narrow spaces (`formatFCFA`).

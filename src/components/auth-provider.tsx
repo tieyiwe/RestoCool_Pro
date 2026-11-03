@@ -10,7 +10,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const inner = <NextIntlClientProvider>{children}</NextIntlClientProvider>;
   if (!env.clerkConfigured()) return inner;
   return (
-    <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up" signInFallbackRedirectUrl="/app" signUpFallbackRedirectUrl="/app">
+    <ClerkProvider
+      publishableKey={env.clerkPublishableKey()}
+      signInUrl="/sign-in"
+      signUpUrl="/sign-up"
+      signInFallbackRedirectUrl="/app"
+      signUpFallbackRedirectUrl="/app"
+    >
       {inner}
     </ClerkProvider>
   );

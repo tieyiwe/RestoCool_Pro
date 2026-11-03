@@ -20,7 +20,8 @@
     "onRequest": "价格面议",
     "signIn": "登录",
     "signOut": "退出登录",
-    "authNotConfigured": "登录尚未配置。请在 Replit Secrets 中添加 Clerk 密钥。"
+    "authNotConfigured": "登录尚未配置。请在 Replit Secrets 中添加 Clerk 密钥。",
+    "apply": "确定"
   },
   "landing": {
     "title": "为布基纳法索餐厅打造的 100% 本地解决方案",
@@ -46,7 +47,7 @@
     "staff": "员工",
     "settings": "设置",
     "about": "关于",
-    "noRestaurant": "没有活动的餐厅。请创建或选择您的餐厅以继续。",
+    "noRestaurant": "您还没有餐厅。",
     "createRestaurant": "创建我的餐厅",
     "stats": {
       "categories": "分类",
@@ -73,7 +74,21 @@
     },
     "devBypass": "开发模式：模拟登录（演示餐厅店主）。",
     "recentActivity": "最近活动",
-    "noActivity": "暂无活动。"
+    "noActivity": "暂无活动。",
+    "newRestaurant": {
+      "title": "创建您的餐厅",
+      "intro": "Laafi！先填写几项信息，其余内容可以稍后完善。",
+      "name": "餐厅名称",
+      "namePlaceholder": "例如：Maquis Le Baobab",
+      "city": "城市",
+      "submit": "创建我的餐厅",
+      "submitting": "正在创建…",
+      "trial": "免费试用专业版 30 天，无需承诺。",
+      "errorName": "请输入至少 2 个字符的名称。",
+      "errorLimit": "您已达到餐厅数量上限。如需添加，请通过 WhatsApp 联系我们。",
+      "addAnother": "添加餐厅"
+    },
+    "switchRestaurant": "切换餐厅"
   },
   "admin": {
     "title": "RestoCool 管理后台",

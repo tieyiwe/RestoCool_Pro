@@ -16,8 +16,8 @@ Vitest · Playwright.
 1. **Import**: Replit → *Create Repl* → *Import from GitHub* → `tieyiwe/RestoCool_Pro`.
 2. **Database**: open the *Database* pane and create a PostgreSQL database
    (`DATABASE_URL` is added to Secrets for you).
-3. **Secrets**: add the variables from [`.env.example`](./.env.example).
-   Until Clerk is set up you can add `DEV_AUTH_BYPASS=1` to try `/app` and `/admin` in development.
+3. **Secrets**: add the variables from [`.env.example`](./.env.example) that are not already there.
+   Without Clerk keys, `DEV_AUTH_BYPASS=1` lets you try `/app` and `/admin` in development.
 4. **Shell**:
    ```bash
    npm install
@@ -26,17 +26,16 @@ Vitest · Playwright.
    ```
 5. Press **Run**. Open `/r/restaurant-demo` (public menu), `/app` (owner) and `/admin`.
 
-### Clerk setup (dashboard.clerk.com)
+### Sign-in (Clerk)
 
-1. Create an application (email + Google sign-in is enough to start).
-2. **Configure → Organizations**: enable Organizations. One organization = one restaurant.
-   Turn off personal accounts if offered (staff always work inside a restaurant).
-3. **Configure → Webhooks** → *Add endpoint*: `https://<your-app>/api/webhooks/clerk`, events
-   `organization.created`, `organizationMembership.created`, `organizationMembership.updated`,
-   `organizationMembership.deleted`. Copy the signing secret to `CLERK_WEBHOOK_SECRET`.
-4. Copy the publishable and secret keys to Replit Secrets.
+Clerk only handles sign-in. Restaurants, memberships and roles are stored in PostgreSQL
+(`members` table), so there is nothing to configure in Clerk beyond the keys:
 
-The app also provisions the restaurant on first sign-in, so a late webhook never blocks an owner.
+- **Replit-managed Clerk**: keys are added automatically. Nothing else to do.
+- **Your own Clerk app**: copy the publishable and secret keys into Replit Secrets.
+
+After signing in, a new user is sent to `/app/new` to create their restaurant (30-day Pro trial).
+Someone who belongs to several restaurants switches between them from the header.
 
 ## Scripts
 
@@ -62,7 +61,7 @@ The app also provisions the restaurant on first sign-in, so a late webhook never
   To add Mooré or Dioula later, add the code to `src/i18n/config.ts` and a messages file.
 - **Money** is integer FCFA, shown as `5 300 F` (`formatFCFA`). A missing price shows « Sur demande », never `0 F`.
 - **Branches**: a branch is a full restaurant with `parent_restaurant_id`.
-- **Roles**: Clerk decides who can sign in to which restaurant; our `members` table holds the RestoCool role.
+- **Tenants and roles**: app-managed. Clerk proves identity; the `members` table decides which restaurants a user can open and with which role. The active restaurant cookie is re-checked against `members` on every request.
 
 ## M1: Foundation
 
@@ -80,5 +79,6 @@ The app also provisions the restaurant on first sign-in, so a late webhook never
 2. `/r/restaurant-demo` → categories bar, FCFA prices, Chinese names under French ones,
    « Sur demande » on the grilled fish, `48 000 F / 78 000 F` on the champagne.
 3. `/app` → dashboard: Pro trial badge, counts (6 / 40 / 14 / 2), recent activity. Switch FR / EN / 中文.
-4. `/admin` → restaurant list.
-5. `/api/health` → `{"status":"ok","db":"ok"}`.
+4. `/app/new` → create a second restaurant; you land on its (empty) dashboard; switch back with the header selector.
+5. `/admin` → restaurant list.
+6. `/api/health` → `{"status":"ok","db":"ok"}`.

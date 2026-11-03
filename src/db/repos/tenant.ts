@@ -100,6 +100,24 @@ export async function findRestaurantBySlug(db: DB, slug: string, opts: { include
   return r;
 }
 
-export async function findRestaurantByClerkOrg(db: DB, clerkOrgId: string) {
-  return db.query.restaurants.findFirst({ where: eq(restaurants.clerkOrgId, clerkOrgId) });
+/**
+ * Restaurants a signed-in user belongs to (active memberships only).
+ * Platform-level lookup keyed by the authenticated Clerk user id: it is how we
+ * discover the tenant, before any tenantRepo exists.
+ */
+export async function membershipsForUser(db: DB, clerkUserId: string) {
+  return db
+    .select({
+      memberId: members.id,
+      role: members.role,
+      restaurantId: restaurants.id,
+      restaurantName: restaurants.name,
+      restaurantSlug: restaurants.slug,
+    })
+    .from(members)
+    .innerJoin(restaurants, eq(restaurants.id, members.restaurantId))
+    .where(and(eq(members.clerkUserId, clerkUserId), eq(members.active, true)))
+    .orderBy(asc(members.createdAt));
 }
+
+export type Membership = Awaited<ReturnType<typeof membershipsForUser>>[number];

@@ -1,5 +1,5 @@
 {
-  "id": "9495cfd8-561a-453d-a77c-6c388106326c",
+  "id": "0149e031-63b3-4e62-83e2-bdb96f7a8360",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -75,6 +75,21 @@
           "columns": [
             {
               "expression": "restaurant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "members_user_idx": {
+          "name": "members_user_idx",
+          "columns": [
+            {
+              "expression": "clerk_user_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -230,12 +245,6 @@
         "parent_restaurant_id": {
           "name": "parent_restaurant_id",
           "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "clerk_org_id": {
-          "name": "clerk_org_id",
-          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -448,15 +457,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "restaurants_clerk_org_id_unique": {
-          "name": "restaurants_clerk_org_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "clerk_org_id"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

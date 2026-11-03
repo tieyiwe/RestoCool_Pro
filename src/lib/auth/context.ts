@@ -1,64 +1,84 @@
 import "server-only";
+import { cookies } from "next/headers";
 import { cache } from "react";
 import { getDb } from "@/db";
-import { findRestaurantByClerkOrg, findRestaurantBySlug, tenantRepo, type TenantRepo } from "@/db/repos/tenant";
+import { findRestaurantBySlug, membershipsForUser, tenantRepo, type Membership, type TenantRepo } from "@/db/repos/tenant";
 import { env } from "@/lib/env";
 import { ForbiddenError, UnauthorizedError } from "@/lib/errors";
-import { ensureMember, ensureRestaurantForOrg, roleFromClerk } from "@/lib/restaurants/provision";
 import { can, type Action, type Actor } from "./can";
 
 type MemberActor = Extract<Actor, { kind: "member" }>;
 type SuperadminActor = Extract<Actor, { kind: "superadmin" }>;
 
-export type MemberContext = { actor: MemberActor; repo: TenantRepo };
+export type Identity = { userId: string; email: string | null; name: string | null };
+export type MemberContext = { actor: MemberActor; repo: TenantRepo; memberships: Membership[] };
 
-async function clerkSession(): Promise<{ userId: string | null; orgId: string | null; orgRole: string | null }> {
+/** Cookie holding the restaurant the user is currently working in (validated against memberships). */
+export const ACTIVE_RESTAURANT_COOKIE = "rc_restaurant";
+
+const DEV_USER: Identity = { userId: "dev-owner", email: "dev@localhost", name: "Dev" };
+
+/** Who is signed in (Clerk proves identity only; restaurants come from our members table). */
+export const getIdentity = cache(async (): Promise<Identity | null> => {
+  if (!env.clerkConfigured()) return env.devAuthBypass() ? DEV_USER : null;
   const { auth } = await import("@clerk/nextjs/server");
-  const a = await auth();
-  return { userId: a.userId ?? null, orgId: a.orgId ?? null, orgRole: a.orgRole ?? null };
-}
-
-/**
- * The signed-in owner/manager for the active Clerk Organization (= restaurant).
- * Returns null when signed out, when no org is active, or when the user is not a member.
- */
-export const getMemberContext = cache(async (): Promise<MemberContext | null> => {
-  const db = getDb();
-
-  if (!env.clerkConfigured()) {
-    if (!env.devAuthBypass()) return null;
-    const r = await findRestaurantBySlug(db, env.devRestaurantSlug(), { includeUnpublished: true });
-    if (!r) return null;
-    return {
-      actor: { kind: "member", userId: "dev-owner", restaurantId: r.id, role: "owner" },
-      repo: tenantRepo(db, r.id),
-    };
-  }
-
-  const { userId, orgId, orgRole } = await clerkSession();
-  if (!userId || !orgId) return null;
-  let r = await findRestaurantByClerkOrg(db, orgId);
-  if (!r) {
-    // Webhook not received yet: provision from Clerk directly (idempotent).
-    const { clerkClient } = await import("@clerk/nextjs/server");
-    const org = await (await clerkClient()).organizations.getOrganization({ organizationId: orgId });
-    r = await ensureRestaurantForOrg(db, { id: org.id, name: org.name });
-  }
-  const repo = tenantRepo(db, r.id);
-  let m = await repo.members.byClerkUser(userId);
-  if (!m && orgRole) {
-    // The session proves current org membership; record it with the mapped role.
-    m = await ensureMember(db, r.id, { clerkUserId: userId, role: roleFromClerk(orgRole) });
-    if (!m.active) return null;
-  }
-  if (!m) return null;
-  return { actor: { kind: "member", userId, restaurantId: r.id, role: m.role }, repo };
+  const { userId } = await auth();
+  return userId ? { userId, email: null, name: null } : null;
 });
 
-/** Super admin = signed-in Clerk user whose primary email is in SUPERADMIN_EMAILS. */
+/** Email and display name, fetched from Clerk only when needed (e.g. creating a restaurant). */
+export async function getIdentityProfile(): Promise<Identity | null> {
+  const id = await getIdentity();
+  if (!id || !env.clerkConfigured()) return id;
+  const { currentUser } = await import("@clerk/nextjs/server");
+  const user = await currentUser();
+  if (!user) return null;
+  return {
+    userId: user.id,
+    email: user.primaryEmailAddress?.emailAddress ?? null,
+    name: [user.firstName, user.lastName].filter(Boolean).join(" ") || null,
+  };
+}
+
+/** All restaurants the signed-in user can work in. */
+export const getMemberships = cache(async (): Promise<Membership[]> => {
+  const id = await getIdentity();
+  if (!id) return [];
+  const db = getDb();
+  const rows = await membershipsForUser(db, id.userId);
+  if (id === DEV_USER) {
+    // Dev bypass: also act as owner of the demo restaurant without a member row.
+    const demo = await findRestaurantBySlug(db, env.devRestaurantSlug(), { includeUnpublished: true });
+    if (demo && !rows.some((m) => m.restaurantId === demo.id)) {
+      rows.unshift({ memberId: "dev", role: "owner", restaurantId: demo.id, restaurantName: demo.name, restaurantSlug: demo.slug });
+    }
+  }
+  return rows;
+});
+
+/**
+ * The signed-in member in their active restaurant. The restaurant comes from the cookie
+ * only if the user really is a member of it; otherwise their first restaurant.
+ * Returns null when signed out or when the user has no restaurant yet.
+ */
+export const getMemberContext = cache(async (): Promise<MemberContext | null> => {
+  const id = await getIdentity();
+  if (!id) return null;
+  const memberships = await getMemberships();
+  if (memberships.length === 0) return null;
+  const wanted = (await cookies()).get(ACTIVE_RESTAURANT_COOKIE)?.value;
+  const active = memberships.find((m) => m.restaurantId === wanted) ?? memberships[0]!;
+  return {
+    actor: { kind: "member", userId: id.userId, restaurantId: active.restaurantId, role: active.role },
+    repo: tenantRepo(getDb(), active.restaurantId),
+    memberships,
+  };
+});
+
+/** Super admin = signed-in Clerk user with a verified email listed in SUPERADMIN_EMAILS. */
 export const getSuperadmin = cache(async (): Promise<SuperadminActor | null> => {
   if (!env.clerkConfigured()) {
-    return env.devAuthBypass() ? { kind: "superadmin", userId: "dev-superadmin", email: "dev@localhost" } : null;
+    return env.devAuthBypass() ? { kind: "superadmin", userId: DEV_USER.userId, email: DEV_USER.email! } : null;
   }
   const { currentUser } = await import("@clerk/nextjs/server");
   const user = await currentUser();

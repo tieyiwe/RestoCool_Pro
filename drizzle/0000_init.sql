@@ -30,7 +30,6 @@ CREATE TABLE "opening_hours" (
 CREATE TABLE "restaurants" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"parent_restaurant_id" uuid,
-	"clerk_org_id" text,
 	"slug" text NOT NULL,
 	"name" text NOT NULL,
 	"legal_name" text,
@@ -54,8 +53,7 @@ CREATE TABLE "restaurants" (
 	"published" boolean DEFAULT false NOT NULL,
 	"powered_badge" boolean DEFAULT true NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "restaurants_clerk_org_id_unique" UNIQUE("clerk_org_id")
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "areas" (
@@ -191,6 +189,7 @@ ALTER TABLE "menu_items" ADD CONSTRAINT "menu_items_category_id_menu_categories_
 ALTER TABLE "audit_log" ADD CONSTRAINT "audit_log_restaurant_id_restaurants_id_fk" FOREIGN KEY ("restaurant_id") REFERENCES "public"."restaurants"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "plan_events" ADD CONSTRAINT "plan_events_restaurant_id_restaurants_id_fk" FOREIGN KEY ("restaurant_id") REFERENCES "public"."restaurants"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "members_restaurant_idx" ON "members" USING btree ("restaurant_id");--> statement-breakpoint
+CREATE INDEX "members_user_idx" ON "members" USING btree ("clerk_user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "members_restaurant_user_uq" ON "members" USING btree ("restaurant_id","clerk_user_id");--> statement-breakpoint
 CREATE INDEX "opening_hours_restaurant_idx" ON "opening_hours" USING btree ("restaurant_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "restaurants_slug_uq" ON "restaurants" USING btree ("slug");--> statement-breakpoint

@@ -20,7 +20,6 @@ export const restaurants = pgTable(
      * Tenant scoping stays one restaurant_id everywhere.
      */
     parentRestaurantId: uuid("parent_restaurant_id").references((): AnyPgColumn => restaurants.id, { onDelete: "set null" }),
-    clerkOrgId: text("clerk_org_id").unique(),
     slug: text("slug").notNull(),
     name: text("name").notNull(),
     legalName: text("legal_name"),
@@ -48,7 +47,11 @@ export const restaurants = pgTable(
   (t) => [uniqueIndex("restaurants_slug_uq").on(t.slug), index("restaurants_parent_idx").on(t.parentRestaurantId)],
 );
 
-/** People who sign in with Clerk and their RestoCool role in a restaurant. */
+/**
+ * Who can sign in to which restaurant, and with which RestoCool role.
+ * App-managed tenants: Clerk only proves identity (clerk_user_id); restaurant
+ * membership lives here, not in Clerk Organizations.
+ */
 export const members = pgTable(
   "members",
   {
@@ -63,6 +66,7 @@ export const members = pgTable(
   },
   (t) => [
     index("members_restaurant_idx").on(t.restaurantId),
+    index("members_user_idx").on(t.clerkUserId),
     uniqueIndex("members_restaurant_user_uq").on(t.restaurantId, t.clerkUserId),
   ],
 );

@@ -20,7 +20,8 @@
     "onRequest": "Sur demande",
     "signIn": "Se connecter",
     "signOut": "Se déconnecter",
-    "authNotConfigured": "Connexion pas encore configurée. Ajoutez les clés Clerk dans Replit Secrets."
+    "authNotConfigured": "Connexion pas encore configurée. Ajoutez les clés Clerk dans Replit Secrets.",
+    "apply": "Valider"
   },
   "landing": {
     "title": "La solution 100 % locale pour les restaurants du Burkina",
@@ -46,7 +47,7 @@
     "staff": "Personnel",
     "settings": "Paramètres",
     "about": "À propos",
-    "noRestaurant": "Aucun restaurant actif. Créez ou sélectionnez votre restaurant pour continuer.",
+    "noRestaurant": "Vous n’avez pas encore de restaurant.",
     "createRestaurant": "Créer mon restaurant",
     "stats": {
       "categories": "Catégories",
@@ -73,7 +74,21 @@
     },
     "devBypass": "Mode développement : connexion simulée (propriétaire du restaurant de démo).",
     "recentActivity": "Activité récente",
-    "noActivity": "Aucune activité pour le moment."
+    "noActivity": "Aucune activité pour le moment.",
+    "newRestaurant": {
+      "title": "Créer votre restaurant",
+      "intro": "Laafi ! Quelques informations pour commencer. Vous pourrez tout compléter ensuite.",
+      "name": "Nom du restaurant",
+      "namePlaceholder": "Ex. : Maquis Le Baobab",
+      "city": "Ville",
+      "submit": "Créer mon restaurant",
+      "submitting": "Création…",
+      "trial": "30 jours d’essai Pro offerts, sans engagement.",
+      "errorName": "Indiquez un nom d’au moins 2 caractères.",
+      "errorLimit": "Vous avez atteint le nombre maximum de restaurants. Contactez-nous sur WhatsApp pour en ajouter.",
+      "addAnother": "Ajouter un restaurant"
+    },
+    "switchRestaurant": "Changer de restaurant"
   },
   "admin": {
     "title": "Administration RestoCool",

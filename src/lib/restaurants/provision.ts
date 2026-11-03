@@ -1,17 +1,22 @@
-import { and, eq, like } from "drizzle-orm";
+import { like } from "drizzle-orm";
+import { z } from "zod";
 import type { DB } from "@/db";
 import { members, planEvents, restaurants } from "@/db/schema";
 import { TRIAL_DAYS, TRIAL_PLAN } from "@/config/plans";
 import { writeAudit } from "@/lib/audit";
+import type { Actor } from "@/lib/auth/can";
 import { RESERVED_SLUGS, slugify } from "@/lib/slug";
-import type { MemberRole } from "@/lib/auth/can";
 
-/** Clerk org role → RestoCool role. Admins of the Clerk org are owners; everyone else starts as manager. */
-export function roleFromClerk(orgRole: string | null | undefined): MemberRole {
-  return orgRole === "org:admin" ? "owner" : "manager";
-}
+/** Maximum restaurants one person can create themselves (branches come with the Business plan, M7). */
+export const MAX_OWNED_RESTAURANTS = 3;
 
-async function uniqueSlug(db: DB, name: string): Promise<string> {
+export const CreateRestaurantInput = z.object({
+  name: z.string().trim().min(2).max(80),
+  city: z.string().trim().min(2).max(60).default("Ouagadougou"),
+});
+export type CreateRestaurantInput = z.infer<typeof CreateRestaurantInput>;
+
+async function uniqueSlug(db: Pick<DB, "select">, name: string): Promise<string> {
   const base = slugify(name);
   const taken = new Set(
     (await db.select({ slug: restaurants.slug }).from(restaurants).where(like(restaurants.slug, `${base}%`))).map((r) => r.slug),
@@ -24,72 +29,48 @@ async function uniqueSlug(db: DB, name: string): Promise<string> {
 }
 
 /**
- * Idempotent: one Clerk Organization = one restaurant.
- * Called by the Clerk webhook and, as a fallback, on first sign-in (webhook lag).
+ * A signed-in user creates a restaurant and becomes its owner.
+ * Starts a 30-day Pro trial; the menu stays unpublished until the owner publishes it.
  */
-export async function ensureRestaurantForOrg(db: DB, org: { id: string; name: string }) {
-  const existing = await db.query.restaurants.findFirst({ where: eq(restaurants.clerkOrgId, org.id) });
-  if (existing) return existing;
-
+export async function createRestaurantForUser(
+  db: DB,
+  user: { clerkUserId: string; email?: string | null; name?: string | null },
+  input: CreateRestaurantInput,
+) {
+  const data = CreateRestaurantInput.parse(input);
   return db.transaction(async (tx) => {
-    const slug = await uniqueSlug(tx as unknown as DB, org.name);
+    const slug = await uniqueSlug(tx, data.name);
     const expires = new Date(Date.now() + TRIAL_DAYS * 86_400_000);
-    const [created] = await tx
+    const [restaurant] = await tx
       .insert(restaurants)
-      .values({ clerkOrgId: org.id, name: org.name, slug, plan: TRIAL_PLAN, planStatus: "trial", planExpiresAt: expires })
-      .onConflictDoNothing({ target: restaurants.clerkOrgId })
+      .values({ name: data.name, city: data.city, slug, plan: TRIAL_PLAN, planStatus: "trial", planExpiresAt: expires })
       .returning();
-    if (!created) {
-      // Lost a race with a concurrent request: return the winner.
-      const again = await tx.query.restaurants.findFirst({ where: eq(restaurants.clerkOrgId, org.id) });
-      if (!again) throw new Error("restaurant provisioning race");
-      return again;
-    }
+    if (!restaurant) throw new Error("restaurant insert failed");
+    const [owner] = await tx
+      .insert(members)
+      .values({
+        restaurantId: restaurant.id,
+        clerkUserId: user.clerkUserId,
+        role: "owner",
+        email: user.email ?? null,
+        name: user.name ?? null,
+      })
+      .returning();
     await tx.insert(planEvents).values({
-      restaurantId: created.id,
+      restaurantId: restaurant.id,
       toPlan: TRIAL_PLAN,
       toStatus: "trial",
       automatic: true,
       reference: `trial:${TRIAL_DAYS}d`,
     });
-    await writeAudit(tx, null, {
-      restaurantId: created.id,
+    const actor: Actor = { kind: "member", userId: user.clerkUserId, restaurantId: restaurant.id, role: "owner" };
+    await writeAudit(tx, actor, {
+      restaurantId: restaurant.id,
       action: "restaurant.created",
       entity: "restaurant",
-      entityId: created.id,
-      data: { clerkOrgId: org.id, slug },
+      entityId: restaurant.id,
+      data: { slug, ownerMemberId: owner?.id },
     });
-    return created;
+    return restaurant;
   });
-}
-
-/**
- * Create the member row if missing. An existing row keeps its role and active flag,
- * unless `reactivate` is set (Clerk webhook: the user was explicitly re-added to the org).
- */
-export async function ensureMember(
-  db: DB,
-  restaurantId: string,
-  m: { clerkUserId: string; role: MemberRole; email?: string | null; name?: string | null },
-  opts: { reactivate?: boolean } = {},
-) {
-  const values = { restaurantId, clerkUserId: m.clerkUserId, role: m.role, email: m.email ?? null, name: m.name ?? null };
-  const target = [members.restaurantId, members.clerkUserId];
-  if (opts.reactivate) {
-    await db.insert(members).values(values).onConflictDoUpdate({ target, set: { active: true } });
-  } else {
-    await db.insert(members).values(values).onConflictDoNothing({ target });
-  }
-  const row = await db.query.members.findFirst({
-    where: and(eq(members.restaurantId, restaurantId), eq(members.clerkUserId, m.clerkUserId)),
-  });
-  if (!row) throw new Error("member provisioning failed");
-  return row;
-}
-
-export async function deactivateMember(db: DB, restaurantId: string, clerkUserId: string) {
-  await db
-    .update(members)
-    .set({ active: false })
-    .where(and(eq(members.restaurantId, restaurantId), eq(members.clerkUserId, clerkUserId)));
 }

@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { AuthProvider } from "@/components/auth-provider";
 import { Logo } from "@/components/brand/logo";
 import { LocaleSwitcher } from "@/components/locale-switcher";
+import { RestaurantSwitcher } from "@/components/restaurant-switcher";
 import { UserMenu } from "@/components/user-menu";
 import { env } from "@/lib/env";
 
@@ -24,7 +25,8 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
           <Link href="/app" aria-label="RestoCool">
             <Logo />
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <RestaurantSwitcher />
             <LocaleSwitcher />
             <UserMenu />
           </div>
