@@ -1,0 +1,395 @@
+# MASTER PROMPT: RestoCool, the multi-restaurant digital menu, ordering and management platform
+
+> Paste this whole file into Claude Code at the start of the project (or save it as `CLAUDE.md` at the repo root).
+> Build it milestone by milestone. After each milestone: run the tests, show me the result, and wait for my "go" before starting the next one.
+
+---
+
+## 0. Who you are and how to work
+
+You are a senior full-stack engineer and product designer building a production SaaS for restaurants in **Burkina Faso** (Ouagadougou first, then Bobo-Dioulasso and the rest of West Africa). You build efficiently, at the lowest possible running cost, with code that a small team can maintain.
+
+Working rules:
+- Work in **milestones** (section 14). Keep each one shippable. Don't start the next milestone until I approve.
+- Before writing code for a milestone, post a short plan: files you'll create, tables you'll change, and the risks you see.
+- Prefer boring, proven tools. **No paid third-party service** except Clerk (auth) and Replit itself. If something would need a paid service, build a free alternative or leave a clean extension point and tell me.
+- Every database query must be scoped to the current restaurant (tenant). Treat a cross-tenant data leak as a critical bug.
+- Write in TypeScript (strict). No `any` unless justified in a comment.
+- All user-facing text goes through i18n (French default, English, Chinese). Never hardcode UI strings.
+- Mobile first. Test every screen at 360px, 390px, 768px (tablet), 1024px and 1440px.
+- Ask me before making a decision that is hard to undo (schema shape, auth model, pricing logic).
+
+---
+
+## 1. Product summary
+
+**Brand:** **RestoCool** (written "RestoCool", logo in two parts: **Resto** + **Cool**). A product of **TIBLOGICS**.
+**Domains:** main site **restocool.com**. **restaucool.com** redirects to it (301) to catch the other spelling. **restofaso.com** is reserved for Burkina campaigns and also redirects for now.
+**Tagline (FR):** « RestoCool : votre menu, vos commandes, vos tables. Simple. »
+**URL scheme:** public menus at `restocool.com/r/{slug}` (short and printable on QR cards), staff and owner app at `restocool.com/app`, super admin at `restocool.com/admin`, marketing landing page at `restocool.com`.
+**Brand tone:** warm, simple, modern, and proud to be from Burkina. French first. Never sounds expensive or exclusive, since small maquis and big restaurants both belong.
+**"100 % local" positioning (core of the brand):** Burkina Faso is actively promoting local products and local solutions (« consommons local »). RestoCool must clearly read as **a solution made for Burkina, by and for Burkinabè businesses**, not an imported foreign app.
+- **Taglines and badges to use** (FR first, with EN versions):
+  - « **100 % local** » badge (green, with a discreet Burkina-inspired accent) on the landing page, the sign-up page and the app's "About" screen.
+  - « Pensé au Burkina, pour les restaurants du Burkina » / "Designed in Burkina, for Burkina's restaurants".
+  - « Fièrement burkinabè » / "Proudly Burkinabè".
+  - « Payez en FCFA, avec Orange Money et Moov Money » / "Pay in FCFA, with Orange Money and Moov Money".
+  - « Support en français, par WhatsApp » / "Support in French, by WhatsApp".
+- **Show it, don't just say it:** FCFA everywhere, +226 numbers, Orange Money and Moov logos (text names until logo use is approved), local cities in examples (Ouagadougou, Bobo-Dioulasso, Koudougou), local dishes in the demo restaurant (riz gras, tô, poulet bicyclette, brochettes, jus de bissap, jus de gingembre), photos and illustrations of local settings (maquis, terrasses), and Mooré/Dioula greetings in the UI (« Laafi », « Barka ») next to French.
+- **Optional badge for restaurants:** owners can show a « Restaurant 100 % local » or « Produits locaux » tag on dishes or on their menu (for example "made with local shea butter, local chicken, local bissap"), with a filter for customers.
+- **Visual identity:** draw on Burkina's colors (red, green, yellow star) as **accents only**, without copying the national flag or coat of arms, and inspired by Faso Dan Fani woven patterns as a subtle texture. Never use official state symbols in the logo.
+- **Honesty rule (mandatory):** every "local" claim must be true. Don't claim local hosting (servers are on Replit, outside Burkina) or a local office/team unless I confirm it. Before writing the landing page, ask me to confirm which of these are true: founder is Burkinabè, team or support people based in Burkina, registered company in Burkina, local partners. Use only the confirmed ones.
+
+**Brand identity to create in M1:** a simple logo (SVG, works at 32px for the favicon and app icon), a primary color, and a neutral palette. Each restaurant's own branding always comes first on its public menu, and RestoCool only appears in the footer badge.
+
+
+A platform where **any restaurant** can sign up, create its profile, build its menu with photos, print QR codes, and run its dining room from a phone or tablet:
+
+- **Customers** scan a QR code, browse the menu in French, English or Chinese, add dishes, and send the order to the restaurant. They never need an account or an app.
+- **Staff** (servers, kitchen, cashier) receive orders live, confirm them, prepare them, serve them, and mark them paid.
+- **Owners and managers** manage the menu, tables/areas, staff profiles, reservations, opening hours, and see sales statistics.
+- **TIBLOGICS (super admin)** manages restaurants, plans and billing for the whole platform.
+
+It's an independent, new product. It reuses the ideas of a single-restaurant prototype we built earlier, but shares no code, data or branding with it. The features listed in section 5 must all exist in the platform as per-restaurant options.
+
+**Market facts to design for:**
+- Currency: **FCFA (XOF)**, no decimals, displayed as `5 300 F` (narrow space as thousands separator, "F" suffix).
+- Timezone: `Africa/Ouagadougou` (UTC+0, no daylight saving).
+- Phones: `+226` followed by 8 digits, displayed `+226 77 29 98 78`.
+- Payments are mostly **cash, Orange Money and Moov Money**, confirmed by hand.
+- **WhatsApp** is the main communication channel. Use free click-to-chat links (`https://wa.me/<number>?text=...`), not a paid WhatsApp API.
+- Networks can be slow or unstable, and many customers have entry-level Android phones with limited data. Pages must be light, fast and usable offline after the first visit.
+- Many staff don't have an email address. Staff login must work without one (section 6).
+- Not every restaurant has numbered tables or private rooms. The seating model must be flexible (section 7).
+
+---
+
+## 2. Tech stack (fixed)
+
+| Concern | Choice | Why |
+|---|---|---|
+| Framework | **Next.js 15 (App Router) + React 19 + TypeScript** | One codebase for pages and API. Easy to wrap with Capacitor later for Play Store and App Store. |
+| Styling | **Tailwind CSS + shadcn/ui** (Radix) | Accessible components, fast to build, small CSS. |
+| Database | **Replit PostgreSQL** | Included with Replit, no extra service. |
+| ORM | **Drizzle ORM + drizzle-kit migrations** | Light, typed, SQL-first. |
+| Auth | **Clerk** (Organizations enabled) | Owners and managers. One Clerk Organization = one restaurant. Free tier is enough to start. |
+| Staff auth | **Own PIN login on authorized devices** (section 6) | Staff without email. No extra Clerk cost per server. |
+| Realtime | **Server-Sent Events (SSE)** from Next.js route handlers, fed by **Postgres LISTEN/NOTIFY**, with a 4-second polling fallback | Free, works across instances, no Pusher/Ably. |
+| Files and images | **Replit Object Storage** | Included. Images are compressed to WebP in the browser before upload. |
+| Validation | **Zod** (shared between client and server) | |
+| Forms | **react-hook-form** | |
+| i18n | **next-intl** | FR (default), EN, ZH. |
+| QR codes | `qrcode` (npm), generated server side as SVG/PNG | Free. |
+| PDF (QR table cards, receipts) | `@react-pdf/renderer` or `pdf-lib` | Free, server side. |
+| Offline / PWA | Custom service worker (Workbox optional) + Web App Manifest | Installable, offline menu. |
+| Charts | `recharts` | Owner dashboard. |
+| Testing | **Vitest** (unit), **Playwright** (end-to-end, mobile viewports) | |
+| Deploy | **Replit Deployments** | One Repl. Use the deployment type that keeps one long-lived server process (Reserved VM) so SSE and LISTEN/NOTIFY are reliable. Tell me the expected monthly cost before deploying. |
+
+Environment variables (store them in Replit Secrets, never in code): `DATABASE_URL`, `CLERK_SECRET_KEY`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_WEBHOOK_SECRET`, `APP_URL`, `SESSION_SECRET` (signing staff PIN sessions and QR tokens), `SUPERADMIN_EMAILS` (comma separated), `PAYMENT_ENCRYPTION_KEY` (32-byte key that encrypts payment provider credentials).
+
+---
+
+## 3. Users and roles
+
+| Role | How they log in | Can do |
+|---|---|---|
+| **Customer** | No login. Anonymous device ID (random, stored in localStorage) | Browse menu, order, track order, reserve, view own history on that device |
+| **Server (serveur)** | PIN on an authorized device, or Clerk if they have an email | See assigned tables/areas, confirm orders, mark served, take orders for customers, call for payment |
+| **Kitchen (cuisine)** | PIN on the kitchen tablet | Kitchen display: see items to prepare, mark preparing/ready |
+| **Cashier (caisse)** | PIN | Bills, mark paid (method + reference), split bill, print/share receipt |
+| **Manager** | Clerk | Everything staff can do, plus menu, tables, staff, shifts, reservations, reports for their restaurant |
+| **Owner** | Clerk | Everything a manager can do, plus restaurant settings, plan, branches, add/remove managers |
+| **Super admin (TIBLOGICS)** | Clerk, email in `SUPERADMIN_EMAILS` | All restaurants, plans, activation, impersonation in read-only mode, platform stats |
+
+Permissions are enforced on the **server** for every request (route handlers and server actions), never only in the UI. Write one `can(user, action, resource)` helper and unit-test it.
+
+---
+
+## 4. Plans (billing-ready, payments confirmed by hand)
+
+Restaurants pay TIBLOGICS by Orange Money or cash. The super admin activates or extends a plan by hand in v1. Plan payments go through the payment layer in section 8b (purpose `plan_subscription`), so they can become automatic as soon as a payment provider is connected.
+
+| | **Gratuit** | **Pro** | **Business** |
+|---|---|---|---|
+| Suggested price | 0 F | ~10 000 F / month | ~25 000 F / month |
+| Digital menu + photos + 3 languages | ✅ | ✅ | ✅ |
+| QR codes + printable table cards | ✅ (1 generic QR) | ✅ per table/area | ✅ |
+| Menu items | up to 40 | unlimited | unlimited |
+| Customer ordering + live order tracking | ❌ (menu only, WhatsApp takeaway link) | ✅ | ✅ |
+| Staff profiles + PIN devices | ❌ | up to 10 | unlimited |
+| Kitchen display + front desk dashboard | ❌ | ✅ | ✅ |
+| Reservations | ❌ | ✅ | ✅ |
+| Reports and CSV export | basic views count | ✅ | ✅ + staff performance |
+| Multiple branches | ❌ | ❌ | ✅ |
+| RestoCool / TIBLOGICS footer badge | always | always | can be hidden |
+
+Store plan limits in **one config file** (`/src/config/plans.ts`) and check them in a single `assertPlan(restaurant, feature)` helper. Prices are placeholders: I'll confirm them.
+
+Plan states: `trial` (30 days of Pro on signup), `active`, `past_due` (7-day grace, banner shown), `suspended` (menu stays visible, ordering disabled). Never delete data when a plan lapses.
+
+---
+
+## 5. Features carried over from the prototype (all must exist)
+
+Each one is a per-restaurant toggle in Settings unless noted.
+
+1. **Public menu page** at `/{locale}/r/{restaurantSlug}`, with categories as a sticky horizontal tab bar, search (works across all three languages), a "spicy" filter, numbered items, "new" badges, and prices formatted in FCFA.
+2. **Dish photos**: thumbnail in the list (168px, lazy-loaded), tap to enlarge, swipe left/right between photos, swipe down to close.
+3. **Three languages**: French by default **on every new visit**. The choice only lasts for the current visit (sessionStorage). Each dish shows the original name underneath in the other languages (for example the Chinese name under the French one), so staff can read any order. Owners can type translations or click **"Suggérer"** to prefill from a built-in glossary (no paid AI in v1).
+4. **Welcome screen** with confetti and "Bienvenue au {restaurant}" (FR/EN/ZH). It closes by itself after about 3 seconds. Respect `prefers-reduced-motion`.
+5. **Share button** always visible in the sticky bar: native share sheet, falling back to WhatsApp, Facebook and Copy link.
+6. **Contact section**: phone numbers (tap to call), WhatsApp button and QR, Orange Money number, address with a Google Maps link, opening hours with "Open now / Closed".
+7. **"Ma sélection" (cart)**: **+** on every item, quantity steppers, running total in a bottom bar. Items with **variants** (for example Champagne 48 000 F / 78 000 F, half or full portion) open a chooser. Items with no price show "Sur demande" and never "0 F".
+8. **Seating choice required** before an order can be sent (section 7).
+9. **"Montrer au serveur"**: a full-screen, high-contrast order view with a large seating badge and an order QR code the server can scan.
+10. **Order tracking for the customer**: live status (sent, confirmed, preparing, ready, served, paid). When served: confetti and "Vous avez été servi ! Bon appétit".
+11. **History on the device**: a new visit starts an empty cart. The previous cart and past orders go to "Sélections précédentes", where they can be reused or deleted.
+12. **Takeaway by WhatsApp**: name and pickup time, prefilled French message with item numbers and total, sent to the restaurant's WhatsApp.
+13. **Fortune cookie** (24+ fortunes, FR/EN/ZH, shareable). Owners can edit or disable them.
+14. **Offline**: menu and thumbnails cached after the first visit. The page is installable as an app, and updates itself when a new version is deployed (check on load and when the tab becomes visible).
+15. **Mobile polish**: 44px minimum tap targets, 16px inputs (no iOS zoom), safe-area insets, the phone's back button closes panels, a back-to-top button, and visible focus states.
+16. **Inactivity release** for seat-picker mode (section 7.3).
+17. **Footer badge** on every public menu: « Menu par **RestoCool** · Powered by **TIBLOGICS** », linking to restocool.com (sign-up page for other restaurants, which makes every menu a free ad) and tiblogics.com.
+
+**Architecture note:** orders, sessions and statuses always go through the **database + SSE**. Orders are stored, staff see them live on any device, and nothing depends on an external relay or on passing data between phones by QR code.
+
+---
+
+## 6. Staff accounts without email (important)
+
+- Owner or manager creates staff profiles: name, photo (optional), role (server, kitchen, cashier), phone, a **4 to 6 digit PIN** (hashed with argon2/bcrypt), assigned areas, and active/inactive status.
+- **Authorized devices**: a manager signs in with Clerk on a tablet or phone and taps **"Autoriser cet appareil"**. That creates a long-lived, signed device token for that restaurant (http-only cookie, revocable from Settings → Appareils).
+- On an authorized device, staff see a **PIN pad with their faces/names** and log in with their PIN. Staff sessions expire after a shift (configurable, default 12h), plus an auto-lock after X minutes idle.
+- 5 wrong PINs lock that staff profile for 10 minutes. Log every login in an audit table.
+- Staff who do have an email can also be invited through Clerk instead.
+- Every action (confirm, serve, mark paid, cancel, discount) records **who did it and when**.
+
+---
+
+## 7. Flexible seating model (not every restaurant has numbered tables)
+
+### 7.1 Restaurant chooses its mode in the onboarding wizard
+- **Numbered tables** (for example 1 to 20, skipping any numbers they don't use)
+- **Named areas** (Terrasse, Salle climatisée, Bar, Jardin, VIP)
+- **Private rooms** (salons, for example 201, 601, "Salon Ouaga")
+- **Counter / no seating**: customer gives a **first name**, and the order gets a short **pickup number** (for example A-27)
+- **Takeaway** and **Delivery** (address + phone, delivered by the restaurant's own rider, manual)
+
+A restaurant can combine several (for example tables + private rooms + takeaway). Each seating unit has a type, a label, an optional area, a capacity, and an active flag.
+
+### 7.2 Two QR strategies (restaurant picks)
+1. **One QR per table/room (recommended)**: the QR holds an unguessable token for that seat. Scanning it sets the seat automatically, so there's no picker and no collisions.
+2. **One generic QR** for the whole restaurant: the customer picks their seat from a picker with distinctive designs (gold round coin for tables, red lacquer plate for rooms, green tag for takeaway).
+
+### 7.3 Table sessions and collisions
+- The first scan or order at a seat opens a **table session**. Other phones scanning the same table **join the same session**: they see the shared table bill, and each phone can add its own items (group ordering). The session closes when it's paid, or when a server closes it.
+- In picker mode, when a customer picks a seat that has an open session from another device, warn them: "Cette table est déjà occupée. Vérifiez votre numéro, ou rejoignez la table si vous êtes ensemble." They can choose **Rejoindre** or **Choisir une autre**.
+- **Inactivity release** (picker mode, before any order is sent): after 4 minutes with no activity, show "Êtes-vous toujours là ?" with a 30-second countdown. With no answer, release the seat. It must also work when the screen turned off: evaluate on `visibilitychange`, and don't count the wake-up touch as activity. Make both timings configurable.
+- The server and front desk always see the **seat badge** in large, distinctive styling on every order card.
+
+---
+
+## 8. Orders and service
+
+**Statuses:** `draft` (customer cart, client side only) → `sent` → `confirmed` → `preparing` → `ready` → `served` → `paid` (or `cancelled` with a reason, at any step before paid).
+
+**Setting "Validation des commandes"** (per restaurant):
+- **Direct**: `sent` orders go straight to the kitchen display.
+- **Server confirms first**: `sent` orders appear for the assigned server, who confirms them (and can edit them with the customer) before they reach the kitchen.
+
+**Screens:**
+- **Front desk dashboard** (tablet/desktop): live board of all open orders by status, filters by area/server, sound + vibration on new orders, seat badges, elapsed timers that turn orange and red after configurable delays.
+- **Kitchen display (KDS)**: large cards per order, items grouped, tap an item or the whole order to mark preparing/ready, optional per-station filter (grill / wok / drinks / desserts). Each menu item has a station.
+- **Server app** (phone): "My tables" with open sessions, new orders to confirm, ready orders to serve, payment requests. Servers can also **take an order for a customer** from the staff menu.
+- **Customer tracking**: live status on the customer's phone through SSE, falling back to polling.
+
+**Order details:** per-item notes ("sans piment"), variants/options with price deltas, quantity, who added it (device or staff), timestamps for every status, and a printable or shareable **ticket** (PDF and WhatsApp text).
+
+**Assignment:** servers are assigned to areas or tables per shift. A new order goes to the server of that seat, or to a pool if nobody is assigned. A manager can reassign.
+
+**Payments (manual in v1):** cashier or server marks an order or session **paid** with: method (`cash`, `orange_money`, `moov_money`, `card`, `other`), amount received, change given (cash), transaction reference (mobile money), and optional discount with a reason (manager approval above a threshold). It supports **split bill** (by item or by equal parts). Show the restaurant's Orange Money and Moov numbers to the customer with a "copy" button. Every payment, manual or online, goes through the payment layer in **section 8b**, so online payment can be switched on later without changing order logic.
+
+**Daily closing (clôture de caisse):** totals by payment method, by server and by category, cancelled orders, discounts. Exportable as PDF or CSV.
+
+---
+
+## 8b. Payment layer: build the plumbing now, plug a payment API in later
+
+Online payment (Orange Money, Moov Money, cards, through an aggregator like CinetPay, PayDunya or Ligdicash, or an operator API directly) will be added later. **Build the full structure now** so that adding a provider means writing one adapter file and adding credentials, with no change to orders, sessions, reservations or plans.
+
+**1. One provider interface** (`/src/payments/types.ts`):
+```ts
+interface PaymentProvider {
+  id: ProviderId;                        // "manual" | "cinetpay" | "paydunya" | "ligdicash" | "orange_money" | "moov_money" | ...
+  supports: { methods: PaymentMethod[]; refunds: boolean; currency: "XOF" };
+  createPayment(input: CreatePaymentInput): Promise<CreatePaymentResult>;  // returns redirect URL, USSD code, or "pending"
+  getStatus(providerRef: string): Promise<ProviderStatus>;
+  verifyWebhook(req: Request, rawBody: string): Promise<VerifiedEvent | null>; // signature check, returns null if invalid
+  refund?(providerRef: string, amount: number): Promise<RefundResult>;
+}
+```
+- Implement **`manual`** fully (it's what staff use in v1: it records method, reference and amount and succeeds immediately).
+- Create **stub adapters** for `cinetpay`, `paydunya`, `ligdicash`, `orange_money`, `moov_money`. They throw `ProviderNotConfiguredError`, contain TODO notes with the steps to implement them, and are covered by the same contract tests as `manual`.
+- A **registry** (`/src/payments/registry.ts`) returns the provider configured for a restaurant.
+
+**2. Tables:**
+- `payment_intents` (id, restaurant_id, purpose: `order` | `session` | `reservation_deposit` | `plan_subscription`, purpose_id, amount, currency `XOF`, provider, method, status: `created` → `pending` → `succeeded` | `failed` | `cancelled` | `expired` | `refunded`, provider_ref, idempotency_key unique, customer_phone, return_url, metadata jsonb, expires_at, created_by)
+- `payment_webhook_events` (provider, provider_event_id unique, payload jsonb, signature_valid, received_at, processed_at, error)
+- `payment_provider_configs` (restaurant_id, provider, enabled, mode `test` | `live`, credentials **encrypted** with AES-256-GCM using `PAYMENT_ENCRYPTION_KEY` from Replit Secrets, fee_percent, fee_fixed). Credentials are never sent to the browser or written to logs.
+- The existing `payments` table records the **settled** money and links to `payment_intent_id`.
+
+**3. Flow and guarantees:**
+- One service, `paymentService.start(purpose, purposeId, method)`, creates the intent with an idempotency key, calls the provider, and returns what the UI needs (redirect URL, USSD instructions, or "waiting").
+- Webhook route `POST /api/webhooks/payments/[provider]`: read the raw body, verify the signature, store the event (dedupe on `provider_event_id`), and process it in a transaction. It's **idempotent**: the same event twice changes nothing.
+- A **reconciliation job** (route triggered by a scheduler, or every 5 minutes while the server runs) checks `pending` intents older than 2 minutes with `getStatus()` and expires abandoned ones.
+- When an intent succeeds, the order/session/reservation/plan updates through the same domain events as manual payment, and emits the same `NOTIFY` for SSE, so the customer and staff screens update live.
+- Amounts are always computed **on the server** from the order, never trusted from the client.
+- Log every state change in `audit_log`.
+
+**4. UI hooks (hidden until a provider is enabled):**
+- Customer: a **"Payer maintenant"** button on the bill and the order tracking screen, a payment status screen (waiting / paid / failed + retry), and a "pay deposit" step on reservation requests.
+- Owner: **Settings → Paiements en ligne** with a provider list, test/live mode, a credentials form (write-only), and a "test connection" button.
+- Super admin: the same layer handles **plan subscriptions** (restaurants paying TIBLOGICS), so plan activation can become automatic.
+
+---
+
+## 9. Reservations
+
+- **Public form** on the restaurant page: date, time slot, party size, seating preference (area or private room), occasion (birthday, business, other), name, phone/WhatsApp, note.
+- Owner sets **opening hours, slot length, maximum covers per slot**, and which rooms can be reserved, with an optional manual **deposit** for private rooms (paid by Orange Money, confirmed by hand).
+- Statuses: `requested` → `confirmed` / `declined` → `seated` → `completed` / `no_show` / `cancelled`.
+- **Manager calendar** (day and week views), color-coded by room/area, with a conflict warning when a room is double-booked.
+- Confirmations and reminders go out as **prefilled WhatsApp messages** (the manager taps "Envoyer sur WhatsApp"). No SMS API. The customer can also get an `.ics` calendar file.
+- When a reservation is seated, it opens a table session on the assigned seat.
+
+---
+
+## 10. Menu management
+
+- Categories (ordered, with drag and drop), items with: number/code (optional), names and descriptions in FR/EN/ZH (FR required), price or "sur demande", variants/options, spicy level (0 to 2), tags (new, chef's pick, vegetarian, contains peanuts/shellfish/eggs), station, photo, availability toggle (**"épuisé aujourd'hui"**, resets the next day), and time windows (for example lunch only).
+- **Photo upload**: crop, then compress in the browser to WebP (1200px max for the full photo, plus a 168px square thumbnail), then upload to Replit Object Storage. Show a data-size estimate.
+- **Bulk tools**: CSV import/export, duplicate item, change prices by percentage for a whole category.
+- **Daily special** banner ("Plat du jour") with start and end dates.
+- **Branding**: logo, cover photo, accent color (validated for contrast), choice of 3 themes (dark lacquer, light, warm).
+- The menu has a public **preview mode** before it's published.
+
+---
+
+## 11. Extra features to make it powerful and cheap (build them in the milestones listed)
+
+1. **Group ordering at one table** (section 7.3): several phones, one shared bill. (M4)
+2. **"Épuisé" in one tap** from the kitchen or front desk, shown live to customers. (M4)
+3. **Low-data mode**: one toggle loads no photos, for customers on expensive data. (M2)
+4. **Printable QR kits**: A4 sheets of table tent cards per seat, with the restaurant logo, in FR/EN/ZH. (M3)
+5. **Staff performance**: orders served, average service time, tips (optional field). (M6)
+6. **Customer feedback**: after "served", an optional 1 to 5 stars + comment, visible to the manager, with a link to the restaurant's Google review page. (M6)
+7. **Loyalty card (simple)**: a stamp every X paid orders on the same device or phone number, and a reward the manager defines. (M7)
+8. **Multi-branch**: one owner, several restaurants, consolidated reports. (M7, Business plan)
+9. **Local languages ready**: the i18n structure accepts Mooré and Dioula later, with no code change. (structure in M1)
+10. **WhatsApp "receipt"**: send the ticket as a prefilled WhatsApp message. (M5)
+11. **Offline staff queue**: if the server's phone loses the network, actions queue and sync when it's back, with a visible "en attente de connexion" state. (M5)
+12. **Platform analytics for TIBLOGICS**: active restaurants, orders per day, plan revenue, churn. (M7)
+
+---
+
+## 12. Data model (Drizzle, Postgres)
+
+Every tenant table has `restaurant_id` (uuid, indexed) plus `created_at` and `updated_at`. Use uuid primary keys. Store money as **integer FCFA**. Store translations as JSONB `{ fr, en?, zh? }`.
+
+- `restaurants` (id, clerk_org_id, slug unique, name, legal_name, logo_url, cover_url, theme, accent_color, phones[], whatsapp, orange_money, moov_money, address, city, gmaps_url, timezone, default_locale, settings jsonb, plan, plan_status, plan_expires_at, published, powered_badge)
+- `branches` (if multi-branch: or model a branch as a restaurant with `parent_restaurant_id`; recommend one and justify)
+- `opening_hours` (restaurant_id, weekday, opens, closes)
+- `areas` (name i18n, sort)
+- `seats` (type: table | room | area | counter | takeaway | delivery, label, area_id, capacity, qr_token unique, active, sort)
+- `menu_categories` (name i18n, sort, active, time_window)
+- `menu_items` (category_id, code, name i18n, description i18n, price nullable, spicy, tags[], station, photo_url, thumb_url, available, sold_out_until, sort)
+- `menu_item_variants` (item_id, name i18n, price)
+- `menu_item_options` (item_id, group, name i18n, price_delta, max_select)
+- `staff` (name, photo_url, role, phone, pin_hash, clerk_user_id nullable, active, locked_until)
+- `devices` (name, token_hash, authorized_by, last_seen_at, revoked_at)
+- `shifts` and `assignments` (staff_id, seat_id or area_id, starts_at, ends_at)
+- `table_sessions` (seat_id, opened_at, closed_at, opened_by_device, status)
+- `orders` (session_id, seat_id, number per day, source: customer | staff, customer_device_id, customer_name, customer_phone, status, validation_mode, assigned_staff_id, totals, notes, timestamps per status, cancelled_reason)
+- `order_items` (order_id, item_id, variant_id, options jsonb, name_snapshot i18n, unit_price_snapshot, qty, note, station, status)
+- `payments` (session_id or order_id, method, amount, change_given, reference, discount, discount_reason, staff_id)
+- `reservations` (seat_id or area_id preference, date, time, party_size, occasion, name, phone, note, deposit, status, staff_id)
+- `feedback` (order_id, rating, comment)
+- `loyalty_cards`, `loyalty_stamps`
+- `fortunes` (text i18n, active)
+- `audit_log` (actor_type, actor_id, action, entity, entity_id, data jsonb, ip, created_at)
+- `plan_events` (restaurant_id, from, to, amount, method, reference, by_superadmin)
+
+Add a Postgres **trigger or app-level hook** that runs `NOTIFY restaurant_<id>` with a small JSON payload on order, session and reservation changes, for the SSE stream.
+
+---
+
+## 13. Architecture, security and performance requirements
+
+- **Tenant isolation**: all data access goes through a repository layer that requires a `restaurantId` from the authenticated context (Clerk org, staff session, or seat QR token). Add a Playwright test that tries to read another restaurant's orders and expects a 403/404.
+- **Public endpoints** (menu, ordering, reservations, tracking) have rate limiting (in-memory token bucket per IP + device ID) and Zod validation, and take only the fields they need.
+- **QR tokens and device tokens** are random (≥ 128 bits). Store them hashed when they grant staff access.
+- **SSE**: one stream per restaurant per role (`/api/stream?scope=frontdesk|kitchen|server|order:<id>`), with a heartbeat every 25s and automatic reconnect. The customer stream only receives their own order and session events.
+- **Performance budget for the public menu**: under 150 KB of JS on first load, under 600 KB total with thumbnails, Largest Contentful Paint under 2.5s on a mid-range Android with a 3G profile. Server-render the menu, stream images, and use `next/image` with WebP and a custom loader for Object Storage.
+- **PWA**: separate service worker scopes for the public menu (`/r/...`) and the staff app (`/app/...`). Network-first for HTML, cache-first for images, versioned caches, update on deploy.
+- **Accessibility**: WCAG 2.1 AA contrast, keyboard navigation, visible focus, labels on every control, `prefers-reduced-motion` respected.
+- **Responsive**: phone (360 to 430px), tablet portrait and landscape (768 to 1180px: the front desk and kitchen layouts are designed for tablets first), and desktop. Kitchen and front desk screens support "always on" kiosk usage (Wake Lock API where available).
+- **Backups**: a daily `pg_dump` script and documentation on how to restore it.
+- **Observability**: structured logs, an `/api/health` endpoint, and a super admin error list (no paid monitoring).
+- **Mobile apps later**: keep all business logic in API routes and server actions (no logic only in components), so a Capacitor shell can reuse the web app. Don't use browser APIs that Capacitor can't provide without a fallback.
+
+---
+
+## 14. Milestones (build in this order)
+
+Each milestone ends with: migrations applied, seed data updated, Vitest and Playwright passing at 390px and 1024px, and a short demo script for me.
+
+**M1: Foundation**
+Next.js + Tailwind + shadcn/ui + next-intl (FR/EN/ZH, FR default) + Drizzle + Replit Postgres + Clerk (Organizations). App shell, layouts for public / staff / admin, theming, the `can()` and `assertPlan()` helpers, the audit log, the repository layer with tenant scoping, and the Clerk webhook to create a restaurant on organization creation. **Seed: create a fictional demo restaurant** ("Restaurant Démo", Ouagadougou) that you write yourself: about 40 items across 6 categories in FR/EN/ZH, with variants, spicy levels, a price "sur demande", 10 tables, 2 areas, 3 private rooms, and placeholder images generated locally (no stock photos). Don't use any real restaurant's name, menu or photos.
+
+**M2: Restaurant onboarding and public menu**
+Onboarding wizard (name, slug, contacts, hours, seating mode, languages, theme), menu manager (categories, items, variants, photos with in-browser compression, availability), and the full public menu page with features 1 to 7 and 13 to 17 from section 5, plus low-data mode. Publish/unpublish.
+
+**M3: Seating and QR**
+Seats/areas/rooms manager, QR per seat and generic QR, printable PDF table cards, the seat picker with distinctive designs, table sessions, collision warning, and inactivity release.
+
+**M4: Ordering and live service**
+Customer order submission, validation mode setting, SSE + LISTEN/NOTIFY with a polling fallback, front desk dashboard, kitchen display with stations, customer live tracking, group ordering at one table, and sold-out in one tap.
+
+**M5: Staff and payments**
+Staff profiles, authorized devices, PIN login with lockout, shifts and assignments, server app ("my tables"), staff-entered orders, the **payment layer from section 8b** (interface, registry, `manual` provider, stub adapters, payment intents, webhook route, reconciliation job, encrypted provider configs, contract tests), manual payments with methods/split bill/discounts on top of it, receipts (PDF + WhatsApp), daily closing, and the offline action queue.
+
+**M6: Reservations, feedback and reports**
+Reservation form and calendar, WhatsApp confirmations, `.ics` files, deposits, seating a reservation, customer feedback, and owner reports (sales by day/hour/category/server, top dishes, average ticket, CSV/PDF export).
+
+**M7: Platform and growth**
+Super admin console (restaurants, plans, manual activation, plan events, platform stats, read-only impersonation), plan limits enforced everywhere, trial/grace/suspension states, multi-branch, loyalty card, and the public marketing landing page at **restocool.com** with a « Créer mon restaurant gratuitement » sign-up (FR first, EN second), built around the **"100 % local"** positioning from section 1 (hero: « La solution 100 % locale pour les restaurants du Burkina »).
+
+**M8: Hardening and launch**
+Security review (tenant isolation tests, rate limits, token handling), performance pass against the budget, accessibility pass, backup/restore script, a privacy page and terms in French, and production deployment on Replit with the custom domain **restocool.com** (HTTPS), plus 301 redirects from **restaucool.com** and **restofaso.com**.
+
+---
+
+## 15. Definition of done (for every feature)
+
+- Works at 360px, 390px, 768px, 1024px and 1440px, in FR, EN and ZH.
+- Works on a slow 3G profile, and degrades gracefully offline.
+- Permissions are checked on the server, with tenant isolation tested.
+- Every user-facing string is translated. French is reviewed by a native speaker standard (no anglicisms).
+- Loading, empty and error states are designed (no blank screens, and errors say what to do).
+- Playwright covers the main path.
+
+---
+
+## 16. Out of scope for v1 (leave clean extension points)
+
+Real payment provider integrations (the plumbing from section 8b is in scope, the live adapters are not), SMS, paid WhatsApp Business API, AI translation or menu OCR from photos, native apps (Capacitor comes after M8), delivery-rider app, accounting integrations.
+
+---
+
+## 17. Start now
+
+1. Read this whole document.
+2. Ask me any blocking question (maximum 5, multiple choice where possible).
+3. Post the M1 plan: folder structure, Drizzle schema for M1 tables, Clerk setup steps I must do in the Clerk dashboard, and Replit Secrets I must add.
+4. Wait for my "go".
