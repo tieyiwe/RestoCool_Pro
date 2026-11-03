@@ -89,7 +89,8 @@
       "errorLimit": "您已达到餐厅数量上限。如需添加，请通过 WhatsApp 联系我们。",
       "addAnother": "添加餐厅"
     },
-    "switchRestaurant": "切换餐厅"
+    "switchRestaurant": "切换餐厅",
+    "comingSoon": "此功能即将推出。"
   },
   "admin": {
     "title": "RestoCool 管理后台",
@@ -261,5 +262,127 @@
     },
     "saveCategory": "保存",
     "timeWindowHint": "留空表示全天供应。"
+  },
+  "settings": {
+    "title": "设置",
+    "intro": "顾客看到的餐厅信息。",
+    "ownerOnly": "只有店主可以修改这些设置。",
+    "save": "保存",
+    "saving": "正在保存…",
+    "saved": "已保存。",
+    "next": "继续",
+    "skip": "跳过此步",
+    "finish": "完成",
+    "errors": {
+      "invalid": "部分字段有误，请检查后重试。",
+      "slug_taken": "此地址已被其他餐厅使用，请换一个。",
+      "slug_reserved": "此地址为保留地址，请换一个。",
+      "phone_invalid": "号码无效。请使用 8 位布基纳法索号码，例如 70 12 34 56。",
+      "contrast": "此颜色在该主题下不够清晰。请选择更深的颜色（漆面主题请选择更浅的颜色）。",
+      "badge_plan": "隐藏 RestoCool 标志需要商业版。",
+      "publish_empty": "发布菜单前请至少添加一道可见菜品。",
+      "unknown": "出现错误，请稍后重试。"
+    },
+    "profile": {
+      "title": "资料",
+      "name": "餐厅名称",
+      "slug": "菜单地址",
+      "slugHint": "您的菜单地址为：{url}",
+      "description": "简短介绍（可选）",
+      "descriptionPlaceholder": "例如：烧烤和本地菜，带遮阳露台。",
+      "city": "城市",
+      "address": "地址",
+      "addressPlaceholder": "例如：Kwame Nkrumah 大道，药店附近",
+      "gmaps": "谷歌地图链接（可选）"
+    },
+    "contacts": {
+      "title": "联系方式和付款",
+      "phones": "电话",
+      "phone": "电话 {n}",
+      "whatsapp": "WhatsApp",
+      "orangeMoney": "Orange Money 号码",
+      "moovMoney": "Moov Money 号码",
+      "hint": "布基纳法索 8 位号码。显示在菜单上，方便顾客致电、发消息或付款。"
+    },
+    "hours": {
+      "title": "营业时间",
+      "open": "营业",
+      "opens": "开门",
+      "closes": "关门",
+      "hint": "如果午夜后关门，直接填写关门时间（例如 01:00）。",
+      "days": [
+        "星期日",
+        "星期一",
+        "星期二",
+        "星期三",
+        "星期四",
+        "星期五",
+        "星期六"
+      ]
+    },
+    "service": {
+      "title": "服务和语言",
+      "seating": "顾客如何就座？",
+      "seatingHint": "可多选。",
+      "modes": {
+        "table": "编号餐桌",
+        "area": "区域（露台、大厅…）",
+        "room": "包间",
+        "counter": "柜台（名字 + 取餐号）",
+        "takeaway": "外带",
+        "delivery": "外送"
+      },
+      "qr": "二维码",
+      "qrPerSeat": "每张餐桌或包间一个二维码（推荐）",
+      "qrGeneric": "全店一个二维码（顾客自选座位）",
+      "validation": "订单确认",
+      "direct": "直接：订单直接送往厨房",
+      "serverConfirms": "服务员先确认",
+      "languages": "菜单语言",
+      "languagesHint": "法语始终显示。"
+    },
+    "appearance": {
+      "title": "外观",
+      "theme": "菜单主题",
+      "themes": {
+        "warm": "温暖",
+        "light": "明亮",
+        "lacquer": "漆面（深色）"
+      },
+      "accent": "主色",
+      "accentHint": "用于标题和按钮，必须清晰易读。",
+      "contrastOk": "清晰易读",
+      "contrastLow": "不够清晰",
+      "logo": "标志",
+      "cover": "封面照片"
+    },
+    "features": {
+      "title": "菜单功能",
+      "welcomeScreen": "带彩纸的欢迎画面",
+      "fortuneCookie": "幸运饼干",
+      "share": "分享按钮",
+      "takeawayWhatsapp": "通过 WhatsApp 外带点餐",
+      "localBadge": "突出本地食材（“本地食材”筛选）",
+      "poweredBadge": "显示“菜单由 RestoCool 提供”标志",
+      "poweredBadgeHint": "商业版可隐藏。"
+    },
+    "publish": {
+      "title": "发布",
+      "published": "您的菜单已上线。",
+      "unpublished": "菜单尚未发布，只有您能看到（预览）。",
+      "publish": "发布我的菜单",
+      "unpublish": "下线菜单",
+      "preview": "查看预览",
+      "open": "打开菜单"
+    },
+    "wizard": {
+      "title": "设置您的餐厅",
+      "step": "第 {n} 步，共 {total} 步",
+      "done": "餐厅已就绪！现在添加您的菜品吧。",
+      "goMenu": "添加菜品",
+      "finishLater": "稍后完成",
+      "banner": "请完成餐厅设置。",
+      "resume": "继续"
+    }
   }
 }

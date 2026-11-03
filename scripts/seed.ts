@@ -47,6 +47,11 @@ async function seedDemo(db: DB) {
     .values({
       slug: DEMO_SLUG,
       name: "Restaurant Démo",
+      description: {
+        fr: "Grillades, plats locaux et jus maison. Terrasse et salons climatisés.",
+        en: "Grills, local dishes and homemade juices. Terrace and air-conditioned rooms.",
+        zh: "烧烤、本地菜和自制果汁。设有露台和空调包间。",
+      },
       legalName: "Restaurant Démo (fictif)",
       theme: "warm",
       accentColor: "#0F6B3E",
@@ -62,6 +67,7 @@ async function seedDemo(db: DB) {
       planExpiresAt: new Date(Date.now() + 30 * 86_400_000),
       published: true,
       settings: {
+        onboardedAt: new Date().toISOString(),
         seatingModes: ["table", "area", "room", "takeaway"],
         qrStrategy: "per_seat",
         orderValidation: "server_confirms",

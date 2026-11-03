@@ -89,7 +89,8 @@
       "errorLimit": "You have reached the maximum number of restaurants. Contact us on WhatsApp to add more.",
       "addAnother": "Add a restaurant"
     },
-    "switchRestaurant": "Switch restaurant"
+    "switchRestaurant": "Switch restaurant",
+    "comingSoon": "This section is coming soon."
   },
   "admin": {
     "title": "RestoCool administration",
@@ -261,5 +262,127 @@
     },
     "saveCategory": "Save",
     "timeWindowHint": "Leave empty for all day."
+  },
+  "settings": {
+    "title": "Settings",
+    "intro": "Your restaurant’s information, as your customers see it.",
+    "ownerOnly": "Only the owner can change these settings.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved.",
+    "next": "Continue",
+    "skip": "Skip this step",
+    "finish": "Finish",
+    "errors": {
+      "invalid": "Some fields are incorrect. Check them and try again.",
+      "slug_taken": "This address is already used by another restaurant. Choose another one.",
+      "slug_reserved": "This address is reserved. Choose another one.",
+      "phone_invalid": "Invalid number. Use an 8-digit Burkina number, for example 70 12 34 56.",
+      "contrast": "This colour is not readable enough with this theme. Choose a darker colour (or a lighter one for the lacquer theme).",
+      "badge_plan": "Hiding the RestoCool badge requires the Business plan.",
+      "publish_empty": "Add at least one visible dish before publishing your menu.",
+      "unknown": "Something went wrong. Please try again in a moment."
+    },
+    "profile": {
+      "title": "Profile",
+      "name": "Restaurant name",
+      "slug": "Menu address",
+      "slugHint": "Your menu will be at: {url}",
+      "description": "Short presentation (optional)",
+      "descriptionPlaceholder": "e.g. Grills and local dishes, shaded terrace.",
+      "city": "City",
+      "address": "Address",
+      "addressPlaceholder": "e.g. Avenue Kwame Nkrumah, near the pharmacy",
+      "gmaps": "Google Maps link (optional)"
+    },
+    "contacts": {
+      "title": "Contacts and payments",
+      "phones": "Phones",
+      "phone": "Phone {n}",
+      "whatsapp": "WhatsApp",
+      "orangeMoney": "Orange Money number",
+      "moovMoney": "Moov Money number",
+      "hint": "Burkina numbers, 8 digits. They appear on your menu to call, message or pay."
+    },
+    "hours": {
+      "title": "Opening hours",
+      "open": "Open",
+      "opens": "Opens",
+      "closes": "Closes",
+      "hint": "If you close after midnight, just enter the closing time (e.g. 01:00).",
+      "days": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ]
+    },
+    "service": {
+      "title": "Service and languages",
+      "seating": "How are your customers seated?",
+      "seatingHint": "You can choose several.",
+      "modes": {
+        "table": "Numbered tables",
+        "area": "Areas (terrace, room…)",
+        "room": "Private rooms",
+        "counter": "Counter (first name + pickup number)",
+        "takeaway": "Takeaway",
+        "delivery": "Delivery"
+      },
+      "qr": "QR codes",
+      "qrPerSeat": "One QR code per table or room (recommended)",
+      "qrGeneric": "One QR code for the whole restaurant (customer picks their seat)",
+      "validation": "Order validation",
+      "direct": "Direct: the order goes to the kitchen",
+      "serverConfirms": "The server confirms first",
+      "languages": "Menu languages",
+      "languagesHint": "French is always shown."
+    },
+    "appearance": {
+      "title": "Appearance",
+      "theme": "Menu theme",
+      "themes": {
+        "warm": "Warm",
+        "light": "Light",
+        "lacquer": "Lacquer (dark)"
+      },
+      "accent": "Main colour",
+      "accentHint": "Used for headings and buttons. It must stay readable.",
+      "contrastOk": "Good readability",
+      "contrastLow": "Not readable enough",
+      "logo": "Logo",
+      "cover": "Cover photo"
+    },
+    "features": {
+      "title": "Menu features",
+      "welcomeScreen": "Welcome screen with confetti",
+      "fortuneCookie": "Fortune cookie",
+      "share": "Share button",
+      "takeawayWhatsapp": "Takeaway orders by WhatsApp",
+      "localBadge": "Highlight local produce (“Local produce” filter)",
+      "poweredBadge": "Show the “Menu by RestoCool” badge",
+      "poweredBadgeHint": "Hiding it is possible with the Business plan."
+    },
+    "publish": {
+      "title": "Publishing",
+      "published": "Your menu is online.",
+      "unpublished": "Your menu is not published yet. Only you can see it (preview).",
+      "publish": "Publish my menu",
+      "unpublish": "Take the menu offline",
+      "preview": "See preview",
+      "open": "Open the menu"
+    },
+    "wizard": {
+      "title": "Setting up your restaurant",
+      "step": "Step {n} of {total}",
+      "done": "Your restaurant is ready! Now add your dishes.",
+      "goMenu": "Add my dishes",
+      "finishLater": "Finish later",
+      "banner": "Finish setting up your restaurant.",
+      "resume": "Resume"
+    }
   }
 }

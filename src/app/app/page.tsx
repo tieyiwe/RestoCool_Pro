@@ -1,12 +1,15 @@
 import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getMemberContext } from "@/lib/auth/context";
 import { effectiveStatus } from "@/lib/plan";
 
 export default async function DashboardPage() {
   const t = await getTranslations("app");
+  const ts = await getTranslations("settings");
   const format = await getFormatter();
   const ctx = await getMemberContext();
 
@@ -41,6 +44,14 @@ export default async function DashboardPage() {
         <Badge variant={status === "active" || status === "trial" ? "muted" : "warning"}>{t(`plan.${status}`)}</Badge>
         <Badge variant="outline">{t(`role.${ctx.actor.role}`)}</Badge>
       </div>
+      {!r.settings.onboardedAt && ctx.actor.role === "owner" && (
+        <Card className="flex flex-wrap items-center justify-between gap-3 border-or bg-or/15" data-testid="onboarding-banner">
+          <p className="font-semibold">{ts("wizard.banner")}</p>
+          <Button asChild>
+            <Link href="/app/onboarding/1">{ts("wizard.resume")}</Link>
+          </Button>
+        </Card>
+      )}
       {status === "trial" && r.planExpiresAt && (
         <p className="text-sm text-muted-foreground">{t("plan.trialEnds", { date: format.dateTime(r.planExpiresAt, { dateStyle: "long" }) })}</p>
       )}

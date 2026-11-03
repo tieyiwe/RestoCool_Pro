@@ -35,7 +35,7 @@ export async function createRestaurantAction(_prev: CreateRestaurantState, formD
     return { error: "unknown" };
   }
   (await cookies()).set(ACTIVE_RESTAURANT_COOKIE, restaurantId, COOKIE_OPTS);
-  redirect("/app");
+  redirect("/app/onboarding/1");
 }
 
 /** Switch the active restaurant. Ignores ids the user is not a member of. */
