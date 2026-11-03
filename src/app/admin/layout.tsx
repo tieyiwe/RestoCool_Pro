@@ -12,9 +12,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const sa = await getSuperadmin();
   return (
     <AuthProvider>
-      <header className="flex items-center justify-between border-b border-border bg-foreground px-4 py-2 text-background">
+      <header className="flex items-center justify-between border-b border-border bg-nuit px-4 py-2 text-creme">
         <Link href="/admin" className="flex items-center gap-2 font-bold">
-          <Logo showMark className="[&_.text-foreground]:text-background" />
+          <Logo onDark />
           <span className="text-sm opacity-80">Admin</span>
         </Link>
         <UserMenu />

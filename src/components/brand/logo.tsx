@@ -1,26 +1,36 @@
 import { cn } from "@/lib/utils";
 
-/** App icon: a covered dish with two wisps of steam. Legible at 32px. No state symbols. */
+/**
+ * RestoCool app icon from the brand kit (docs/brand/BRAND.md). Never redraw it.
+ * TODO(brand kit): switch to /brand/svg/restocool-icon.svg (and restocool-favicon.svg
+ * below 32px) once the SVG files are added to public/brand/svg/.
+ */
 export function LogoMark({ className, title = "RestoCool" }: { className?: string; title?: string }) {
   return (
-    <svg viewBox="0 0 32 32" className={cn("h-8 w-8", className)} role="img" aria-label={title}>
-      <rect width="32" height="32" rx="8" fill="#0E7C4A" />
-      <path d="M11 8.5c-1.2 1.3 1.2 2.2 0 3.6M16 7c-1.2 1.4 1.2 2.4 0 3.9M21 8.5c-1.2 1.3 1.2 2.2 0 3.6" stroke="#F2B705" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-      <path d="M7 21a9 9 0 0 1 18 0z" fill="#fff" />
-      <circle cx="16" cy="13.2" r="1.4" fill="#fff" />
-      <rect x="5" y="21.5" width="22" height="2.6" rx="1.3" fill="#fff" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element -- tiny static brand asset, no optimisation needed
+    <img
+      src="/brand/png/app-icon-192.png"
+      alt={title}
+      width={32}
+      height={32}
+      className={cn("h-8 w-8 rounded-[22%]", className)}
+      decoding="async"
+    />
   );
 }
 
-/** Two-part wordmark: "Resto" + "Cool". */
-export function Logo({ className, showMark = true }: { className?: string; showMark?: boolean }) {
+/**
+ * Horizontal logo: icon + wordmark.
+ * TODO(brand kit): replace with /brand/svg/restocool-logo-horizontal.svg (wordmark outlined)
+ * and -dark.svg on dark backgrounds. Until then the wordmark is set in Baloo 2, the logo font.
+ */
+export function Logo({ className, showMark = true, onDark = false }: { className?: string; showMark?: boolean; onDark?: boolean }) {
   return (
-    <span className={cn("inline-flex items-center gap-2 font-extrabold tracking-tight", className)}>
-      {showMark && <LogoMark />}
-      <span className="text-xl leading-none">
-        <span className="text-foreground">Resto</span>
-        <span className="text-rc-green">Cool</span>
+    <span className={cn("inline-flex items-center gap-2", className)}>
+      {showMark && <LogoMark title="" />}
+      <span className="font-display text-xl leading-none font-extrabold" aria-label="RestoCool">
+        <span className={onDark ? "text-creme" : "text-encre"}>Resto</span>
+        <span className={onDark ? "text-or" : "text-vert"}>Cool</span>
       </span>
     </span>
   );

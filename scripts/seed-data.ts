@@ -77,7 +77,7 @@ export const DEMO_CATEGORIES: SeedCategory[] = [
   },
   {
     name: { fr: "Plats", en: "Main dishes", zh: "主菜" },
-    color: "#0e7c4a",
+    color: "#0f6b3e",
     station: "kitchen",
     items: [
       {

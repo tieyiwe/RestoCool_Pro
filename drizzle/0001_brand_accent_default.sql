@@ -1,0 +1,1 @@
+ALTER TABLE "restaurants" ALTER COLUMN "accent_color" SET DEFAULT '#0F6B3E';

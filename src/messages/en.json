@@ -28,7 +28,8 @@
     "subtitle": "Digital menu, QR code ordering and dining room management, from your phone.",
     "cta": "Create my restaurant for free",
     "seeDemo": "See the demo menu",
-    "comingSoon": "Launching soon in Ouagadougou and Bobo-Dioulasso."
+    "comingSoon": "Launching soon in Ouagadougou and Bobo-Dioulasso.",
+    "howItWorks": "See how it works"
   },
   "menu": {
     "notFound": "This menu does not exist or is not published yet.",
@@ -101,5 +102,56 @@
     "colPublished": "Published",
     "yes": "Yes",
     "no": "No"
+  },
+  "demo": {
+    "title": "How it works",
+    "subtitle": "From table to plate, in seconds.",
+    "customer": "Customer",
+    "server": "Server",
+    "play": "Play",
+    "pause": "Pause",
+    "prev": "Previous step",
+    "next": "Next step",
+    "chapters": {
+      "scan": "The customer scans the table QR code",
+      "choose": "They build their selection",
+      "show": "“Show the server”",
+      "serverScan": "The server scans the order",
+      "served": "Served, enjoy your meal!"
+    },
+    "ui": {
+      "scanHint": "Point at the QR code",
+      "tableDetected": "Table 7 detected",
+      "restaurant": "Restaurant Démo",
+      "tabs": [
+        "Grills",
+        "Mains",
+        "Drinks"
+      ],
+      "chooseVariant": "Choose your portion",
+      "half": "Half",
+      "whole": "Whole",
+      "mySelection": "My selection",
+      "items": "{count, plural, one {# item} other {# items}}",
+      "showServer": "Show the server",
+      "table": "Table",
+      "orderNo": "Order A-27",
+      "scanOrder": "Scan order",
+      "newOrder": "New order",
+      "confirm": "Confirm",
+      "confirmed": "Confirmed",
+      "statusSent": "Sent",
+      "statusConfirmed": "Confirmed",
+      "statusPreparing": "Preparing",
+      "statusReady": "Ready",
+      "statusServed": "Served",
+      "served": "You’ve been served! Enjoy your meal",
+      "total": "Total"
+    },
+    "dishes": {
+      "chicken": "Grilled free-range chicken",
+      "rice": "Jollof-style rice",
+      "bissap": "Hibiscus juice"
+    }
   }
 }

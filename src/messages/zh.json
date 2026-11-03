@@ -28,7 +28,8 @@
     "subtitle": "数字菜单、扫码点餐和餐厅管理，手机即可完成。",
     "cta": "免费创建我的餐厅",
     "seeDemo": "查看演示菜单",
-    "comingSoon": "即将在瓦加杜古和博博迪乌拉索上线。"
+    "comingSoon": "即将在瓦加杜古和博博迪乌拉索上线。",
+    "howItWorks": "查看使用流程"
   },
   "menu": {
     "notFound": "该菜单不存在或尚未发布。",
@@ -101,5 +102,56 @@
     "colPublished": "已发布",
     "yes": "是",
     "no": "否"
+  },
+  "demo": {
+    "title": "使用流程",
+    "subtitle": "从餐桌到餐盘，只需几秒钟。",
+    "customer": "顾客",
+    "server": "服务员",
+    "play": "播放",
+    "pause": "暂停",
+    "prev": "上一步",
+    "next": "下一步",
+    "chapters": {
+      "scan": "顾客扫描餐桌二维码",
+      "choose": "挑选菜品",
+      "show": "“出示给服务员”",
+      "serverScan": "服务员扫描订单",
+      "served": "上菜啦，请慢用！"
+    },
+    "ui": {
+      "scanHint": "对准二维码",
+      "tableDetected": "已识别 7 号桌",
+      "restaurant": "Restaurant Démo",
+      "tabs": [
+        "烧烤",
+        "主菜",
+        "饮料"
+      ],
+      "chooseVariant": "选择份量",
+      "half": "半只",
+      "whole": "整只",
+      "mySelection": "我的选择",
+      "items": "{count, plural, other {# 件}}",
+      "showServer": "出示给服务员",
+      "table": "餐桌",
+      "orderNo": "订单 A-27",
+      "scanOrder": "扫描订单",
+      "newOrder": "新订单",
+      "confirm": "确认",
+      "confirmed": "已确认",
+      "statusSent": "已发送",
+      "statusConfirmed": "已确认",
+      "statusPreparing": "制作中",
+      "statusReady": "已备好",
+      "statusServed": "已上菜",
+      "served": "已为您上菜！请慢用",
+      "total": "合计"
+    },
+    "dishes": {
+      "chicken": "烤走地鸡",
+      "rice": "油焖饭",
+      "bissap": "洛神花汁"
+    }
   }
 }

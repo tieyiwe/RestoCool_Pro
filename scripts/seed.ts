@@ -49,7 +49,7 @@ async function seedDemo(db: DB) {
       name: "Restaurant Démo",
       legalName: "Restaurant Démo (fictif)",
       theme: "warm",
-      accentColor: "#0E7C4A",
+      accentColor: "#0F6B3E",
       phones: ["22670000001", "22670000002"],
       whatsapp: "22670000001",
       orangeMoney: "22670000003",

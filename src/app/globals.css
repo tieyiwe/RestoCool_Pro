@@ -1,47 +1,53 @@
 @import "tailwindcss";
 
-/* RestoCool brand tokens. Burkina colors are used as accents only. */
+/* RestoCool brand tokens — source of truth: docs/brand/BRAND.md. Do not invent colours. */
 :root {
-  --rc-green: #0e7c4a;      /* primary — 5.3:1 on white */
-  --rc-green-dark: #0a5c37;
-  --rc-red: #c2362b;        /* accent */
-  --rc-yellow: #f2b705;     /* accent, never for text on white */
+  --rc-vert: #0f6b3e;     /* primary — creme text 6.2:1 */
+  --rc-nuit: #0b3d26;     /* hero, footer, dark mode background */
+  --rc-or: #e9b530;       /* star, badges, highlights — never body text on light */
+  --rc-laterite: #b24a26; /* errors, alerts, spicy, destructive */
+  --rc-creme: #fff8ec;
+  --rc-sable: #f1e6d0;
+  --rc-encre: #17231c;
+  --rc-encre-2: #3e4a42;
+  --rc-ligne: #e4d9c2;
 
-  --background: #faf8f5;
+  --background: var(--rc-creme);
   --surface: #ffffff;
-  --foreground: #1c1917;
-  --muted: #f1ede7;
-  --muted-foreground: #57534e;
-  --border: #e4ded5;
-  --primary: var(--rc-green);
-  --primary-foreground: #ffffff;
-  --ring: #0e7c4a;
+  --foreground: var(--rc-encre);
+  --muted: var(--rc-sable);
+  --muted-foreground: var(--rc-encre-2);
+  --border: var(--rc-ligne);
+  --primary: var(--rc-vert);
+  --primary-foreground: var(--rc-creme);
+  --danger: var(--rc-laterite);
+  --ring: var(--rc-vert);
   --radius: 0.75rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --background: #141210;
-    --surface: #1e1b18;
-    --foreground: #f5f2ee;
-    --muted: #2a2622;
-    --muted-foreground: #b8b1a8;
-    --border: #3a342e;
-    --primary: #2fae72;
-    --primary-foreground: #0b1a12;
-    --ring: #2fae72;
+    --background: var(--rc-nuit);
+    --surface: #0f4a2f;
+    --foreground: var(--rc-creme);
+    --muted: #14553a;
+    --muted-foreground: #d9e4dc;
+    --border: #1d6045;
+    --primary: var(--rc-or);
+    --primary-foreground: var(--rc-encre);
+    --ring: var(--rc-or);
   }
 }
 :root[data-theme="dark"] {
-  --background: #141210;
-  --surface: #1e1b18;
-  --foreground: #f5f2ee;
-  --muted: #2a2622;
-  --muted-foreground: #b8b1a8;
-  --border: #3a342e;
-  --primary: #2fae72;
-  --primary-foreground: #0b1a12;
-  --ring: #2fae72;
+  --background: var(--rc-nuit);
+  --surface: #0f4a2f;
+  --foreground: var(--rc-creme);
+  --muted: #14553a;
+  --muted-foreground: #d9e4dc;
+  --border: #1d6045;
+  --primary: var(--rc-or);
+  --primary-foreground: var(--rc-encre);
+  --ring: var(--rc-or);
 }
 
 /* Public menu themes, chosen per restaurant. Accent comes from restaurant.accent_color. */
@@ -54,12 +60,12 @@
   --border: #e4e4e7;
 }
 [data-menu-theme="warm"] {
-  --background: #fbf6ee;
-  --surface: #fffdf9;
-  --foreground: #2b1d12;
-  --muted: #f3e9da;
-  --muted-foreground: #6b5440;
-  --border: #e8dac6;
+  --background: var(--rc-creme);
+  --surface: #ffffff;
+  --foreground: var(--rc-encre);
+  --muted: var(--rc-sable);
+  --muted-foreground: var(--rc-encre-2);
+  --border: var(--rc-ligne);
 }
 [data-menu-theme="lacquer"] {
   --background: #160d0b;
@@ -81,15 +87,29 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-ring: var(--ring);
   --color-accent: var(--accent, var(--primary));
-  --color-rc-green: var(--rc-green);
-  --color-rc-red: var(--rc-red);
-  --color-rc-yellow: var(--rc-yellow);
+  --color-danger: var(--danger);
+  --color-vert: var(--rc-vert);
+  --color-nuit: var(--rc-nuit);
+  --color-or: var(--rc-or);
+  --color-laterite: var(--rc-laterite);
+  --color-creme: var(--rc-creme);
+  --color-sable: var(--rc-sable);
+  --color-encre: var(--rc-encre);
+  --color-encre-2: var(--rc-encre-2);
+  --color-ligne: var(--rc-ligne);
   --radius-lg: var(--radius);
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  /* Manrope for text, Baloo 2 for titles and big numbers; CJK falls back to system fonts. */
+  --font-sans: var(--font-manrope), system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-display: var(--font-baloo), var(--font-manrope), system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
+}
+h1,
+h2,
+.font-display {
+  font-family: var(--font-display);
 }
 body {
   background: var(--background);
@@ -112,8 +132,8 @@ textarea {
 /* Subtle woven texture inspired by Faso Dan Fani stripes. */
 .rc-weave {
   background-image:
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--rc-green) 9%, transparent) 0 6px, transparent 6px 14px),
-    repeating-linear-gradient(0deg, color-mix(in srgb, var(--rc-red) 6%, transparent) 0 3px, transparent 3px 18px);
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--rc-vert) 8%, transparent) 0 6px, transparent 6px 14px),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--rc-laterite) 5%, transparent) 0 3px, transparent 3px 18px);
 }
 
 .safe-bottom {
@@ -129,4 +149,84 @@ textarea {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ---------- Demo animation (home page and /demo) ---------- */
+@keyframes demo-beam {
+  0% { top: 6%; }
+  50% { top: 88%; }
+  100% { top: 6%; }
+}
+.demo-beam {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  height: 3px;
+  border-radius: 9999px;
+  background: var(--rc-or);
+  box-shadow: 0 0 14px 4px color-mix(in srgb, var(--rc-or) 70%, transparent);
+  animation: demo-beam 1.6s ease-in-out infinite;
+}
+@keyframes demo-tap {
+  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0.9; }
+  70% { transform: translate(-50%, -50%) scale(1.6); opacity: 0.35; }
+  100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+.demo-tap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--rc-or) 65%, transparent);
+  border: 2px solid var(--rc-or);
+  pointer-events: none;
+  animation: demo-tap 0.9s ease-out 0.15s both;
+}
+@keyframes demo-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--rc-or) 60%, transparent); }
+  50% { box-shadow: 0 0 0 6px transparent; }
+}
+.demo-pulse { animation: demo-pulse 1.4s ease-in-out infinite; }
+@keyframes demo-float {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-6px) rotate(1.5deg); }
+}
+.demo-float { animation: demo-float 3s ease-in-out infinite; }
+@keyframes demo-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.demo-slide-up { animation: demo-slide-up 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes demo-fade-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+.demo-fade-in { animation: demo-fade-in 0.35s ease-out both; }
+@keyframes demo-pop {
+  0% { opacity: 0; transform: scale(0.85) translateY(10px); }
+  70% { opacity: 1; transform: scale(1.03); }
+  100% { transform: none; }
+}
+.demo-pop { animation: demo-pop 0.45s ease-out both; }
+@keyframes demo-bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+.demo-bump { animation: demo-bump 0.35s ease-out; display: inline-flex; }
+@keyframes demo-confetti {
+  0% { top: -6%; opacity: 1; }
+  100% { top: 105%; opacity: 0.9; }
+}
+.demo-confetti {
+  position: absolute;
+  top: -6%;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  animation-name: demo-confetti;
+  animation-timing-function: cubic-bezier(0.3, 0.6, 0.5, 1);
+  animation-fill-mode: both;
 }

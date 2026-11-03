@@ -28,7 +28,8 @@
     "subtitle": "Menu digital, commandes par QR code et gestion de salle, depuis votre téléphone.",
     "cta": "Créer mon restaurant gratuitement",
     "seeDemo": "Voir le menu de démonstration",
-    "comingSoon": "Lancement bientôt à Ouagadougou et Bobo-Dioulasso."
+    "comingSoon": "Lancement bientôt à Ouagadougou et Bobo-Dioulasso.",
+    "howItWorks": "Voir comment ça marche"
   },
   "menu": {
     "notFound": "Ce menu n’existe pas ou n’est pas encore publié.",
@@ -101,5 +102,56 @@
     "colPublished": "Publié",
     "yes": "Oui",
     "no": "Non"
+  },
+  "demo": {
+    "title": "Comment ça marche",
+    "subtitle": "De la table à l’assiette, en quelques secondes.",
+    "customer": "Client",
+    "server": "Serveur",
+    "play": "Lecture",
+    "pause": "Pause",
+    "prev": "Étape précédente",
+    "next": "Étape suivante",
+    "chapters": {
+      "scan": "Le client scanne le QR de la table",
+      "choose": "Il compose sa sélection",
+      "show": "« Montrer au serveur »",
+      "serverScan": "Le serveur scanne la commande",
+      "served": "Servi, bon appétit !"
+    },
+    "ui": {
+      "scanHint": "Visez le QR code",
+      "tableDetected": "Table 7 détectée",
+      "restaurant": "Restaurant Démo",
+      "tabs": [
+        "Grillades",
+        "Plats",
+        "Boissons"
+      ],
+      "chooseVariant": "Choisissez la portion",
+      "half": "Demi",
+      "whole": "Entier",
+      "mySelection": "Ma sélection",
+      "items": "{count, plural, one {# article} other {# articles}}",
+      "showServer": "Montrer au serveur",
+      "table": "Table",
+      "orderNo": "Commande A-27",
+      "scanOrder": "Scanner la commande",
+      "newOrder": "Nouvelle commande",
+      "confirm": "Confirmer",
+      "confirmed": "Confirmée",
+      "statusSent": "Envoyée",
+      "statusConfirmed": "Confirmée",
+      "statusPreparing": "En préparation",
+      "statusReady": "Prête",
+      "statusServed": "Servie",
+      "served": "Vous avez été servi ! Bon appétit",
+      "total": "Total"
+    },
+    "dishes": {
+      "chicken": "Poulet bicyclette",
+      "rice": "Riz gras",
+      "bissap": "Jus de bissap"
+    }
   }
 }

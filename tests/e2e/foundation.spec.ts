@@ -11,7 +11,7 @@ test("health endpoint reports the database is up", async ({ request }) => {
 
 test("holding page shows the brand and links to the demo menu", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("img", { name: "RestoCool" })).toBeVisible();
+  await expect(page.getByLabel("RestoCool").first()).toBeVisible();
   await expect(page.getByText("RestoCool : votre menu, vos commandes, vos tables. Simple.")).toBeVisible();
   await page.getByRole("link", { name: "Voir le menu de démonstration" }).click();
   await expect(page).toHaveURL(/\/r\/restaurant-demo$/);

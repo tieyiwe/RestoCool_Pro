@@ -26,7 +26,7 @@ export const restaurants = pgTable(
     logoUrl: text("logo_url"),
     coverUrl: text("cover_url"),
     theme: themeEnum("theme").notNull().default("warm"),
-    accentColor: text("accent_color").notNull().default("#0E7C4A"),
+    accentColor: text("accent_color").notNull().default("#0F6B3E"),
     phones: text("phones").array().notNull().default([]),
     whatsapp: text("whatsapp"),
     orangeMoney: text("orange_money"),
