@@ -1,0 +1,191 @@
+import "./_env";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { eq } from "drizzle-orm";
+import { closeDb, getDb, type DB } from "../src/db";
+import {
+  areas,
+  fortunes,
+  menuCategories,
+  menuItemOptions,
+  menuItemVariants,
+  menuItems,
+  openingHours,
+  planEvents,
+  restaurants,
+  seats,
+} from "../src/db/schema";
+import { writeAudit } from "../src/lib/audit";
+import { randomToken } from "../src/lib/tokens";
+import { DEMO_CATEGORIES, DEMO_FORTUNES } from "./seed-data";
+
+const DEMO_SLUG = "restaurant-demo";
+const TEST_SLUG = "maquis-temoin";
+const IMG_DIR = path.join(process.cwd(), "public", "demo");
+
+function escapeXml(s: string) {
+  return s.replace(/[<>&"']/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&apos;" })[c]!);
+}
+
+/** Locally generated placeholder (no stock photos): category color, dish number and name. */
+function placeholderSvg(code: string, label: string, color: string): string {
+  const short = label.length > 22 ? `${label.slice(0, 21)}…` : label;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${color}"/><stop offset="1" stop-color="#1c1917"/></linearGradient></defs><rect width="400" height="400" fill="url(#g)"/><circle cx="200" cy="175" r="105" fill="#fff" opacity=".14"/><circle cx="200" cy="175" r="78" fill="#fff" opacity=".18"/><text x="200" y="198" font-family="system-ui,sans-serif" font-size="72" font-weight="800" fill="#fff" text-anchor="middle">${escapeXml(code)}</text><text x="200" y="335" font-family="system-ui,sans-serif" font-size="26" font-weight="700" fill="#fff" text-anchor="middle">${escapeXml(short)}</text></svg>`;
+}
+
+async function resetRestaurant(db: DB, slug: string) {
+  // Cascades to every tenant table.
+  await db.delete(restaurants).where(eq(restaurants.slug, slug));
+}
+
+async function seedDemo(db: DB) {
+  await resetRestaurant(db, DEMO_SLUG);
+  await mkdir(IMG_DIR, { recursive: true });
+
+  const [r] = await db
+    .insert(restaurants)
+    .values({
+      slug: DEMO_SLUG,
+      name: "Restaurant Démo",
+      legalName: "Restaurant Démo (fictif)",
+      theme: "warm",
+      accentColor: "#0E7C4A",
+      phones: ["22670000001", "22670000002"],
+      whatsapp: "22670000001",
+      orangeMoney: "22670000003",
+      moovMoney: "22660000004",
+      address: "Avenue de la Démo, Ouagadougou",
+      city: "Ouagadougou",
+      gmapsUrl: "https://maps.google.com/?q=Ouagadougou",
+      plan: "pro",
+      planStatus: "trial",
+      planExpiresAt: new Date(Date.now() + 30 * 86_400_000),
+      published: true,
+      settings: {
+        seatingModes: ["table", "area", "room", "takeaway"],
+        qrStrategy: "per_seat",
+        orderValidation: "server_confirms",
+        enabledLocales: ["fr", "en", "zh"],
+        features: { welcomeScreen: true, fortuneCookie: true, takeawayWhatsapp: true, share: true, localBadge: true },
+        inactivity: { warnAfterSec: 240, releaseAfterSec: 30 },
+      },
+    })
+    .returning();
+  const restaurantId = r!.id;
+
+  // Opening hours: every day 10:00–23:00, Friday and Saturday until 01:00.
+  await db.insert(openingHours).values(
+    [0, 1, 2, 3, 4, 5, 6].map((weekday) => ({
+      restaurantId,
+      weekday,
+      opens: "10:00",
+      closes: weekday === 5 || weekday === 6 ? "01:00" : "23:00",
+    })),
+  );
+
+  const [terrasse, salle] = await db
+    .insert(areas)
+    .values([
+      { restaurantId, name: { fr: "Terrasse", en: "Terrace", zh: "露台" }, sort: 1 },
+      { restaurantId, name: { fr: "Salle climatisée", en: "Air-conditioned room", zh: "空调大厅" }, sort: 2 },
+    ])
+    .returning();
+
+  await db.insert(seats).values([
+    ...Array.from({ length: 10 }, (_, i) => ({
+      restaurantId,
+      type: "table" as const,
+      label: String(i + 1),
+      areaId: i < 6 ? terrasse!.id : salle!.id,
+      capacity: i % 3 === 0 ? 6 : 4,
+      qrToken: randomToken(),
+      sort: i + 1,
+    })),
+    { restaurantId, type: "room" as const, label: "Salon Ouaga", capacity: 12, qrToken: randomToken(), sort: 1 },
+    { restaurantId, type: "room" as const, label: "Salon 201", capacity: 8, qrToken: randomToken(), sort: 2 },
+    { restaurantId, type: "room" as const, label: "Salon 601", capacity: 10, qrToken: randomToken(), sort: 3 },
+    { restaurantId, type: "takeaway" as const, label: "À emporter", qrToken: randomToken(), sort: 1 },
+  ]);
+
+  let itemCount = 0;
+  for (const [ci, cat] of DEMO_CATEGORIES.entries()) {
+    const [category] = await db
+      .insert(menuCategories)
+      .values({ restaurantId, name: cat.name, sort: ci + 1 })
+      .returning();
+    for (const [ii, item] of cat.items.entries()) {
+      const file = `item-${item.code}.svg`;
+      await writeFile(path.join(IMG_DIR, file), placeholderSvg(item.code, item.name.fr, cat.color));
+      const [row] = await db
+        .insert(menuItems)
+        .values({
+          restaurantId,
+          categoryId: category!.id,
+          code: item.code,
+          name: item.name,
+          description: item.description ?? null,
+          price: item.price,
+          spicy: item.spicy ?? 0,
+          tags: item.tags ?? [],
+          station: item.station ?? cat.station,
+          photoUrl: `/demo/${file}`,
+          thumbUrl: `/demo/${file}`,
+          sort: ii + 1,
+        })
+        .returning();
+      itemCount++;
+      if (item.variants?.length) {
+        await db.insert(menuItemVariants).values(
+          item.variants.map((v, vi) => ({ restaurantId, itemId: row!.id, name: v.name, price: v.price, sort: vi + 1 })),
+        );
+      }
+      if (item.options?.length) {
+        await db.insert(menuItemOptions).values(
+          item.options.map((o, oi) => ({
+            restaurantId,
+            itemId: row!.id,
+            group: o.group,
+            name: o.name,
+            priceDelta: o.priceDelta,
+            maxSelect: o.maxSelect ?? 1,
+            sort: oi + 1,
+          })),
+        );
+      }
+    }
+  }
+
+  await db.insert(fortunes).values(DEMO_FORTUNES.map((text) => ({ restaurantId, text })));
+  await db.insert(planEvents).values({ restaurantId, toPlan: "pro", toStatus: "trial", automatic: true, reference: "seed" });
+  await writeAudit(db, null, { restaurantId, action: "restaurant.seeded", entity: "restaurant", entityId: restaurantId });
+
+  console.log(`✓ ${r!.name}: ${DEMO_CATEGORIES.length} categories, ${itemCount} items, 14 seats, ${DEMO_FORTUNES.length} fortunes`);
+}
+
+/** A second, unpublished tenant used only by the tenant-isolation tests. */
+async function seedTestTenant(db: DB) {
+  await resetRestaurant(db, TEST_SLUG);
+  const [r] = await db
+    .insert(restaurants)
+    .values({ slug: TEST_SLUG, name: "Maquis Témoin (test)", plan: "gratuit", planStatus: "active", published: false })
+    .returning();
+  const [c] = await db
+    .insert(menuCategories)
+    .values({ restaurantId: r!.id, name: { fr: "Secret" } })
+    .returning();
+  await db.insert(menuItems).values({ restaurantId: r!.id, categoryId: c!.id, name: { fr: "Plat secret du témoin" }, price: 999 });
+  console.log(`✓ ${r!.name} (isolation tests)`);
+}
+
+async function main() {
+  const db = getDb();
+  await seedDemo(db);
+  if (process.argv.includes("--with-test-tenant")) await seedTestTenant(db);
+}
+
+main()
+  .catch((err) => {
+    console.error(err);
+    process.exitCode = 1;
+  })
+  .finally(() => closeDb());

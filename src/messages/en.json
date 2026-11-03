@@ -1,0 +1,90 @@
+{
+  "brand": {
+    "tagline": "RestoCool: your menu, your orders, your tables. Simple.",
+    "local": "100% local",
+    "designedIn": "Designed in Burkina, for Burkina's restaurants",
+    "proud": "Proudly Burkinabè",
+    "payLocal": "Pay in FCFA, with Orange Money and Moov Money",
+    "support": "Support in French, by WhatsApp",
+    "greeting": "Laafi!",
+    "thanks": "Barka!"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong. Please try again in a moment.",
+    "retry": "Try again",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "language": "Language",
+    "onRequest": "On request",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "authNotConfigured": "Sign-in is not configured yet. Add the Clerk keys in Replit Secrets."
+  },
+  "landing": {
+    "title": "The 100% local solution for Burkina's restaurants",
+    "subtitle": "Digital menu, QR code ordering and dining room management, from your phone.",
+    "cta": "Create my restaurant for free",
+    "seeDemo": "See the demo menu",
+    "comingSoon": "Launching soon in Ouagadougou and Bobo-Dioulasso."
+  },
+  "menu": {
+    "notFound": "This menu does not exist or is not published yet.",
+    "items": "{count, plural, =0 {No dishes} one {# dish} other {# dishes}}",
+    "spicy": "Spicy",
+    "new": "New",
+    "poweredBy": "Menu by <resto>RestoCool</resto> · Powered by <tib>TIBLOGICS</tib>",
+    "preview": "Preview: this menu is not published yet.",
+    "shellNote": "Full menu (cart, photos, languages) under construction."
+  },
+  "app": {
+    "title": "Restaurant space",
+    "dashboard": "Dashboard",
+    "menu": "Menu",
+    "seating": "Tables and rooms",
+    "staff": "Staff",
+    "settings": "Settings",
+    "about": "About",
+    "noRestaurant": "No active restaurant. Create or select your restaurant to continue.",
+    "createRestaurant": "Create my restaurant",
+    "stats": {
+      "categories": "Categories",
+      "items": "Dishes",
+      "seats": "Seats",
+      "areas": "Areas"
+    },
+    "plan": {
+      "gratuit": "Free",
+      "pro": "Pro",
+      "business": "Business",
+      "trial": "Trial",
+      "active": "Active",
+      "past_due": "Payment overdue",
+      "suspended": "Suspended",
+      "trialEnds": "Pro trial until {date}"
+    },
+    "role": {
+      "owner": "Owner",
+      "manager": "Manager",
+      "server": "Server",
+      "kitchen": "Kitchen",
+      "cashier": "Cashier"
+    },
+    "devBypass": "Development mode: simulated sign-in (owner of the demo restaurant).",
+    "recentActivity": "Recent activity",
+    "noActivity": "No activity yet."
+  },
+  "admin": {
+    "title": "RestoCool administration",
+    "restaurants": "Restaurants",
+    "forbidden": "Restricted to the TIBLOGICS team.",
+    "colName": "Name",
+    "colCity": "City",
+    "colPlan": "Plan",
+    "colStatus": "Status",
+    "colPublished": "Published",
+    "yes": "Yes",
+    "no": "No"
+  }
+}

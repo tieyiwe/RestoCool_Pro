@@ -1,0 +1,90 @@
+{
+  "brand": {
+    "tagline": "RestoCool : votre menu, vos commandes, vos tables. Simple.",
+    "local": "100 % local",
+    "designedIn": "Pensé au Burkina, pour les restaurants du Burkina",
+    "proud": "Fièrement burkinabè",
+    "payLocal": "Payez en FCFA, avec Orange Money et Moov Money",
+    "support": "Support en français, par WhatsApp",
+    "greeting": "Laafi !",
+    "thanks": "Barka !"
+  },
+  "common": {
+    "loading": "Chargement…",
+    "error": "Une erreur est survenue. Réessayez dans un instant.",
+    "retry": "Réessayer",
+    "back": "Retour",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "language": "Langue",
+    "onRequest": "Sur demande",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "authNotConfigured": "Connexion pas encore configurée. Ajoutez les clés Clerk dans Replit Secrets."
+  },
+  "landing": {
+    "title": "La solution 100 % locale pour les restaurants du Burkina",
+    "subtitle": "Menu digital, commandes par QR code et gestion de salle, depuis votre téléphone.",
+    "cta": "Créer mon restaurant gratuitement",
+    "seeDemo": "Voir le menu de démonstration",
+    "comingSoon": "Lancement bientôt à Ouagadougou et Bobo-Dioulasso."
+  },
+  "menu": {
+    "notFound": "Ce menu n’existe pas ou n’est pas encore publié.",
+    "items": "{count, plural, =0 {Aucun plat} one {# plat} other {# plats}}",
+    "spicy": "Pimenté",
+    "new": "Nouveau",
+    "poweredBy": "Menu par <resto>RestoCool</resto> · Powered by <tib>TIBLOGICS</tib>",
+    "preview": "Aperçu : ce menu n’est pas encore publié.",
+    "shellNote": "Menu complet (panier, photos, langues) en cours de construction."
+  },
+  "app": {
+    "title": "Espace restaurant",
+    "dashboard": "Tableau de bord",
+    "menu": "Menu",
+    "seating": "Tables et salles",
+    "staff": "Personnel",
+    "settings": "Paramètres",
+    "about": "À propos",
+    "noRestaurant": "Aucun restaurant actif. Créez ou sélectionnez votre restaurant pour continuer.",
+    "createRestaurant": "Créer mon restaurant",
+    "stats": {
+      "categories": "Catégories",
+      "items": "Plats",
+      "seats": "Places",
+      "areas": "Zones"
+    },
+    "plan": {
+      "gratuit": "Gratuit",
+      "pro": "Pro",
+      "business": "Business",
+      "trial": "Essai",
+      "active": "Actif",
+      "past_due": "Paiement en retard",
+      "suspended": "Suspendu",
+      "trialEnds": "Essai Pro jusqu’au {date}"
+    },
+    "role": {
+      "owner": "Propriétaire",
+      "manager": "Gérant",
+      "server": "Serveur",
+      "kitchen": "Cuisine",
+      "cashier": "Caisse"
+    },
+    "devBypass": "Mode développement : connexion simulée (propriétaire du restaurant de démo).",
+    "recentActivity": "Activité récente",
+    "noActivity": "Aucune activité pour le moment."
+  },
+  "admin": {
+    "title": "Administration RestoCool",
+    "restaurants": "Restaurants",
+    "forbidden": "Accès réservé à l’équipe TIBLOGICS.",
+    "colName": "Nom",
+    "colCity": "Ville",
+    "colPlan": "Formule",
+    "colStatus": "Statut",
+    "colPublished": "Publié",
+    "yes": "Oui",
+    "no": "Non"
+  }
+}

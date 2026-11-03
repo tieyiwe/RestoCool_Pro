@@ -1,0 +1,27 @@
+# RestoCool on Replit (Next.js 15 + Drizzle + Replit PostgreSQL).
+#
+# Before the first run:
+#   1. Database pane -> create PostgreSQL (sets DATABASE_URL automatically).
+#   2. Secrets pane  -> add the variables listed in .env.example.
+#   3. Shell: npm run db:migrate && npm run db:seed
+#
+# Deployment: Reserved VM (one long-lived process, needed for live order
+# updates over SSE + Postgres LISTEN/NOTIFY from M4). Migrations run on start.
+
+modules = ["nodejs-22", "postgresql-16"]
+run = "npm run dev"
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+deploymentTarget = "gce"
+build = ["sh", "-c", "npm ci && npm run build"]
+run = ["sh", "-c", "npm run db:migrate && npm run start"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[env]
+NEXT_TELEMETRY_DISABLED = "1"

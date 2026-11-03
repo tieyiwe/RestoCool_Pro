@@ -1,0 +1,27 @@
+import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { AuthProvider } from "@/components/auth-provider";
+import { Logo } from "@/components/brand/logo";
+import { UserMenu } from "@/components/user-menu";
+import { getSuperadmin } from "@/lib/auth/context";
+
+export const dynamic = "force-dynamic";
+
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const t = await getTranslations("admin");
+  const sa = await getSuperadmin();
+  return (
+    <AuthProvider>
+      <header className="flex items-center justify-between border-b border-border bg-foreground px-4 py-2 text-background">
+        <Link href="/admin" className="flex items-center gap-2 font-bold">
+          <Logo showMark className="[&_.text-foreground]:text-background" />
+          <span className="text-sm opacity-80">Admin</span>
+        </Link>
+        <UserMenu />
+      </header>
+      <main className="mx-auto max-w-6xl px-4 py-6">
+        {sa ? children : <p role="alert" className="text-center text-muted-foreground">{t("forbidden")}</p>}
+      </main>
+    </AuthProvider>
+  );
+}

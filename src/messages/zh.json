@@ -1,0 +1,90 @@
+{
+  "brand": {
+    "tagline": "RestoCool：您的菜单、您的订单、您的餐桌。简单。",
+    "local": "100% 本地",
+    "designedIn": "为布基纳法索的餐厅而设计，源自布基纳法索",
+    "proud": "布基纳法索自豪出品",
+    "payLocal": "以西非法郎支付，支持 Orange Money 和 Moov Money",
+    "support": "通过 WhatsApp 提供法语支持",
+    "greeting": "Laafi！",
+    "thanks": "Barka！"
+  },
+  "common": {
+    "loading": "加载中…",
+    "error": "出现错误，请稍后重试。",
+    "retry": "重试",
+    "back": "返回",
+    "save": "保存",
+    "cancel": "取消",
+    "language": "语言",
+    "onRequest": "价格面议",
+    "signIn": "登录",
+    "signOut": "退出登录",
+    "authNotConfigured": "登录尚未配置。请在 Replit Secrets 中添加 Clerk 密钥。"
+  },
+  "landing": {
+    "title": "为布基纳法索餐厅打造的 100% 本地解决方案",
+    "subtitle": "数字菜单、扫码点餐和餐厅管理，手机即可完成。",
+    "cta": "免费创建我的餐厅",
+    "seeDemo": "查看演示菜单",
+    "comingSoon": "即将在瓦加杜古和博博迪乌拉索上线。"
+  },
+  "menu": {
+    "notFound": "该菜单不存在或尚未发布。",
+    "items": "{count, plural, =0 {暂无菜品} other {# 道菜}}",
+    "spicy": "辣",
+    "new": "新品",
+    "poweredBy": "菜单由 <resto>RestoCool</resto> 提供 · Powered by <tib>TIBLOGICS</tib>",
+    "preview": "预览：此菜单尚未发布。",
+    "shellNote": "完整菜单（购物车、照片、多语言）正在建设中。"
+  },
+  "app": {
+    "title": "餐厅管理",
+    "dashboard": "概览",
+    "menu": "菜单",
+    "seating": "餐桌和包间",
+    "staff": "员工",
+    "settings": "设置",
+    "about": "关于",
+    "noRestaurant": "没有活动的餐厅。请创建或选择您的餐厅以继续。",
+    "createRestaurant": "创建我的餐厅",
+    "stats": {
+      "categories": "分类",
+      "items": "菜品",
+      "seats": "座位",
+      "areas": "区域"
+    },
+    "plan": {
+      "gratuit": "免费版",
+      "pro": "专业版",
+      "business": "商业版",
+      "trial": "试用",
+      "active": "有效",
+      "past_due": "付款逾期",
+      "suspended": "已暂停",
+      "trialEnds": "专业版试用至 {date}"
+    },
+    "role": {
+      "owner": "店主",
+      "manager": "经理",
+      "server": "服务员",
+      "kitchen": "厨房",
+      "cashier": "收银"
+    },
+    "devBypass": "开发模式：模拟登录（演示餐厅店主）。",
+    "recentActivity": "最近活动",
+    "noActivity": "暂无活动。"
+  },
+  "admin": {
+    "title": "RestoCool 管理后台",
+    "restaurants": "餐厅",
+    "forbidden": "仅限 TIBLOGICS 团队访问。",
+    "colName": "名称",
+    "colCity": "城市",
+    "colPlan": "套餐",
+    "colStatus": "状态",
+    "colPublished": "已发布",
+    "yes": "是",
+    "no": "否"
+  }
+}

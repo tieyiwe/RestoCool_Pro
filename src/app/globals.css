@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+/* RestoCool brand tokens. Burkina colors are used as accents only. */
+:root {
+  --rc-green: #0e7c4a;      /* primary — 5.3:1 on white */
+  --rc-green-dark: #0a5c37;
+  --rc-red: #c2362b;        /* accent */
+  --rc-yellow: #f2b705;     /* accent, never for text on white */
+
+  --background: #faf8f5;
+  --surface: #ffffff;
+  --foreground: #1c1917;
+  --muted: #f1ede7;
+  --muted-foreground: #57534e;
+  --border: #e4ded5;
+  --primary: var(--rc-green);
+  --primary-foreground: #ffffff;
+  --ring: #0e7c4a;
+  --radius: 0.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #141210;
+    --surface: #1e1b18;
+    --foreground: #f5f2ee;
+    --muted: #2a2622;
+    --muted-foreground: #b8b1a8;
+    --border: #3a342e;
+    --primary: #2fae72;
+    --primary-foreground: #0b1a12;
+    --ring: #2fae72;
+  }
+}
+:root[data-theme="dark"] {
+  --background: #141210;
+  --surface: #1e1b18;
+  --foreground: #f5f2ee;
+  --muted: #2a2622;
+  --muted-foreground: #b8b1a8;
+  --border: #3a342e;
+  --primary: #2fae72;
+  --primary-foreground: #0b1a12;
+  --ring: #2fae72;
+}
+
+/* Public menu themes, chosen per restaurant. Accent comes from restaurant.accent_color. */
+[data-menu-theme="light"] {
+  --background: #ffffff;
+  --surface: #ffffff;
+  --foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #52525b;
+  --border: #e4e4e7;
+}
+[data-menu-theme="warm"] {
+  --background: #fbf6ee;
+  --surface: #fffdf9;
+  --foreground: #2b1d12;
+  --muted: #f3e9da;
+  --muted-foreground: #6b5440;
+  --border: #e8dac6;
+}
+[data-menu-theme="lacquer"] {
+  --background: #160d0b;
+  --surface: #241512;
+  --foreground: #f8efe6;
+  --muted: #34201b;
+  --muted-foreground: #d6c2b0;
+  --border: #4a2e26;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-ring: var(--ring);
+  --color-accent: var(--accent, var(--primary));
+  --color-rc-green: var(--rc-green);
+  --color-rc-red: var(--rc-red);
+  --color-rc-yellow: var(--rc-yellow);
+  --radius-lg: var(--radius);
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* 16px inputs avoid iOS zoom on focus. */
+input,
+select,
+textarea {
+  font-size: max(16px, 1rem);
+}
+
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Subtle woven texture inspired by Faso Dan Fani stripes. */
+.rc-weave {
+  background-image:
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--rc-green) 9%, transparent) 0 6px, transparent 6px 14px),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--rc-red) 6%, transparent) 0 3px, transparent 3px 18px);
+}
+
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
