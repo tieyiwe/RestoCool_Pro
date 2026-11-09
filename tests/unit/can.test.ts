@@ -23,6 +23,15 @@ describe("can()", () => {
     }
   });
 
+  it("only managers and owners read the audit log (members with a staff role do not)", () => {
+    for (const role of ["server", "kitchen", "cashier"] as const) {
+      const member: Actor = { kind: "member", userId: `m-${role}`, restaurantId: A, role };
+      expect(can(member, "audit.read", { restaurantId: A })).toBe(false);
+    }
+    expect(can(manager, "audit.read", { restaurantId: A })).toBe(true);
+    expect(can(owner, "audit.read", { restaurantId: A })).toBe(true);
+  });
+
   it("requires a resource for tenant-bound actors", () => {
     expect(can(owner, "menu.read")).toBe(false);
   });
