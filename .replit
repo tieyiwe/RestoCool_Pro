@@ -25,3 +25,28 @@ externalPort = 80
 
 [env]
 NEXT_TELEMETRY_DISABLED = "1"
+
+# Run button: start the dev server and open the preview on port 5000.
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "RestoCool Web"
+
+[[workflows.workflow]]
+name = "RestoCool Web"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
