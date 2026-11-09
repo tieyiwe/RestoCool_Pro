@@ -83,3 +83,33 @@ test("admin lists restaurants", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Restaurants" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Restaurant Démo" })).toBeVisible();
 });
+
+test.describe("media upload", () => {
+  const webpHeader = Buffer.concat([Buffer.from("RIFF"), Buffer.alloc(4), Buffer.from("WEBP"), Buffer.alloc(32)]);
+
+  test("rejects an oversized body before reading it", async ({ request }) => {
+    const res = await request.post("/api/app/media", {
+      multipart: {
+        kind: "item",
+        width: "10",
+        height: "10",
+        full: { name: "full.webp", mimeType: "image/webp", buffer: Buffer.concat([webpHeader, Buffer.alloc(2 * 1024 * 1024)]) },
+        thumb: { name: "thumb.webp", mimeType: "image/webp", buffer: webpHeader },
+      },
+    });
+    expect(res.status()).toBe(413);
+  });
+
+  test("rejects a file that is not WebP", async ({ request }) => {
+    const res = await request.post("/api/app/media", {
+      multipart: {
+        kind: "item",
+        width: "10",
+        height: "10",
+        full: { name: "full.webp", mimeType: "image/webp", buffer: Buffer.from("<svg onload=alert(1)>") },
+        thumb: { name: "thumb.webp", mimeType: "image/webp", buffer: webpHeader },
+      },
+    });
+    expect(res.status()).toBe(400);
+  });
+});
