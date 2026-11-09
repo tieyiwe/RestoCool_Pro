@@ -19,6 +19,18 @@ export function unitPrice(item: PublicItem, variantId: string | null, optionIds:
   return base + extras;
 }
 
+/**
+ * A saved line still matches the current menu: the dish exists, its variant (required when the
+ * dish has variants) and options still exist. Variants are re-created on every edit, so an old
+ * variant id would otherwise be priced as « sur demande ».
+ */
+export function lineMatchesMenu(items: Map<string, PublicItem>, line: CartLine): boolean {
+  const item = items.get(line.itemId);
+  if (!item) return false;
+  if (item.variants.length > 0 ? !item.variants.some((v) => v.id === line.variantId) : line.variantId !== null) return false;
+  return line.optionIds.every((id) => item.options.some((o) => o.id === id));
+}
+
 export type CartTotals = { count: number; total: number; hasOnRequest: boolean };
 
 /** Lines whose dish no longer exists (menu changed) are ignored. */

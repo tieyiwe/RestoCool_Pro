@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { formatBfPhone, formatFCFA, telHref, whatsappHref } from "@/lib/format";
-import { addToCart, cartTotals, changeQty, indexItems, qtyForItem, takeawayMessage, unitPrice } from "@/lib/public-menu/cart";
+import { addToCart, cartTotals, changeQty, indexItems, lineMatchesMenu, qtyForItem, takeawayMessage, unitPrice } from "@/lib/public-menu/cart";
 import { openStatus } from "@/lib/public-menu/hours";
 import { itemMatches } from "@/lib/public-menu/search";
 import { makeT, type Messages } from "@/lib/public-menu/translate";
@@ -89,7 +89,7 @@ export function MenuApp({
     setLowData(readStore("local", "rc-lowdata") === "1");
     try {
       const saved: unknown = JSON.parse(readStore("session", cartKey) ?? "[]");
-      if (Array.isArray(saved)) setLines(saved.filter((x): x is CartLine => isCartLine(x) && items.has(x.itemId)));
+      if (Array.isArray(saved)) setLines(saved.filter((x): x is CartLine => isCartLine(x) && lineMatchesMenu(items, x)));
     } catch {
       /* ignore */
     }
