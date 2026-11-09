@@ -39,6 +39,10 @@ describe("Suggérer (glossary)", () => {
     expect(s.en).toBe("Chicken yassa");
     expect(s.zh).toBe("");
   });
+  it("ignores Object.prototype names instead of returning garbage", () => {
+    expect(suggestTranslation("constructor")).toEqual({ en: "Constructor", zh: "" });
+    expect(suggestTranslation("Poulet toString")).toEqual({ en: "Chicken tostring", zh: "" });
+  });
 });
 
 describe("accent colour contrast", () => {
