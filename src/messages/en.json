@@ -21,7 +21,9 @@
     "signIn": "Sign in",
     "signOut": "Sign out",
     "authNotConfigured": "Sign-in is not configured yet. Add the Clerk keys in Replit Secrets.",
-    "apply": "Go"
+    "apply": "Go",
+    "authLoading": "Loading sign-in…",
+    "authFailed": "Sign-in could not load. Check your internet connection and reload the page. If it keeps happening, contact support."
   },
   "landing": {
     "title": "The 100% local solution for Burkina's restaurants",

@@ -21,7 +21,9 @@
     "signIn": "登录",
     "signOut": "退出登录",
     "authNotConfigured": "登录尚未配置。请在 Replit Secrets 中添加 Clerk 密钥。",
-    "apply": "确定"
+    "apply": "确定",
+    "authLoading": "正在加载登录…",
+    "authFailed": "登录无法加载。请检查网络连接并刷新页面。如果问题仍然存在，请联系客服。"
   },
   "landing": {
     "title": "为布基纳法索餐厅打造的 100% 本地解决方案",

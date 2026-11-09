@@ -5,6 +5,7 @@ const PROTECTED = [/^\/app(\/|$)/, /^\/admin(\/|$)/, /^\/api\/app(\/|$)/, /^\/ap
 const isProtected = (req: NextRequest) => PROTECTED.some((re) => re.test(req.nextUrl.pathname));
 
 const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY || "";
+const proxyUrl = process.env.NEXT_PUBLIC_CLERK_PROXY_URL || process.env.CLERK_PROXY_URL || "";
 const clerkConfigured = Boolean(process.env.CLERK_SECRET_KEY && publishableKey);
 const devBypass = process.env.NODE_ENV !== "production" && process.env.DEV_AUTH_BYPASS === "1";
 
@@ -13,7 +14,7 @@ const withClerk = clerkConfigured
       async (auth, req) => {
         if (isProtected(req)) await auth.protect();
       },
-      { publishableKey, signInUrl: "/sign-in", signUpUrl: "/sign-up" },
+      { publishableKey, signInUrl: "/sign-in", signUpUrl: "/sign-up", ...(proxyUrl ? { proxyUrl } : {}) },
     )
   : null;
 

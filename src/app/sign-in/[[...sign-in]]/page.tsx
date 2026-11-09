@@ -1,6 +1,7 @@
 import { SignIn } from "@clerk/nextjs";
 import Link from "next/link";
 import { AuthProvider } from "@/components/auth-provider";
+import { ClerkStatus } from "@/components/auth/clerk-status";
 import { Logo } from "@/components/brand/logo";
 import { env } from "@/lib/env";
 import { getTranslations } from "next-intl/server";
@@ -15,7 +16,10 @@ export default async function Page() {
       <main className="rc-weave flex min-h-dvh flex-col items-center justify-center gap-6 px-4 py-10">
         <Logo />
         {env.clerkConfigured() ? (
-          <SignIn />
+          <>
+            <ClerkStatus />
+            <SignIn />
+          </>
         ) : (
           <p className="max-w-sm text-center text-sm text-muted-foreground">
             {t("authNotConfigured")}{" "}

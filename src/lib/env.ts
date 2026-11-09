@@ -11,6 +11,10 @@ export const env = {
   clerkPublishableKey(): string {
     return process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY || "";
   },
+  /** Set when Clerk is reached through a proxy (some managed setups). Empty otherwise. */
+  clerkProxyUrl(): string {
+    return process.env.NEXT_PUBLIC_CLERK_PROXY_URL || process.env.CLERK_PROXY_URL || "";
+  },
   clerkConfigured(): boolean {
     return Boolean(process.env.CLERK_SECRET_KEY && env.clerkPublishableKey());
   },
