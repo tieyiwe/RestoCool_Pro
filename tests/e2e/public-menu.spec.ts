@@ -66,6 +66,32 @@ test("Ma sélection: variants chooser, running total, steppers, back button clos
   await expect(page).toHaveURL(/\/r\/restaurant-demo$/);
 });
 
+test("a selection of only « sur demande » dishes never shows 0 F; one back press closes a panel", async ({ page }) => {
+  await openMenu(page);
+  await page.getByTestId("menu-search").fill("capitaine");
+  await page.getByTestId("add-button").click();
+  await expect(page.getByTestId("cart-total")).toHaveText("Sur demande");
+  await page.getByTestId("cart-bar").click();
+  await expect(page.getByTestId("cart-sheet")).not.toContainText(`0${N}F`);
+  await page.goBack();
+  await expect(page.getByTestId("cart-sheet")).toHaveCount(0);
+  // The panel used exactly one history entry: one more back leaves the menu.
+  expect(await page.evaluate(() => (history.state as { rcPanel?: boolean } | null)?.rcPanel ?? false)).toBe(false);
+});
+
+test("a corrupted saved selection does not break the menu", async ({ page, request }) => {
+  const { items } = (await (await request.get("/api/app/menu/items")).json()) as { items: Array<{ id: string }> };
+  const realId = items[0]!.id;
+  await page.addInitScript((id) => {
+    sessionStorage.setItem("rc-welcome-restaurant-demo", "1");
+    // A line for a real dish but without optionIds/qty, plus junk.
+    sessionStorage.setItem("rc-cart-restaurant-demo", JSON.stringify([{ itemId: id }, null, { key: 1, itemId: id, qty: "lots" }]));
+  }, realId);
+  await page.goto("/r/restaurant-demo");
+  await expect(page.getByTestId("menu-item")).toHaveCount(40);
+  await expect(page.getByTestId("cart-bar")).toHaveCount(0);
+});
+
 test("takeaway by WhatsApp sends a prefilled French message with numbers and total", async ({ page, context }) => {
   // wa.me is not reachable from the test sandbox: answer it locally, we only check the URL.
   await context.route("https://wa.me/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "ok" }));
