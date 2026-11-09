@@ -1,5 +1,5 @@
 import "server-only";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { cache } from "react";
 import { getDb } from "@/db";
 import { findRestaurantBySlug, membershipsForUser, tenantRepo, type Membership, type TenantRepo } from "@/db/repos/tenant";
@@ -18,9 +18,14 @@ export const ACTIVE_RESTAURANT_COOKIE = "rc_restaurant";
 
 const DEV_USER: Identity = { userId: "dev-owner", email: "dev@localhost", name: "Dev" };
 
+/** Dev sign-in bypass, only for requests made to localhost (see env.devAuthBypass). */
+async function bypass(): Promise<boolean> {
+  return env.devAuthBypass((await headers()).get("host"));
+}
+
 /** Who is signed in (Clerk proves identity only; restaurants come from our members table). */
 export const getIdentity = cache(async (): Promise<Identity | null> => {
-  if (!env.clerkConfigured()) return env.devAuthBypass() ? DEV_USER : null;
+  if (!env.clerkConfigured()) return (await bypass()) ? DEV_USER : null;
   const { auth } = await import("@clerk/nextjs/server");
   const { userId } = await auth();
   return userId ? { userId, email: null, name: null } : null;
@@ -78,7 +83,7 @@ export const getMemberContext = cache(async (): Promise<MemberContext | null> =>
 /** Super admin = signed-in Clerk user with a verified email listed in SUPERADMIN_EMAILS. */
 export const getSuperadmin = cache(async (): Promise<SuperadminActor | null> => {
   if (!env.clerkConfigured()) {
-    return env.devAuthBypass() ? { kind: "superadmin", userId: DEV_USER.userId, email: DEV_USER.email! } : null;
+    return (await bypass()) ? { kind: "superadmin", userId: DEV_USER.userId, email: DEV_USER.email! } : null;
   }
   const { currentUser } = await import("@clerk/nextjs/server");
   const user = await currentUser();

@@ -60,7 +60,7 @@ export const ServiceInput = z.object({
   inactivity: z.object({ warnAfterSec: z.number().int().min(60).max(3600), releaseAfterSec: z.number().int().min(10).max(600) }).optional(),
 });
 
-const OwnMedia = z.union([z.literal(""), z.string().regex(/^\/api\/media\/r\/[0-9a-f-]{36}\/[A-Za-z0-9_-]+(-t)?\.webp$/)]).default("");
+const OwnMedia = z.union([z.literal(""), z.string().regex(/^\/api\/media\/r\/[0-9a-f-]{36}\/[A-Za-z0-9_-]+(-t)?\.(?:webp|jpg)$/)]).default("");
 export const AppearanceInput = z.object({
   theme: z.enum(["lacquer", "light", "warm"]),
   accentColor: z.string().regex(/^#[0-9a-fA-F]{6}$/),

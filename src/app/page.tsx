@@ -28,7 +28,15 @@ export default async function HomePage() {
         </div>
       </section>
       <DemoShowcase />
-      <p className="pb-10 text-center text-sm text-muted-foreground">{t("landing.comingSoon")}</p>
+      <p className="text-center text-sm text-muted-foreground">{t("landing.comingSoon")}</p>
+      <footer className="flex justify-center gap-4 pt-4 pb-10 text-sm text-muted-foreground">
+        <Link href="/privacy" className="flex min-h-11 items-center underline">
+          {t("legal.privacy")}
+        </Link>
+        <Link href="/terms" className="flex min-h-11 items-center underline">
+          {t("legal.terms")}
+        </Link>
+      </footer>
     </main>
   );
 }

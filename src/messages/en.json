@@ -514,7 +514,8 @@
     "group_area": "Areas",
     "group_counter": "Counter",
     "group_takeaway": "Takeaway",
-    "group_delivery": "Delivery"
+    "group_delivery": "Delivery",
+    "privacy": "Privacy"
   },
   "seating": {
     "title": "Tables and rooms",
@@ -596,5 +597,9 @@
       "poweredBy": "Menu by RestoCool",
       "fold": "Fold here"
     }
+  },
+  "legal": {
+    "privacy": "Privacy",
+    "terms": "Terms"
   }
 }

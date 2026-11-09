@@ -11,8 +11,8 @@ export interface ObjectStore {
   delete(key: string): Promise<void>;
 }
 
-/** Keys look like r/<restaurant uuid>/<random>.webp — validated before any read or write. */
-export const MEDIA_KEY_RE = /^r\/[0-9a-f-]{36}\/[A-Za-z0-9_-]{16,64}(?:-t)?\.webp$/;
+/** Keys look like r/<restaurant uuid>/<random>.webp (or .jpg from iPhones) — validated before any read or write. */
+export const MEDIA_KEY_RE = /^r\/[0-9a-f-]{36}\/[A-Za-z0-9_-]{16,64}(?:-t)?\.(?:webp|jpg)$/;
 
 class LocalStore implements ObjectStore {
   readonly kind = "local" as const;

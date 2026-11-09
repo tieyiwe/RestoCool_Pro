@@ -3,7 +3,7 @@
 Digital menu, QR ordering and dining-room management for restaurants in Burkina Faso.
 A product of **TIBLOGICS**. The full product brief is in [`CLAUDE.md`](./CLAUDE.md).
 
-**Status:** Milestones 1 (Foundation) and 2 (Onboarding and public menu) done. See the demo scripts below.
+**Status:** Milestones 1 (Foundation), 2 (Onboarding and public menu) and 3 (Seating and QR) done. See the demo scripts below.
 
 ## Stack
 
@@ -17,7 +17,7 @@ Vitest · Playwright.
 2. **Database**: open the *Database* pane and create a PostgreSQL database
    (`DATABASE_URL` is added to Secrets for you).
 3. **Secrets**: add the variables from [`.env.example`](./.env.example) that are not already there.
-   Without Clerk keys, `DEV_AUTH_BYPASS=1` lets you try `/app` and `/admin` in development.
+   On your own computer without Clerk keys, `DEV_AUTH_BYPASS=1` lets you try `/app` and `/admin` (localhost only).
 4. **Shell**:
    ```bash
    npm install
@@ -105,3 +105,27 @@ Photos are stored in Replit Object Storage on Replit (create it in the *Storage*
 ### Not in M2 (planned)
 
 Seat choice, « Montrer au serveur » with order QR, live order tracking and « Sélections précédentes » need orders and seats (M3–M4). Still to do from the menu section of the brief: drag-and-drop ordering (up/down buttons for now), a manual crop tool (thumbnails are centre-cropped), CSV import/export, price change by percentage, the « Plat du jour » banner, and editing the fortune list (it can be turned off).
+
+## M3: Seating and QR
+
+- **Seating manager** (`/app/seating`): areas in FR/EN/ZH; numbered tables added in bulk (« de 1 à 20 sauf 13 »); private rooms and named areas; counter, takeaway and delivery follow the seating modes in Settings; capacity, active, order; open sessions with « Libérer ».
+- **QR codes**: one per table/room (Pro, Business, trial) or one for the whole restaurant (Gratuit, or by choice). PNG download, « Nouveau QR » invalidates a lost or copied card.
+- **Printable kit** (`/app/seating/print`): A4 table tents to fold, or 6 cards per page, with the restaurant name/logo and « Scannez pour voir le menu » in FR/EN/ZH. Print, or « Enregistrer en PDF » from the print dialog.
+- **Customers**: scanning a table QR (`/r/{slug}/t/{token}`) seats the phone; other phones at the same table join the same session. With the generic QR, a seat picker (gold coins for tables, red lacquer plates for rooms, green tags for the rest), an « occupée » warning with Rejoindre / Choisir une autre, the counter asks a first name.
+- **Inactivity release** (picker mode): after 4 min, « Êtes-vous toujours là ? » with a 30 s countdown, then the seat is freed; works after the screen was off; timings in Settings → Service.
+- **Security**: public endpoints validated (zod) and rate-limited per IP + device; QR tokens never exposed by the picker; table links not indexed.
+
+### M3 demo script
+
+1. `/app/seating` → add tables « 11 à 14 sauf 13 » → download a table's QR → « Imprimer les cartes QR » (tents or cards).
+2. Open a table's link (↗ next to it) on two phones: both show « 📍 Table 7 », and the second says « Vous avez rejoint la table ». `/app/seating` shows the table occupied with 2 phones.
+3. Settings → Service → « Un seul QR code » → open `/r/restaurant-demo` → « Choisir ma place » → pick a table; on a second phone pick the same table → « Cette table est déjà occupée ».
+4. Leave the phone untouched for 4 minutes → « Êtes-vous toujours là ? » → after 30 s the seat is freed.
+
+## Legal pages
+
+`/privacy` (politique de confidentialité) and `/terms` (conditions générales d’utilisation), French first with an English version. Fill in the publisher details (RCCM, IFU, address, contact) in `src/config/legal.ts`; until then the pages show « [à compléter] ». Have them reviewed by a lawyer before launch.
+
+## Security review (M1–M2)
+
+An independent review found no cross-restaurant data access. Fixed: staff roles could see the activity log; uploads were read before the size check; missing security headers (clickjacking); a vulnerable postcss version; slug race conditions; small public-menu bugs (history, toasts, saved cart, « 0 F » total, focus in dialogs); publishing with all categories hidden; iPhone photo uploads (JPEG fallback); dev sign-in bypass now limited to localhost.

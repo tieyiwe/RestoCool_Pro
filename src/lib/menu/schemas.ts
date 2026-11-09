@@ -39,7 +39,7 @@ export const OptionInput = z.object({
 /** Photo URLs must come from our own media route (or the seeded demo images). */
 const PhotoUrl = z
   .string()
-  .regex(/^\/(api\/media\/r\/[0-9a-f-]{36}\/[A-Za-z0-9_-]+(-t)?\.webp|demo\/item-[\w-]+\.svg)$/)
+  .regex(/^\/(api\/media\/r\/[0-9a-f-]{36}\/[A-Za-z0-9_-]+(-t)?\.(?:webp|jpg)|demo\/item-[\w-]+\.svg)$/)
   .nullable()
   .default(null);
 

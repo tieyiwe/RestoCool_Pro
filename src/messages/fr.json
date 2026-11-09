@@ -514,7 +514,8 @@
     "group_area": "Zones",
     "group_counter": "Comptoir",
     "group_takeaway": "À emporter",
-    "group_delivery": "Livraison"
+    "group_delivery": "Livraison",
+    "privacy": "Confidentialité"
   },
   "seating": {
     "title": "Tables et salles",
@@ -596,5 +597,9 @@
       "poweredBy": "Menu par RestoCool",
       "fold": "Plier ici"
     }
+  },
+  "legal": {
+    "privacy": "Confidentialité",
+    "terms": "Conditions d’utilisation"
   }
 }

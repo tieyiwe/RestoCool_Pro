@@ -10,7 +10,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
   const r = await findRestaurantBySlug(getDb(), slug);
   if (!r) return new Response("Not found", { status: 404 });
   const icons = r.logoUrl
-    ? [{ src: r.logoUrl, sizes: "any", type: "image/webp", purpose: "any" }]
+    ? [{ src: r.logoUrl, sizes: "any", type: r.logoUrl.endsWith(".jpg") ? "image/jpeg" : "image/webp", purpose: "any" }]
     : [
         { src: "/brand/png/app-icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
         { src: "/brand/png/app-icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },

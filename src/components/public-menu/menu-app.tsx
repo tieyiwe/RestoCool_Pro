@@ -461,6 +461,10 @@ export function MenuApp({
               · {t("poweredBy2")}{" "}
               <a href="https://tiblogics.com" className="font-semibold underline-offset-2 hover:underline">
                 TIBLOGICS
+              </a>{" "}
+              ·{" "}
+              <a href="/privacy" className="underline-offset-2 hover:underline">
+                {t("privacy")}
               </a>
             </span>
           </footer>

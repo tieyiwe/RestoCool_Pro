@@ -514,7 +514,8 @@
     "group_area": "区域",
     "group_counter": "柜台",
     "group_takeaway": "外带",
-    "group_delivery": "外送"
+    "group_delivery": "外送",
+    "privacy": "隐私政策"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -596,5 +597,9 @@
       "poweredBy": "菜单由 RestoCool 提供",
       "fold": "沿此折叠"
     }
+  },
+  "legal": {
+    "privacy": "隐私政策",
+    "terms": "使用条款"
   }
 }

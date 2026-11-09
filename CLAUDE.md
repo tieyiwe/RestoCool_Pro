@@ -402,3 +402,8 @@ Real payment provider integrations (the plumbing from section 8b is in scope, th
 - **Branches** are full restaurants with `parent_restaurant_id`.
 - **Public menu URLs have no locale**: `/r/{slug}`, always French on a new visit; the visitor's language lives in sessionStorage. The staff app remembers the language in a cookie.
 - **Price display**: `5 300 F` with U+202F narrow spaces (`formatFCFA`).
+- **QR kit**: a print-ready A4 page (table tents or 6 cards per page) that the owner prints or saves as PDF from the browser, instead of a server-generated PDF (keeps Chinese text and logos exact, no large font files).
+- **Table sessions** open on the first scan of a table QR (or the first pick in the seat picker); idle sessions close by themselves (picker: inactivity timings; QR: after 4 h without activity, until orders exist).
+- **Legal pages** live at `/privacy` and `/terms` (French is the reference text, English for convenience; aliases `/confidentialite`, `/conditions`, `/cgu`). Publisher details are in `src/config/legal.ts`.
+- **Photos**: WebP when the browser can encode it, JPEG otherwise (Safari/iPhone); the server checks the real format from the bytes.
+- **Dev sign-in bypass** (`DEV_AUTH_BYPASS=1`) only works on localhost and never in production.

@@ -28,6 +28,14 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Keep pg out of the client/edge bundles.
   serverExternalPackages: ["pg"],
+  // French-friendly aliases for the legal pages.
+  async redirects() {
+    return [
+      { source: "/confidentialite", destination: "/privacy?lang=fr", permanent: true },
+      { source: "/conditions", destination: "/terms?lang=fr", permanent: true },
+      { source: "/cgu", destination: "/terms?lang=fr", permanent: true },
+    ];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

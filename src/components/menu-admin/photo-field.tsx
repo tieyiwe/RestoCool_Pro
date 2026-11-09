@@ -33,8 +33,8 @@ export function PhotoField({
       fd.set("kind", kind);
       fd.set("width", String(img.width));
       fd.set("height", String(img.height));
-      fd.set("full", img.full, "full.webp");
-      fd.set("thumb", img.thumb, "thumb.webp");
+      fd.set("full", img.full, img.full.type === "image/jpeg" ? "full.jpg" : "full.webp");
+      fd.set("thumb", img.thumb, img.thumb.type === "image/jpeg" ? "thumb.jpg" : "thumb.webp");
       const res = await fetch("/api/app/media", { method: "POST", body: fd });
       if (!res.ok) throw new Error(`upload ${res.status}`);
       const body = (await res.json()) as UploadedPhoto & { bytes: number };

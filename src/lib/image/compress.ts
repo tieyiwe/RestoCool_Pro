@@ -11,19 +11,34 @@ export type CompressedImage = {
   originalBytes: number;
 };
 
-async function toBlob(canvas: HTMLCanvasElement, quality: number): Promise<Blob> {
+type Mime = "image/webp" | "image/jpeg";
+
+async function toBlob(canvas: HTMLCanvasElement, quality: number, mime: Mime): Promise<Blob> {
   return new Promise((resolve, reject) =>
-    canvas.toBlob((b) => (b && b.type === "image/webp" ? resolve(b) : reject(new Error("webp_unsupported"))), "image/webp", quality),
+    canvas.toBlob((b) => (b && b.type === mime ? resolve(b) : reject(new Error(`${mime}_unsupported`))), mime, quality),
   );
 }
 
+/** WebP where the browser can encode it; JPEG otherwise (Safari on iPhone and Mac). */
+let mimeCache: Mime | null = null;
+async function bestMime(): Promise<Mime> {
+  if (mimeCache) return mimeCache;
+  const c = document.createElement("canvas");
+  c.width = c.height = 2;
+  mimeCache = await toBlob(c, 0.8, "image/webp").then(
+    () => "image/webp" as const,
+    () => "image/jpeg" as const,
+  );
+  return mimeCache;
+}
+
 /** Encode under a byte budget by lowering quality step by step. */
-async function encodeWithin(canvas: HTMLCanvasElement, maxBytes: number, startQuality: number): Promise<Blob> {
+async function encodeWithin(canvas: HTMLCanvasElement, maxBytes: number, startQuality: number, mime: Mime): Promise<Blob> {
   let q = startQuality;
-  let blob = await toBlob(canvas, q);
+  let blob = await toBlob(canvas, q, mime);
   while (blob.size > maxBytes && q > 0.4) {
     q -= 0.1;
-    blob = await toBlob(canvas, q);
+    blob = await toBlob(canvas, q, mime);
   }
   if (blob.size > maxBytes) throw new Error("too_large");
   return blob;
@@ -53,9 +68,10 @@ export async function compressImage(file: File): Promise<CompressedImage> {
     .drawImage(bitmap, (bitmap.width - side) / 2, (bitmap.height - side) / 2, side, side, 0, 0, IMAGE_LIMITS.thumbSide, IMAGE_LIMITS.thumbSide);
   bitmap.close();
 
+  const mime = await bestMime();
   return {
-    full: await encodeWithin(full, IMAGE_LIMITS.fullMaxBytes, 0.8),
-    thumb: await encodeWithin(thumb, IMAGE_LIMITS.thumbMaxBytes, 0.75),
+    full: await encodeWithin(full, IMAGE_LIMITS.fullMaxBytes, 0.8, mime),
+    thumb: await encodeWithin(thumb, IMAGE_LIMITS.thumbMaxBytes, 0.75, mime),
     width,
     height,
     originalBytes: file.size,

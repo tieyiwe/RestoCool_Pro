@@ -24,7 +24,8 @@ const withClerk = clerkConfigured
  */
 export default function middleware(req: NextRequest, event: NextFetchEvent) {
   if (withClerk) return withClerk(req, event);
-  if (isProtected(req) && !devBypass) {
+  const localhost = ["localhost", "127.0.0.1", "::1", "[::1]"].includes(req.nextUrl.hostname);
+  if (isProtected(req) && !(devBypass && localhost)) {
     if (req.nextUrl.pathname.startsWith("/api/")) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }

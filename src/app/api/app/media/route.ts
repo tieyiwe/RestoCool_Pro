@@ -6,7 +6,7 @@ import { requireMember } from "@/lib/auth/context";
 import { writeAudit } from "@/lib/audit";
 import { AppError } from "@/lib/errors";
 import { handle } from "@/lib/http";
-import { IMAGE_LIMITS, isWebp } from "@/lib/image/webp";
+import { detectImageFormat, IMAGE_LIMITS, type ImageFormat } from "@/lib/image/webp";
 import { getStore, mediaUrl } from "@/lib/storage";
 import { randomToken } from "@/lib/tokens";
 
@@ -21,12 +21,13 @@ const Meta = z.object({
 /** Both images plus multipart overhead and the small text fields. */
 const MAX_BODY_BYTES = IMAGE_LIMITS.fullMaxBytes + IMAGE_LIMITS.thumbMaxBytes + 16 * 1024;
 
-async function readWebp(value: FormDataEntryValue | null, maxBytes: number): Promise<Buffer> {
+async function readImage(value: FormDataEntryValue | null, maxBytes: number): Promise<{ bytes: Buffer; format: ImageFormat }> {
   if (!(value instanceof Blob)) throw new AppError("invalid_image", 400);
   if (value.size === 0 || value.size > maxBytes) throw new AppError("image_too_large", 413);
   const bytes = Buffer.from(await value.arrayBuffer());
-  if (!isWebp(bytes)) throw new AppError("invalid_image", 400);
-  return bytes;
+  const format = detectImageFormat(bytes); // checked from the bytes, never from the declared type
+  if (!format) throw new AppError("invalid_image", 400);
+  return { bytes, format };
 }
 
 /**
@@ -44,12 +45,14 @@ export const POST = handle(async (req: Request) => {
   const meta = Meta.parse({ kind: form.get("kind"), width: form.get("width"), height: form.get("height") });
   const { actor, repo } = await requireMember(meta.kind === "item" ? "menu.write" : "settings.write");
 
-  const full = await readWebp(form.get("full"), IMAGE_LIMITS.fullMaxBytes);
-  const thumb = await readWebp(form.get("thumb"), IMAGE_LIMITS.thumbMaxBytes);
+  const fullImg = await readImage(form.get("full"), IMAGE_LIMITS.fullMaxBytes);
+  const thumbImg = await readImage(form.get("thumb"), IMAGE_LIMITS.thumbMaxBytes);
+  const full = fullImg.bytes;
+  const thumb = thumbImg.bytes;
 
   const base = `r/${repo.restaurantId}/${randomToken(16)}`;
-  const fullKey = `${base}.webp`;
-  const thumbKey = `${base}-t.webp`;
+  const fullKey = `${base}.${fullImg.format}`;
+  const thumbKey = `${base}-t.${thumbImg.format}`;
   const store = getStore();
   await store.put(fullKey, full);
   await store.put(thumbKey, thumb);

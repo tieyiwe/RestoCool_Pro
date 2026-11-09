@@ -9,6 +9,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const t = await getTranslations("common");
+  const tl = await getTranslations("legal");
   return (
     <AuthProvider>
       <main className="rc-weave flex min-h-dvh flex-col items-center justify-center gap-6 px-4 py-10">
@@ -21,6 +22,14 @@ export default async function Page() {
             {env.devAuthBypass() && <Link href="/app" className="font-semibold text-primary underline">/app</Link>}
           </p>
         )}
+        <p className="flex gap-4 text-xs text-muted-foreground">
+          <Link href="/privacy" className="underline">
+            {tl("privacy")}
+          </Link>
+          <Link href="/terms" className="underline">
+            {tl("terms")}
+          </Link>
+        </p>
       </main>
     </AuthProvider>
   );
