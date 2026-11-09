@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getMemberContext } from "@/lib/auth/context";
+import { can } from "@/lib/auth/can";
 import { effectiveStatus } from "@/lib/plan";
 
 export default async function DashboardPage() {
@@ -18,12 +19,14 @@ export default async function DashboardPage() {
 
   const r = await ctx.repo.restaurant.get();
   if (!r) return null;
+  // The activity feed is the audit log: managers and owners only (audit.read).
+  const canReadAudit = can(ctx.actor, "audit.read", { restaurantId: ctx.repo.restaurantId });
   const [categories, itemCount, seats, areas, activity] = await Promise.all([
     ctx.repo.menu.categories(),
     ctx.repo.menu.countItems(),
     ctx.repo.seating.seats(),
     ctx.repo.seating.areas(),
-    ctx.repo.audit.recent(10),
+    canReadAudit ? ctx.repo.audit.recent(10) : Promise.resolve([]),
   ]);
   const status = effectiveStatus(r);
 
@@ -65,23 +68,25 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      <Card>
-        <CardTitle className="mb-3">{t("recentActivity")}</CardTitle>
-        {activity.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{t("noActivity")}</p>
-        ) : (
-          <ul className="divide-y divide-border text-sm">
-            {activity.map((a) => (
-              <li key={a.id} className="flex justify-between gap-3 py-2">
-                <span className="font-mono">{a.action}</span>
-                <time className="text-muted-foreground" dateTime={a.createdAt.toISOString()}>
-                  {format.dateTime(a.createdAt, { dateStyle: "short", timeStyle: "short" })}
-                </time>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
+      {canReadAudit && (
+        <Card>
+          <CardTitle className="mb-3">{t("recentActivity")}</CardTitle>
+          {activity.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{t("noActivity")}</p>
+          ) : (
+            <ul className="divide-y divide-border text-sm">
+              {activity.map((a) => (
+                <li key={a.id} className="flex justify-between gap-3 py-2">
+                  <span className="font-mono">{a.action}</span>
+                  <time className="text-muted-foreground" dateTime={a.createdAt.toISOString()}>
+                    {format.dateTime(a.createdAt, { dateStyle: "short", timeStyle: "short" })}
+                  </time>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+      )}
     </div>
   );
 }
