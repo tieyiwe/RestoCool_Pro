@@ -3,7 +3,7 @@ import { and, eq, ne, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
 import type { TenantRepo } from "@/db/repos/tenant";
-import { FEATURE_FLAGS, menuItems, openingHours, restaurants, type RestaurantSettings } from "@/db/schema";
+import { FEATURE_FLAGS, menuCategories, menuItems, openingHours, restaurants, type RestaurantSettings } from "@/db/schema";
 import { writeAudit } from "@/lib/audit";
 import type { Actor } from "@/lib/auth/can";
 import { accentIsReadable } from "@/lib/color";
@@ -188,7 +188,9 @@ export async function setPublished(ctx: SettingsCtx, published: boolean) {
     const [row] = await ctx.db
       .select({ n: sql<number>`count(*)::int` })
       .from(menuItems)
-      .where(and(eq(menuItems.restaurantId, ctx.repo.restaurantId), eq(menuItems.available, true)));
+      // A dish is only visible inside an active category of the same restaurant.
+      .innerJoin(menuCategories, and(eq(menuCategories.id, menuItems.categoryId), eq(menuCategories.restaurantId, menuItems.restaurantId)))
+      .where(and(eq(menuItems.restaurantId, ctx.repo.restaurantId), eq(menuItems.available, true), eq(menuCategories.active, true)));
     if ((row?.n ?? 0) === 0) throw new SettingsValidationError("publish_empty");
   }
   await update(ctx, { published }, published ? "restaurant.published" : "restaurant.unpublished");

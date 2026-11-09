@@ -132,4 +132,13 @@ describe.skipIf(!hasDb)("menu + settings services (database)", () => {
     await settings.setPublished(A, true);
     expect((await A.repo.restaurant.get())!.published).toBe(true);
   });
+
+  it("a dish inside a hidden category does not count as visible for publishing", async () => {
+    const r = await createRestaurantForUser(getDb(), { clerkUserId: "it-menu-d" }, { name: "Maquis Caché", city: "Koudougou" });
+    ids.push(r.id);
+    const D = ctxFor(r.id, "it-menu-d");
+    const cat = await menu.createCategory(D, { name: { fr: "Cachée", en: "", zh: "" }, active: false, timeWindow: null });
+    await menu.createItem(D, baseItem(cat.id));
+    await expect(settings.setPublished(D, true)).rejects.toMatchObject({ code: "publish_empty" });
+  });
 });
