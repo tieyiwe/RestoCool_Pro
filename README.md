@@ -124,7 +124,7 @@ Seat choice, « Montrer au serveur » with order QR, live order tracking and « 
 
 ## Legal pages
 
-`/privacy` (politique de confidentialité) and `/terms` (conditions générales d’utilisation), French first with an English version. Fill in the publisher details (RCCM, IFU, address, contact) in `src/config/legal.ts`; until then the pages show « [à compléter] ». Have them reviewed by a lawyer before launch.
+`/privacy` (politique de confidentialité) and `/terms` (conditions générales d’utilisation), French first with an English version. Publisher: TIBLOGICS (United States, part of Tilogroup). Fill in the legal form, US state, address and contact in `src/config/legal.ts`; until then the pages show « [à compléter] ». The privacy policy includes the disclosures Google requires for « Continuer avec Google » (use `https://restocool.com/privacy` and `/terms` on the OAuth consent screen). Have both reviewed by a lawyer before launch.
 
 ## Security review (M1–M2)
 

@@ -4,21 +4,22 @@ import { PLANS } from "@/config/plans";
 import { formatFCFA } from "@/lib/format";
 
 function Publisher({ lang }: { lang: "fr" | "en" }) {
-  const tbc = lang === "fr" ? "[à compléter]" : "[to be completed]";
   const fr = lang === "fr";
+  const tbc = fr ? "[à compléter]" : "[to be completed]";
   return (
     <ul>
       <li>
         {fr ? "Éditeur" : "Publisher"} : {LEGAL.publisher}
-        {LEGAL.legalForm ? `, ${LEGAL.legalForm}` : ""}
+        {LEGAL.legalForm ? `, ${LEGAL.legalForm}` : ""} — {fr ? `membre du groupe ${LEGAL.parentGroup}` : `part of ${LEGAL.parentGroup}`}
       </li>
-      <li>RCCM : {fillOr(LEGAL.rccm, tbc)}</li>
-      <li>IFU : {fillOr(LEGAL.ifu, tbc)}</li>
+      <li>
+        {fr ? "Pays" : "Country"} : {fr ? LEGAL.country.fr : LEGAL.country.en} ({fr ? "État" : "State"} : {fillOr(LEGAL.state, tbc)})
+      </li>
       <li>
         {fr ? "Adresse" : "Address"} : {fillOr(LEGAL.address, tbc)}
       </li>
       <li>
-        {fr ? "Contact" : "Contact"} : {fillOr(LEGAL.email, tbc)} · WhatsApp {fillOr(LEGAL.whatsapp, tbc)}
+        Contact : {fillOr(LEGAL.email, tbc)} · WhatsApp {fillOr(LEGAL.whatsapp, tbc)}
       </li>
       <li>
         {fr ? "Site" : "Website"} : {LEGAL.website}
@@ -33,7 +34,8 @@ export function TermsFr() {
   return (
     <>
       <p>
-        Les présentes conditions encadrent l’utilisation de {LEGAL.product} ({LEGAL.website}) par les restaurants et par les personnes qui consultent leurs
+        Les présentes conditions encadrent l’utilisation de {LEGAL.product} ({LEGAL.website}), un produit de {LEGAL.publisher} (groupe{" "}
+        {LEGAL.parentGroup}), par les restaurants et par les personnes qui consultent leurs
         menus. En créant un compte ou en utilisant le service, vous les acceptez.
       </p>
 
@@ -51,6 +53,14 @@ export function TermsFr() {
         <li>Vous devez être majeur et autorisé à représenter le restaurant.</li>
         <li>Les informations fournies doivent être exactes. Vous êtes responsable des accès que vous donnez (gérants, personnel, appareils autorisés).</li>
         <li>Gardez vos identifiants et codes PIN confidentiels et prévenez-nous de toute utilisation non autorisée.</li>
+        <li>
+          Vous pouvez vous connecter avec un compte Google. Vous restez soumis aux conditions de Google pour ce compte ; nous ne recevons que votre nom, votre
+          e-mail et votre photo de profil, utilisés comme décrit dans la{" "}
+          <Link href="/privacy?lang=fr" className="underline">
+            politique de confidentialité
+          </Link>
+          .
+        </li>
       </ul>
 
       <h2>4. Formules, essai et paiement</h2>
@@ -128,8 +138,9 @@ export function TermsFr() {
 
       <h2>13. Droit applicable</h2>
       <p>
-        Ces conditions sont régies par le droit du Burkina Faso. En cas de litige, nous chercherons d’abord une solution amiable ; à défaut, les juridictions de
-        Ouagadougou seront compétentes.
+        Ces conditions sont régies par le droit de l’État de {fillOr(LEGAL.state, "[à compléter]")} ({LEGAL.country.fr}). En cas de litige, nous chercherons
+        d’abord une solution amiable ; à défaut, les tribunaux compétents de cet État seront saisis. Cela ne vous prive pas des protections impératives que vous
+        accorde la loi de votre pays de résidence, notamment au Burkina Faso.
       </p>
     </>
   );
@@ -139,7 +150,7 @@ export function TermsEn() {
   return (
     <>
       <p>
-        These terms govern the use of {LEGAL.product} ({LEGAL.website}) by restaurants and by people who view their menus. By creating an account or using the
+        These terms govern the use of {LEGAL.product} ({LEGAL.website}), a product of {LEGAL.publisher} ({LEGAL.parentGroup}), by restaurants and by people who view their menus. By creating an account or using the
         service, you accept them.
       </p>
 
@@ -157,6 +168,14 @@ export function TermsEn() {
         <li>You must be an adult and authorised to represent the restaurant.</li>
         <li>Information you provide must be accurate. You are responsible for the access you grant (managers, staff, authorised devices).</li>
         <li>Keep your credentials and PIN codes confidential and tell us about any unauthorised use.</li>
+        <li>
+          You can sign in with a Google account. Google’s terms continue to apply to that account; we only receive your name, email and profile picture, used as
+          described in the{" "}
+          <Link href="/privacy?lang=en" className="underline">
+            privacy policy
+          </Link>
+          .
+        </li>
       </ul>
 
       <h2>4. Plans, trial and payment</h2>
@@ -233,8 +252,9 @@ export function TermsEn() {
 
       <h2>13. Governing law</h2>
       <p>
-        These terms are governed by the law of Burkina Faso. In case of dispute we will first seek an amicable solution; failing that, the courts of Ouagadougou
-        will have jurisdiction.
+        These terms are governed by the laws of the State of {fillOr(LEGAL.state, "[to be completed]")} ({LEGAL.country.en}). In case of dispute we will first
+        seek an amicable solution; failing that, the competent courts of that State will have jurisdiction. This does not take away any mandatory protection
+        given to you by the law of the country where you live, including Burkina Faso.
       </p>
     </>
   );
