@@ -102,7 +102,8 @@
     "colStatus": "状态",
     "colPublished": "已发布",
     "yes": "是",
-    "no": "否"
+    "no": "否",
+    "badge": "管理后台"
   },
   "demo": {
     "title": "使用流程",
@@ -242,7 +243,9 @@
       "saving": "正在保存…",
       "cancel": "取消",
       "required": "必填",
-      "priceInvalid": "请输入以西非法郎计的整数价格。"
+      "priceInvalid": "请输入以西非法郎计的整数价格。",
+      "sizeKb": "{n} KB",
+      "sizeMb": "{n} MB"
     },
     "tag": {
       "new": "新品",

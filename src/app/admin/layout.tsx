@@ -15,7 +15,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <header className="flex items-center justify-between border-b border-border bg-nuit px-4 py-2 text-creme">
         <Link href="/admin" className="flex items-center gap-2 font-bold">
           <Logo onDark />
-          <span className="text-sm opacity-80">Admin</span>
+          <span className="text-sm opacity-80">{t("badge")}</span>
         </Link>
         <UserMenu />
       </header>
