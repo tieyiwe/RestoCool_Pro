@@ -3,7 +3,7 @@
 Digital menu, QR ordering and dining-room management for restaurants in Burkina Faso.
 A product of **TIBLOGICS**. The full product brief is in [`CLAUDE.md`](./CLAUDE.md).
 
-**Status:** Milestone 1 (Foundation) done. See [M1 notes](#m1-foundation) below.
+**Status:** Milestones 1 (Foundation) and 2 (Onboarding and public menu) done. See the demo scripts below.
 
 ## Stack
 
@@ -50,6 +50,8 @@ Someone who belongs to several restaurants switches between them from the header
 | `npm run db:migrate` | Apply migrations |
 | `npm run db:seed` | (Re)create the fictional « Restaurant Démo » |
 
+Photos are stored in Replit Object Storage on Replit (create it in the *Storage* pane) and in `./.data/uploads` elsewhere. Force one with `STORAGE_DRIVER=replit|local`.
+
 ## Architecture rules
 
 - **Tenant isolation**: application code reads tenant data only through `tenantRepo(db, restaurantId)`
@@ -82,3 +84,24 @@ Someone who belongs to several restaurants switches between them from the header
 4. `/app/new` → create a second restaurant; you land on its (empty) dashboard; switch back with the header selector.
 5. `/admin` → restaurant list.
 6. `/api/health` → `{"status":"ok","db":"ok"}`.
+
+## M2: Onboarding and public menu
+
+- **Setup wizard** after « Créer mon restaurant »: profile and menu address, contacts (+226, WhatsApp, Orange Money, Moov), opening hours (past midnight supported), seating modes, QR strategy, order validation, languages, theme and accent colour (contrast-checked), logo and cover.
+- **Menu manager** (`/app/menu`): categories (add, rename in 3 languages, reorder, hide, lunch-only time windows, delete when empty); dishes with number, FR/EN/ZH names and descriptions, « Suggérer » (built-in glossary, no paid AI), price or « sur demande », variants, options, spice level, labels, kitchen station, photo; « Épuisé aujourd’hui » (until midnight), hide/show, duplicate, reorder, delete. Gratuit plan limited to 40 dishes.
+- **Photos**: compressed in the browser to WebP (max 1200px + 168px thumbnail), with the size saved shown, uploaded to Object Storage, served with year-long caching.
+- **Settings** (`/app/settings`) and **publish / unpublish** (needs at least one visible dish); owners preview an unpublished menu.
+- **Public menu** (`/r/{slug}`): sticky tabs following the scroll, search in FR/EN/ZH, filters (spicy, new, local produce), numbered dishes, badges, names in the other languages under each dish, photos with full-screen viewer (swipe left/right, swipe down to close), language for the visit only, welcome screen with confetti (3 s, once per visit), share (native or WhatsApp / Facebook / copy), contact with open/closed, tap-to-call, WhatsApp button and QR, mobile money numbers with « Copier », hours, Google Maps; « Ma sélection » with variant chooser, steppers and running total (« sur demande » never counted as 0 F); takeaway by WhatsApp (prefilled French message); fortune cookie; low-data mode; back-to-top; the phone's back button closes panels.
+- **Offline / install**: service worker for `/r/` (pages network-first, images and app files cache-first, new caches on each deploy) and a per-restaurant manifest.
+
+### M2 demo script
+
+1. `/app/new` → create « Maquis Test » → the 5-step wizard → « Ajouter mes plats ».
+2. Add a category, then a dish: type « Riz gras », press « ✨ Suggérer » (EN and 中文 fill in), add two variants, add a photo (see the compressed size), save.
+3. `/app/settings` → « Publier mon menu » → open the menu.
+4. `/r/restaurant-demo` on a phone: welcome screen; search « chicken » or « 洛神花 »; 🌶️ filter; switch to EN, reload (stays EN), open in a new tab (back to FR); add the Champagne → choose Magnum; open « Ma sélection »; press the phone's back button (the panel closes); « Commander à emporter (WhatsApp) »; tap a photo and swipe; turn on « Économie de données »; open the fortune cookie.
+5. `/app/menu` → « Marquer épuisé » on a dish → it shows « Épuisé aujourd’hui » on the menu and cannot be added.
+
+### Not in M2 (planned)
+
+Seat choice, « Montrer au serveur » with order QR, live order tracking and « Sélections précédentes » need orders and seats (M3–M4). Still to do from the menu section of the brief: drag-and-drop ordering (up/down buttons for now), a manual crop tool (thumbnails are centre-cropped), CSV import/export, price change by percentage, the « Plat du jour » banner, and editing the fortune list (it can be turned off).

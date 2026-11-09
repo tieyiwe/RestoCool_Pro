@@ -110,20 +110,23 @@ export async function HoursSection({ hours, next, submitLabel }: { hours: Hours;
         {order.map((d) => {
           const h = hours.find((x) => x.weekday === d);
           return (
-            <div key={d} className="grid grid-cols-[1fr_auto] items-center gap-2 p-2 sm:grid-cols-[10rem_auto_1fr_1fr]">
-              <span className="font-semibold">{days[d]}</span>
-              <label className="flex items-center gap-2 text-sm">
+            <div key={d} className="flex flex-wrap items-center gap-x-3 gap-y-2 p-2">
+              <span className="w-24 font-semibold">{days[d]}</span>
+              <label className="flex min-h-11 items-center gap-2 text-sm">
                 <input type="checkbox" name={`open_${d}`} defaultChecked={Boolean(h) || hours.length === 0} className="h-5 w-5" />
                 {t("open")}
               </label>
-              <label className="flex items-center gap-2 text-sm">
-                <span className="w-20 text-muted-foreground">{t("opens")}</span>
-                <input type="time" name={`opens_${d}`} defaultValue={h?.opens.slice(0, 5) ?? "10:00"} className={input} />
-              </label>
-              <label className="flex items-center gap-2 text-sm">
-                <span className="w-20 text-muted-foreground">{t("closes")}</span>
-                <input type="time" name={`closes_${d}`} defaultValue={h?.closes.slice(0, 5) ?? "23:00"} className={input} />
-              </label>
+              <span className="flex flex-wrap items-center gap-2">
+                <label className="flex items-center gap-1 text-sm">
+                  <span className="sr-only">{t("opens")}</span>
+                  <input type="time" name={`opens_${d}`} defaultValue={h?.opens.slice(0, 5) ?? "10:00"} className="min-h-11 w-[7.5rem] rounded-lg border border-border bg-surface px-2" />
+                </label>
+                <span aria-hidden>–</span>
+                <label className="flex items-center gap-1 text-sm">
+                  <span className="sr-only">{t("closes")}</span>
+                  <input type="time" name={`closes_${d}`} defaultValue={h?.closes.slice(0, 5) ?? "23:00"} className="min-h-11 w-[7.5rem] rounded-lg border border-border bg-surface px-2" />
+                </label>
+              </span>
             </div>
           );
         })}

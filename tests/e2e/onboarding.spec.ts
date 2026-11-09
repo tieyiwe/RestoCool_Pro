@@ -1,30 +1,82 @@
 import { expect, test } from "@playwright/test";
+import { pngBuffer } from "./helpers";
 
 test.describe.configure({ mode: "serial" });
 
-test("an owner creates a second restaurant, lands on it, and can switch back", async ({ page }, info) => {
+test("owner creates a restaurant, goes through the wizard, builds a menu with a photo and publishes it", async ({ page }, info) => {
   const name = `Maquis E2E ${info.project.name}`;
-  await page.goto("/app/new");
-  await expect(page.getByRole("heading", { name: "Créer votre restaurant" })).toBeVisible();
 
-  // Validation error is shown in French.
+  // 1. Create
+  await page.goto("/app/new");
   await page.getByLabel("Nom du restaurant").fill("x");
   await page.getByRole("button", { name: "Créer mon restaurant" }).click();
   await expect(page.getByRole("alert").filter({ hasText: "au moins 2 caractères" })).toBeVisible();
-
   await page.getByLabel("Nom du restaurant").fill(name);
   await page.getByLabel("Ville").fill("Koudougou");
   await page.getByRole("button", { name: "Créer mon restaurant" }).click();
 
-  await expect(page).toHaveURL(/\/app$/);
-  await expect(page.getByTestId("restaurant-name")).toHaveText(name);
-  await expect(page.getByText("Propriétaire", { exact: true })).toBeVisible();
+  // 2. Wizard: profile → contacts → hours → service → appearance → done
+  await expect(page).toHaveURL(/\/app\/onboarding\/1$/);
+  await expect(page.getByText("Étape 1 sur 5")).toBeVisible();
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/\/onboarding\/2$/);
+  await page.getByLabel("WhatsApp").fill("70 12 34 56");
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/\/onboarding\/3$/);
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/\/onboarding\/4$/);
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/\/onboarding\/5$/);
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page.getByRole("heading", { name: /Votre restaurant est prêt/ })).toBeVisible();
+  await page.getByRole("button", { name: "Ajouter mes plats" }).click();
+  await expect(page).toHaveURL(/\/app\/menu$/);
 
-  // The new restaurant is empty and isolated: its menu API returns no items.
-  const res = await page.request.get("/api/app/menu/items");
-  expect((await res.json()).items).toHaveLength(0);
+  // 3. Menu: a category, then a dish with « Suggérer », variants and a photo
+  await expect(page.getByText("Votre menu est vide")).toBeVisible();
+  await page.getByLabel("Nom de la catégorie").fill("Grillades");
+  await page.getByRole("button", { name: "Ajouter une catégorie" }).click();
+  await page.getByRole("link", { name: "+ Ajouter un plat" }).click();
+  await page.getByTestId("name-fr").fill("Riz gras");
+  await page.getByRole("button", { name: "✨ Suggérer" }).first().click();
+  await expect(page.getByTestId("name-en")).toHaveValue("Jollof-style rice");
+  await expect(page.getByTestId("name-zh")).toHaveValue("油焖饭");
+  await page.getByRole("button", { name: "+ Ajouter une variante" }).click();
+  await page.getByRole("button", { name: "+ Ajouter une variante" }).click();
+  await page.getByLabel("Nom de la variante FR").nth(0).fill("Demi");
+  await page.getByLabel("Prix", { exact: true }).nth(0).fill("1 500");
+  await page.getByLabel("Nom de la variante FR").nth(1).fill("Complet");
+  await page.getByLabel("Prix", { exact: true }).nth(1).fill("2500");
+  await page.getByLabel("Ajouter une photo").setInputFiles({ name: "riz.png", mimeType: "image/png", buffer: await pngBuffer(page) });
+  await expect(page.getByTestId("photo-preview")).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText(/Photo compressée/)).toBeVisible();
+  await expect(page.getByRole("radio", { name: "Pas pimenté" })).toBeChecked();
+  await page.getByRole("radio", { name: /^Pimenté/ }).check();
+  await page.getByRole("button", { name: "Enregistrer le plat" }).click();
+  await expect(page).toHaveURL(/\/app\/menu$/, { timeout: 20_000 });
+  const row = page.getByTestId("admin-item").filter({ hasText: "Riz gras" });
+  await expect(row).toContainText("1\u202F500\u202FF / 2\u202F500\u202FF");
+  // Editing loads the saved values back (spice level included).
+  await row.getByRole("link", { name: "Modifier" }).click();
+  await expect(page.getByRole("radio", { name: /^Pimenté/ })).toBeChecked();
+  await expect(page.getByTestId("name-zh")).toHaveValue("油焖饭");
+  await page.goto("/app/menu");
 
-  // Switch back to the demo restaurant.
+  // 4. Publish from Settings, then the public menu shows the dish and its photo
+  await page.goto("/app/settings#publish");
+  await page.getByTestId("publish-section").getByRole("button", { name: "Publier mon menu" }).click();
+  await expect(page.getByTestId("publish-status")).toContainText("Votre menu est en ligne", { timeout: 10_000 });
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "");
+  await page.goto(`/r/${slug}`);
+  await page.getByTestId("welcome").click();
+  await expect(page.getByTestId("dish-name")).toHaveText("Riz gras");
+  const thumb = page.getByTestId("menu-item").locator("img").first();
+  await expect(thumb).toHaveAttribute("src", /\/api\/media\/r\/.+-t\.webp$/);
+  const img = await page.request.get((await thumb.getAttribute("src"))!);
+  expect(img.headers()["content-type"]).toBe("image/webp");
+
+  // 5. Switch back to the demo restaurant with the header selector.
+  await page.goto("/app");
   await page.getByLabel("Changer de restaurant").selectOption({ label: "Restaurant Démo" });
   await page.getByRole("button", { name: "Valider" }).click();
   await expect(page.getByTestId("restaurant-name")).toHaveText("Restaurant Démo");

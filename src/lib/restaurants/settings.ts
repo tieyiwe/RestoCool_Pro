@@ -64,7 +64,7 @@ export const AppearanceInput = z.object({
 });
 
 export const FeaturesInput = z.object({
-  features: z.record(z.enum(FEATURE_FLAGS), z.boolean()),
+  features: z.partialRecord(z.enum(FEATURE_FLAGS), z.boolean()),
   poweredBadge: z.boolean(),
 });
 

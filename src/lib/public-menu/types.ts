@@ -1,0 +1,48 @@
+import type { I18nText } from "@/db/schema";
+
+/** Everything the public menu needs, serialised once on the server (no secrets, no internal ids beyond item ids). */
+export type PublicVariant = { id: string; name: I18nText; price: number };
+export type PublicOption = { id: string; group: I18nText; name: I18nText; priceDelta: number };
+export type PublicItem = {
+  id: string;
+  code: string | null;
+  name: I18nText;
+  description: I18nText | null;
+  price: number | null;
+  variants: PublicVariant[];
+  options: PublicOption[];
+  spicy: number;
+  tags: string[];
+  thumbUrl: string | null;
+  photoUrl: string | null;
+  soldOut: boolean;
+};
+export type PublicCategory = { id: string; name: I18nText; items: PublicItem[] };
+export type PublicHours = { weekday: number; opens: string; closes: string };
+
+export type PublicMenuData = {
+  slug: string;
+  name: string;
+  description: I18nText | null;
+  city: string;
+  address: string | null;
+  gmapsUrl: string | null;
+  phones: string[];
+  whatsapp: string | null;
+  orangeMoney: string | null;
+  moovMoney: string | null;
+  logoUrl: string | null;
+  coverUrl: string | null;
+  theme: "lacquer" | "light" | "warm";
+  accent: string;
+  onAccent: string;
+  poweredBadge: boolean;
+  features: { welcomeScreen: boolean; fortuneCookie: boolean; share: boolean; takeawayWhatsapp: boolean; localBadge: boolean };
+  locales: Array<"fr" | "en" | "zh">;
+  hours: PublicHours[];
+  categories: PublicCategory[];
+  fortunes: I18nText[];
+  preview: boolean;
+};
+
+export type CartLine = { key: string; itemId: string; variantId: string | null; optionIds: string[]; qty: number };

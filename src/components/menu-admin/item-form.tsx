@@ -242,7 +242,14 @@ export function ItemForm({
           <div className="flex flex-wrap gap-2">
             {[0, 1, 2].map((n) => (
               <label key={n} className="flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm has-checked:border-primary has-checked:bg-muted">
-                <input type="radio" value={n} {...register("spicy", { setValueAs: Number })} className="h-4 w-4" />
+                <input
+                  type="radio"
+                  name="spicy"
+                  value={n}
+                  checked={Number(watch("spicy") ?? 0) === n}
+                  onChange={() => setValue("spicy", n, { shouldDirty: true })}
+                  className="h-4 w-4"
+                />
                 {t(`item.spicy${n}` as "item.spicy0")} {"🌶️".repeat(n)}
               </label>
             ))}
