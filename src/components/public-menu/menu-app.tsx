@@ -8,6 +8,7 @@ import { itemMatches } from "@/lib/public-menu/search";
 import { makeT, type Messages } from "@/lib/public-menu/translate";
 import type { CartLine, PublicItem, PublicMenuData } from "@/lib/public-menu/types";
 import { cn } from "@/lib/utils";
+import { SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
 
 type Lang = "fr" | "en" | "zh";
 type Panel =
@@ -44,10 +45,15 @@ export function MenuApp({
   data,
   messages,
   whatsappQr,
+  seatToken = null,
+  seating,
 }: {
   data: PublicMenuData;
   messages: Record<Lang, Messages>;
   whatsappQr: string | null;
+  /** Token from a printed table QR (/r/{slug}/t/{token}). */
+  seatToken?: string | null;
+  seating: SeatingConfig;
 }) {
   // French on every new visit; the choice lasts for this visit only (sessionStorage).
   const [lang, setLang] = useState<Lang>("fr");
@@ -166,10 +172,14 @@ export function MenuApp({
     return () => window.removeEventListener("offline", show);
   });
 
-  function flash(msg: string) {
+  const flash = useCallback((msg: string) => {
     setToast(msg);
-    window.setTimeout(() => setToast(null), 2500);
-  }
+    window.setTimeout(() => setToast(null), 3000);
+  }, []);
+  const [picker, setPicker] = useState(false);
+  const { seat, warning, stillHere, choose } = useSeat({ slug: data.slug, token: seatToken, config: seating, onToast: flash, t });
+  // A seat set by scanning the table's own QR stays (the phone is at that table); picker seats can change.
+  const canChangeSeat = seating.pickerAvailable && seat?.source !== "qr";
 
   /* ---------- derived ---------- */
   const filtering = query.trim() !== "" || filters.spicy || filters.local || filters.isNew;
@@ -262,6 +272,25 @@ export function MenuApp({
                 </a>
               )}
             </p>
+            {seating.enabled && (
+              <div className="mt-2">
+                {seat ? (
+                  <SeatBadge seat={seat} t={t} onChange={canChangeSeat ? () => setPicker(true) : null} />
+                ) : (
+                  seating.pickerAvailable && (
+                    <button
+                      type="button"
+                      onClick={() => setPicker(true)}
+                      className="min-h-11 rounded-full px-4 text-sm font-bold"
+                      style={{ background: "var(--accent)", color: "var(--on-accent)" }}
+                      data-testid="choose-seat"
+                    >
+                      📍 {t("chooseSeat")}
+                    </button>
+                  )
+                )}
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -590,6 +619,8 @@ export function MenuApp({
         />
       )}
 
+      {picker && <SeatPicker slug={data.slug} lang={lang} t={t} onChoose={choose} onClose={() => setPicker(false)} />}
+      {warning !== null && <StillThere seconds={warning} t={t} onStay={stillHere} />}
       {welcome && <Welcome name={data.name} t={t} onClose={() => setWelcome(false)} />}
     </div>
   );

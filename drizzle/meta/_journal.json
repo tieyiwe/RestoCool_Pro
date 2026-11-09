@@ -22,6 +22,13 @@
       "when": 1793713789518,
       "tag": "0002_m2_media_description",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794257737086,
+      "tag": "0003_m3_table_sessions",
+      "breakpoints": true
     }
   ]
 }

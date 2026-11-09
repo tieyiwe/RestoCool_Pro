@@ -38,3 +38,33 @@ export async function pngBuffer(page: Page): Promise<Buffer> {
   });
   return Buffer.from(b64, "base64");
 }
+
+/** Run SQL against the e2e database (test setup only). */
+export async function sql<T extends Record<string, unknown> = Record<string, unknown>>(text: string, params: unknown[] = []): Promise<T[]> {
+  const pool = new Pool({ connectionString: process.env.E2E_DATABASE_URL });
+  try {
+    return (await pool.query<T>(text, params)).rows;
+  } finally {
+    await pool.end();
+  }
+}
+
+export async function seatToken(label: string, type = "table"): Promise<string> {
+  const rows = await sql<{ qr_token: string }>(
+    "select s.qr_token from seats s join restaurants r on r.id = s.restaurant_id where r.slug = 'restaurant-demo' and s.type = $1 and s.label = $2",
+    [type, label],
+  );
+  return rows[0]!.qr_token;
+}
+
+/** Patch the demo restaurant's settings JSON (e.g. QR strategy, inactivity timings). */
+export async function patchDemoSettings(patch: Record<string, unknown>) {
+  await sql("update restaurants set settings = settings || $1::jsonb where slug = 'restaurant-demo'", [JSON.stringify(patch)]);
+}
+
+/** Close every open table session of the demo restaurant. */
+export async function resetDemoSessions() {
+  await sql(
+    "update table_sessions set status = 'closed', closed_at = now(), closed_reason = 'staff' where status = 'open' and restaurant_id = (select id from restaurants where slug = 'restaurant-demo')",
+  );
+}

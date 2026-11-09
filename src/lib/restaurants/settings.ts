@@ -10,6 +10,7 @@ import { accentIsReadable } from "@/lib/color";
 import { normalizeBfPhone } from "@/lib/format";
 import { hasFeature } from "@/lib/plan";
 import { RESERVED_SLUGS, slugify } from "@/lib/slug";
+import { syncSingletonSeats } from "@/lib/seating/admin";
 
 export type SettingsCtx = { db: DB; actor: Actor; repo: TenantRepo };
 export type SettingsError =
@@ -19,7 +20,8 @@ export type SettingsError =
   | "phone_invalid"
   | "contrast"
   | "badge_plan"
-  | "publish_empty";
+  | "publish_empty"
+  | "qr_plan";
 export class SettingsValidationError extends Error {
   constructor(public readonly code: SettingsError) {
     super(code);
@@ -53,6 +55,8 @@ export const ServiceInput = z.object({
   qrStrategy: z.enum(["per_seat", "generic"]),
   orderValidation: z.enum(["direct", "server_confirms"]),
   enabledLocales: z.array(z.enum(["fr", "en", "zh"])).default(["fr"]),
+  /** Inactivity release in picker mode (seconds). */
+  inactivity: z.object({ warnAfterSec: z.number().int().min(60).max(3600), releaseAfterSec: z.number().int().min(10).max(600) }).optional(),
 });
 
 const OwnMedia = z.union([z.literal(""), z.string().regex(/^\/api\/media\/r\/[0-9a-f-]{36}\/[A-Za-z0-9_-]+(-t)?\.webp$/)]).default("");
@@ -149,7 +153,15 @@ export async function saveService(ctx: SettingsCtx, input: z.input<typeof Servic
   const p = ServiceInput.safeParse(input);
   if (!p.success) throw new SettingsValidationError("invalid");
   const enabledLocales = Array.from(new Set(["fr", ...p.data.enabledLocales]));
-  await mergeSettings(ctx, { ...p.data, enabledLocales }, "settings.service");
+  const r = await current(ctx);
+  // One QR per table/room needs Pro or Business; Gratuit has one generic QR.
+  if (p.data.qrStrategy === "per_seat" && !hasFeature(r, "qrPerSeat")) throw new SettingsValidationError("qr_plan");
+  await mergeSettings(
+    ctx,
+    { ...p.data, enabledLocales, inactivity: p.data.inactivity ?? r.settings.inactivity },
+    "settings.service",
+  );
+  await syncSingletonSeats(ctx.db, ctx.repo.restaurantId, p.data.seatingModes);
 }
 
 export async function saveAppearance(ctx: SettingsCtx, input: z.input<typeof AppearanceInput>) {

@@ -73,6 +73,10 @@ export async function saveServiceAction(_p: SettingsResult, fd: FormData) {
       qrStrategy: s(fd, "qrStrategy") as never,
       orderValidation: s(fd, "orderValidation") as never,
       enabledLocales: fd.getAll("enabledLocales").map(String) as never,
+      inactivity:
+        fd.get("warnAfterMin") !== null
+          ? { warnAfterSec: Math.round(Number(s(fd, "warnAfterMin")) * 60), releaseAfterSec: Math.round(Number(s(fd, "releaseAfterSec"))) }
+          : undefined,
     }),
   );
 }

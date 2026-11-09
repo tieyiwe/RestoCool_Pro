@@ -197,6 +197,17 @@ export async function ServiceSection({ r, next, submitLabel }: SectionProps) {
         </div>
         <p className="mt-1 text-xs text-muted-foreground">{t("languagesHint")}</p>
       </fieldset>
+      <fieldset className="grid gap-2 sm:grid-cols-2">
+        <legend className={label}>{t("inactivity")}</legend>
+        <label className="text-sm">
+          <span className="mb-1 block">{t("warnAfterMin")}</span>
+          <input type="number" name="warnAfterMin" min={1} max={60} step={1} defaultValue={Math.round((s.inactivity?.warnAfterSec ?? 240) / 60)} className={input} />
+        </label>
+        <label className="text-sm">
+          <span className="mb-1 block">{t("releaseAfterSec")}</span>
+          <input type="number" name="releaseAfterSec" min={10} max={600} step={5} defaultValue={s.inactivity?.releaseAfterSec ?? 30} className={input} />
+        </label>
+      </fieldset>
     </SettingsForm>
   );
 }
