@@ -35,3 +35,11 @@ export class PlanLimitError extends AppError {
     super("plan_limit", 402, message);
   }
 }
+
+/** Postgres 23505, whether the driver error is thrown directly or wrapped by Drizzle. */
+export function isUniqueViolation(err: unknown): boolean {
+  for (let e: unknown = err, i = 0; e && i < 3; e = (e as { cause?: unknown }).cause, i++) {
+    if ((e as { code?: unknown }).code === "23505") return true;
+  }
+  return false;
+}

@@ -7,6 +7,7 @@ import { FEATURE_FLAGS, menuItems, openingHours, restaurants, type RestaurantSet
 import { writeAudit } from "@/lib/audit";
 import type { Actor } from "@/lib/auth/can";
 import { accentIsReadable } from "@/lib/color";
+import { isUniqueViolation } from "@/lib/errors";
 import { normalizeBfPhone } from "@/lib/format";
 import { hasFeature } from "@/lib/plan";
 import { RESERVED_SLUGS, slugify } from "@/lib/slug";
@@ -98,19 +99,26 @@ export async function saveProfile(ctx: SettingsCtx, input: z.input<typeof Profil
     columns: { id: true },
   });
   if (taken) throw new SettingsValidationError("slug_taken");
-  await update(
-    ctx,
-    {
-      name: p.data.name,
-      slug,
-      description: i18nOrNull(p.data.description),
-      city: p.data.city,
-      address: p.data.address || null,
-      gmapsUrl: p.data.gmapsUrl || null,
-    },
-    "settings.profile",
-  );
+  try {
+    await update(
+      ctx,
+      {
+        name: p.data.name,
+        slug,
+        description: i18nOrNull(p.data.description),
+        city: p.data.city,
+        address: p.data.address || null,
+        gmapsUrl: p.data.gmapsUrl || null,
+      },
+      "settings.profile",
+    );
+  } catch (err) {
+    // Another restaurant took the slug between the check and the update (unique index).
+    if (isUniqueViolation(err)) throw new SettingsValidationError("slug_taken");
+    throw err;
+  }
 }
+
 
 export async function saveContacts(ctx: SettingsCtx, input: z.input<typeof ContactsInput>) {
   const p = ContactsInput.safeParse(input);
