@@ -3,6 +3,7 @@ import { afterAll, describe, expect, it } from "vitest";
 import { closeDb, getDb } from "@/db";
 import { membershipsForUser, tenantRepo } from "@/db/repos/tenant";
 import { auditLog, members, planEvents, restaurants } from "@/db/schema";
+import { isUniqueViolation } from "@/lib/errors";
 import { createRestaurantForUser } from "@/lib/restaurants/provision";
 
 const hasDb = Boolean(process.env.DATABASE_URL);
@@ -38,6 +39,25 @@ describe.skipIf(!hasDb)("app-managed tenants (database)", () => {
     created.push(r2.id);
     const [first] = await getDb().select().from(restaurants).where(eq(restaurants.id, created[0]!));
     expect(r2.slug).not.toBe(first!.slug);
+  });
+
+  it("two restaurants created at the same time with the same name both get a slug", async () => {
+    const name = `Maquis Simultané ${Date.now()}`;
+    const rs = await Promise.all(
+      Array.from({ length: 3 }, (_, i) => createRestaurantForUser(getDb(), { clerkUserId: `${USER}-race-${i}` }, { name, city: "Ouagadougou" })),
+    );
+    created.push(...rs.map((r) => r.id));
+    expect(new Set(rs.map((r) => r.slug)).size).toBe(3);
+  });
+
+  it("isUniqueViolation recognises the slug unique index error", async () => {
+    const [first] = await getDb().select().from(restaurants).where(eq(restaurants.id, created[0]!));
+    const err = await getDb()
+      .insert(restaurants)
+      .values({ name: "Doublon", city: "Ouagadougou", slug: first!.slug })
+      .then(() => null, (e: unknown) => e);
+    expect(isUniqueViolation(err)).toBe(true);
+    expect(isUniqueViolation(new Error("other"))).toBe(false);
   });
 
   it("lists only the user's own active memberships", async () => {

@@ -18,6 +18,9 @@ const Meta = z.object({
   height: z.coerce.number().int().min(1).max(IMAGE_LIMITS.fullMaxSide),
 });
 
+/** Both images plus multipart overhead and the small text fields. */
+const MAX_BODY_BYTES = IMAGE_LIMITS.fullMaxBytes + IMAGE_LIMITS.thumbMaxBytes + 16 * 1024;
+
 async function readWebp(value: FormDataEntryValue | null, maxBytes: number): Promise<Buffer> {
   if (!(value instanceof Blob)) throw new AppError("invalid_image", 400);
   if (value.size === 0 || value.size > maxBytes) throw new AppError("image_too_large", 413);
@@ -31,6 +34,12 @@ async function readWebp(value: FormDataEntryValue | null, maxBytes: number): Pro
  * Item photos need menu.write; logo and cover need settings.write.
  */
 export const POST = handle(async (req: Request) => {
+  // Authenticate and bound the body size BEFORE buffering the multipart form in memory.
+  // Every role that may upload anything has menu.write (logo/cover additionally need settings.write).
+  await requireMember("menu.write");
+  const declared = Number(req.headers.get("content-length") ?? "0");
+  if (!Number.isFinite(declared) || declared > MAX_BODY_BYTES) throw new AppError("image_too_large", 413);
+
   const form = await req.formData();
   const meta = Meta.parse({ kind: form.get("kind"), width: form.get("width"), height: form.get("height") });
   const { actor, repo } = await requireMember(meta.kind === "item" ? "menu.write" : "settings.write");

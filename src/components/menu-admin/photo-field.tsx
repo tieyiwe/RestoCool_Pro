@@ -39,7 +39,8 @@ export function PhotoField({
       if (!res.ok) throw new Error(`upload ${res.status}`);
       const body = (await res.json()) as UploadedPhoto & { bytes: number };
       onChange({ fullUrl: body.fullUrl, thumbUrl: body.thumbUrl });
-      setSizeNote(t("photoSize", { size: formatBytes(body.bytes), original: formatBytes(img.originalBytes) }));
+      const units = { kb: (n: string) => t("sizeKb", { n }), mb: (n: string) => t("sizeMb", { n }) };
+      setSizeNote(t("photoSize", { size: formatBytes(body.bytes, units), original: formatBytes(img.originalBytes, units) }));
       setState("idle");
     } catch {
       setState("error");

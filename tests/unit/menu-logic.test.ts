@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { accentIsReadable, contrastRatio } from "@/lib/color";
 import { suggestTranslation } from "@/lib/menu/glossary";
-import { addToCart, cartTotals, changeQty, indexItems, takeawayMessage, unitPrice } from "@/lib/public-menu/cart";
+import { addToCart, cartTotals, changeQty, indexItems, lineMatchesMenu, takeawayMessage, unitPrice } from "@/lib/public-menu/cart";
 import { openStatus } from "@/lib/public-menu/hours";
 import { itemMatches } from "@/lib/public-menu/search";
 import { format } from "@/lib/public-menu/translate";
@@ -38,6 +38,10 @@ describe("Suggérer (glossary)", () => {
     const s = suggestTranslation("Poulet yassa");
     expect(s.en).toBe("Chicken yassa");
     expect(s.zh).toBe("");
+  });
+  it("ignores Object.prototype names instead of returning garbage", () => {
+    expect(suggestTranslation("constructor")).toEqual({ en: "Constructor", zh: "" });
+    expect(suggestTranslation("Poulet toString")).toEqual({ en: "Chicken tostring", zh: "" });
   });
 });
 
@@ -103,6 +107,15 @@ describe("Ma sélection", () => {
     expect(cartTotals(idx, lines)).toEqual({ count: 4, total: 7500, hasOnRequest: true });
     lines = changeQty(lines, lines.find((l) => l.itemId === "j")!.key, -2);
     expect(cartTotals(idx, lines).count).toBe(2);
+  });
+  it("a saved line whose variant or option no longer exists does not match the menu", () => {
+    expect(lineMatchesMenu(idx, addToCart([], "c", "whole", ["nochili"])[0]!)).toBe(true);
+    expect(lineMatchesMenu(idx, addToCart([], "c", "old-variant-id", [])[0]!)).toBe(false);
+    expect(lineMatchesMenu(idx, addToCart([], "c", null, [])[0]!)).toBe(false);
+    expect(lineMatchesMenu(idx, addToCart([], "c", "half", ["gone"])[0]!)).toBe(false);
+    expect(lineMatchesMenu(idx, addToCart([], "j", "half", [])[0]!)).toBe(false);
+    expect(lineMatchesMenu(idx, addToCart([], "j")[0]!)).toBe(true);
+    expect(lineMatchesMenu(idx, addToCart([], "missing")[0]!)).toBe(false);
   });
   it("same dish + same choice = one line", () => {
     const lines = addToCart(addToCart([], "c", "half", []), "c", "half", []);

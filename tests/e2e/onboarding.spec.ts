@@ -4,6 +4,9 @@ import { pngBuffer } from "./helpers";
 test.describe.configure({ mode: "serial" });
 
 test("owner creates a restaurant, goes through the wizard, builds a menu with a photo and publishes it", async ({ page }, info) => {
+  // Long end-to-end path; on a cold `next dev` the first visit to each route compiles it,
+  // which pushed this test past the default 30 s on the first project.
+  test.slow();
   const name = `Maquis E2E ${info.project.name}`;
 
   // 1. Create

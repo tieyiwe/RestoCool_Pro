@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { formatBfPhone, formatFCFA, telHref, whatsappHref } from "@/lib/format";
-import { addToCart, cartTotals, changeQty, indexItems, qtyForItem, takeawayMessage, unitPrice } from "@/lib/public-menu/cart";
+import { addToCart, cartTotals, changeQty, indexItems, lineMatchesMenu, qtyForItem, takeawayMessage, unitPrice } from "@/lib/public-menu/cart";
 import { openStatus } from "@/lib/public-menu/hours";
 import { itemMatches } from "@/lib/public-menu/search";
 import { makeT, type Messages } from "@/lib/public-menu/translate";
@@ -37,6 +37,22 @@ function writeStore(kind: "session" | "local", key: string, value: string | null
   } catch {
     /* ignore */
   }
+}
+
+/** Stored carts come from the browser: keep only well-formed lines (a bad one would crash the menu). */
+function isCartLine(x: unknown): x is CartLine {
+  if (!x || typeof x !== "object") return false;
+  const l = x as Record<string, unknown>;
+  return (
+    typeof l.key === "string" &&
+    typeof l.itemId === "string" &&
+    (l.variantId === null || typeof l.variantId === "string") &&
+    Array.isArray(l.optionIds) &&
+    l.optionIds.every((o) => typeof o === "string") &&
+    Number.isInteger(l.qty) &&
+    (l.qty as number) >= 1 &&
+    (l.qty as number) <= 99
+  );
 }
 
 const pick = (t: { fr: string } & Partial<Record<string, string>> | null | undefined, lang: Lang) => (t ? t[lang]?.trim() || t.fr : "");
@@ -78,8 +94,8 @@ export function MenuApp({
     if (l === "en" || l === "zh") setLang(data.locales.includes(l) ? l : "fr");
     setLowData(readStore("local", "rc-lowdata") === "1");
     try {
-      const saved = JSON.parse(readStore("session", cartKey) ?? "[]") as CartLine[];
-      if (Array.isArray(saved)) setLines(saved.filter((x) => items.has(x.itemId)));
+      const saved: unknown = JSON.parse(readStore("session", cartKey) ?? "[]");
+      if (Array.isArray(saved)) setLines(saved.filter((x): x is CartLine => isCartLine(x) && lineMatchesMenu(items, x)));
     } catch {
       /* ignore */
     }
@@ -107,12 +123,17 @@ export function MenuApp({
   }, [welcome]);
 
   /* ---------- panels + phone back button ---------- */
+  // One history entry per open panel stack, so the phone's back button closes it.
+  // (Kept out of the setState updater: updaters must be pure and may run twice.)
+  const panelRef = useRef<Panel | null>(null);
+  useEffect(() => {
+    panelRef.current = panel;
+  }, [panel]);
   const openPanel = useCallback((p: Panel) => {
-    setPanel((cur) => {
-      if (cur) window.history.replaceState({ rcPanel: true }, "");
-      else window.history.pushState({ rcPanel: true }, "");
-      return p;
-    });
+    if (panelRef.current) window.history.replaceState({ rcPanel: true }, "");
+    else window.history.pushState({ rcPanel: true }, "");
+    panelRef.current = p;
+    setPanel(p);
   }, []);
   const closePanel = useCallback(() => {
     if ((window.history.state as { rcPanel?: boolean } | null)?.rcPanel) window.history.back();
@@ -166,16 +187,19 @@ export function MenuApp({
     document.addEventListener("visibilitychange", onVisible);
     return () => document.removeEventListener("visibilitychange", onVisible);
   }, []);
+  const toastTimer = useRef<number | undefined>(undefined);
+  const flash = useCallback((msg: string) => {
+    setToast(msg);
+    window.clearTimeout(toastTimer.current);
+    toastTimer.current = window.setTimeout(() => setToast(null), 2500);
+  }, []);
+  useEffect(() => () => window.clearTimeout(toastTimer.current), []);
   useEffect(() => {
     const show = () => !navigator.onLine && flash(t("offline"));
     window.addEventListener("offline", show);
     return () => window.removeEventListener("offline", show);
-  });
+  }, [flash, t]);
 
-  const flash = useCallback((msg: string) => {
-    setToast(msg);
-    window.setTimeout(() => setToast(null), 3000);
-  }, []);
   const [picker, setPicker] = useState(false);
   const { seat, warning, stillHere, choose } = useSeat({ slug: data.slug, token: seatToken, config: seating, onToast: flash, t });
   // A seat set by scanning the table's own QR stays (the phone is at that table); picker seats can change.
@@ -458,8 +482,8 @@ export function MenuApp({
               <span className="rounded-full bg-black/20 px-2 py-0.5 text-sm">{totals.count}</span>
             </span>
             <span className="tabular-nums" data-testid="cart-total">
-              {formatFCFA(totals.total)}
-              {totals.hasOnRequest ? " +" : ""}
+              {/* Only « sur demande » dishes: never show « 0 F ». */}
+              {totals.total === 0 && totals.hasOnRequest ? t("onRequest") : `${formatFCFA(totals.total)}${totals.hasOnRequest ? " +" : ""}`}
             </span>
           </button>
         </div>
@@ -527,7 +551,7 @@ export function MenuApp({
               </ul>
               <p className="mt-3 flex justify-between border-t border-border pt-3 text-lg font-extrabold">
                 <span>{t("total")}</span>
-                <span className="tabular-nums">{formatFCFA(totals.total)}</span>
+                <span className="tabular-nums">{totals.total === 0 && totals.hasOnRequest ? t("onRequest") : formatFCFA(totals.total)}</span>
               </p>
               {totals.hasOnRequest && <p className="text-sm text-muted-foreground">{t("plusOnRequest")}</p>}
               <p className="mt-3 rounded-lg bg-muted p-3 text-sm">{t("showWaiterHint")}</p>
@@ -748,14 +772,23 @@ function Stepper({ qty, t, name, onMinus, onPlus }: { qty: number; t: ReturnType
 }
 
 function Sheet({ title, onClose, t, testId, children }: { title: string; onClose: () => void; t: ReturnType<typeof makeT>; testId?: string; children: React.ReactNode }) {
+  // Keyboard and screen-reader users land in the dialog, and go back where they were on close.
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    dialogRef.current?.focus({ preventScroll: true });
+    return () => previous?.focus({ preventScroll: true });
+  }, []);
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 sm:items-center" onClick={onClose}>
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label={title}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[88dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-background p-4 sm:rounded-3xl"
+        className="max-h-[88dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-background p-4 sm:rounded-3xl outline-none"
         style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
         data-testid={testId}
       >
@@ -900,7 +933,7 @@ function Lightbox({
   const start = useRef<{ x: number; y: number } | null>(null);
   const [dragY, setDragY] = useState(0);
   const item = photos[index]!;
-  const go = (d: number) => onIndex((index + d + photos.length) % photos.length);
+  const go = useCallback((d: number) => onIndex((index + d + photos.length) % photos.length), [index, photos.length, onIndex]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") go(1);
@@ -908,7 +941,7 @@ function Lightbox({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  });
+  }, [go]);
   return (
     <div
       role="dialog"

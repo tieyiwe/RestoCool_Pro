@@ -62,6 +62,7 @@ export async function compressImage(file: File): Promise<CompressedImage> {
   };
 }
 
-export function formatBytes(n: number): string {
-  return n < 1024 * 1024 ? `${Math.round(n / 1024)} Ko` : `${(n / 1024 / 1024).toFixed(1)} Mo`;
+/** Size for display; the unit label comes from the caller's translations ("{n} Ko" / "{n} KB"). */
+export function formatBytes(n: number, units: { kb: (n: string) => string; mb: (n: string) => string }): string {
+  return n < 1024 * 1024 ? units.kb(String(Math.round(n / 1024))) : units.mb((n / 1024 / 1024).toFixed(1));
 }

@@ -104,10 +104,13 @@ const norm = (s: string) => s.toLowerCase().normalize("NFC").replace(/[’']/g, 
 
 export type Suggestion = { en: string; zh: string };
 
+/** Own keys only: "constructor", "toString"… must not resolve to Object.prototype members. */
+const lookup = (table: Record<string, Entry>, key: string): Entry | undefined => (Object.hasOwn(table, key) ? table[key] : undefined);
+
 export function suggestTranslation(fr: string): Suggestion {
   const n = norm(fr);
   if (!n) return { en: "", zh: "" };
-  const phrase = PHRASES[n];
+  const phrase = lookup(PHRASES, n);
   if (phrase) return { ...phrase };
 
   // Greedy: longest known phrase at each position, else a word.
@@ -118,7 +121,7 @@ export function suggestTranslation(fr: string): Suggestion {
   for (let i = 0; i < tokens.length; ) {
     let matched = false;
     for (let len = Math.min(4, tokens.length - i); len >= 2; len--) {
-      const p = PHRASES[tokens.slice(i, i + len).join(" ")];
+      const p = lookup(PHRASES, tokens.slice(i, i + len).join(" "));
       if (p) {
         en.push(p.en);
         zh.push(p.zh);
@@ -129,7 +132,7 @@ export function suggestTranslation(fr: string): Suggestion {
     }
     if (matched) continue;
     const word = tokens[i]!;
-    const entry = WORDS[word] ?? PHRASES[word];
+    const entry = lookup(WORDS, word) ?? lookup(PHRASES, word);
     if (entry) {
       en.push(entry.en);
       zh.push(entry.zh);

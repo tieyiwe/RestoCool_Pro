@@ -3,10 +3,11 @@ import { and, eq, ne, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
 import type { TenantRepo } from "@/db/repos/tenant";
-import { FEATURE_FLAGS, menuItems, openingHours, restaurants, type RestaurantSettings } from "@/db/schema";
+import { FEATURE_FLAGS, menuCategories, menuItems, openingHours, restaurants, type RestaurantSettings } from "@/db/schema";
 import { writeAudit } from "@/lib/audit";
 import type { Actor } from "@/lib/auth/can";
 import { accentIsReadable } from "@/lib/color";
+import { isUniqueViolation } from "@/lib/errors";
 import { normalizeBfPhone } from "@/lib/format";
 import { hasFeature } from "@/lib/plan";
 import { RESERVED_SLUGS, slugify } from "@/lib/slug";
@@ -102,19 +103,26 @@ export async function saveProfile(ctx: SettingsCtx, input: z.input<typeof Profil
     columns: { id: true },
   });
   if (taken) throw new SettingsValidationError("slug_taken");
-  await update(
-    ctx,
-    {
-      name: p.data.name,
-      slug,
-      description: i18nOrNull(p.data.description),
-      city: p.data.city,
-      address: p.data.address || null,
-      gmapsUrl: p.data.gmapsUrl || null,
-    },
-    "settings.profile",
-  );
+  try {
+    await update(
+      ctx,
+      {
+        name: p.data.name,
+        slug,
+        description: i18nOrNull(p.data.description),
+        city: p.data.city,
+        address: p.data.address || null,
+        gmapsUrl: p.data.gmapsUrl || null,
+      },
+      "settings.profile",
+    );
+  } catch (err) {
+    // Another restaurant took the slug between the check and the update (unique index).
+    if (isUniqueViolation(err)) throw new SettingsValidationError("slug_taken");
+    throw err;
+  }
 }
+
 
 export async function saveContacts(ctx: SettingsCtx, input: z.input<typeof ContactsInput>) {
   const p = ContactsInput.safeParse(input);
@@ -192,7 +200,9 @@ export async function setPublished(ctx: SettingsCtx, published: boolean) {
     const [row] = await ctx.db
       .select({ n: sql<number>`count(*)::int` })
       .from(menuItems)
-      .where(and(eq(menuItems.restaurantId, ctx.repo.restaurantId), eq(menuItems.available, true)));
+      // A dish is only visible inside an active category of the same restaurant.
+      .innerJoin(menuCategories, and(eq(menuCategories.id, menuItems.categoryId), eq(menuCategories.restaurantId, menuItems.restaurantId)))
+      .where(and(eq(menuItems.restaurantId, ctx.repo.restaurantId), eq(menuItems.available, true), eq(menuCategories.active, true)));
     if ((row?.n ?? 0) === 0) throw new SettingsValidationError("publish_empty");
   }
   await update(ctx, { published }, published ? "restaurant.published" : "restaurant.unpublished");

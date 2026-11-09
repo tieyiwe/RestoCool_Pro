@@ -4,6 +4,7 @@ import type { DB } from "@/db";
 import { members, planEvents, restaurants } from "@/db/schema";
 import { TRIAL_DAYS, TRIAL_PLAN } from "@/config/plans";
 import { writeAudit } from "@/lib/audit";
+import { isUniqueViolation } from "@/lib/errors";
 import type { Actor } from "@/lib/auth/can";
 import { RESERVED_SLUGS, slugify } from "@/lib/slug";
 
@@ -38,6 +39,17 @@ export async function createRestaurantForUser(
   input: CreateRestaurantInput,
 ) {
   const data = CreateRestaurantInput.parse(input);
+  // Two sign-ups with the same name can pick the same free slug at once: retry on the unique index.
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await insertRestaurant(db, user, data);
+    } catch (err) {
+      if (attempt >= 5 || !isUniqueViolation(err)) throw err;
+    }
+  }
+}
+
+async function insertRestaurant(db: DB, user: { clerkUserId: string; email?: string | null; name?: string | null }, data: CreateRestaurantInput) {
   return db.transaction(async (tx) => {
     const slug = await uniqueSlug(tx, data.name);
     const expires = new Date(Date.now() + TRIAL_DAYS * 86_400_000);
