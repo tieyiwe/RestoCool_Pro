@@ -113,3 +113,10 @@ test.describe("media upload", () => {
     expect(res.status()).toBe(400);
   });
 });
+
+test("pages are served with basic security headers", async ({ request }) => {
+  const res = await request.get("/r/restaurant-demo");
+  expect(res.headers()["x-content-type-options"]).toBe("nosniff");
+  expect(res.headers()["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+  expect(res.headers()["x-powered-by"]).toBeUndefined();
+});
