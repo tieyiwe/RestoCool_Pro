@@ -740,14 +740,23 @@ function Stepper({ qty, t, name, onMinus, onPlus }: { qty: number; t: ReturnType
 }
 
 function Sheet({ title, onClose, t, testId, children }: { title: string; onClose: () => void; t: ReturnType<typeof makeT>; testId?: string; children: React.ReactNode }) {
+  // Keyboard and screen-reader users land in the dialog, and go back where they were on close.
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    dialogRef.current?.focus({ preventScroll: true });
+    return () => previous?.focus({ preventScroll: true });
+  }, []);
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 sm:items-center" onClick={onClose}>
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label={title}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[88dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-background p-4 sm:rounded-3xl"
+        className="max-h-[88dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-background p-4 sm:rounded-3xl outline-none"
         style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
         data-testid={testId}
       >

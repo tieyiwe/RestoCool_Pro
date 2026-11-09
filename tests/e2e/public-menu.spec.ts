@@ -79,6 +79,16 @@ test("a selection of only « sur demande » dishes never shows 0 F; one back pre
   expect(await page.evaluate(() => (history.state as { rcPanel?: boolean } | null)?.rcPanel ?? false)).toBe(false);
 });
 
+test("opening a panel moves keyboard focus into it, closing it gives focus back", async ({ page }) => {
+  await openMenu(page);
+  await page.getByTestId("fortune-button").focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByTestId("fortune-sheet")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(page.getByTestId("fortune-sheet")).toHaveCount(0);
+  await expect(page.getByTestId("fortune-button")).toBeFocused();
+});
+
 test("a corrupted saved selection does not break the menu", async ({ page, request }) => {
   const { items } = (await (await request.get("/api/app/menu/items")).json()) as { items: Array<{ id: string }> };
   const realId = items[0]!.id;
