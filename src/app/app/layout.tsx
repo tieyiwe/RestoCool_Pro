@@ -24,6 +24,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       { href: "/app", label: t("dashboard"), need: null },
       { href: "/app/service", label: t("frontDesk"), need: "orders.read" },
       { href: "/app/kitchen", label: t("kitchen"), need: "orders.read" },
+      { href: "/app/orders", label: t("history"), need: "reports.read" },
       { href: "/app/menu", label: t("menu"), need: "menu.write" },
       { href: "/app/seating", label: t("seating"), need: "seats.write" },
       { href: "/app/staff", label: t("staff"), need: "staff.write" },

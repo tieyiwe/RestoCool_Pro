@@ -9,10 +9,6 @@ import { cn } from "@/lib/utils";
 /** Owner / manager analytics: orders, sales, service times, busy hours, top dishes, personnel. */
 export async function OrderAnalyticsPanel({ data, range }: { data: OrderAnalytics; range: Range }) {
   const t = await getTranslations("analytics");
-  const tr = await getTranslations("app.role");
-  const tro = await getTranslations("roles");
-  const roleOf = (p: { role: string; roleKey: string | null; roleName: string | null }) =>
-    p.role === "owner" ? tr("owner") : p.roleKey ? tro(`names.${p.roleKey}` as "names.server") : (p.roleName ?? tr(p.role as "server"));
   const locale = await getLocale();
   const max = Math.max(1, ...data.byHour);
   const firstHour = data.byHour.findIndex((c) => c > 0);
@@ -89,35 +85,6 @@ export async function OrderAnalyticsPanel({ data, range }: { data: OrderAnalytic
         </div>
       )}
 
-      <Card className="overflow-x-auto p-0">
-        <CardTitle className="p-4 pb-2">{t("personnel")}</CardTitle>
-        <table className="w-full min-w-[36rem] text-sm" data-testid="analytics-personnel">
-          <thead className="text-left text-muted-foreground">
-            <tr>
-              <th className="px-4 py-2">{t("col.staffNo")}</th>
-              <th className="px-4 py-2">{t("col.name")}</th>
-              <th className="px-4 py-2 text-right">{t("col.confirmed")}</th>
-              <th className="px-4 py-2 text-right">{t("col.prepared")}</th>
-              <th className="px-4 py-2 text-right">{t("col.served")}</th>
-              <th className="px-4 py-2 text-right">{t("col.avgService")}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {data.personnel.map((p) => (
-              <tr key={p.id}>
-                <td className="px-4 py-2 font-mono font-bold">{p.staffNo}</td>
-                <td className="px-4 py-2">
-                  {p.name} <span className="text-xs text-muted-foreground">· {roleOf(p)}</span>
-                </td>
-                <td className="px-4 py-2 text-right tabular-nums">{p.confirmed}</td>
-                <td className="px-4 py-2 text-right tabular-nums">{p.prepared}</td>
-                <td className="px-4 py-2 text-right tabular-nums">{p.served}</td>
-                <td className="px-4 py-2 text-right tabular-nums">{p.avgServiceMin == null ? "—" : t("minutes", { n: p.avgServiceMin })}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Card>
       <p className="text-xs text-muted-foreground">{t("note")}</p>
     </section>
   );

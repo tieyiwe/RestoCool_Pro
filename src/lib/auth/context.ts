@@ -1,5 +1,6 @@
 import "server-only";
 import { cookies, headers } from "next/headers";
+import { sql } from "drizzle-orm";
 import { cache } from "react";
 import { getDb } from "@/db";
 import { findRestaurantBySlug, membershipsForUser, tenantRepo, type Membership, type TenantRepo } from "@/db/repos/tenant";
@@ -74,6 +75,7 @@ export const getMemberContext = cache(async (): Promise<MemberContext | null> =>
   if (memberships.length === 0) return null;
   const wanted = (await cookies()).get(ACTIVE_RESTAURANT_COOKIE)?.value;
   const active = memberships.find((m) => m.restaurantId === wanted) ?? memberships[0]!;
+  if (active.memberId !== "dev") void touchLastSeen(active.memberId);
   return {
     actor: { kind: "member", userId: id.userId, restaurantId: active.restaurantId, role: active.role, ...(active.access ? { access: cleanAccess(active.access) } : {}) },
     repo: tenantRepo(getDb(), active.restaurantId),
@@ -109,4 +111,15 @@ export async function requireSuperadmin(): Promise<SuperadminActor> {
   const sa = await getSuperadmin();
   if (!sa) throw new ForbiddenError();
   return sa;
+}
+
+/** « Actively using the app »: one cheap write at most every 5 minutes per person; never blocks a page. */
+async function touchLastSeen(memberId: string) {
+  try {
+    await getDb().execute(
+      sql`update members set last_seen_at = now() where id = ${memberId} and (last_seen_at is null or last_seen_at < now() - interval '5 minutes')`,
+    );
+  } catch {
+    // Activity tracking must never break a page.
+  }
 }

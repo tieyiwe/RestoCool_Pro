@@ -117,6 +117,8 @@ export const members = pgTable(
     pinHash: text("pin_hash"),
     pinFailures: smallint("pin_failures").notNull().default(0),
     lockedUntil: timestamp("locked_until", { withTimezone: true }),
+    /** Last time this person used the app (updated at most every 5 minutes), for activity ranking. */
+    lastSeenAt: timestamp("last_seen_at", { withTimezone: true }),
     ...timestamps,
   },
   (t) => [

@@ -57,7 +57,7 @@ export function LocationField({ initial }: { initial: (LatLng & { source: string
   };
 
   return (
-    <section className="flex flex-col gap-3 rounded-2xl border border-border bg-muted/30 p-4" aria-labelledby="loc-title" data-testid="location-field">
+    <section id="location" className="flex scroll-mt-20 flex-col gap-3 rounded-2xl border border-border bg-muted/30 p-4" aria-labelledby="loc-title" data-testid="location-field">
       <div>
         <h3 id="loc-title" className="font-bold">
           📍 {t("title")}

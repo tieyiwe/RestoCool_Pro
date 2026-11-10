@@ -13,6 +13,10 @@ import { OrderAnalyticsPanel } from "@/components/analytics/order-analytics";
 import { LearnCard } from "@/components/guide/learn-card";
 import { getDb } from "@/db";
 import { orderAnalytics, type Range } from "@/lib/analytics/orders";
+import { liveStatus, personnelRanking, type RankedPerson } from "@/lib/analytics/backoffice";
+import { ActivityFeed, Alerts, LiveStrip, RankingCard, Shortcuts, type Alert, type Shortcut } from "@/components/backoffice/backoffice";
+import { attendanceEnabled } from "@/lib/personnel/attendance";
+import { personnel } from "@/lib/personnel";
 
 export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
   const t = await getTranslations("app");
@@ -41,7 +45,47 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   const canReports = can(ctx.actor, "reports.read", { restaurantId: ctx.repo.restaurantId });
   const rq = (await searchParams).range;
   const range: Range = rq === "7d" || rq === "30d" ? rq : "today";
-  const analytics = canReports ? await orderAnalytics(getDb(), ctx.repo.restaurantId, range) : null;
+  const db = getDb();
+  const rid = ctx.repo.restaurantId;
+  const [analytics, live, ranking, people] = await Promise.all([
+    canReports ? orderAnalytics(db, rid, range) : null,
+    canReports ? liveStatus(db, rid) : null,
+    canReports ? personnelRanking(db, rid, range) : null,
+    personnel(db, rid),
+  ]);
+  const allowed = (a: Parameters<typeof can>[1]) => can(ctx.actor, a, { restaurantId: rid });
+  const tro = await getTranslations("roles");
+  const roleLabel = (p: { role: string; roleKey?: string | null; roleName?: string | null }) =>
+    p.role === "owner" ? t("role.owner") : p.roleKey ? tro(`names.${p.roleKey}` as "names.server") : (p.roleName ?? t(`role.${p.role}` as "role.server"));
+  const me = people.find((p) => p.id === ctx.memberships.find((m) => m.restaurantId === rid)?.memberId);
+  const myRole = me ? roleLabel({ role: me.role, roleKey: me.jobRoleKey, roleName: me.jobRoleName }) : t(`role.${ctx.actor.role}`);
+  const attendance = attendanceEnabled(r);
+  const alerts: Alert[] = [];
+  if (live) {
+    if (live.waitingOrders) alerts.push({ key: "waiting", n: live.waitingOrders, href: "/app/service", tone: "red" });
+    if (live.readyOrders) alerts.push({ key: "ready", n: live.readyOrders, href: "/app/service", tone: "amber" });
+    if (live.locked) alerts.push({ key: "locked", n: live.locked, href: "/app/staff", tone: "amber" });
+    if (live.soldOut) alerts.push({ key: "soldOut", n: live.soldOut, href: "/app/menu", tone: "info" });
+  }
+  if (allowed("settings.write")) {
+    if (!r.published) alerts.push({ key: "unpublished", href: "/app/settings#publish", tone: "amber" });
+    if (r.latitude == null) alerts.push({ key: "noLocation", href: "/app/settings#location", tone: "info" });
+  }
+  const shortcuts = (
+    [
+      { key: "frontDesk", href: "/app/service", icon: "🛎️", need: "orders.read" },
+      { key: "kitchen", href: "/app/kitchen", icon: "👩‍🍳", need: "orders.read" },
+      { key: "history", href: "/app/orders", icon: "🧾", need: "reports.read" },
+      { key: "menu", href: "/app/menu", icon: "📖", need: "menu.write" },
+      { key: "seating", href: "/app/seating", icon: "🪑", need: "seats.write" },
+      { key: "qr", href: "/app/seating/print?qr=main&layout=grid", icon: "🖨️", need: "seats.write" },
+      { key: "staff", href: "/app/staff", icon: "👥", need: "staff.write" },
+      { key: "roles", href: "/app/staff/roles", icon: "🔑", need: "staff.write" },
+      { key: "settings", href: "/app/settings", icon: "⚙️", need: "settings.write" },
+      { key: "menuPage", href: `/r/${r.slug}`, icon: "📱", need: null },
+      { key: "guide", href: "/app/guide", icon: "🎓", need: null },
+    ] as const
+  ).filter((x) => !x.need || allowed(x.need)) satisfies readonly Shortcut[];
   const canManage = can(ctx.actor, "settings.write", { restaurantId: ctx.repo.restaurantId });
   const canSeats = can(ctx.actor, "seats.write", { restaurantId: ctx.repo.restaurantId });
   const placeSeats = seats.filter((s) => s.type === "table" || s.type === "room" || s.type === "area");
@@ -69,7 +113,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         </h1>
         <Badge>{t(`plan.${r.plan}`)}</Badge>
         <Badge variant={status === "active" || status === "trial" ? "muted" : "warning"}>{t(`plan.${status}`)}</Badge>
-        <Badge variant="outline">{t(`role.${ctx.actor.role}`)}</Badge>
+        <Badge variant="outline" data-testid="my-role">{myRole}</Badge>
       </div>
       {!r.settings.onboardedAt && ctx.actor.role === "owner" && (
         <Card className="flex flex-wrap items-center justify-between gap-3 border-or bg-or/15" data-testid="onboarding-banner">
@@ -102,9 +146,14 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         </Card>
       )}
 
-      <LearnCard audience={ctx.actor.role === "owner" || ctx.actor.role === "manager" ? "manager" : "staff"} />
+      {live && <LiveStrip live={live} attendance={attendance} />}
+      {canReports && <Alerts alerts={alerts} />}
+      <Shortcuts items={[...shortcuts]} />
 
       {analytics && <OrderAnalyticsPanel data={analytics} range={range} />}
+      {ranking && <RankingCard people={ranking} range={range} roleOf={(p: RankedPerson) => roleLabel(p)} />}
+
+      <LearnCard audience={ctx.actor.role === "owner" || ctx.actor.role === "manager" ? "manager" : "staff"} />
 
       {canSeats && <MainQrCard restaurantId={r.id} slug={r.slug} published={r.published} />}
 
@@ -117,25 +166,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         ))}
       </div>
 
-      {canReadAudit && (
-        <Card>
-          <CardTitle className="mb-3">{t("recentActivity")}</CardTitle>
-          {activity.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("noActivity")}</p>
-          ) : (
-            <ul className="divide-y divide-border text-sm">
-              {activity.map((a) => (
-                <li key={a.id} className="flex justify-between gap-3 py-2">
-                  <span className="font-mono">{a.action}</span>
-                  <time className="text-muted-foreground" dateTime={a.createdAt.toISOString()}>
-                    {format.dateTime(a.createdAt, { dateStyle: "short", timeStyle: "short" })}
-                  </time>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
-      )}
+      {canReadAudit && <ActivityFeed items={activity} />}
     </div>
   );
 }
