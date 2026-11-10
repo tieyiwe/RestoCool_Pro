@@ -777,6 +777,8 @@
     "invalidQr": "此二维码已失效。请询问服务员或自行选择座位。",
     "loadingSeats": "正在加载座位…",
     "noSeats": "暂无可用座位。",
+    "seatsLoadError": "无法加载座位，请检查网络连接。",
+    "retry": "重试",
     "joinedTable": "您已加入这张桌子。",
     "seatError": "无法选择此座位，请重试。",
     "seat_table": "餐桌",

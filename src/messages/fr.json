@@ -777,6 +777,8 @@
     "invalidQr": "Ce QR code n’est plus valide. Demandez au serveur ou choisissez votre place.",
     "loadingSeats": "Chargement des places…",
     "noSeats": "Aucune place disponible pour le moment.",
+    "seatsLoadError": "Impossible de charger les places. Vérifiez votre connexion.",
+    "retry": "Réessayer",
     "joinedTable": "Vous avez rejoint la table.",
     "seatError": "Impossible de choisir cette place. Réessayez.",
     "seat_table": "Table",

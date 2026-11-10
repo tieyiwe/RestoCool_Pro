@@ -1,4 +1,4 @@
-import { eq, inArray } from "drizzle-orm";
+import { eq, inArray, sql } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
@@ -9,6 +9,8 @@ const { menuCategories, menuItemOptions, menuItems, menuItemVariants, restaurant
 const sessions = await import("@/lib/seating/sessions");
 const admin = await import("@/lib/seating/admin");
 const svc = await import("@/lib/orders/service");
+const { publicOrder } = await import("@/lib/orders/serialize");
+const { orderAnalytics } = await import("@/lib/analytics/orders");
 const { createRestaurantForUser } = await import("@/lib/restaurants/provision");
 const { NotFoundError, ForbiddenError } = await import("@/lib/errors");
 
@@ -177,5 +179,115 @@ describe.skipIf(!hasDb)("orders (database)", () => {
     const mine = await svc.ordersForCustomer(getDb(), r.id, PHONE_C, j.sessionId);
     expect(mine.sharedSessionId).toBeNull();
     expect(mine.orders.map((x) => x.id)).toEqual([o.id]);
+  });
+
+  const PHONE_D = "orderPhoneDDDDDDDDDDD";
+  const PHONE_E = "orderPhoneEEEEEEEEEEE";
+  const seatOf = async (type: string, label?: string) => {
+    const s = (await owner.repo.seating.seats()).find((x) => x.type === type && (label === undefined || x.label === label))!;
+    return { id: s.id, type: s.type, label: s.label };
+  };
+  const bissap = () => [{ itemId: bissapId, variantId: null, optionIds: [], qty: 1 }];
+
+  it("takeaway is one seat shared by unrelated customers: never « occupied », never « joined »", async () => {
+    const fresh = await reload(r.id);
+    const take = await seatOf("takeaway");
+    const d = await sessions.joinSession(getDb(), fresh, { seat: take, deviceId: PHONE_D, source: "picker" });
+    const e = await sessions.joinSession(getDb(), fresh, { seat: take, deviceId: PHONE_E, source: "picker" });
+    expect(d.ok && e.ok).toBe(true);
+    expect(e.ok && e.joined).toBe(false);
+    const picker = await sessions.pickerSeats(getDb(), fresh);
+    expect(picker.find((s) => s.type === "takeaway")?.occupied).toBe(false);
+  });
+
+  it("inactivity release never frees a picker table that has ordered; the long idle rule still applies", async () => {
+    const fresh = await reload(r.id);
+    const t2 = await seatOf("table", "2");
+    const j = await sessions.joinSession(getDb(), fresh, { seat: t2, deviceId: PHONE_D, source: "picker", confirmJoin: true });
+    if (!j.ok) throw new Error("join");
+    const o = await svc.placeCustomerOrder(getDb(), fresh, PHONE_D, { sessionId: j.sessionId, lines: bissap() });
+    await svc.setOrderStatus(owner, o.id, "served");
+    const status = async () => (await getDb().query.tableSessions.findFirst({ where: eq(tableSessions.id, j.sessionId) }))!.status;
+    // Ten quiet minutes while eating: the table stays theirs (the phone holds it too).
+    await sessions.sweepStale(getDb(), fresh, new Date(Date.now() + 10 * 60_000));
+    expect(await status()).toBe("open");
+    // Hours later with nothing in progress: closed like any idle table.
+    await sessions.sweepStale(getDb(), fresh, new Date(Date.now() + 5 * 3600_000));
+    expect(await status()).toBe("closed");
+  });
+
+  it("two cooks finishing the last dishes at the same time leave the order « prête »", async () => {
+    const fresh = await reload(r.id);
+    const t2 = await seatOf("table", "2");
+    const j = await sessions.joinSession(getDb(), fresh, { seat: t2, deviceId: PHONE_E, source: "qr" });
+    if (!j.ok) throw new Error("join");
+    for (let round = 0; round < 4; round++) {
+      const placed = await svc.placeCustomerOrder(getDb(), fresh, PHONE_E, {
+        sessionId: j.sessionId,
+        lines: [
+          { itemId: bissapId, variantId: null, optionIds: [], qty: 1 },
+          { itemId: rizId, variantId: demiId, optionIds: [], qty: 1 },
+          { itemId: surDemandeId, variantId: null, optionIds: [], qty: 1 },
+        ],
+      });
+      const o = await svc.getOrder(owner, placed.id);
+      await svc.setItemStatus(kitchen, o.id, o.items[0]!.id, "ready");
+      await Promise.all(o.items.slice(1).map((i) => svc.setItemStatus(kitchen, o.id, i.id, "ready")));
+      const after = await svc.getOrder(owner, o.id);
+      expect(after.items.every((i) => i.status === "ready")).toBe(true);
+      expect(after.status).toBe("ready");
+      expect(after.readyAt).not.toBeNull();
+    }
+  });
+
+  it("the table bill counts this table's orders, not the phone's earlier visits of the day", async () => {
+    await admin.addTables(owner, { from: 3, to: 3, skip: [], areaId: null, capacity: null });
+    const fresh = await reload(r.id);
+    const t3 = await seatOf("table", "3");
+    // PHONE_A already ordered at table 1 earlier today.
+    const j = await sessions.joinSession(getDb(), fresh, { seat: t3, deviceId: PHONE_A, source: "qr" });
+    if (!j.ok) throw new Error("join");
+    const o = await svc.placeCustomerOrder(getDb(), fresh, PHONE_A, { sessionId: j.sessionId, lines: bissap() });
+    const res = await svc.ordersForCustomer(getDb(), r.id, PHONE_A, j.sessionId);
+    expect(res.currentSessionId).toBe(j.sessionId);
+    const list = res.orders.map((x) => publicOrder(x, PHONE_A, res.currentSessionId));
+    expect(list.length).toBeGreaterThan(1);
+    expect(list.filter((x) => x.current).map((x) => x.id)).toEqual([o.id]);
+    expect(list.find((x) => x.id !== o.id)?.current).toBe(false);
+    // Without a session (not seated), nothing is « current ».
+    const away = await svc.ordersForCustomer(getDb(), r.id, PHONE_A, null);
+    expect(away.orders.map((x) => publicOrder(x, PHONE_A, away.currentSessionId)).some((x) => x.current)).toBe(false);
+  });
+
+  it("analytics: service time ignores orders cancelled after being served; busy hours are Ouagadougou hours", async () => {
+    const db = getDb();
+    await admin.addTables(otherOwner, { from: 1, to: 1, skip: [], areaId: null, capacity: null });
+    const [cat] = await db.insert(menuCategories).values({ restaurantId: other.id, name: { fr: "Boissons" } }).returning();
+    const [dish] = await db.insert(menuItems).values({ restaurantId: other.id, categoryId: cat!.id, name: { fr: "Jus de gingembre" }, price: 700 }).returning();
+    const seat = (await otherOwner.repo.seating.seats()).find((s) => s.type === "table" && s.label === "1")!;
+    const j = await sessions.joinSession(db, other, { seat: { id: seat.id, type: seat.type, label: seat.label }, deviceId: PHONE_D, source: "qr" });
+    if (!j.ok) throw new Error("join");
+    const now = new Date();
+    const line = [{ itemId: dish!.id, variantId: null, optionIds: [], qty: 1 }];
+    const kept = await svc.placeCustomerOrder(db, other, PHONE_D, { sessionId: j.sessionId, lines: line }, new Date(now.getTime() - 20 * 60_000));
+    await svc.setOrderStatus(otherOwner, kept.id, "confirmed", undefined, new Date(now.getTime() - 20 * 60_000));
+    await svc.setOrderStatus(otherOwner, kept.id, "served", undefined, now);
+    const voided = await svc.placeCustomerOrder(db, other, PHONE_D, { sessionId: j.sessionId, lines: line }, new Date(now.getTime() - 90 * 60_000));
+    await svc.setOrderStatus(otherOwner, voided.id, "confirmed", undefined, new Date(now.getTime() - 90 * 60_000));
+    await svc.setOrderStatus(otherOwner, voided.id, "served", undefined, now);
+    await svc.setOrderStatus(otherOwner, voided.id, "cancelled", "erreur de caisse", now);
+    // Only orders from the last 2 hours, so the test also works just after midnight.
+    const a = await orderAnalytics(db, other.id, "7d", now);
+    expect(a.served).toBe(1);
+    expect(a.cancelled).toBe(1);
+    expect(a.avgServiceMin).toBe(20);
+    // Even if the database connection uses another time zone, hours are Ouagadougou (UTC) hours.
+    await db.transaction(async (tx) => {
+      await tx.execute(sql`set local time zone 'America/New_York'`);
+      const b = await orderAnalytics(tx as unknown as typeof db, other.id, "7d", now);
+      const sentHour = new Date(now.getTime() - 20 * 60_000).getUTCHours();
+      expect(b.byHour[sentHour]).toBeGreaterThanOrEqual(1);
+      expect(b.byHour.reduce((s, c) => s + c, 0)).toBe(1);
+    });
   });
 });

@@ -24,9 +24,9 @@ export async function POST(req: Request) {
   if (!r) return notFound();
   try {
     const order = await placeCustomerOrder(getDb(), r, deviceId, input);
-    const { orders } = await ordersForCustomer(getDb(), r.id, deviceId, null);
+    const { orders, currentSessionId } = await ordersForCustomer(getDb(), r.id, deviceId, input.sessionId);
     const full = orders.find((o) => o.id === order.id)!;
-    return NextResponse.json({ order: publicOrder(full, deviceId) }, { status: 201, headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ order: publicOrder(full, deviceId, currentSessionId) }, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (err) {
     return orderErrorResponse(err);
   }
@@ -41,6 +41,6 @@ export async function GET(req: Request) {
   if (!allow(req, q.data.deviceId)) return tooMany();
   const r = await publicRestaurant(q.data.slug);
   if (!r) return notFound();
-  const { orders, sharedSessionId } = await ordersForCustomer(getDb(), r.id, q.data.deviceId, q.data.sessionId ?? null);
-  return NextResponse.json({ orders: orders.map((o) => publicOrder(o, q.data.deviceId)), shared: Boolean(sharedSessionId) }, { headers: { "Cache-Control": "no-store" } });
+  const { orders, sharedSessionId, currentSessionId } = await ordersForCustomer(getDb(), r.id, q.data.deviceId, q.data.sessionId ?? null);
+  return NextResponse.json({ orders: orders.map((o) => publicOrder(o, q.data.deviceId, currentSessionId)), shared: Boolean(sharedSessionId) }, { headers: { "Cache-Control": "no-store" } });
 }

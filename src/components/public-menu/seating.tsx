@@ -281,12 +281,14 @@ export function SeatPicker({ slug, lang, t, onChoose, onClose }: { slug: string;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setFailed(false);
     fetch(`/api/public/r/${slug}/seats`, { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((b: { seats: PickerSeat[] }) => setSeats(b.seats))
       .catch(() => setFailed(true));
   }, [slug]);
+  useEffect(load, [load]);
 
   async function pick(s: PickerSeat, opts: { confirmJoin?: boolean; customerName?: string } = {}) {
     if (s.type === "counter" && !opts.customerName) return setCounter(s);
@@ -354,6 +356,14 @@ export function SeatPicker({ slug, lang, t, onChoose, onClose }: { slug: string;
           </form>
         ) : seats === null && !failed ? (
           <p className="py-8 text-center text-muted-foreground">{t("loadingSeats")}</p>
+        ) : seats === null ? (
+          // Loading failed (weak network): say so and offer a retry, not « no seats ».
+          <div className="flex flex-col items-center gap-3 py-8 text-center" role="alert" data-testid="seats-error">
+            <p className="text-muted-foreground">{t("seatsLoadError")}</p>
+            <button type="button" onClick={load} className="min-h-11 rounded-full border border-border px-5 font-semibold">
+              {t("retry")}
+            </button>
+          </div>
         ) : groups.length === 0 ? (
           <p className="py-8 text-center text-muted-foreground">{t("noSeats")}</p>
         ) : (

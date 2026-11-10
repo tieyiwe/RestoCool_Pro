@@ -235,6 +235,7 @@ export async function ordersForCustomer(db: DB, restaurantId: string, deviceId: 
   const since = new Date(now.getTime() - 24 * 3600_000);
   const s = sessionId ? await customerSession(db, restaurantId, sessionId, deviceId) : null;
   const shared = s && GROUP_SEATS.has(s.seat.type) ? s.session.id : null;
+  const current = s?.session.id ?? null;
   const list = await db
     .select()
     .from(orders)
@@ -246,7 +247,7 @@ export async function ordersForCustomer(db: DB, restaurantId: string, deviceId: 
     )
     .orderBy(desc(orders.sentAt))
     .limit(30);
-  return { orders: await withItems(db, restaurantId, list), sharedSessionId: shared };
+  return { orders: await withItems(db, restaurantId, list), sharedSessionId: shared, currentSessionId: current };
 }
 
 /* ---------------------------------------------------------------- staff */
@@ -372,11 +373,17 @@ export async function setOrderStatus(ctx: ServiceCtx, orderId: string, to: Targe
 export async function setItemStatus(ctx: ServiceCtx, orderId: string, itemId: string, to: "pending" | "preparing" | "ready", now = new Date()) {
   need(ctx, "orders.prepare");
   const rid = ctx.repo.restaurantId;
-  const o = await ctx.db.query.orders.findFirst({ where: and(eq(orders.restaurantId, rid), eq(orders.id, orderId)) });
-  if (!o) throw new NotFoundError();
-  if (!["sent", "confirmed", "preparing", "ready"].includes(o.status)) throw new OrderError("conflict");
   const by = await memberIdOf(ctx);
   await ctx.db.transaction(async (tx) => {
+    // Lock the order: two cooks finishing the last two dishes at once must both see every
+    // dish's status, or the order would stay « en préparation » with every dish ready.
+    const [o] = await tx
+      .select()
+      .from(orders)
+      .where(and(eq(orders.restaurantId, rid), eq(orders.id, orderId)))
+      .for("update");
+    if (!o) throw new NotFoundError();
+    if (!(ACTIVE_STATUSES as readonly string[]).includes(o.status)) throw new OrderError("conflict");
     const done = await tx
       .update(orderItems)
       .set({ status: to, updatedAt: now })

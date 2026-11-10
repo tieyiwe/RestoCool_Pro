@@ -1,14 +1,19 @@
 import type { PersonRef } from "@/lib/personnel";
 import type { OrderWithItems } from "./service";
 
-/** What a customer's phone receives: no device ids, no staff ids, no phone/address of others. */
-export function publicOrder(o: OrderWithItems, deviceId: string) {
+/**
+ * What a customer's phone receives: no device ids, no staff ids, no phone/address of others.
+ * `current`: the order belongs to the session the phone is seated at now (its table bill),
+ * not to an earlier visit of the last 24 h.
+ */
+export function publicOrder(o: OrderWithItems, deviceId: string, currentSessionId: string | null = null) {
   const mine = o.customerDeviceId === deviceId;
   return {
     id: o.id,
     number: o.number,
     status: o.status,
     mine,
+    current: currentSessionId !== null && o.sessionId === currentSessionId,
     seat: o.seatType ? { type: o.seatType, label: o.seatLabel ?? "" } : null,
     customerName: mine ? o.customerName : null,
     subtotal: o.subtotal,

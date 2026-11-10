@@ -1,6 +1,6 @@
 import "server-only";
 import type { RtEvent } from "./events";
-import { subscribe } from "./listener";
+import { listening, subscribe } from "./listener";
 
 const HEARTBEAT_MS = 25_000;
 
@@ -23,6 +23,8 @@ export function sseResponse(req: Request, pick: (ev: RtEvent) => string | null):
         }
       };
       const unsubscribe = await subscribe((ev) => {
+        // The database connection dropped: end the stream; the browser retries and polls meanwhile.
+        if (ev === null) return close();
         const kind = pick(ev);
         if (kind) send(`event: ${kind}\ndata: {}\n\n`);
       });
@@ -41,6 +43,12 @@ export function sseResponse(req: Request, pick: (ev: RtEvent) => string | null):
       cleanup = close;
       req.signal.addEventListener("abort", close);
       // Tell the browser to retry after 3 s if the connection drops; confirm the stream is live.
+      // Without a LISTEN connection no event would ever come: never say « ready » then, close
+      // so the screen keeps polling and retries.
+      if (!listening()) {
+        send(`retry: 3000\n\n`);
+        return close();
+      }
       send(`retry: 3000\nevent: ready\ndata: {}\n\n`);
     },
     cancel() {

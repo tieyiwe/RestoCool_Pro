@@ -18,6 +18,8 @@ export type CustomerOrder = {
   number: number;
   status: "sent" | "confirmed" | "preparing" | "ready" | "served" | "paid" | "cancelled";
   mine: boolean;
+  /** Sent from the session this phone is seated at now (not an earlier visit). */
+  current: boolean;
   seat: { type: string; label: string } | null;
   customerName: string | null;
   subtotal: number;
@@ -71,11 +73,18 @@ export function useLiveOrders({
     cbs.current = { onMenuChange, onSessionChange, onServed };
   }, [onMenuChange, onSessionChange, onServed]);
 
+  // Several refreshes can be in flight (one per live event); an older answer arriving last
+  // must not put a status back (« prête » after « servie ») nor replay the celebration.
+  const seq = useRef(0);
+  const applied = useRef(0);
   const refresh = useCallback(async () => {
+    const mine = ++seq.current;
     const qs = new URLSearchParams({ slug, deviceId: deviceId(), ...(sessionId ? { sessionId } : {}) });
     const res = await fetch(`/api/public/orders?${qs}`, { cache: "no-store" }).catch(() => null);
     if (!res?.ok) return;
-    const body = (await res.json()) as { orders: CustomerOrder[]; shared: boolean };
+    const body = (await res.json().catch(() => null)) as { orders: CustomerOrder[]; shared: boolean } | null;
+    if (!body || mine < applied.current) return;
+    applied.current = mine;
     for (const o of body.orders) {
       const before = known.current.get(o.id);
       if (o.mine && before && before !== "served" && o.status === "served") cbs.current.onServed(o);
@@ -103,7 +112,9 @@ export function useLiveOrders({
       es = new EventSource(`/api/public/stream?${qs}`);
       es.addEventListener("ready", () => {
         stopPolling();
-        void refresh(); // catch up on anything missed while disconnected
+        // Catch up on anything missed while disconnected, sold-out dishes included.
+        void refresh();
+        cbs.current.onMenuChange();
       });
       es.addEventListener("order", () => void refresh());
       es.addEventListener("menu", () => cbs.current.onMenuChange());
@@ -194,7 +205,8 @@ export function OrdersList({
   onShow: (o: CustomerOrder) => void;
 }) {
   if (orders.length === 0) return <p className="py-6 text-center text-muted-foreground">{t("noOrders")}</p>;
-  const live = orders.filter((o) => o.status !== "cancelled");
+  // The table bill is this table's orders only, not this phone's earlier visits of the day.
+  const live = orders.filter((o) => o.current && o.status !== "cancelled");
   const tableTotal = live.reduce((s, o) => s + o.subtotal, 0);
   const tableOnRequest = live.some((o) => o.hasOnRequest);
   return (
