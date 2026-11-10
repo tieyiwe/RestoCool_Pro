@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { boolean, date, index, integer, jsonb, pgTable, smallint, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id, timestamps, type I18nText } from "./_shared";
 import { orderItemStatusEnum, orderSourceEnum, orderStatusEnum, seatTypeEnum, stationEnum } from "./enums";
@@ -23,6 +24,8 @@ export const orders = pgTable(
     number: integer("number").notNull(),
     source: orderSourceEnum("source").notNull().default("customer"),
     customerDeviceId: text("customer_device_id"),
+    /** Random id the phone sends with an order: a resend (lost answer on a bad network) returns the same order. */
+    clientRequestId: text("client_request_id"),
     customerName: text("customer_name"),
     customerPhone: text("customer_phone"),
     deliveryAddress: text("delivery_address"),
@@ -58,6 +61,7 @@ export const orders = pgTable(
     index("orders_session_idx").on(t.sessionId),
     index("orders_device_idx").on(t.restaurantId, t.customerDeviceId),
     uniqueIndex("orders_restaurant_day_number_uq").on(t.restaurantId, t.businessDate, t.number),
+    uniqueIndex("orders_client_request_uq").on(t.restaurantId, t.clientRequestId).where(sql`${t.clientRequestId} is not null`),
   ],
 );
 

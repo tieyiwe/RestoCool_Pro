@@ -19,7 +19,7 @@ export async function OrderAnalyticsPanel({ data, range }: { data: OrderAnalytic
     { key: "orders", value: String(data.orders), sub: data.open ? t("openNow", { n: data.open }) : null },
     { key: "revenue", value: formatFCFA(data.revenue), sub: t("servedCount", { n: data.served }) },
     { key: "avgTicket", value: data.served ? formatFCFA(data.avgTicket) : "—", sub: null },
-    { key: "avgService", value: data.avgServiceMin == null ? "—" : `${data.avgServiceMin} min`, sub: data.avgPrepMin == null ? null : t("prep", { n: data.avgPrepMin }) },
+    { key: "avgService", value: data.avgServiceMin == null ? "—" : t("minutes", { n: data.avgServiceMin }), sub: data.avgPrepMin == null ? null : t("prep", { n: data.avgPrepMin }) },
     { key: "cancelled", value: String(data.cancelled), sub: null },
   ] as const;
   return (
@@ -109,7 +109,7 @@ export async function OrderAnalyticsPanel({ data, range }: { data: OrderAnalytic
                 <td className="px-4 py-2 text-right tabular-nums">{p.confirmed}</td>
                 <td className="px-4 py-2 text-right tabular-nums">{p.prepared}</td>
                 <td className="px-4 py-2 text-right tabular-nums">{p.served}</td>
-                <td className="px-4 py-2 text-right tabular-nums">{p.avgServiceMin == null ? "—" : `${p.avgServiceMin} min`}</td>
+                <td className="px-4 py-2 text-right tabular-nums">{p.avgServiceMin == null ? "—" : t("minutes", { n: p.avgServiceMin })}</td>
               </tr>
             ))}
           </tbody>

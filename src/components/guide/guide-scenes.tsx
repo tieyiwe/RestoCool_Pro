@@ -339,7 +339,7 @@ export function sceneFor(id: GuideId, step: number, L: (k: string) => string): S
         <div className="flex flex-col gap-1.5 rounded-xl border-2 border-[#E8DCC7] bg-white p-2">
           <div className="flex items-center justify-between">
             <Seat label="7" />
-            <span className="text-[10px] font-bold">{L("orderNo")} · 3 min</span>
+            <span className="text-[10px] font-bold">{L("orderNo")} · {L("min3")}</span>
           </div>
           <span className={cn("rounded-lg border-2 px-2 py-1 text-[11px] font-bold", state === "ready" ? "border-emerald-600 bg-emerald-50" : state === "cooking" ? "border-orange-500 bg-orange-50" : "border-[#E8DCC7]")}>
             2× Brochettes · {state === "ready" ? L("readyShort") : state === "cooking" ? L("cooking") : L("todo")}
@@ -501,7 +501,7 @@ export function sceneFor(id: GuideId, step: number, L: (k: string) => string): S
           {[
             [L("orders"), "48"],
             [L("sales"), "186 500 F"],
-            [L("serviceTime"), "14 min"],
+            [L("serviceTime"), L("min14")],
           ].map(([k, v]) => (
             <span key={k} className="rounded-lg bg-white p-1.5">
               <span className="block text-[8px] text-[#5B6B60]">{k}</span>

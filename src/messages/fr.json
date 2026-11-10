@@ -1,13 +1,13 @@
 {
   "brand": {
-    "tagline": "RestoCool : votre menu, vos commandes, vos tables. Simple.",
+    "tagline": "RestoCool : votre menu, vos commandes, vos tables. Simple.",
     "local": "100 % local",
     "designedIn": "Pensé au Burkina, pour les restaurants du Burkina",
     "proud": "Fièrement burkinabè",
     "payLocal": "Payez en FCFA, avec Orange Money et Moov Money",
     "support": "Support en français, par WhatsApp",
-    "greeting": "Laafi !",
-    "thanks": "Barka !"
+    "greeting": "Laafi !",
+    "thanks": "Barka !"
   },
   "common": {
     "loading": "Chargement…",
@@ -62,11 +62,11 @@
       "newOrder": "Nouvelle commande",
       "table": "Table 7",
       "items": "2 articles",
-      "served": "Servi !",
+      "served": "Servi !",
       "open": "Ouvert"
     },
     "strip": {
-      "languages": "3 langues : FR · EN · 中文",
+      "languages": "3 langues : FR · EN · 中文",
       "noApp": "0 application à installer",
       "qr": "Un QR code par table",
       "payments": "FCFA · Orange Money · Moov"
@@ -76,7 +76,7 @@
       "subtitle": "Les menus imprimés s’abîment, les prix changent, les clients attendent. RestoCool règle tout ça depuis votre téléphone.",
       "a": {
         "title": "Modifiez en 10 secondes",
-        "text": "Un prix change, un plat est épuisé ? Corrigez-le sur votre téléphone : le menu est à jour pour tous les clients, sans réimprimer."
+        "text": "Un prix change, un plat est épuisé ? Corrigez-le sur votre téléphone : le menu est à jour pour tous les clients, sans réimprimer."
       },
       "b": {
         "title": "Des photos qui donnent faim",
@@ -94,7 +94,7 @@
       "soon": "Bientôt",
       "menu": {
         "title": "Menu QR multilingue",
-        "text": "Catégories, recherche, filtres « pimenté » et « nouveautés », prix en FCFA, « sur demande » quand il le faut."
+        "text": "Catégories, recherche, filtres « pimenté » et « nouveautés », prix en FCFA, « sur demande » quand il le faut."
       },
       "photos": {
         "title": "Photos plein écran",
@@ -131,13 +131,13 @@
     },
     "burkina": {
       "title": "Pensé pour la réalité des restaurants ici",
-      "subtitle": "Pas une application étrangère adaptée à la va-vite : RestoCool parle votre langue et votre monnaie.",
-      "fcfa": "Prix en FCFA, sans centimes : 5 300 F",
-      "mobile": "Orange Money et Moov Money affichés avec un bouton « Copier »",
-      "whatsapp": "WhatsApp partout : contact, commandes, partage du menu",
+      "subtitle": "Pas une application étrangère adaptée à la va-vite : RestoCool parle votre langue et votre monnaie.",
+      "fcfa": "Prix en FCFA, sans centimes : 5 300 F",
+      "mobile": "Orange Money et Moov Money affichés avec un bouton « Copier »",
+      "whatsapp": "WhatsApp partout : contact, commandes, partage du menu",
       "network": "Pages légères, utilisables avec peu de réseau",
-      "french": "En français d’abord, avec un « Laafi ! » pour accueillir vos clients",
-      "phone": "Numéros +226, lien Google Maps, horaires « Ouvert / Fermé »",
+      "french": "En français d’abord, avec un « Laafi ! » pour accueillir vos clients",
+      "phone": "Numéros +226, lien Google Maps, horaires « Ouvert / Fermé »",
       "founder": "Fondé par un Burkinabè, pour les restaurants du Burkina."
     },
     "who": {
@@ -188,21 +188,21 @@
     },
     "faq": {
       "title": "Questions fréquentes",
-      "q1": "Mes clients doivent-ils installer une application ?",
+      "q1": "Mes clients doivent-ils installer une application ?",
       "a1": "Non. Ils scannent le QR code avec l’appareil photo de leur téléphone et le menu s’ouvre dans le navigateur.",
-      "q2": "Et si le réseau est faible ?",
-      "a2": "Les pages sont très légères et les photos compressées. Après la première visite, le menu reste consultable hors connexion. Un mode « économie de données » masque les photos.",
-      "q3": "Combien de temps pour démarrer ?",
-      "a3": "Quelques minutes : créez votre restaurant, ajoutez vos plats (le bouton « Suggérer » propose les traductions), puis imprimez vos QR codes.",
-      "q4": "Comment se passe le paiement de l’abonnement ?",
+      "q2": "Et si le réseau est faible ?",
+      "a2": "Les pages sont très légères et les photos compressées. Après la première visite, le menu reste consultable hors connexion. Un mode « économie de données » masque les photos.",
+      "q3": "Combien de temps pour démarrer ?",
+      "a3": "Quelques minutes : créez votre restaurant, ajoutez vos plats (le bouton « Suggérer » propose les traductions), puis imprimez vos QR codes.",
+      "q4": "Comment se passe le paiement de l’abonnement ?",
       "a4": "En FCFA, par Orange Money, Moov Money ou en espèces. L’essai Pro de 30 jours ne demande aucun paiement.",
-      "q5": "Puis-je modifier mes prix à tout moment ?",
-      "a5": "Oui, et autant de fois que vous voulez. Vous pouvez aussi marquer un plat « épuisé aujourd’hui » : il revient automatiquement le lendemain.",
-      "q6": "Mes données sont-elles protégées ?",
+      "q5": "Puis-je modifier mes prix à tout moment ?",
+      "a5": "Oui, et autant de fois que vous voulez. Vous pouvez aussi marquer un plat « épuisé aujourd’hui » : il revient automatiquement le lendemain.",
+      "q6": "Mes données sont-elles protégées ?",
       "a6": "Chaque restaurant ne voit que ses propres données, les connexions sont chiffrées et nous ne vendons aucune donnée. Voir notre politique de confidentialité."
     },
     "final": {
-      "title": "Prêt à moderniser votre salle ?",
+      "title": "Prêt à moderniser votre salle ?",
       "subtitle": "Créez votre menu aujourd’hui, imprimez vos QR codes ce soir.",
       "cta": "Créer mon restaurant gratuitement"
     },
@@ -216,8 +216,8 @@
     "digitize": {
       "eyebrow": "Comment ça marche",
       "title": "Digitalisez votre service, sans réinventer la roue",
-      "subtitle": "Vous gardez votre façon de travailler : le client choisit, le serveur confirme, la cuisine prépare. RestoCool enlève juste le papier, les allers-retours et les oublis.",
-      "before": "Avant :",
+      "subtitle": "Vous gardez votre façon de travailler : le client choisit, le serveur confirme, la cuisine prépare. RestoCool enlève juste le papier, les allers-retours et les oublis.",
+      "before": "Avant :",
       "steps": {
         "scan": {
           "title": "Le client scanne et choisit",
@@ -231,7 +231,7 @@
         },
         "cook": {
           "title": "La cuisine prépare",
-          "text": "L’écran cuisine affiche les plats à faire, poste par poste. « Prêt » prévient le service.",
+          "text": "L’écran cuisine affiche les plats à faire, poste par poste. « Prêt » prévient le service.",
           "before": "le bon papier perdu ou illisible."
         },
         "record": {
@@ -241,7 +241,7 @@
         }
       },
       "recordsTitle": "Votre tableau de bord garde la trace de tout",
-      "recordsText": "Plus besoin de cahier : chaque commande est enregistrée avec l’heure, la table, les plats et la personne qui l’a traitée.",
+      "recordsText": "Plus besoin de cahier : chaque commande est enregistrée avec l’heure, la table, les plats et la personne qui l’a traitée.",
       "r1": "Ventes et nombre de commandes du jour, de la semaine, du mois",
       "r2": "Temps de service et de cuisine, heures de pointe",
       "r3": "Plats les plus commandés",
@@ -252,7 +252,8 @@
         "service": "Service moyen",
         "staffNo": "Matricule",
         "name": "Nom",
-        "served": "Servies"
+        "served": "Servies",
+        "min14": "14 min"
       }
     }
   },
@@ -262,7 +263,7 @@
     "spicy": "Pimenté",
     "new": "Nouveau",
     "poweredBy": "Menu par <resto>RestoCool</resto> · Powered by <tib>TIBLOGICS</tib>",
-    "preview": "Aperçu : ce menu n’est pas encore publié.",
+    "preview": "Aperçu : ce menu n’est pas encore publié.",
     "shellNote": "Menu complet (panier, photos, langues) en cours de construction."
   },
   "app": {
@@ -298,14 +299,14 @@
       "kitchen": "Cuisine",
       "cashier": "Caisse"
     },
-    "devBypass": "Mode développement : connexion simulée (propriétaire du restaurant de démo).",
+    "devBypass": "Mode développement : connexion simulée (propriétaire du restaurant de démo).",
     "recentActivity": "Activité récente",
     "noActivity": "Aucune activité pour le moment.",
     "newRestaurant": {
       "title": "Créez votre restaurant",
-      "intro": "Laafi ! Restaurant, maquis, café ou bar : donnez-lui un nom, le reste se configure pas à pas.",
+      "intro": "Laafi ! Restaurant, maquis, café ou bar : donnez-lui un nom, le reste se configure pas à pas.",
       "name": "Nom du restaurant",
-      "namePlaceholder": "Ex. : Maquis Le Baobab",
+      "namePlaceholder": "Ex. : Maquis Le Baobab",
       "city": "Ville",
       "submit": "Créer mon restaurant",
       "submitting": "Création…",
@@ -379,9 +380,9 @@
     "chapters": {
       "scan": "Le client scanne le QR de la table",
       "choose": "Il compose sa sélection",
-      "show": "« Montrer au serveur »",
+      "show": "« Montrer au serveur »",
       "serverScan": "Le serveur scanne la commande",
-      "served": "Servi, bon appétit !"
+      "served": "Servi, bon appétit !"
     },
     "ui": {
       "scanHint": "Visez le QR code",
@@ -409,7 +410,7 @@
       "statusPreparing": "En préparation",
       "statusReady": "Prête",
       "statusServed": "Servie",
-      "served": "Vous avez été servi ! Bon appétit",
+      "served": "Vous avez été servi ! Bon appétit",
       "total": "Total"
     },
     "dishes": {
@@ -425,8 +426,8 @@
     "previewMenu": "Voir le menu public",
     "addCategory": "Ajouter une catégorie",
     "categoryName": "Nom de la catégorie",
-    "categoryNamePlaceholder": "Ex. : Grillades",
-    "emptyMenu": "Votre menu est vide. Commencez par créer une catégorie, par exemple « Grillades » ou « Boissons ».",
+    "categoryNamePlaceholder": "Ex. : Grillades",
+    "emptyMenu": "Votre menu est vide. Commencez par créer une catégorie, par exemple « Grillades » ou « Boissons ».",
     "emptyCategory": "Aucun plat dans cette catégorie.",
     "addItem": "Ajouter un plat",
     "moveUp": "Monter",
@@ -440,7 +441,7 @@
     "timeWindow": "Disponible seulement entre",
     "from": "de",
     "to": "à",
-    "confirmDelete": "Supprimer définitivement ?",
+    "confirmDelete": "Supprimer définitivement ?",
     "categoryNotEmpty": "Videz d’abord cette catégorie (déplacez ou supprimez ses plats).",
     "soldOutToday": "Épuisé aujourd’hui",
     "markSoldOut": "Marquer épuisé",
@@ -459,7 +460,7 @@
       "editTitle": "Modifier le plat",
       "category": "Catégorie",
       "code": "Numéro (facultatif)",
-      "codeHint": "Affiché devant le nom, pratique pour commander : « 12 ».",
+      "codeHint": "Affiché devant le nom, pratique pour commander : « 12 ».",
       "name": "Nom",
       "nameFr": "Nom en français",
       "nameEn": "Nom en anglais",
@@ -473,14 +474,14 @@
       "descZh": "Description en chinois",
       "price": "Prix (F CFA)",
       "onRequest": "Prix sur demande",
-      "onRequestHint": "Affiche « Sur demande » au lieu d’un prix.",
+      "onRequestHint": "Affiche « Sur demande » au lieu d’un prix.",
       "variants": "Variantes (portions, tailles)",
-      "variantsHint": "Ex. : Demi 3 500 F / Entier 6 500 F. Le client choisit au moment d’ajouter.",
+      "variantsHint": "Ex. : Demi 3 500 F / Entier 6 500 F. Le client choisit au moment d’ajouter.",
       "addVariant": "Ajouter une variante",
       "variantName": "Nom de la variante",
       "variantPrice": "Prix",
       "options": "Options",
-      "optionsHint": "Ex. : groupe « Piment », option « Sans piment », +0 F.",
+      "optionsHint": "Ex. : groupe « Piment », option « Sans piment », +0 F.",
       "addOption": "Ajouter une option",
       "optionGroup": "Groupe",
       "optionName": "Option",
@@ -499,7 +500,7 @@
       "removePhoto": "Retirer la photo",
       "compressing": "Compression…",
       "uploading": "Envoi…",
-      "photoSize": "Photo compressée : {size} (au lieu de {original})",
+      "photoSize": "Photo compressée : {size} (au lieu de {original})",
       "photoError": "Cette photo n’a pas pu être préparée. Essayez une autre image (JPEG ou PNG).",
       "save": "Enregistrer le plat",
       "saving": "Enregistrement…",
@@ -553,12 +554,12 @@
       "title": "Profil",
       "name": "Nom du restaurant",
       "slug": "Adresse du menu",
-      "slugHint": "Votre menu sera à l’adresse : {url}",
+      "slugHint": "Votre menu sera à l’adresse : {url}",
       "description": "Présentation courte (facultative)",
-      "descriptionPlaceholder": "Ex. : Grillades et plats locaux, terrasse ombragée.",
+      "descriptionPlaceholder": "Ex. : Grillades et plats locaux, terrasse ombragée.",
       "city": "Ville",
       "address": "Adresse",
-      "addressPlaceholder": "Ex. : Avenue Kwame Nkrumah, près de la pharmacie",
+      "addressPlaceholder": "Ex. : Avenue Kwame Nkrumah, près de la pharmacie",
       "gmaps": "Lien Google Maps (facultatif)"
     },
     "contacts": {
@@ -588,7 +589,7 @@
     },
     "service": {
       "title": "Service et langues",
-      "seating": "Comment vos clients sont-ils installés ?",
+      "seating": "Comment vos clients sont-ils installés ?",
       "seatingHint": "Vous pouvez en choisir plusieurs.",
       "modes": {
         "table": "Tables numérotées",
@@ -602,15 +603,15 @@
       "qrPerSeat": "Un QR code par table ou salon (recommandé)",
       "qrGeneric": "Un seul QR code pour tout le restaurant (le client choisit sa place)",
       "validation": "Validation des commandes",
-      "direct": "Directe : la commande part en cuisine",
+      "direct": "Directe : la commande part en cuisine",
       "serverConfirms": "Le serveur confirme d’abord",
       "languages": "Langues du menu",
       "languagesHint": "Le français est toujours affiché.",
       "inactivity": "Libération des places (QR unique)",
-      "warnAfterMin": "Demander « Êtes-vous toujours là ? » après (minutes)",
+      "warnAfterMin": "Demander « Êtes-vous toujours là ? » après (minutes)",
       "releaseAfterSec": "Puis libérer la place après (secondes)",
-      "tableCount": "Combien de tables avez-vous ?",
-      "tableCountHint": "Nous créons les tables 1 à N, chacune avec son QR code. Vous pourrez les modifier dans « Places et QR ». Laissez 0 si vous n’avez pas de tables numérotées.",
+      "tableCount": "Combien de tables avez-vous ?",
+      "tableCountHint": "Nous créons les tables 1 à N, chacune avec son QR code. Vous pourrez les modifier dans « Places et QR ». Laissez 0 si vous n’avez pas de tables numérotées.",
       "delays": "Délais d’alerte du service (minutes)",
       "warnMin": "Orange après",
       "lateMin": "Rouge après"
@@ -635,7 +636,7 @@
       "preview": "Aperçu de votre menu",
       "previewTagline": "Ouvert · Menu en français, English, 中文",
       "previewDish": "Riz gras · 2 000 F",
-      "noLogoYet": "Pas encore de logo : nous affichons la première lettre de votre nom en attendant."
+      "noLogoYet": "Pas encore de logo : nous affichons la première lettre de votre nom en attendant."
     },
     "features": {
       "title": "Fonctions du menu",
@@ -643,8 +644,8 @@
       "fortuneCookie": "Biscuit de la chance",
       "share": "Bouton de partage",
       "takeawayWhatsapp": "Commande à emporter par WhatsApp",
-      "localBadge": "Mettre en avant les produits locaux (filtre « Produits locaux »)",
-      "poweredBadge": "Afficher le badge « Menu par RestoCool »",
+      "localBadge": "Mettre en avant les produits locaux (filtre « Produits locaux »)",
+      "poweredBadge": "Afficher le badge « Menu par RestoCool »",
       "poweredBadgeHint": "Le masquer est possible avec la formule Business.",
       "attendance": "Pointage du personnel (arrivée et départ)"
     },
@@ -660,7 +661,7 @@
     "wizard": {
       "title": "Configuration de votre restaurant",
       "step": "Étape {n} sur {total}",
-      "done": "Votre restaurant est prêt ! Ajoutez maintenant vos plats.",
+      "done": "Votre restaurant est prêt ! Ajoutez maintenant vos plats.",
       "goMenu": "Ajouter mes plats",
       "banner": "Terminez la configuration de votre restaurant.",
       "resume": "Reprendre",
@@ -670,7 +671,7 @@
   },
   "public": {
     "welcome": "Bienvenue au {name}",
-    "welcomeSub": "Laafi ! Bonne découverte de notre menu.",
+    "welcomeSub": "Laafi ! Bonne découverte de notre menu.",
     "close": "Fermer",
     "search": "Rechercher un plat",
     "searchPlaceholder": "Rechercher un plat…",
@@ -684,7 +685,7 @@
     "share": "Partager",
     "shareTitle": "Partager ce menu",
     "copyLink": "Copier le lien",
-    "copied": "Copié !",
+    "copied": "Copié !",
     "lowData": "Économie de données",
     "lowDataHint": "Masque les photos pour consommer moins de données.",
     "categories": "Catégories",
@@ -715,7 +716,7 @@
     "items": "{count, plural, one {# article} other {# articles}}",
     "total": "Total",
     "plusOnRequest": "+ articles au prix sur demande",
-    "emptySelection": "Votre sélection est vide. Touchez « + » pour ajouter des plats.",
+    "emptySelection": "Votre sélection est vide. Touchez « + » pour ajouter des plats.",
     "clear": "Vider la sélection",
     "showWaiterHint": "Montrez cette sélection au serveur pour commander.",
     "takeaway": "Commander à emporter (WhatsApp)",
@@ -744,9 +745,9 @@
     "prevPhoto": "Photo précédente",
     "nextPhoto": "Photo suivante",
     "backToTop": "Haut de page",
-    "preview": "Aperçu : ce menu n’est pas encore publié.",
+    "preview": "Aperçu : ce menu n’est pas encore publié.",
     "updated": "Nouvelle version disponible",
-    "offline": "Hors ligne : menu enregistré sur votre téléphone.",
+    "offline": "Hors ligne : menu enregistré sur votre téléphone.",
     "days": [
       "Dimanche",
       "Lundi",
@@ -759,7 +760,7 @@
     "poweredBy": "Menu par",
     "poweredBy2": "Powered by",
     "chooseSeat": "Choisir ma place",
-    "seatTitle": "Où êtes-vous installé ?",
+    "seatTitle": "Où êtes-vous installé ?",
     "changeSeat": "Changer",
     "yourSeat": "Votre place",
     "occupied": "Occupée",
@@ -770,7 +771,7 @@
     "counterName": "Votre prénom",
     "counterHint": "Nous vous appellerons par votre prénom.",
     "confirm": "Valider",
-    "stillThere": "Êtes-vous toujours là ?",
+    "stillThere": "Êtes-vous toujours là ?",
     "stillThereText": "Sans réponse, votre place sera libérée dans {seconds} s.",
     "imHere": "Je suis là",
     "released": "Votre place a été libérée.",
@@ -800,14 +801,14 @@
     "chooseSeatToOrder": "Choisir ma place pour commander",
     "chooseSeatFirst": "Choisissez d’abord votre place.",
     "scanTableFirst": "Scannez le QR code de votre table pour commander.",
-    "orderSent": "Commande n° {n} envoyée !",
-    "orderUnavailable": "Un plat vient d’être épuisé : il a été retiré de votre sélection. Vérifiez et renvoyez.",
+    "orderSent": "Commande n° {n} envoyée !",
+    "orderUnavailable": "Un plat vient d’être épuisé : il a été retiré de votre sélection. Vérifiez et renvoyez.",
     "orderDetailsMissing": "Complétez votre nom (et l’adresse et le téléphone pour une livraison).",
-    "orderOffline": "Pas de connexion. Votre sélection est gardée : réessayez quand le réseau revient.",
+    "orderOffline": "Pas de connexion. Votre sélection est gardée : réessayez quand le réseau revient.",
     "orderError": "La commande n’est pas partie. Réessayez, ou montrez votre sélection au serveur.",
-    "orderFor": "Commande pour : {seat}",
+    "orderFor": "Commande pour : {seat}",
     "noteLabel": "Remarque",
-    "notePlaceholder": "Ex. : sans piment",
+    "notePlaceholder": "Ex. : sans piment",
     "phone": "Téléphone",
     "deliveryAddress": "Adresse de livraison",
     "orderNumber": "Commande n° {n}",
@@ -826,8 +827,8 @@
     "showToServer": "Montrer au serveur",
     "orderQrAlt": "QR code de la commande",
     "orderQrHint": "Le serveur peut scanner ce code pour ouvrir la commande.",
-    "served": "Vous avez été servi ! Bon appétit",
-    "servedSub": "Barka ! Merci de votre visite.",
+    "served": "Vous avez été servi ! Bon appétit",
+    "servedSub": "Barka ! Merci de votre visite.",
     "previousSelections": "Sélections précédentes",
     "noHistory": "Aucune sélection précédente sur ce téléphone.",
     "historyOrder": "Commande n° {n}",
@@ -843,14 +844,14 @@
     "intro": "Vos places, vos zones et vos QR codes. Les clients scannent le QR de leur table pour voir le menu.",
     "areas": "Zones",
     "areaName": "Nom de la zone",
-    "areaPlaceholder": "Ex. : Terrasse",
+    "areaPlaceholder": "Ex. : Terrasse",
     "addArea": "Ajouter une zone",
     "noAreas": "Aucune zone. Les zones sont facultatives (Terrasse, Salle climatisée, Bar…).",
     "addTables": "Ajouter des tables numérotées",
     "from": "De",
     "to": "à",
     "skip": "Sauf (numéros)",
-    "skipPlaceholder": "Ex. : 13, 17",
+    "skipPlaceholder": "Ex. : 13, 17",
     "capacity": "Places",
     "area": "Zone",
     "noArea": "Sans zone",
@@ -859,7 +860,7 @@
     "addSeat": "Ajouter un salon ou une zone",
     "type": "Type",
     "label": "Nom ou numéro",
-    "labelPlaceholder": "Ex. : Salon Ouaga, 201",
+    "labelPlaceholder": "Ex. : Salon Ouaga, 201",
     "addSeatBtn": "Ajouter",
     "types": {
       "table": "Tables",
@@ -881,19 +882,19 @@
     "inactive": "Désactivée",
     "save": "Enregistrer",
     "delete": "Supprimer",
-    "confirmDelete": "Supprimer cette place et son QR code ?",
+    "confirmDelete": "Supprimer cette place et son QR code ?",
     "qr": "QR code",
     "download": "Télécharger",
     "regenerate": "Nouveau QR",
-    "confirmRegenerate": "L’ancien QR code de cette place ne fonctionnera plus. Continuer ?",
+    "confirmRegenerate": "L’ancien QR code de cette place ne fonctionnera plus. Continuer ?",
     "regenerated": "Nouveau QR code créé. Réimprimez la carte de cette place.",
     "active": "Active",
     "moveUp": "Monter",
     "moveDown": "Descendre",
     "edit": "Modifier",
     "genericTitle": "QR code unique du restaurant",
-    "genericHint": "Un seul QR pour tout le restaurant : le client choisit sa place sur son téléphone.",
-    "perSeatHint": "Chaque table et chaque salon a son propre QR : en le scannant, le client est installé automatiquement.",
+    "genericHint": "Un seul QR pour tout le restaurant : le client choisit sa place sur son téléphone.",
+    "perSeatHint": "Chaque table et chaque salon a son propre QR : en le scannant, le client est installé automatiquement.",
     "planQr": "La formule Gratuit inclut un seul QR code pour tout le restaurant. Passez à Pro pour un QR par table.",
     "print": "Imprimer les cartes QR",
     "printTent": "Chevalets (1 par page, à plier)",
@@ -908,7 +909,7 @@
     "close": "Libérer",
     "errors": {
       "duplicate": "Une place porte déjà ce nom.",
-      "invalid": "Vérifiez les numéros (de 1 à 999, « de » plus petit que « à »).",
+      "invalid": "Vérifiez les numéros (de 1 à 999, « de » plus petit que « à »).",
       "unknown": "Une erreur est survenue. Réessayez."
     },
     "card": {
@@ -923,10 +924,10 @@
       "step2": "Visez le code, puis touchez le lien qui s’affiche",
       "step2En": "Point at the code, tap the link",
       "step2Zh": "对准二维码，点击链接",
-      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → Numéro RC :"
+      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → Numéro RC :"
     },
     "mainPrintHint": "6 autocollants par page A4. Découpez-les et placez-les à l’entrée, sur les tables, au comptoir ou sur la vitrine.",
-    "mainCode": "Numéro RC du restaurant (pour les clients qui ne scannent pas) :",
+    "mainCode": "Numéro RC du restaurant (pour les clients qui ne scannent pas) :",
     "seatCode": "Code de la place"
   },
   "legal": {
@@ -935,10 +936,10 @@
   },
   "mainQr": {
     "title": "Votre QR code principal",
-    "ready": "Il est déjà prêt : il ouvre votre menu sur le téléphone de vos clients.",
+    "ready": "Il est déjà prêt : il ouvre votre menu sur le téléphone de vos clients.",
     "howPrint": "Imprimez-le (autocollant ou affiche).",
-    "howPlace": "Placez-le partout où vos clients peuvent le voir : à l’entrée, sur les tables, au comptoir, sur la vitrine.",
-    "howScan": "Vos clients le scannent avec l’appareil photo de leur téléphone : les 2 étapes sont écrites sur l’autocollant.",
+    "howPlace": "Placez-le partout où vos clients peuvent le voir : à l’entrée, sur les tables, au comptoir, sur la vitrine.",
+    "howScan": "Vos clients le scannent avec l’appareil photo de leur téléphone : les 2 étapes sont écrites sur l’autocollant.",
     "notPublished": "Votre menu n’est pas encore publié. Publiez-le dans Réglages pour que vos clients puissent le voir.",
     "print": "Imprimer mes QR codes",
     "download": "Télécharger l’image (PNG)",
@@ -947,17 +948,17 @@
   },
   "codeEntry": {
     "pageTitle": "Ouvrir un menu avec un code",
-    "title": "Vous avez un numéro RC ?",
+    "title": "Vous avez un numéro RC ?",
     "intro": "Le numéro RC (RC = RestoCool) est écrit sous le QR code du restaurant. Il ouvre le même menu que le scan.",
-    "hint": "Entrez le numéro RC écrit sous le QR code du restaurant (ex. : RC-K7M3P).",
+    "hint": "Entrez le numéro RC écrit sous le QR code du restaurant (ex. : RC-K7M3P).",
     "label": "Numéro RC du restaurant",
     "placeholder": "RC-K7M3P",
     "submit": "Ouvrir le menu",
-    "invalid": "Ce numéro n’a pas le bon format : RC suivi de 5 lettres ou chiffres, écrit sous le QR code.",
+    "invalid": "Ce numéro n’a pas le bon format : RC suivi de 5 lettres ou chiffres, écrit sous le QR code.",
     "notFound": "Aucun restaurant ne correspond à ce numéro RC. Vérifiez-le, ou scannez le QR code.",
     "tooMany": "Trop d’essais. Patientez une minute, puis réessayez.",
     "orScan": "Vous pouvez aussi scanner le QR code avec l’appareil photo de votre téléphone.",
-    "homeTitle": "Vous êtes au restaurant ?",
+    "homeTitle": "Vous êtes au restaurant ?",
     "homeText": "Tapez le numéro RC écrit sous le QR code pour ouvrir le menu.",
     "short": "Entrer un numéro RC"
   },
@@ -970,9 +971,9 @@
     "polling": "Reconnexion…",
     "sound": "Son",
     "screenOn": "Écran allumé",
-    "soldOutButton": "Épuisé ?",
+    "soldOutButton": "Épuisé ?",
     "soldOutTitle": "Plats épuisés aujourd’hui",
-    "soldOutHint": "Cochez un plat : il passe « Épuisé » tout de suite chez les clients, jusqu’à minuit.",
+    "soldOutHint": "Cochez un plat : il passe « Épuisé » tout de suite chez les clients, jusqu’à minuit.",
     "soldOut": "Épuisé",
     "search": "Rechercher",
     "loading": "Chargement…",
@@ -991,7 +992,7 @@
     "markReady": "Prête",
     "markServed": "Servie",
     "cancel": "Annuler",
-    "cancelWhy": "Pourquoi annuler ?",
+    "cancelWhy": "Pourquoi annuler ?",
     "cancelConfirm": "Annuler la commande",
     "back": "Retour",
     "reason": {
@@ -999,7 +1000,7 @@
       "soldOut": "Plat épuisé",
       "mistake": "Erreur de commande"
     },
-    "conflict": "Cette commande vient d’être modifiée par quelqu’un d’autre : l’écran est à jour.",
+    "conflict": "Cette commande vient d’être modifiée par quelqu’un d’autre : l’écran est à jour.",
     "forbidden": "Votre rôle ne permet pas cette action.",
     "actionError": "L’action n’a pas abouti. Vérifiez la connexion et réessayez.",
     "status": {
@@ -1038,16 +1039,17 @@
     "allReady": "Tout est prêt",
     "kitchenEmpty": "Aucun plat à préparer. Les nouvelles commandes apparaîtront ici.",
     "waitingService": "{count, plural, one {# commande prête attend} other {# commandes prêtes attendent}} le service",
-    "planRequiredTitle": "Service en direct : offre Pro",
+    "planRequiredTitle": "Service en direct : offre Pro",
     "planRequired": "Les commandes des clients, l’écran cuisine et le service en salle sont inclus dans les offres Pro et Business.",
     "seePlans": "Voir les offres",
-    "networkError": "Impossible de charger les commandes. Vérifiez la connexion : l’écran se met à jour dès qu’elle revient.",
+    "networkError": "Impossible de charger les commandes. Vérifiez la connexion : l’écran se met à jour dès qu’elle revient.",
     "by": {
       "confirmed": "Confirmée par {name} · matricule {no}",
       "prepared": "Préparée par {name} · matricule {no}",
       "served": "Servie par {name} · matricule {no}",
       "cancelled": "Annulée par {name} · matricule {no}"
-    }
+    },
+    "minutes": "{n} min"
   },
   "personnel": {
     "title": "Personnel",
@@ -1061,7 +1063,7 @@
     "cancelled": "Annulées",
     "inactive": "Inactif",
     "period": "Chiffres des 7 derniers jours.",
-    "comingM5": "Bientôt : ajoutez vos serveurs, la cuisine et la caisse, avec une connexion par code PIN sur la tablette du restaurant (sans adresse e-mail)."
+    "comingM5": "Bientôt : ajoutez vos serveurs, la cuisine et la caisse, avec une connexion par code PIN sur la tablette du restaurant (sans adresse e-mail)."
   },
   "analytics": {
     "title": "Activité et ventes",
@@ -1080,12 +1082,12 @@
     },
     "openNow": "{n} en cours",
     "servedCount": "{n} servies",
-    "prep": "Cuisine : {n} min",
+    "prep": "Cuisine : {n} min",
     "empty": "Aucune commande sur cette période. Les chiffres apparaîtront dès les premières commandes.",
     "byHour": "Commandes par heure",
     "byHourAlt": "Nombre de commandes pour chaque heure de la journée",
     "topDishes": "Plats les plus commandés",
-    "personnel": "Personnel : commandes traitées",
+    "personnel": "Personnel : commandes traitées",
     "col": {
       "staffNo": "Matricule",
       "name": "Nom",
@@ -1094,7 +1096,8 @@
       "served": "Servies",
       "avgService": "Service moyen"
     },
-    "note": "Ventes : commandes servies, hors plats « sur demande ». Temps de service : de l’envoi de la commande au service."
+    "note": "Ventes : commandes servies, hors plats « sur demande ». Temps de service : de l’envoi de la commande au service.",
+    "minutes": "{n} min"
   },
   "setup": {
     "guide": "Étapes de la configuration",
@@ -1102,7 +1105,7 @@
     "guideTitle": "Votre établissement en ligne en 5 minutes",
     "stepOf": "Étape {n} sur {total}",
     "allDone": "Configuration terminée",
-    "unlocks": "Débloqué à la fin :",
+    "unlocks": "Débloqué à la fin :",
     "time": "Chaque étape peut être passée et modifiée plus tard dans Paramètres.",
     "doneText": "{name} est prêt. Ajoutez vos plats, imprimez votre QR code et vos clients pourront commander depuis leur téléphone. Chaque commande est enregistrée dans votre tableau de bord.",
     "next": {
@@ -1121,7 +1124,7 @@
     "steps": {
       "create": {
         "title": "Votre établissement",
-        "hint": "Le nom et la ville : c’est tout pour commencer."
+        "hint": "Le nom et la ville : c’est tout pour commencer."
       },
       "profile": {
         "title": "Profil",
@@ -1133,7 +1136,7 @@
       },
       "hours": {
         "title": "Horaires",
-        "hint": "Affichés « Ouvert » ou « Fermé » en direct sur votre menu."
+        "hint": "Affichés « Ouvert » ou « Fermé » en direct sur votre menu."
       },
       "service": {
         "title": "Service et tables",
@@ -1141,7 +1144,7 @@
       },
       "appearance": {
         "title": "Image de marque",
-        "hint": "Logo, photo et couleurs : votre marque passe en premier."
+        "hint": "Logo, photo et couleurs : votre marque passe en premier."
       }
     }
   },
@@ -1152,7 +1155,7 @@
     "featuredBadge": "À la une",
     "all": "Tous les restaurants",
     "searchLabel": "Rechercher un restaurant",
-    "placeholder": "Nom, ville ou numéro RC (ex. : RC-K7M3P)",
+    "placeholder": "Nom, ville ou numéro RC (ex. : RC-K7M3P)",
     "empty": "Aucun restaurant ne correspond. Essayez un autre nom, une ville ou un numéro RC.",
     "open": "Voir le menu",
     "count": "# restaurant(s)",
@@ -1171,9 +1174,9 @@
     "pin": "Code PIN",
     "submit": "Pointer",
     "sending": "Enregistrement…",
-    "hello": "Bonjour {name} !",
-    "bye": "Au revoir {name} !",
-    "inAt": "Arrivée enregistrée à {time}. Bon service !",
+    "hello": "Bonjour {name} !",
+    "bye": "Au revoir {name} !",
+    "inAt": "Arrivée enregistrée à {time}. Bon service !",
     "outAt": "Départ enregistré à {time} · {hours} de présence.",
     "error": {
       "invalid": "Vérifiez le matricule (chiffres) et le code PIN (4 à 6 chiffres).",
@@ -1182,13 +1185,13 @@
       "unknown": "Ce matricule n’existe pas dans ce restaurant.",
       "no_pin": "Aucun code PIN pour ce matricule. Demandez au responsable d’en créer un.",
       "wrong_pin": "Code PIN incorrect. Il vous reste encore {tries} essai(s).",
-      "locked": "Trop d’essais : ce profil est bloqué pendant {minutes} min. Demandez au responsable de vous pointer.",
+      "locked": "Trop d’essais : ce profil est bloqué pendant {minutes} min. Demandez au responsable de vous pointer.",
       "too_many": "Trop d’essais depuis cet appareil. Patientez une minute."
     },
     "poster1": "Scannez ce QR code avec votre téléphone.",
     "poster2": "Entrez votre matricule et votre code PIN.",
-    "poster3": "À l’arrivée comme au départ : le même code.",
-    "posterRc": "Sans QR code : {site} · numéro {rc}",
+    "poster3": "À l’arrivée comme au départ : le même code.",
+    "posterRc": "Sans QR code : {site} · numéro {rc}",
     "guideLink": "Guide du personnel (tutoriels animés)"
   },
   "attendance": {
@@ -1199,8 +1202,8 @@
     "qrText": "Imprimez-le et placez-le à l’entrée du personnel (pas en salle). En le scannant, chacun entre son matricule et son code PIN.",
     "print": "Imprimer",
     "regenerate": "Changer le QR code",
-    "regenerateConfirm": "L’ancien QR code imprimé ne fonctionnera plus. Continuer ?",
-    "orRc": "Sans QR code : restocool.com/pointage avec le numéro {rc}.",
+    "regenerateConfirm": "L’ancien QR code imprimé ne fonctionnera plus. Continuer ?",
+    "orRc": "Sans QR code : restocool.com/pointage avec le numéro {rc}.",
     "present": "Présent",
     "absent": "Absent",
     "since": "depuis {time}",
@@ -1239,7 +1242,7 @@
       "pin": "Code PIN enregistré.",
       "in": "Arrivée enregistrée.",
       "out": "Départ enregistré.",
-      "qr": "Nouveau QR code de pointage créé : imprimez-le.",
+      "qr": "Nouveau QR code de pointage créé : imprimez-le.",
       "status": "Statut mis à jour."
     },
     "err": {
@@ -1251,8 +1254,8 @@
   "guide": {
     "title": "Guide RestoCool",
     "intro": "De courts tutoriels animés pour prendre en main RestoCool. Touchez une étape pour la revoir.",
-    "introPublic": "Tutoriels animés pour le personnel et les gérants : pointage, commandes, cuisine, numéro RC.",
-    "audience": "Pour qui ?",
+    "introPublic": "Tutoriels animés pour le personnel et les gérants : pointage, commandes, cuisine, numéro RC.",
+    "audience": "Pour qui ?",
     "for": {
       "manager": "Gérants",
       "staff": "Personnel"
@@ -1266,7 +1269,7 @@
     "listLabel": "Tutoriels",
     "seen": "Vu",
     "cardTitle": "Apprendre à utiliser RestoCool",
-    "allSeen": "Bravo, vous avez vu tous les tutoriels ! Revoyez-les quand vous voulez.",
+    "allSeen": "Bravo, vous avez vu tous les tutoriels ! Revoyez-les quand vous voulez.",
     "seeAll": "Voir tous les tutoriels",
     "checkinLink": "Pointage",
     "ui": {
@@ -1294,13 +1297,13 @@
       "confirm": "Confirmer",
       "cooking": "En cours",
       "served": "Servie",
-      "bonAppetit": "Vous avez été servi ! Bon appétit",
+      "bonAppetit": "Vous avez été servi ! Bon appétit",
       "readyShort": "Prêt",
       "todo": "À faire",
       "allReady": "Tout est prêt",
       "kitchenScreen": "Écran cuisine",
-      "floorNotified": "Le service est prévenu : commande prête",
-      "soldOutBtn": "Épuisé ?",
+      "floorNotified": "Le service est prévenu : commande prête",
+      "soldOutBtn": "Épuisé ?",
       "soldOutTitle": "Plats épuisés aujourd’hui",
       "soldOut": "Épuisé",
       "personnel": "Personnel",
@@ -1317,7 +1320,7 @@
       "checkinTitle": "Pointage",
       "staffNo": "Matricule",
       "punch": "Pointer",
-      "helloMariam": "Bonjour Mariam !",
+      "helloMariam": "Bonjour Mariam !",
       "arrivalAt": "Arrivée enregistrée à 08:02.",
       "rcNumber": "Numéro RC",
       "openMenu": "Ouvrir le menu",
@@ -1326,29 +1329,31 @@
       "all": "Tous",
       "grill": "Grill",
       "drinks": "Boissons",
-      "owner": "Propriétaire"
+      "owner": "Propriétaire",
+      "min14": "14 min",
+      "min3": "3 min"
     },
     "items": {
       "menu": {
         "title": "Ajouter vos plats",
         "intro": "Créez votre menu en quelques minutes, avec photos et prix en FCFA.",
-        "s1": "Ouvrez Menu, puis touchez « + Ajouter un plat ».",
-        "s2": "Tapez le nom et le prix. « Suggérer » remplit l’anglais et le chinois.",
-        "s3": "Ajoutez une photo : elle est compressée automatiquement. Enregistrez.",
+        "s1": "Ouvrez Menu, puis touchez « + Ajouter un plat ».",
+        "s2": "Tapez le nom et le prix. « Suggérer » remplit l’anglais et le chinois.",
+        "s3": "Ajoutez une photo : elle est compressée automatiquement. Enregistrez.",
         "s4": "Le plat apparaît tout de suite sur le menu de vos clients."
       },
       "qr": {
         "title": "Imprimer et placer vos QR codes",
         "intro": "Chaque table a son QR code et son numéro RC.",
-        "s1": "Ouvrez Tables et salles, puis touchez « Imprimer les QR codes ».",
-        "s2": "Imprimez la page (ou enregistrez-la en PDF) : une carte par table.",
+        "s1": "Ouvrez Tables et salles, puis touchez « Imprimer les QR codes ».",
+        "s2": "Imprimez la page (ou enregistrez-la en PDF) : une carte par table.",
         "s3": "Posez chaque carte sur sa table, bien visible.",
-        "s4": "Le client scanne : son téléphone sait déjà à quelle table il est."
+        "s4": "Le client scanne : son téléphone sait déjà à quelle table il est."
       },
       "publish": {
         "title": "Publier et partager votre menu",
         "intro": "Rendez votre menu visible à tous, puis partagez-le.",
-        "s1": "Dans Paramètres, section Publier, touchez « Publier ».",
+        "s1": "Dans Paramètres, section Publier, touchez « Publier ».",
         "s2": "Votre menu est en ligne et apparaît dans l’annuaire RestoCool.",
         "s3": "Partagez le lien ou votre numéro RC sur WhatsApp et vos réseaux."
       },
@@ -1356,22 +1361,22 @@
         "title": "Suivre les commandes en salle",
         "intro": "Toutes les commandes arrivent en direct sur la tablette du service.",
         "s1": "Une nouvelle commande arrive avec un son, le numéro de table bien visible.",
-        "s2": "Touchez « Confirmer » : elle part en cuisine.",
-        "s3": "Elle passe dans « En cuisine » pendant la préparation.",
-        "s4": "Quand elle est « Prête », servez-la et touchez « Servie »."
+        "s2": "Touchez « Confirmer » : elle part en cuisine.",
+        "s3": "Elle passe dans « En cuisine » pendant la préparation.",
+        "s4": "Quand elle est « Prête », servez-la et touchez « Servie »."
       },
       "soldout": {
         "title": "Marquer un plat épuisé",
-        "intro": "Un plat est fini ? Vos clients le voient tout de suite.",
-        "s1": "Sur l’écran cuisine ou le service, touchez « Épuisé ? ».",
-        "s2": "Cochez le plat : il est épuisé jusqu’à minuit.",
-        "s3": "Sur le téléphone des clients, le plat affiche « Épuisé »."
+        "intro": "Un plat est fini ? Vos clients le voient tout de suite.",
+        "s1": "Sur l’écran cuisine ou le service, touchez « Épuisé ? ».",
+        "s2": "Cochez le plat : il est épuisé jusqu’à minuit.",
+        "s3": "Sur le téléphone des clients, le plat affiche « Épuisé »."
       },
       "staff": {
         "title": "Ajouter votre personnel et le pointage",
         "intro": "Chaque personne a un matricule et un code PIN, même sans e-mail.",
-        "s1": "Dans Personnel, tapez le nom, le rôle et un code PIN, puis « Ajouter ».",
-        "s2": "La personne reçoit son matricule (ex. : 004), enregistré sur chaque commande.",
+        "s1": "Dans Personnel, tapez le nom, le rôle et un code PIN, puis « Ajouter ».",
+        "s2": "La personne reçoit son matricule (ex. : 004), enregistré sur chaque commande.",
         "s3": "Imprimez le QR code de pointage et placez-le à l’entrée du personnel.",
         "s4": "Voyez qui est présent, et pointez quelqu’un à la main s’il a oublié."
       },
@@ -1379,50 +1384,50 @@
         "title": "Lire vos chiffres",
         "intro": "Ventes, commandes et personnel, sans cahier.",
         "s1": "Le tableau de bord montre les commandes, les ventes et le temps de service.",
-        "s2": "Changez la période : aujourd’hui, 7 jours ou 30 jours.",
+        "s2": "Changez la période : aujourd’hui, 7 jours ou 30 jours.",
         "s3": "Voyez les commandes traitées par chaque personne, avec son matricule."
       },
       "checkin": {
         "title": "Pointer à l’arrivée et au départ",
         "intro": "Votre matricule et votre code PIN suffisent.",
         "s1": "Scannez le QR code de pointage à l’entrée du personnel.",
-        "s2": "Tapez votre matricule (ex. : 004).",
-        "s3": "Tapez votre code PIN, puis « Pointer ».",
-        "s4": "C’est enregistré ! Au départ, refaites la même chose."
+        "s2": "Tapez votre matricule (ex. : 004).",
+        "s3": "Tapez votre code PIN, puis « Pointer ».",
+        "s4": "C’est enregistré ! Au départ, refaites la même chose."
       },
       "confirm": {
         "title": "Confirmer une nouvelle commande",
         "intro": "Les commandes des clients arrivent sur la tablette ou le téléphone.",
-        "s1": "Une commande arrive avec un son : regardez le numéro de table.",
-        "s2": "Vérifiez avec le client si besoin, puis touchez « Confirmer ».",
+        "s1": "Une commande arrive avec un son : regardez le numéro de table.",
+        "s2": "Vérifiez avec le client si besoin, puis touchez « Confirmer ».",
         "s3": "La commande part en cuisine automatiquement."
       },
       "serve": {
         "title": "Servir une commande prête",
         "intro": "La cuisine vous prévient quand c’est prêt.",
-        "s1": "La commande passe dans « Prête » : apportez-la à la bonne table.",
-        "s2": "Touchez « Servie » : la commande est enregistrée à votre nom.",
-        "s3": "Le client voit « Vous avez été servi ! Bon appétit »."
+        "s1": "La commande passe dans « Prête » : apportez-la à la bonne table.",
+        "s2": "Touchez « Servie » : la commande est enregistrée à votre nom.",
+        "s3": "Le client voit « Vous avez été servi ! Bon appétit »."
       },
       "scan": {
         "title": "Lire la commande d’un client",
         "intro": "Le client peut vous montrer sa commande sur son téléphone.",
-        "s1": "Le client touche « Montrer au serveur » : grand écran avec la table et les plats.",
+        "s1": "Le client touche « Montrer au serveur » : grand écran avec la table et les plats.",
         "s2": "Scannez le QR code de son écran avec votre téléphone.",
-        "s3": "La commande s’ouvre chez vous : confirmez-la."
+        "s3": "La commande s’ouvre chez vous : confirmez-la."
       },
       "kitchen": {
         "title": "Utiliser l’écran cuisine",
         "intro": "Les plats à préparer s’affichent par poste.",
         "s1": "Une commande confirmée arrive sur l’écran cuisine.",
-        "s2": "Touchez un plat quand vous commencez : il passe « En cours ».",
-        "s3": "Touchez « Tout est prêt » quand tout est terminé.",
+        "s2": "Touchez un plat quand vous commencez : il passe « En cours ».",
+        "s3": "Touchez « Tout est prêt » quand tout est terminé.",
         "s4": "Le service est prévenu tout de suite."
       },
       "rc": {
         "title": "Aider un client qui ne peut pas scanner",
         "intro": "Le numéro RC ouvre le même menu que le QR code.",
-        "s1": "Montrez au client le numéro RC écrit sous le QR code (ex. : RC-K7M3P).",
+        "s1": "Montrez au client le numéro RC écrit sous le QR code (ex. : RC-K7M3P).",
         "s2": "Il va sur restocool.com/c et tape le numéro.",
         "s3": "Le menu s’ouvre, déjà à la bonne table."
       }

@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { getDb } from "@/db";
 import { kioskRestaurant, Pin, punch } from "@/lib/personnel/attendance";
-import { rateLimit } from "@/lib/rate-limit";
+import { ipFromHeaders, rateLimit } from "@/lib/rate-limit";
 
 export type KioskState =
   | undefined
@@ -16,7 +16,7 @@ const Input = z.object({ staffNo: z.coerce.number().int().min(1).max(9999), pin:
 /** Check-in kiosk: matricule + PIN. The restaurant comes from the QR token or its numéro RC. */
 export async function punchAction(_prev: KioskState, fd: FormData): Promise<KioskState> {
   const h = await headers();
-  const ip = (h.get("x-forwarded-for")?.split(",")[0] ?? h.get("x-real-ip") ?? "unknown").trim();
+  const ip = ipFromHeaders(h);
   if (!rateLimit(`punch:${ip}`, { capacity: 20, refillPerSec: 1 / 6 })) return { ok: false, error: "too_many" };
   const p = Input.safeParse({ staffNo: String(fd.get("staffNo") ?? "").replace(/\D/g, ""), pin: String(fd.get("pin") ?? "") });
   if (!p.success) return { ok: false, error: "invalid" };

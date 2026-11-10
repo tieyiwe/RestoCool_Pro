@@ -100,6 +100,8 @@ export default async function PrintCardsPage({ searchParams }: { searchParams: P
         <span className="text-sm text-muted-foreground">{layout === "tent" ? t("printTent") : t("printGrid")}</span>
         {mainOnly && <p className="w-full text-sm">{t("mainPrintHint")}</p>}
       </div>
+      {/* The A4 sheets scroll inside this frame on phones (the page itself never scrolls sideways). */}
+      <div className="overflow-x-auto print:overflow-visible" data-testid="print-frame">
       {layout === "tent"
         ? cards.map((c) => (
             <section key={c.key} className="sheet mx-auto mb-6 flex h-[281mm] w-[194mm] flex-col bg-white text-black shadow-lg" data-testid="print-card">
@@ -120,6 +122,7 @@ export default async function PrintCardsPage({ searchParams }: { searchParams: P
               ))}
             </section>
           ))}
+      </div>
     </div>
   );
 }

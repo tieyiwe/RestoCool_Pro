@@ -7,6 +7,8 @@ import { RestaurantSwitcher } from "@/components/restaurant-switcher";
 import { UserMenu } from "@/components/user-menu";
 import { env } from "@/lib/env";
 import { setupState } from "@/lib/auth/setup";
+import { can, type Action } from "@/lib/auth/can";
+import { getMemberContext } from "@/lib/auth/context";
 
 export const dynamic = "force-dynamic";
 
@@ -14,16 +16,21 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   const t = await getTranslations("app");
   // Business first: until it is created and set up, no other section is shown (focus mode).
   const focus = (await setupState().catch(() => "none" as const)) !== "ready";
-  const nav = [
-    { href: "/app", label: t("dashboard") },
-    { href: "/app/service", label: t("frontDesk") },
-    { href: "/app/kitchen", label: t("kitchen") },
-    { href: "/app/menu", label: t("menu") },
-    { href: "/app/seating", label: t("seating") },
-    { href: "/app/staff", label: t("staff") },
-    { href: "/app/settings", label: t("settings") },
-    { href: "/app/guide", label: t("guide") },
-  ];
+  const ctx = await getMemberContext().catch(() => null);
+  // Each person only sees the sections their role can open (the server checks again on every page).
+  const allowed = (a: Action | null) => !a || (ctx ? can(ctx.actor, a, { restaurantId: ctx.repo.restaurantId }) : false);
+  const nav = (
+    [
+      { href: "/app", label: t("dashboard"), need: null },
+      { href: "/app/service", label: t("frontDesk"), need: "orders.read" },
+      { href: "/app/kitchen", label: t("kitchen"), need: "orders.read" },
+      { href: "/app/menu", label: t("menu"), need: "menu.write" },
+      { href: "/app/seating", label: t("seating"), need: "seats.write" },
+      { href: "/app/staff", label: t("staff"), need: "staff.write" },
+      { href: "/app/settings", label: t("settings"), need: "settings.write" },
+      { href: "/app/guide", label: t("guide"), need: null },
+    ] as const
+  ).filter((n) => allowed(n.need));
   return (
     <AuthProvider>
       <div className="flex min-h-dvh flex-col">

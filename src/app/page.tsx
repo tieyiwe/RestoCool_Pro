@@ -276,7 +276,7 @@ export default async function HomePage() {
                 {[
                   [t("digitize.mock.orders"), "48"],
                   [t("digitize.mock.sales"), formatFCFA(186500)],
-                  [t("digitize.mock.service"), "14 min"],
+                  [t("digitize.mock.service"), t("digitize.mock.min14")],
                 ].map(([label, value]) => (
                   <div key={label} className="rounded-xl bg-creme p-3">
                     <p className="text-[11px] text-encre-2">{label}</p>

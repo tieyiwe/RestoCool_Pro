@@ -140,6 +140,13 @@ export function useLiveOrders({
   return { orders, shared, refresh, setOrders };
 }
 
+/** Random id for one order attempt; kept across retries so a resend never duplicates it. */
+export function newRequestId(): string {
+  const b = new Uint8Array(18);
+  crypto.getRandomValues(b);
+  return btoa(String.fromCharCode(...b)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
 export type SendResult = { ok: true; order: CustomerOrder } | { ok: false; error: string; itemIds: string[] };
 
 export async function sendOrder(
@@ -147,6 +154,7 @@ export async function sendOrder(
   seat: MySeat,
   lines: CartLine[],
   extra: { customerName?: string; customerPhone?: string; deliveryAddress?: string },
+  requestId: string,
 ): Promise<SendResult> {
   const res = await fetch("/api/public/orders", {
     method: "POST",
@@ -155,6 +163,7 @@ export async function sendOrder(
       slug,
       deviceId: deviceId(),
       sessionId: seat.sessionId,
+      requestId,
       lines: lines.map((l) => ({ itemId: l.itemId, variantId: l.variantId, optionIds: l.optionIds, qty: l.qty, ...(l.note ? { note: l.note } : {}) })),
       ...Object.fromEntries(Object.entries(extra).filter(([, v]) => v && v.trim())),
     }),

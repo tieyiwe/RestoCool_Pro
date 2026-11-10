@@ -21,3 +21,13 @@ describe("public rate limit", () => {
     expect(passed).toBeLessThanOrEqual(31);
   });
 });
+
+describe("client IP for rate limits", () => {
+  it("ignores addresses the client put first in X-Forwarded-For", async () => {
+    const { ipFromHeaders } = await import("@/lib/rate-limit");
+    const h = new Headers({ "x-forwarded-for": "6.6.6.6, 1.2.3.4" });
+    expect(ipFromHeaders(h)).toBe("1.2.3.4"); // added by the trusted proxy (1 hop)
+    expect(ipFromHeaders(new Headers({ "x-forwarded-for": "1.2.3.4" }))).toBe("1.2.3.4");
+    expect(ipFromHeaders(new Headers())).toBe("unknown");
+  });
+});

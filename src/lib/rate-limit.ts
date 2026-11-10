@@ -23,7 +23,22 @@ export function rateLimit(key: string, opts: { capacity: number; refillPerSec: n
   return true;
 }
 
+/**
+ * The visitor's IP, for rate limits. X-Forwarded-For is a list the client can pre-fill with
+ * anything, so the first entry can't be trusted: each proxy in front of the app appends the
+ * address it saw. With N trusted proxies (TRUSTED_PROXY_HOPS, default 1 = Replit's), the real
+ * client is the N-th entry from the right.
+ */
+export function ipFromHeaders(h: Pick<Headers, "get">): string {
+  const hops = Math.max(1, Number(process.env.TRUSTED_PROXY_HOPS ?? 1) || 1);
+  const list = (h.get("x-forwarded-for") ?? "")
+    .split(",")
+    .map((x) => x.trim())
+    .filter(Boolean);
+  if (list.length > 0) return list[Math.max(0, list.length - hops)]!;
+  return h.get("x-real-ip")?.trim() || "unknown";
+}
+
 export function clientIp(req: Request): string {
-  const fwd = req.headers.get("x-forwarded-for");
-  return (fwd?.split(",")[0] ?? req.headers.get("x-real-ip") ?? "unknown").trim();
+  return ipFromHeaders(req.headers);
 }

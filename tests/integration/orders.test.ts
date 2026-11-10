@@ -5,7 +5,7 @@ vi.mock("server-only", () => ({}));
 
 const { closeDb, getDb } = await import("@/db");
 const { tenantRepo } = await import("@/db/repos/tenant");
-const { menuCategories, menuItemOptions, menuItems, menuItemVariants, restaurants, tableSessions } = await import("@/db/schema");
+const { menuCategories, menuItemOptions, menuItems, menuItemVariants, orders, restaurants, tableSessions } = await import("@/db/schema");
 const sessions = await import("@/lib/seating/sessions");
 const admin = await import("@/lib/seating/admin");
 const svc = await import("@/lib/orders/service");
@@ -96,6 +96,30 @@ describe.skipIf(!hasDb)("orders (database)", () => {
     expect(o.seatLabel).toBe("1");
     const second = await svc.placeCustomerOrder(getDb(), r, PHONE_A, { sessionId: sessionA, lines: [{ itemId: bissapId, variantId: null, optionIds: [], qty: 1 }] });
     expect(second.number).toBe(o.number + 1);
+  });
+
+  it("a resent order (same request id) is never created twice, even when both copies arrive together", async () => {
+    const input = { sessionId: sessionA, requestId: "resendTestRequest0001", lines: [{ itemId: bissapId, variantId: null, optionIds: [], qty: 1 }] };
+    const [a, b] = await Promise.all([svc.placeCustomerOrder(getDb(), r, PHONE_A, input), svc.placeCustomerOrder(getDb(), r, PHONE_A, input)]);
+    expect(a.id).toBe(b.id);
+    const again = await svc.placeCustomerOrder(getDb(), r, PHONE_A, input);
+    expect(again.id).toBe(a.id);
+    // Another phone reusing the id gets its own order (ids are per phone).
+    await expect(svc.placeCustomerOrder(getDb(), r, PHONE_C, input)).rejects.toMatchObject({ code: "no_seat" });
+    await getDb().delete(orders).where(eq(orders.id, a.id)); // keep later counts unchanged
+  });
+
+  it("refuses more options than a group allows (max_select)", async () => {
+    const [second] = await getDb().insert(menuItemOptions).values({ restaurantId: r.id, itemId: rizId, group: { fr: "Extras" }, name: { fr: "Œuf" }, priceDelta: 200 }).returning();
+    await expect(
+      svc.placeCustomerOrder(getDb(), r, PHONE_A, { sessionId: sessionA, lines: [{ itemId: rizId, variantId: demiId, optionIds: [pimentId, second!.id], qty: 1 }] }),
+    ).rejects.toMatchObject({ code: "invalid" });
+    await getDb().update(menuItemOptions).set({ maxSelect: 2 }).where(eq(menuItemOptions.itemId, rizId));
+    const ok = await svc.placeCustomerOrder(getDb(), r, PHONE_A, { sessionId: sessionA, lines: [{ itemId: rizId, variantId: demiId, optionIds: [pimentId, second!.id], qty: 1 }] });
+    expect(ok.subtotal).toBe(1500 + 100 + 200);
+    await getDb().delete(orders).where(eq(orders.id, ok.id));
+    await getDb().delete(menuItemOptions).where(eq(menuItemOptions.id, second!.id));
+    await getDb().update(menuItemOptions).set({ maxSelect: 1 }).where(eq(menuItemOptions.itemId, rizId));
   });
 
   it("refuses bad variants, foreign options, sold-out dishes and phones not seated", async () => {

@@ -2,7 +2,7 @@ import "server-only";
 import { headers } from "next/headers";
 import { getDb } from "@/db";
 import { normalizeCode, resolveCode } from "@/lib/access-codes";
-import { rateLimit } from "@/lib/rate-limit";
+import { ipFromHeaders, rateLimit } from "@/lib/rate-limit";
 
 export type CodeLookup = { ok: true; path: string } | { ok: false; error: "invalid" | "notFound" | "tooMany" };
 
@@ -13,7 +13,7 @@ export type CodeLookup = { ok: true; path: string } | { ok: false; error: "inval
 export async function lookupCode(raw: string): Promise<CodeLookup> {
   if (!normalizeCode(raw)) return { ok: false, error: "invalid" };
   const h = await headers();
-  const ip = (h.get("x-forwarded-for")?.split(",")[0] ?? h.get("x-real-ip") ?? "unknown").trim();
+  const ip = ipFromHeaders(h);
   if (!rateLimit(`code:${ip}`, { capacity: 10, refillPerSec: 1 / 6 })) return { ok: false, error: "tooMany" };
   const found = await resolveCode(getDb(), raw);
   if (!found) return { ok: false, error: "notFound" };

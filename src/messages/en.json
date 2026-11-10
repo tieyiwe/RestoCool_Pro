@@ -252,7 +252,8 @@
         "service": "Avg. service",
         "staffNo": "Staff ID",
         "name": "Name",
-        "served": "Served"
+        "served": "Served",
+        "min14": "14 min"
       }
     }
   },
@@ -1047,7 +1048,8 @@
       "prepared": "Prepared by {name} · staff ID {no}",
       "served": "Served by {name} · staff ID {no}",
       "cancelled": "Cancelled by {name} · staff ID {no}"
-    }
+    },
+    "minutes": "{n} min"
   },
   "personnel": {
     "title": "Personnel",
@@ -1094,7 +1096,8 @@
       "served": "Served",
       "avgService": "Avg. service"
     },
-    "note": "Sales: served orders, excluding « on request » dishes. Service time: from sending the order to serving it."
+    "note": "Sales: served orders, excluding « on request » dishes. Service time: from sending the order to serving it.",
+    "minutes": "{n} min"
   },
   "setup": {
     "guide": "Setup steps",
@@ -1326,7 +1329,9 @@
       "all": "All",
       "grill": "Grill",
       "drinks": "Drinks",
-      "owner": "Owner"
+      "owner": "Owner",
+      "min14": "14 min",
+      "min3": "3 min"
     },
     "items": {
       "menu": {

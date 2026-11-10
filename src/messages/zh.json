@@ -252,7 +252,8 @@
         "service": "平均上菜",
         "staffNo": "工号",
         "name": "姓名",
-        "served": "已上菜"
+        "served": "已上菜",
+        "min14": "14 分钟"
       }
     }
   },
@@ -1047,7 +1048,8 @@
       "prepared": "制作：{name} · 工号 {no}",
       "served": "上菜：{name} · 工号 {no}",
       "cancelled": "取消：{name} · 工号 {no}"
-    }
+    },
+    "minutes": "{n} 分钟"
   },
   "personnel": {
     "title": "员工",
@@ -1094,7 +1096,8 @@
       "served": "已上菜",
       "avgService": "平均上菜"
     },
-    "note": "销售额：已上菜的订单，不含“面议”菜品。上菜时间：从发送订单到上菜。"
+    "note": "销售额：已上菜的订单，不含“面议”菜品。上菜时间：从发送订单到上菜。",
+    "minutes": "{n} 分钟"
   },
   "setup": {
     "guide": "设置步骤",
@@ -1326,7 +1329,9 @@
       "all": "全部",
       "grill": "烧烤",
       "drinks": "饮品",
-      "owner": "店主"
+      "owner": "店主",
+      "min14": "14 分钟",
+      "min3": "3 分钟"
     },
     "items": {
       "menu": {

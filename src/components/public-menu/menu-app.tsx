@@ -8,7 +8,7 @@ import { itemMatches } from "@/lib/public-menu/search";
 import { makeT, type Messages } from "@/lib/public-menu/translate";
 import type { CartLine, PublicItem, PublicMenuData } from "@/lib/public-menu/types";
 import { cn } from "@/lib/utils";
-import { HistoryList, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
+import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
 import { deviceId, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
 
 type Lang = "fr" | "en" | "zh";
@@ -236,6 +236,11 @@ export function MenuApp({
   const [details, setDetails] = useState({ customerName: "", customerPhone: "", deliveryAddress: "" });
   const [noteFor, setNoteFor] = useState<string | null>(null);
   const [heldSeat, setHeldSeat] = useState(false);
+  const requestIdRef = useRef<string | null>(null);
+  // A changed selection is a new order: forget the previous attempt's id.
+  useEffect(() => {
+    requestIdRef.current = null;
+  }, [lines]);
   const { seat, warning, stillHere, choose, forget } = useSeat({ slug: data.slug, token: seatToken, config: seating, onToast: flash, t, hold: heldSeat });
   const refreshAvailability = useCallback(async () => {
     const res = await fetch(`/api/public/r/${initialData.slug}/availability`, { cache: "no-store" }).catch(() => null);
@@ -279,13 +284,16 @@ export function MenuApp({
     const valid = lines.filter((l) => lineMatchesMenu(items, l));
     if (valid.length === 0) return;
     setSending(true);
+    // Same selection resent (no answer last time) → same request id → never a duplicate order.
+    requestIdRef.current ??= newRequestId();
     const res = await sendOrder(data.slug, seat, valid, {
       customerName: details.customerName || seat.name,
       customerPhone: details.customerPhone,
       deliveryAddress: details.deliveryAddress,
-    });
+    }, requestIdRef.current);
     setSending(false);
     if (res.ok) {
+      requestIdRef.current = null;
       history.addOrder(res.order.number, valid);
       setLines([]);
       writeStore("local", trackKey, String(Date.now()));

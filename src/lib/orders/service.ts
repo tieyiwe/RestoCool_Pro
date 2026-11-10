@@ -59,6 +59,8 @@ export const CustomerOrderInput = z.object({
   customerPhone: z.string().trim().regex(/^\+?[0-9 ]{8,16}$/).optional(),
   deliveryAddress: z.string().trim().min(3).max(200).optional(),
   note: z.string().trim().max(200).optional(),
+  /** Idempotency key generated on the phone (same key = same order, never a duplicate). */
+  requestId: z.string().regex(/^[A-Za-z0-9_-]{16,64}$/).optional(),
 });
 export type CustomerOrderInput = z.infer<typeof CustomerOrderInput>;
 
@@ -112,6 +114,16 @@ export async function priceLines(db: DB, restaurantId: string, lines: z.infer<ty
     if ((itemVariants.length > 0 && !variant) || (l.variantId && !variant)) throw new OrderError("invalid");
     const opts = [...new Set(l.optionIds)].map((id) => options.find((o) => o.id === id && o.itemId === item.id));
     if (opts.some((o) => !o)) throw new OrderError("invalid");
+    // Each option group allows at most `max_select` choices (1 by default), as on the menu.
+    const perGroup = new Map<string, { count: number; max: number }>();
+    for (const o of opts) {
+      const key = JSON.stringify(o!.group);
+      const g = perGroup.get(key) ?? { count: 0, max: 0 };
+      g.count += 1;
+      g.max = Math.max(g.max, o!.maxSelect || 1);
+      perGroup.set(key, g);
+    }
+    if ([...perGroup.values()].some((g) => g.count > g.max)) throw new OrderError("invalid");
     const optionSnap = opts.map((o) => ({ id: o!.id, group: o!.group, name: o!.name, priceDelta: o!.priceDelta }));
     const base = variant ? variant.price : item.price;
     const unitPrice = base === null ? null : base + optionSnap.reduce((s, o) => s + o.priceDelta, 0);
@@ -165,7 +177,19 @@ async function nextNumber(tx: Pick<DB, "execute">, restaurantId: string, day: st
 }
 
 /** A customer sends their selection. The seat comes from their session (QR or picker), never from the body. */
+async function orderForRequest(db: DB, restaurantId: string, deviceId: string, requestId: string | undefined) {
+  if (!requestId) return null;
+  return (
+    (await db.query.orders.findFirst({
+      where: and(eq(orders.restaurantId, restaurantId), eq(orders.clientRequestId, requestId), eq(orders.customerDeviceId, deviceId)),
+    })) ?? null
+  );
+}
+
 export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string, input: CustomerOrderInput, now = new Date()) {
+  // Resent after a lost answer: give back the order already created, don't make a second one.
+  const already = await orderForRequest(db, r.id, deviceId, input.requestId);
+  if (already) return already;
   const s = await customerSession(db, r.id, input.sessionId, deviceId);
   if (!s) throw new OrderError("no_seat");
   const type = s.seat.type;
@@ -177,7 +201,7 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
   const mode = r.settings.orderValidation ?? "server_confirms";
   const actor: Actor = { kind: "customer", deviceId, restaurantId: r.id };
 
-  const order = await db.transaction(async (tx) => {
+  const insert = () => db.transaction(async (tx) => {
     const day = businessDate(now);
     const number = await nextNumber(tx, r.id, day);
     const [o] = await tx
@@ -192,6 +216,7 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
         number,
         source: "customer",
         customerDeviceId: deviceId,
+        clientRequestId: input.requestId ?? null,
         customerName: name,
         customerPhone: type === "delivery" ? (input.customerPhone ?? null) : null,
         deliveryAddress: type === "delivery" ? (input.deliveryAddress ?? null) : null,
@@ -212,7 +237,17 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
     await notify(tx, { k: "order", r: r.id, o: o!.id, s: s.session.id, d: deviceId });
     return o!;
   });
-  return order;
+  try {
+    return await insert();
+  } catch (err) {
+    // Two copies of the same request at the same instant: the unique index let one win.
+    const c = err as { code?: string; cause?: { code?: string } };
+    if ((c.cause?.code ?? c.code) === "23505") {
+      const winner = await orderForRequest(db, r.id, deviceId, input.requestId);
+      if (winner) return winner;
+    }
+    throw err;
+  }
 }
 
 export type OrderWithItems = Order & { items: OrderItem[] };

@@ -186,11 +186,12 @@ export function SeatBadgeLarge({ seat, name }: { seat: StaffOrder["seat"]; name:
 }
 
 function Elapsed({ since, now, delays }: { since: string; now: number; delays: Delays }) {
+  const t = useTranslations("service");
   const min = Math.max(0, Math.floor((now - new Date(since).getTime()) / 60_000));
   const tone = min >= delays.lateMin ? "bg-red-600 text-white" : min >= delays.warnMin ? "bg-orange-500 text-white" : "bg-muted";
   return (
     <span className={cn("rounded-full px-2 py-0.5 text-sm font-bold tabular-nums", tone)} data-testid="elapsed">
-      {min} min
+      {t("minutes", { n: min })}
     </span>
   );
 }
