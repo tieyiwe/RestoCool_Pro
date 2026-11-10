@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getDb } from "@/db";
 import { allow, DeviceId, notFound, publicRestaurant, Slug, tooMany } from "@/lib/public-api";
-import { findSeat, joinSession } from "@/lib/seating/sessions";
+import { findSeat, joinSession, pickable } from "@/lib/seating/sessions";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,8 @@ export async function POST(req: Request) {
   const db = getDb();
   const seat = await findSeat(db, r.id, "token" in body ? { token: body.token } : { seatId: body.seatId });
   if (!seat) return notFound();
+  // Picker: only the seats the picker offers (not a per-seat QR table reached by its id).
+  if ("seatId" in body && !pickable(r, seat)) return notFound();
   if ("seatId" in body && seat.type === "counter" && !body.customerName) {
     return NextResponse.json({ error: "name_required" }, { status: 400 });
   }

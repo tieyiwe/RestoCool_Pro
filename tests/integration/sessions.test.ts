@@ -132,4 +132,32 @@ describe.skipIf(!hasDb)("table sessions and seating admin (database)", () => {
     const tokens = (await getDb().select({ t: seats.qrToken }).from(seats).where(eq(seats.restaurantId, r.id))).map((x) => x.t);
     for (const tk of tokens) expect(JSON.stringify(generic)).not.toContain(tk);
   });
+
+  it("per-seat QR: a table's seat id (returned by a scan) cannot be reused to join it without its QR", async () => {
+    const { POST } = await import("@/app/api/public/sessions/route");
+    await getDb()
+      .update(restaurants)
+      .set({ published: true, settings: { ...r.settings, qrStrategy: "per_seat", seatingModes: ["table", "room", "takeaway"] } })
+      .where(eq(restaurants.id, r.id));
+    const fresh = await reload(r.id);
+    const seat = (await ctx.repo.seating.seats()).find((s) => s.label === "5")!;
+    expect(sessions.pickable(fresh, seat)).toBe(false);
+    const call = (body: object) =>
+      POST(new Request("http://localhost/api/public/sessions", { method: "POST", headers: { "content-type": "application/json", "x-forwarded-for": "10.9.8.7" }, body: JSON.stringify({ slug: fresh.slug, ...body }) }));
+    // The phone at the table scans its QR and learns the seat id…
+    const scan = await call({ deviceId: PHONE_A, token: seat.qrToken });
+    expect(scan.status).toBe(200);
+    const { seat: seen } = (await scan.json()) as { seat: { id: string } };
+    expect(seen.id).toBe(seat.id);
+    // …but another phone (or the same one later, from home) cannot join by that id.
+    const byId = await call({ deviceId: PHONE_B, seatId: seen.id, confirmJoin: true });
+    expect(byId.status).toBe(404);
+    // Seats the picker offers still work by id.
+    const takeaway = (await sessions.pickerSeats(getDb(), fresh))[0]!;
+    expect((await call({ deviceId: PHONE_B, seatId: takeaway.id })).status).toBe(200);
+    // With one generic QR, every seat is picked by id.
+    await getDb().update(restaurants).set({ settings: { ...fresh.settings, qrStrategy: "generic" } }).where(eq(restaurants.id, r.id));
+    expect(sessions.pickable(await reload(r.id), seat)).toBe(true);
+    await getDb().update(restaurants).set({ published: false }).where(eq(restaurants.id, r.id));
+  });
 });
