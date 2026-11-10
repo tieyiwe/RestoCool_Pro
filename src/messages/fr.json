@@ -23,7 +23,10 @@
     "authNotConfigured": "Connexion pas encore configurée. Ajoutez les clés Clerk dans Replit Secrets.",
     "apply": "Valider",
     "authLoading": "Chargement de la connexion…",
-    "authFailed": "La connexion n’a pas pu se charger. Vérifiez votre connexion Internet et rechargez la page. Si le problème continue, contactez le support."
+    "authFailed": "La connexion n’a pas pu se charger. Vérifiez votre connexion Internet et rechargez la page. Si le problème continue, contactez le support.",
+    "notFoundTitle": "Page introuvable",
+    "notFoundText": "Cette page n’existe pas, ou le menu n’est pas encore publié.",
+    "backHome": "Retour à l’accueil"
   },
   "landing": {
     "cta": "Créer mon restaurant gratuitement",

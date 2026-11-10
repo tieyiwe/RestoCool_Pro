@@ -23,7 +23,10 @@
     "authNotConfigured": "登录尚未配置。请在 Replit Secrets 中添加 Clerk 密钥。",
     "apply": "确定",
     "authLoading": "正在加载登录…",
-    "authFailed": "登录无法加载。请检查网络连接并刷新页面。如果问题仍然存在，请联系客服。"
+    "authFailed": "登录无法加载。请检查网络连接并刷新页面。如果问题仍然存在，请联系客服。",
+    "notFoundTitle": "页面未找到",
+    "notFoundText": "此页面不存在，或菜单尚未发布。",
+    "backHome": "返回首页"
   },
   "landing": {
     "cta": "免费创建我的餐厅",
