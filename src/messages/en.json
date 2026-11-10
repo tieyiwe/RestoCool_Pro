@@ -26,12 +26,187 @@
     "authFailed": "Sign-in could not load. Check your internet connection and reload the page. If it keeps happening, contact support."
   },
   "landing": {
-    "title": "The 100% local solution for Burkina's restaurants",
-    "subtitle": "Digital menu, QR code ordering and dining room management, from your phone.",
     "cta": "Create my restaurant for free",
     "seeDemo": "See the demo menu",
     "comingSoon": "Launching soon in Ouagadougou and Bobo-Dioulasso.",
-    "howItWorks": "See how it works"
+    "howItWorks": "See how it works",
+    "title": "The 100% local solution for Burkina's restaurants",
+    "subtitle": "Digital menu, QR code ordering and dining room management, from your phone.",
+    "nav": {
+      "features": "Features",
+      "how": "How it works",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "signIn": "Sign in",
+      "cta": "Try it free",
+      "menu": "Menu"
+    },
+    "hero": {
+      "eyebrow": "For restaurants, maquis and lounges in Burkina Faso",
+      "title": "Your menu, your orders, your tables.",
+      "titleAccent": "Simple.",
+      "subtitle": "A QR code digital menu in French, English and Chinese that customers open on their phone without installing anything. Prices in CFA francs, WhatsApp contact, Orange Money and Moov Money.",
+      "cta": "Create my restaurant for free",
+      "demo": "See a demo menu",
+      "chip1": "30-day Pro trial included",
+      "chip2": "No credit card",
+      "chip3": "Ready in minutes",
+      "chip4": "No app to install"
+    },
+    "mock": {
+      "newOrder": "New order",
+      "table": "Table 7",
+      "items": "2 items",
+      "served": "Served!",
+      "open": "Open"
+    },
+    "strip": {
+      "languages": "3 languages: FR · EN · 中文",
+      "noApp": "0 apps to install",
+      "qr": "One QR code per table",
+      "payments": "CFA F · Orange Money · Moov"
+    },
+    "why": {
+      "title": "Less paper, more service",
+      "subtitle": "Printed menus wear out, prices change, customers wait. RestoCool fixes all of that from your phone.",
+      "a": {
+        "title": "Update in 10 seconds",
+        "text": "A price changed, a dish sold out? Fix it on your phone: the menu is up to date for every customer, no reprinting."
+      },
+      "b": {
+        "title": "Photos that make people hungry",
+        "text": "Add a photo to each dish. They are compressed automatically so they open fast, even on little data."
+      },
+      "c": {
+        "title": "Every customer understands",
+        "text": "French, English and Chinese, with the dish name in the other languages so your staff can read every order."
+      }
+    },
+    "features": {
+      "title": "Everything your dining room needs",
+      "subtitle": "Available today, and what is coming very soon.",
+      "available": "Available",
+      "soon": "Coming soon",
+      "menu": {
+        "title": "Multilingual QR menu",
+        "text": "Categories, search, “spicy” and “new” filters, prices in CFA francs, “on request” when needed."
+      },
+      "photos": {
+        "title": "Full-screen photos",
+        "text": "Customers swipe through dishes, and can switch to data-saver mode if they want."
+      },
+      "qr": {
+        "title": "QR per table + print kit",
+        "text": "One QR code per table or room, and ready-to-print table tents with your logo, in three languages."
+      },
+      "seats": {
+        "title": "Tables, rooms, counter",
+        "text": "Customers are seated automatically by scanning their table. Several phones can join the same table."
+      },
+      "whatsapp": {
+        "title": "Takeaway by WhatsApp",
+        "text": "Customers send their takeaway order to your WhatsApp, with dish numbers and the total."
+      },
+      "offline": {
+        "title": "Fast, even on 3G",
+        "text": "The menu stays available offline after the first visit and can be installed like an app."
+      },
+      "orders": {
+        "title": "Live orders",
+        "text": "Orders arrive on the dining-room and kitchen tablets, and customers follow their progress."
+      },
+      "staff": {
+        "title": "Staff and checkout",
+        "text": "Staff sign in with a PIN; cash, Orange Money and Moov Money payments; end-of-day closing."
+      },
+      "reservations": {
+        "title": "Reservations and reports",
+        "text": "Reservations confirmed by WhatsApp, revenue per day, best-selling dishes."
+      }
+    },
+    "burkina": {
+      "title": "Built for how restaurants work here",
+      "subtitle": "Not a foreign app hastily adapted: RestoCool speaks your language and your currency.",
+      "fcfa": "Prices in CFA francs, no cents: 5,300 F",
+      "mobile": "Orange Money and Moov Money shown with a “Copy” button",
+      "whatsapp": "WhatsApp everywhere: contact, orders, sharing the menu",
+      "network": "Light pages that work with a weak network",
+      "french": "French first, with a “Laafi!” to welcome your customers",
+      "phone": "+226 numbers, Google Maps link, “Open / Closed” hours"
+    },
+    "who": {
+      "title": "For every kind of place",
+      "maquis": "Maquis and grills",
+      "restaurant": "Restaurants",
+      "lounge": "Lounges and bars",
+      "fastfood": "Fast food and takeaway",
+      "hotel": "Hotels",
+      "catering": "Caterers"
+    },
+    "pricing": {
+      "title": "Simple plans, in CFA francs",
+      "subtitle": "Start for free. Change plans whenever you want.",
+      "month": "/ month",
+      "free": "Free",
+      "popular": "Most popular",
+      "cta": "Start the free trial",
+      "ctaFree": "Create my free menu",
+      "note": "Indicative prices. Payment by Orange Money, Moov Money or cash.",
+      "gratuit": {
+        "name": "Free",
+        "desc": "To put your menu online.",
+        "f1": "Digital menu with photos",
+        "f2": "3 languages",
+        "f3": "One QR code for the whole restaurant",
+        "f4": "Up to 40 dishes",
+        "f5": "Takeaway orders by WhatsApp"
+      },
+      "pro": {
+        "name": "Pro",
+        "desc": "To serve faster in the dining room.",
+        "f1": "Everything in Free, unlimited dishes",
+        "f2": "One QR code per table + print kit",
+        "f3": "Live orders and customer tracking",
+        "f4": "Kitchen screen and dining-room board",
+        "f5": "Up to 10 staff members"
+      },
+      "business": {
+        "name": "Business",
+        "desc": "For large dining rooms and several locations.",
+        "f1": "Everything in Pro, unlimited staff",
+        "f2": "Several restaurants",
+        "f3": "Reports per server",
+        "f4": "RestoCool badge can be hidden",
+        "f5": "Priority support"
+      }
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "q1": "Do my customers need to install an app?",
+      "a1": "No. They scan the QR code with their phone camera and the menu opens in the browser.",
+      "q2": "What if the network is weak?",
+      "a2": "Pages are very light and photos are compressed. After the first visit, the menu works offline. A “data saver” mode hides photos.",
+      "q3": "How long does it take to start?",
+      "a3": "A few minutes: create your restaurant, add your dishes (the “Suggest” button proposes translations), then print your QR codes.",
+      "q4": "How do I pay for the subscription?",
+      "a4": "In CFA francs, by Orange Money, Moov Money or cash. The 30-day Pro trial needs no payment.",
+      "q5": "Can I change my prices at any time?",
+      "a5": "Yes, as often as you like. You can also mark a dish “sold out today”: it comes back automatically the next day.",
+      "q6": "Is my data protected?",
+      "a6": "Each restaurant only sees its own data, connections are encrypted and we sell no data. See our privacy policy."
+    },
+    "final": {
+      "title": "Ready to modernise your dining room?",
+      "subtitle": "Create your menu today, print your QR codes tonight.",
+      "cta": "Create my restaurant for free"
+    },
+    "footer": {
+      "product": "A {publisher} product",
+      "group": "Part of {group}",
+      "rights": "© {year} {publisher}. All rights reserved.",
+      "demo": "Demo menu",
+      "animation": "Animated demo"
+    }
   },
   "menu": {
     "notFound": "This menu does not exist or is not published yet.",

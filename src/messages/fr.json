@@ -26,12 +26,187 @@
     "authFailed": "La connexion n’a pas pu se charger. Vérifiez votre connexion Internet et rechargez la page. Si le problème continue, contactez le support."
   },
   "landing": {
-    "title": "La solution 100 % locale pour les restaurants du Burkina",
-    "subtitle": "Menu digital, commandes par QR code et gestion de salle, depuis votre téléphone.",
     "cta": "Créer mon restaurant gratuitement",
     "seeDemo": "Voir le menu de démonstration",
     "comingSoon": "Lancement bientôt à Ouagadougou et Bobo-Dioulasso.",
-    "howItWorks": "Voir comment ça marche"
+    "howItWorks": "Voir comment ça marche",
+    "title": "La solution 100 % locale pour les restaurants du Burkina",
+    "subtitle": "Menu digital, commandes par QR code et gestion de salle, depuis votre téléphone.",
+    "nav": {
+      "features": "Fonctionnalités",
+      "how": "Comment ça marche",
+      "pricing": "Tarifs",
+      "faq": "Questions",
+      "signIn": "Se connecter",
+      "cta": "Essayer gratuitement",
+      "menu": "Menu"
+    },
+    "hero": {
+      "eyebrow": "Pour les restaurants, maquis et lounges du Burkina",
+      "title": "Votre menu, vos commandes, vos tables.",
+      "titleAccent": "Simple.",
+      "subtitle": "Un menu digital avec QR code, en français, anglais et chinois, que vos clients ouvrent sur leur téléphone sans rien installer. Prix en FCFA, contact WhatsApp, Orange Money et Moov Money.",
+      "cta": "Créer mon restaurant gratuitement",
+      "demo": "Voir un menu de démonstration",
+      "chip1": "30 jours d’essai Pro offerts",
+      "chip2": "Sans carte bancaire",
+      "chip3": "Prêt en quelques minutes",
+      "chip4": "Aucune application à installer"
+    },
+    "mock": {
+      "newOrder": "Nouvelle commande",
+      "table": "Table 7",
+      "items": "2 articles",
+      "served": "Servi !",
+      "open": "Ouvert"
+    },
+    "strip": {
+      "languages": "3 langues : FR · EN · 中文",
+      "noApp": "0 application à installer",
+      "qr": "Un QR code par table",
+      "payments": "FCFA · Orange Money · Moov"
+    },
+    "why": {
+      "title": "Moins de papier, plus de service",
+      "subtitle": "Les menus imprimés s’abîment, les prix changent, les clients attendent. RestoCool règle tout ça depuis votre téléphone.",
+      "a": {
+        "title": "Modifiez en 10 secondes",
+        "text": "Un prix change, un plat est épuisé ? Corrigez-le sur votre téléphone : le menu est à jour pour tous les clients, sans réimprimer."
+      },
+      "b": {
+        "title": "Des photos qui donnent faim",
+        "text": "Ajoutez une photo à chaque plat. Elles sont compressées automatiquement pour s’ouvrir vite, même avec peu de données."
+      },
+      "c": {
+        "title": "Tous vos clients compris",
+        "text": "Français, anglais et chinois, avec le nom du plat dans les autres langues pour que vos serveurs lisent chaque commande."
+      }
+    },
+    "features": {
+      "title": "Tout ce qu’il faut pour votre salle",
+      "subtitle": "Disponible aujourd’hui, et ce qui arrive très bientôt.",
+      "available": "Disponible",
+      "soon": "Bientôt",
+      "menu": {
+        "title": "Menu QR multilingue",
+        "text": "Catégories, recherche, filtres « pimenté » et « nouveautés », prix en FCFA, « sur demande » quand il le faut."
+      },
+      "photos": {
+        "title": "Photos plein écran",
+        "text": "Les clients feuillettent les plats en glissant, et passent en mode économie de données s’ils le souhaitent."
+      },
+      "qr": {
+        "title": "QR par table + kit à imprimer",
+        "text": "Un QR code par table ou salon, et des chevalets prêts à imprimer avec votre logo, en trois langues."
+      },
+      "seats": {
+        "title": "Tables, salons, comptoir",
+        "text": "Le client est installé automatiquement en scannant sa table. Plusieurs téléphones peuvent rejoindre la même table."
+      },
+      "whatsapp": {
+        "title": "À emporter par WhatsApp",
+        "text": "Le client envoie sa commande à emporter sur votre WhatsApp, avec les numéros des plats et le total."
+      },
+      "offline": {
+        "title": "Rapide, même en 3G",
+        "text": "Le menu reste disponible hors connexion après la première visite et peut s’installer comme une application."
+      },
+      "orders": {
+        "title": "Commandes en direct",
+        "text": "Les commandes arrivent sur la tablette de la salle et de la cuisine, et le client suit leur avancement."
+      },
+      "staff": {
+        "title": "Personnel et caisse",
+        "text": "Connexion du personnel par code PIN, encaissement espèces, Orange Money et Moov Money, clôture de caisse."
+      },
+      "reservations": {
+        "title": "Réservations et statistiques",
+        "text": "Réservations confirmées par WhatsApp, chiffre d’affaires par jour, plats les plus vendus."
+      }
+    },
+    "burkina": {
+      "title": "Pensé pour la réalité des restaurants ici",
+      "subtitle": "Pas une application étrangère adaptée à la va-vite : RestoCool parle votre langue et votre monnaie.",
+      "fcfa": "Prix en FCFA, sans centimes : 5 300 F",
+      "mobile": "Orange Money et Moov Money affichés avec un bouton « Copier »",
+      "whatsapp": "WhatsApp partout : contact, commandes, partage du menu",
+      "network": "Pages légères, utilisables avec peu de réseau",
+      "french": "En français d’abord, avec un « Laafi ! » pour accueillir vos clients",
+      "phone": "Numéros +226, lien Google Maps, horaires « Ouvert / Fermé »"
+    },
+    "who": {
+      "title": "Pour tous les établissements",
+      "maquis": "Maquis et grillades",
+      "restaurant": "Restaurants",
+      "lounge": "Lounges et bars",
+      "fastfood": "Fast-food et à emporter",
+      "hotel": "Hôtels",
+      "catering": "Traiteurs"
+    },
+    "pricing": {
+      "title": "Des formules simples, en FCFA",
+      "subtitle": "Commencez gratuitement. Changez de formule quand vous voulez.",
+      "month": "/ mois",
+      "free": "Gratuit",
+      "popular": "Le plus choisi",
+      "cta": "Commencer l’essai gratuit",
+      "ctaFree": "Créer mon menu gratuit",
+      "note": "Prix indicatifs. Paiement par Orange Money, Moov Money ou en espèces.",
+      "gratuit": {
+        "name": "Gratuit",
+        "desc": "Pour mettre votre menu en ligne.",
+        "f1": "Menu digital avec photos",
+        "f2": "3 langues",
+        "f3": "Un QR code pour tout le restaurant",
+        "f4": "Jusqu’à 40 plats",
+        "f5": "Commande à emporter par WhatsApp"
+      },
+      "pro": {
+        "name": "Pro",
+        "desc": "Pour servir plus vite en salle.",
+        "f1": "Tout le Gratuit, plats illimités",
+        "f2": "Un QR code par table + kit à imprimer",
+        "f3": "Commandes en direct et suivi client",
+        "f4": "Écran cuisine et tableau de salle",
+        "f5": "Jusqu’à 10 membres du personnel"
+      },
+      "business": {
+        "name": "Business",
+        "desc": "Pour les grandes salles et plusieurs adresses.",
+        "f1": "Tout le Pro, personnel illimité",
+        "f2": "Plusieurs restaurants",
+        "f3": "Statistiques par serveur",
+        "f4": "Badge RestoCool masquable",
+        "f5": "Accompagnement prioritaire"
+      }
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "q1": "Mes clients doivent-ils installer une application ?",
+      "a1": "Non. Ils scannent le QR code avec l’appareil photo de leur téléphone et le menu s’ouvre dans le navigateur.",
+      "q2": "Et si le réseau est faible ?",
+      "a2": "Les pages sont très légères et les photos compressées. Après la première visite, le menu reste consultable hors connexion. Un mode « économie de données » masque les photos.",
+      "q3": "Combien de temps pour démarrer ?",
+      "a3": "Quelques minutes : créez votre restaurant, ajoutez vos plats (le bouton « Suggérer » propose les traductions), puis imprimez vos QR codes.",
+      "q4": "Comment se passe le paiement de l’abonnement ?",
+      "a4": "En FCFA, par Orange Money, Moov Money ou en espèces. L’essai Pro de 30 jours ne demande aucun paiement.",
+      "q5": "Puis-je modifier mes prix à tout moment ?",
+      "a5": "Oui, et autant de fois que vous voulez. Vous pouvez aussi marquer un plat « épuisé aujourd’hui » : il revient automatiquement le lendemain.",
+      "q6": "Mes données sont-elles protégées ?",
+      "a6": "Chaque restaurant ne voit que ses propres données, les connexions sont chiffrées et nous ne vendons aucune donnée. Voir notre politique de confidentialité."
+    },
+    "final": {
+      "title": "Prêt à moderniser votre salle ?",
+      "subtitle": "Créez votre menu aujourd’hui, imprimez vos QR codes ce soir.",
+      "cta": "Créer mon restaurant gratuitement"
+    },
+    "footer": {
+      "product": "Un produit {publisher}",
+      "group": "Membre du groupe {group}",
+      "rights": "© {year} {publisher}. Tous droits réservés.",
+      "demo": "Menu de démonstration",
+      "animation": "Démonstration animée"
+    }
   },
   "menu": {
     "notFound": "Ce menu n’existe pas ou n’est pas encore publié.",

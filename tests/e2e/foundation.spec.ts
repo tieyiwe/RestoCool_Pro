@@ -9,11 +9,17 @@ test("health endpoint reports the database is up", async ({ request }) => {
   expect(await res.json()).toMatchObject({ status: "ok", db: "ok" });
 });
 
-test("holding page shows the brand and links to the demo menu", async ({ page }) => {
+test("home page: hero, demo menu link, pricing in FCFA, FAQ, no unconfirmed local claims", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByLabel("RestoCool").first()).toBeVisible();
-  await expect(page.getByText("RestoCool : votre menu, vos commandes, vos tables. Simple.")).toBeVisible();
-  await page.getByRole("link", { name: "Voir le menu de démonstration" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Votre menu, vos commandes, vos tables.");
+  await expect(page.getByTestId("plan-pro")).toContainText("10\u202F000\u202FF");
+  await expect(page.getByTestId("plan-gratuit")).toContainText("0\u202FF");
+  await page.getByText("Mes clients doivent-ils installer une application ?").click();
+  await expect(page.getByText("Ils scannent le QR code")).toBeVisible();
+  // Honesty rule: local claims stay off until the owner confirms them.
+  await expect(page.getByText("100 % local")).toHaveCount(0);
+  await expect(page.getByText("Fièrement burkinabè")).toHaveCount(0);
+  await page.getByRole("link", { name: "Voir un menu de démonstration" }).first().click();
   await expect(page).toHaveURL(/\/r\/restaurant-demo$/);
 });
 

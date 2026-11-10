@@ -230,3 +230,12 @@ textarea {
   animation-timing-function: cubic-bezier(0.3, 0.6, 0.5, 1);
   animation-fill-mode: both;
 }
+
+/* ---------- Home page ---------- */
+@keyframes landing-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.landing-float { animation: landing-float 4s ease-in-out infinite; }
+.landing-float-late { animation: landing-float 4.5s ease-in-out 1.2s infinite; }
+html { scroll-behavior: smooth; }
