@@ -1,4 +1,5 @@
 import "server-only";
+import { notify } from "@/lib/realtime/events";
 import { and, asc, eq, gt, sql } from "drizzle-orm";
 import type { DB } from "@/db";
 import { menuCategories, menuItemOptions, menuItemVariants, menuItems } from "@/db/schema";
@@ -256,6 +257,8 @@ export async function setSoldOutToday(ctx: MenuCtx, itemId: string, soldOut: boo
     .set({ soldOutUntil: soldOut ? endOfLocalDay() : null })
     .where(and(eq(menuItems.restaurantId, rid), eq(menuItems.id, itemId)));
   await writeAudit(ctx.db, ctx.actor, { restaurantId: rid, action: soldOut ? "menu.item.sold_out" : "menu.item.back_in_stock", entity: "menu_item", entityId: itemId });
+  // Customers' menus update live (« Épuisé » appears or disappears).
+  await notify(ctx.db, { k: "menu", r: rid });
 }
 
 export async function setItemAvailable(ctx: MenuCtx, itemId: string, available: boolean) {
@@ -263,6 +266,7 @@ export async function setItemAvailable(ctx: MenuCtx, itemId: string, available: 
   const rid = ctx.repo.restaurantId;
   await ctx.db.update(menuItems).set({ available }).where(and(eq(menuItems.restaurantId, rid), eq(menuItems.id, itemId)));
   await writeAudit(ctx.db, ctx.actor, { restaurantId: rid, action: available ? "menu.item.shown" : "menu.item.hidden", entity: "menu_item", entityId: itemId });
+  await notify(ctx.db, { k: "menu", r: rid });
 }
 
 /** Items currently sold out (for dashboards). */

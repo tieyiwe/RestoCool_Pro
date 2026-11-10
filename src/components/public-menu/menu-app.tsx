@@ -8,7 +8,8 @@ import { itemMatches } from "@/lib/public-menu/search";
 import { makeT, type Messages } from "@/lib/public-menu/translate";
 import type { CartLine, PublicItem, PublicMenuData } from "@/lib/public-menu/types";
 import { cn } from "@/lib/utils";
-import { SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
+import { HistoryList, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
+import { deviceId, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
 
 type Lang = "fr" | "en" | "zh";
 type Panel =
@@ -16,6 +17,9 @@ type Panel =
   | { type: "cart" }
   | { type: "takeaway" }
   | { type: "share" }
+  | { type: "orders" }
+  | { type: "history" }
+  | { type: "server"; orderId: string }
   | { type: "fortune"; index: number }
   | { type: "lightbox"; index: number };
 
@@ -51,14 +55,15 @@ function isCartLine(x: unknown): x is CartLine {
     l.optionIds.every((o) => typeof o === "string") &&
     Number.isInteger(l.qty) &&
     (l.qty as number) >= 1 &&
-    (l.qty as number) <= 99
+    (l.qty as number) <= 99 &&
+    (l.note === undefined || (typeof l.note === "string" && l.note.length <= 140))
   );
 }
 
 const pick = (t: { fr: string } & Partial<Record<string, string>> | null | undefined, lang: Lang) => (t ? t[lang]?.trim() || t.fr : "");
 
 export function MenuApp({
-  data,
+  data: initialData,
   messages,
   whatsappQr,
   seatToken = null,
@@ -71,6 +76,15 @@ export function MenuApp({
   seatToken?: string | null;
   seating: SeatingConfig;
 }) {
+  // Live « épuisé » (sold out / hidden) from the restaurant, applied over the server-rendered menu.
+  const [liveSoldOut, setLiveSoldOut] = useState<Set<string> | null>(null);
+  const data = useMemo(
+    () =>
+      liveSoldOut
+        ? { ...initialData, categories: initialData.categories.map((c) => ({ ...c, items: c.items.map((i) => ({ ...i, soldOut: liveSoldOut.has(i.id) })) })) }
+        : initialData,
+    [initialData, liveSoldOut],
+  );
   // French on every new visit; the choice lasts for this visit only (sessionStorage).
   const [lang, setLang] = useState<Lang>("fr");
   const [lowData, setLowData] = useState(false);
@@ -86,30 +100,38 @@ export function MenuApp({
   const hydrated = useRef(false);
   const t = useMemo(() => makeT(messages[lang]), [messages, lang]);
   const items = useMemo(() => indexItems(data), [data]);
-  const cartKey = `rc-cart-${data.slug}`;
+  const baseItems = useMemo(() => indexItems(initialData), [initialData]);
+  const cartKey = `rc-cart-${initialData.slug}`;
+  const history = useHistory(initialData.slug, isCartLine);
+  const { startVisit, rememberCart } = history;
 
   /* ---------- restore per-visit state ---------- */
   useEffect(() => {
     const l = readStore("session", "rc-lang");
     if (l === "en" || l === "zh") setLang(data.locales.includes(l) ? l : "fr");
     setLowData(readStore("local", "rc-lowdata") === "1");
+    const stored = readStore("session", cartKey);
+    // A new visit starts with an empty cart; last visit's cart goes to « Sélections précédentes ».
+    startVisit(stored === null);
     try {
-      const saved: unknown = JSON.parse(readStore("session", cartKey) ?? "[]");
-      if (Array.isArray(saved)) setLines(saved.filter((x): x is CartLine => isCartLine(x) && lineMatchesMenu(items, x)));
+      const saved: unknown = JSON.parse(stored ?? "[]");
+      if (Array.isArray(saved)) setLines(saved.filter((x): x is CartLine => isCartLine(x) && lineMatchesMenu(baseItems, x)));
     } catch {
       /* ignore */
     }
-    if (data.features.welcomeScreen && !data.preview && readStore("session", `rc-welcome-${data.slug}`) !== "1") {
+    if (initialData.features.welcomeScreen && !initialData.preview && readStore("session", `rc-welcome-${initialData.slug}`) !== "1") {
       setWelcome(true);
-      writeStore("session", `rc-welcome-${data.slug}`, "1");
+      writeStore("session", `rc-welcome-${initialData.slug}`, "1");
     }
     setNow(new Date());
     hydrated.current = true;
-  }, [cartKey, data, items]);
+  }, [cartKey, initialData, baseItems, startVisit]);
 
   useEffect(() => {
-    if (hydrated.current) writeStore("session", cartKey, JSON.stringify(lines));
-  }, [lines, cartKey]);
+    if (!hydrated.current) return;
+    writeStore("session", cartKey, JSON.stringify(lines));
+    rememberCart(lines);
+  }, [lines, cartKey, rememberCart]);
 
   useEffect(() => {
     document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
@@ -201,7 +223,88 @@ export function MenuApp({
   }, [flash, t]);
 
   const [picker, setPicker] = useState(false);
-  const { seat, warning, stillHere, choose } = useSeat({ slug: data.slug, token: seatToken, config: seating, onToast: flash, t });
+  /* ---------- orders: send, live tracking, table bill ---------- */
+  const trackKey = `rc-ordered-${initialData.slug}`;
+  const [tracking, setTracking] = useState(false);
+  useEffect(() => {
+    const at = Number(readStore("local", trackKey) ?? 0);
+    setTracking(Date.now() - at < 24 * 3600_000);
+  }, [trackKey]);
+  const [served, setServed] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [details, setDetails] = useState({ customerName: "", customerPhone: "", deliveryAddress: "" });
+  const [noteFor, setNoteFor] = useState<string | null>(null);
+  const [heldSeat, setHeldSeat] = useState(false);
+  const { seat, warning, stillHere, choose, forget } = useSeat({ slug: data.slug, token: seatToken, config: seating, onToast: flash, t, hold: heldSeat });
+  const refreshAvailability = useCallback(async () => {
+    const res = await fetch(`/api/public/r/${initialData.slug}/availability`, { cache: "no-store" }).catch(() => null);
+    if (res?.ok) setLiveSoldOut(new Set(((await res.json()) as { soldOut: string[] }).soldOut));
+  }, [initialData.slug]);
+  const sessionIdForCheck = seat?.sessionId ?? null;
+  const onSessionChange = useCallback(() => {
+    // Closed by staff: the heartbeat answers 410 and the seat is forgotten.
+    if (!sessionIdForCheck) return;
+    void fetch(`/api/public/sessions/${sessionIdForCheck}/heartbeat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: initialData.slug, deviceId: deviceId() }),
+    }).then((r) => r.status === 410 && forget());
+  }, [sessionIdForCheck, initialData.slug, forget]);
+  const onServed = useCallback(() => setServed(true), []);
+  const live = useLiveOrders({
+    slug: data.slug,
+    sessionId: seat?.sessionId ?? null,
+    active: seating.enabled && (seat !== null || tracking),
+    onMenuChange: refreshAvailability,
+    onSessionChange,
+    onServed,
+  });
+  const myOrders = live.orders;
+  const activeOrders = myOrders.filter((o) => o.mine && ["sent", "confirmed", "preparing", "ready"].includes(o.status));
+  useEffect(() => {
+    setHeldSeat(Boolean(seat && myOrders.some((o) => o.mine && o.status !== "cancelled")));
+  }, [seat, myOrders]);
+
+  async function submitOrder() {
+    if (!seat) {
+      if (seating.pickerAvailable) {
+        closePanel();
+        setPicker(true);
+      }
+      flash(t(seating.pickerAvailable ? "chooseSeatFirst" : "scanTableFirst"));
+      return;
+    }
+    const valid = lines.filter((l) => lineMatchesMenu(items, l));
+    if (valid.length === 0) return;
+    setSending(true);
+    const res = await sendOrder(data.slug, seat, valid, {
+      customerName: details.customerName || seat.name,
+      customerPhone: details.customerPhone,
+      deliveryAddress: details.deliveryAddress,
+    });
+    setSending(false);
+    if (res.ok) {
+      history.addOrder(res.order.number, valid);
+      setLines([]);
+      writeStore("local", trackKey, String(Date.now()));
+      setTracking(true);
+      live.setOrders((o) => [res.order, ...o.filter((x) => x.id !== res.order.id)]);
+      void live.refresh();
+      openPanel({ type: "orders" });
+      flash(t("orderSent", { n: res.order.number }));
+      return;
+    }
+    if (res.error === "unavailable") {
+      setLiveSoldOut((prev) => new Set([...(prev ?? []), ...res.itemIds]));
+      setLines((l) => l.filter((x) => !res.itemIds.includes(x.itemId)));
+      flash(t("orderUnavailable"));
+    } else if (res.error === "no_seat") {
+      forget();
+      flash(t(seating.pickerAvailable ? "chooseSeatFirst" : "scanTableFirst"));
+    } else if (res.error === "name_required" || res.error === "delivery_required") flash(t("orderDetailsMissing"));
+    else if (res.error === "network") flash(t("orderOffline"));
+    else flash(t("orderError"));
+  }
   // A seat set by scanning the table's own QR stays (the phone is at that table); picker seats can change.
   const canChangeSeat = seating.pickerAvailable && seat?.source !== "qr";
 
@@ -297,7 +400,7 @@ export function MenuApp({
               )}
             </p>
             {seating.enabled && (
-              <div className="mt-2">
+              <div className="mt-2 flex flex-wrap items-center gap-2">
                 {seat ? (
                   <SeatBadge seat={seat} t={t} onChange={canChangeSeat ? () => setPicker(true) : null} />
                 ) : (
@@ -312,6 +415,12 @@ export function MenuApp({
                       📍 {t("chooseSeat")}
                     </button>
                   )
+                )}
+                {myOrders.length > 0 && (
+                  <button type="button" onClick={() => openPanel({ type: "orders" })} className="min-h-11 rounded-full border border-border bg-surface px-4 text-sm font-bold" data-testid="my-orders-button">
+                    🧾 {t("myOrders")}
+                    {activeOrders.length > 0 && <span className="ml-1 rounded-full bg-[var(--accent)] px-1.5 text-xs text-[var(--on-accent)]">{activeOrders.length}</span>}
+                  </button>
                 )}
               </div>
             )}
@@ -493,6 +602,20 @@ export function MenuApp({
         </div>
       )}
 
+      {totals.count === 0 && activeOrders.length > 0 && (
+        <div className="fixed inset-x-0 bottom-0 z-30 px-3 pb-3" style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
+          <button
+            type="button"
+            onClick={() => openPanel({ type: "orders" })}
+            className="mx-auto flex min-h-14 w-full max-w-3xl items-center justify-between rounded-2xl border-2 border-[var(--accent)] bg-surface px-4 font-bold shadow-xl"
+            data-testid="orders-bar"
+          >
+            <span>🧾 {t("myOrders")}</span>
+            <span className="text-sm">{t(`status_${activeOrders[0]!.status}`)}</span>
+          </button>
+        </div>
+      )}
+
       {showTop && (
         <button
           type="button"
@@ -525,6 +648,11 @@ export function MenuApp({
       )}
       {panel?.type === "cart" && (
         <Sheet title={t("mySelection")} onClose={closePanel} t={t} testId="cart-sheet">
+          {history.entries.length > 0 && (
+            <button type="button" onClick={() => openPanel({ type: "history" })} className="mb-2 min-h-11 text-sm font-semibold underline underline-offset-2" data-testid="history-link">
+              🕘 {t("previousSelections")} ({history.entries.length})
+            </button>
+          )}
           {lines.length === 0 ? (
             <p className="py-6 text-center text-muted-foreground">{t("emptySelection")}</p>
           ) : (
@@ -547,6 +675,28 @@ export function MenuApp({
                           <p className="text-sm text-muted-foreground">{[variant && pick(variant.name, lang), ...opts.map((o) => pick(o.name, lang))].filter(Boolean).join(", ")}</p>
                         )}
                         <p className="text-sm tabular-nums">{p === null ? t("onRequest") : formatFCFA(p * l.qty)}</p>
+                        {seating.enabled &&
+                          (noteFor === l.key ? (
+                            <input
+                              autoFocus
+                              defaultValue={l.note ?? ""}
+                              maxLength={140}
+                              placeholder={t("notePlaceholder")}
+                              aria-label={t("noteLabel")}
+                              onBlur={(e) => {
+                                const v = e.target.value.trim();
+                                setLines((x) => x.map((y) => (y.key === l.key ? { ...y, note: v || undefined } : y)));
+                                setNoteFor(null);
+                              }}
+                              onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
+                              className="mt-1 min-h-11 w-full rounded-lg border border-border bg-surface px-2 text-base"
+                              data-testid="line-note"
+                            />
+                          ) : (
+                            <button type="button" onClick={() => setNoteFor(l.key)} className="min-h-11 text-left text-sm text-muted-foreground underline-offset-2 hover:underline" data-testid="add-note">
+                              {l.note ? `« ${l.note} »` : `+ ${t("noteLabel")}`}
+                            </button>
+                          ))}
                       </div>
                       <Stepper qty={l.qty} t={t} name={pick(item.name, lang)} onMinus={() => setLines((x) => changeQty(x, l.key, -1))} onPlus={() => setLines((x) => changeQty(x, l.key, 1))} />
                     </li>
@@ -558,14 +708,33 @@ export function MenuApp({
                 <span className="tabular-nums">{totals.total === 0 && totals.hasOnRequest ? t("onRequest") : formatFCFA(totals.total)}</span>
               </p>
               {totals.hasOnRequest && <p className="text-sm text-muted-foreground">{t("plusOnRequest")}</p>}
-              <p className="mt-3 rounded-lg bg-muted p-3 text-sm">{t("showWaiterHint")}</p>
+              {seating.enabled ? (
+                <>
+                  {seat && <OrderDetailsFields seat={seat} t={t} values={details} onChange={(v) => setDetails((d) => ({ ...d, ...v }))} />}
+                  {seat && <p className="mt-3 text-sm text-muted-foreground">{t("orderFor", { seat: `${t(`seat_${seat.seat.type}`)} ${["table", "room", "area"].includes(seat.seat.type) ? seat.seat.label : ""}`.trim() })}</p>}
+                </>
+              ) : (
+                <p className="mt-3 rounded-lg bg-muted p-3 text-sm">{t("showWaiterHint")}</p>
+              )}
               <div className="mt-4 flex flex-col gap-2">
+                {seating.enabled && (
+                  <button
+                    type="button"
+                    onClick={() => void submitOrder()}
+                    disabled={sending || data.preview}
+                    className="min-h-14 rounded-xl text-lg font-extrabold disabled:opacity-60"
+                    style={{ background: "var(--accent)", color: "var(--on-accent)" }}
+                    data-testid="send-order"
+                  >
+                    {sending ? t("sending") : seat ? `✓ ${t("sendOrder")}` : `📍 ${t(seating.pickerAvailable ? "chooseSeatToOrder" : "scanTableFirst")}`}
+                  </button>
+                )}
                 {data.features.takeawayWhatsapp && (
                   <button
                     type="button"
                     onClick={() => openPanel({ type: "takeaway" })}
-                    className="min-h-12 rounded-xl font-bold"
-                    style={{ background: "var(--accent)", color: "var(--on-accent)" }}
+                    className={cn("min-h-12 rounded-xl font-bold", seating.enabled && "border border-border")}
+                    style={seating.enabled ? undefined : { background: "var(--accent)", color: "var(--on-accent)" }}
                   >
                     🛍️ {t("takeaway")}
                   </button>
@@ -578,6 +747,43 @@ export function MenuApp({
           )}
         </Sheet>
       )}
+      {panel?.type === "orders" && (
+        <Sheet title={t("myOrders")} onClose={closePanel} t={t} testId="orders-sheet">
+          <OrdersList orders={myOrders} shared={live.shared} lang={lang} t={t} onShow={(o: CustomerOrder) => openPanel({ type: "server", orderId: o.id })} />
+        </Sheet>
+      )}
+      {panel?.type === "server" && myOrders.find((o) => o.id === panel.orderId) && (
+        <ShowToServer order={myOrders.find((o) => o.id === panel.orderId)!} slug={data.slug} lang={lang} t={t} onClose={closePanel} />
+      )}
+      {panel?.type === "history" && (
+        <Sheet title={t("previousSelections")} onClose={closePanel} t={t} testId="history-sheet">
+          <HistoryList
+            entries={history.entries}
+            lang={lang}
+            t={t}
+            describe={(l) => {
+              const it = items.get(l.itemId);
+              return it && lineMatchesMenu(items, l) ? `${l.qty} × ${pick(it.name, lang)}` : null;
+            }}
+            onReuse={(e) => {
+              const ok = e.lines.filter((l) => lineMatchesMenu(items, l) && !items.get(l.itemId)?.soldOut);
+              setLines((cur) => {
+                const merged = [...cur];
+                for (const l of ok) {
+                  const i = merged.findIndex((m) => m.key === l.key);
+                  if (i >= 0) merged[i] = { ...merged[i]!, qty: Math.min(99, merged[i]!.qty + l.qty) };
+                  else merged.push(l);
+                }
+                return merged;
+              });
+              flash(ok.length < e.lines.length ? t("reusedPartly") : t("reused"));
+              openPanel({ type: "cart" });
+            }}
+            onDelete={history.remove}
+          />
+        </Sheet>
+      )}
+      {served && <ServedCelebration t={t} onClose={() => setServed(false)} />}
       {panel?.type === "takeaway" && data.whatsapp && (
         <TakeawaySheet
           t={t}

@@ -7,3 +7,6 @@ export const memberRoleEnum = pgEnum("member_role", ["owner", "manager", "server
 export const seatTypeEnum = pgEnum("seat_type", ["table", "room", "area", "counter", "takeaway", "delivery"]);
 export const stationEnum = pgEnum("station", ["grill", "wok", "kitchen", "drinks", "desserts"]);
 export const actorTypeEnum = pgEnum("actor_type", ["member", "staff", "superadmin", "customer", "system"]);
+export const orderStatusEnum = pgEnum("order_status", ["sent", "confirmed", "preparing", "ready", "served", "paid", "cancelled"]);
+export const orderItemStatusEnum = pgEnum("order_item_status", ["pending", "preparing", "ready", "served", "cancelled"]);
+export const orderSourceEnum = pgEnum("order_source", ["customer", "staff"]);

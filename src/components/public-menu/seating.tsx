@@ -49,7 +49,12 @@ async function post(url: string, body: unknown): Promise<Response> {
  * The customer's seat for this visit: from the printed table QR (token) or the picker.
  * Handles heartbeats and, in picker mode, inactivity release (works after the screen was off).
  */
-export function useSeat({ slug, token, config, onToast, t }: { slug: string; token: string | null; config: SeatingConfig; onToast: (m: string) => void; t: T }) {
+export function useSeat({ slug, token, config, onToast, t, hold = false }: { slug: string; token: string | null; config: SeatingConfig; onToast: (m: string) => void; t: T; hold?: boolean }) {
+  // Once an order is sent from this seat, inactivity no longer frees it.
+  const holdRef = useRef(hold);
+  useEffect(() => {
+    holdRef.current = hold;
+  }, [hold]);
   const key = `rc-seat-${slug}`;
   const [seat, setSeatState] = useState<MySeat | null>(null);
   const [warning, setWarning] = useState<number | null>(null);
@@ -137,7 +142,10 @@ export function useSeat({ slug, token, config, onToast, t }: { slug: string; tok
     };
 
     const evaluate = () => {
-      if (!picker) return;
+      if (!picker || holdRef.current) {
+        setWarning(null);
+        return;
+      }
       const st = inactivityState(lastActivity.current, Date.now(), timings);
       if (st.phase === "active") setWarning(null);
       else if (st.phase === "warning") setWarning(st.secondsLeft);
@@ -205,7 +213,10 @@ export function useSeat({ slug, token, config, onToast, t }: { slug: string; tok
     [onToast, setSeat, slug, t],
   );
 
-  return { seat, warning, stillHere, choose, leave };
+  /** The server says this phone is no longer seated (session closed): forget the seat. */
+  const forget = useCallback(() => setSeat(null), [setSeat]);
+
+  return { seat, warning, stillHere, choose, leave, forget };
 }
 
 /* ---------------- UI ---------------- */

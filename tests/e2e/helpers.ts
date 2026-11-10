@@ -68,3 +68,10 @@ export async function resetDemoSessions() {
     "update table_sessions set status = 'closed', closed_at = now(), closed_reason = 'staff' where status = 'open' and restaurant_id = (select id from restaurants where slug = 'restaurant-demo')",
   );
 }
+
+/** Delete every order of the demo restaurant, close its sessions, and put dishes back in stock. */
+export async function resetDemoOrders() {
+  await sql("delete from orders where restaurant_id = (select id from restaurants where slug = 'restaurant-demo')");
+  await sql("update menu_items set sold_out_until = null where restaurant_id = (select id from restaurants where slug = 'restaurant-demo')");
+  await resetDemoSessions();
+}

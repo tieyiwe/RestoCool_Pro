@@ -1,10 +1,10 @@
 import "server-only";
 import { and, eq, inArray, isNull, lt, or, sql } from "drizzle-orm";
 import type { DB } from "@/db";
-import { areas, restaurants, seats, sessionDevices, tableSessions } from "@/db/schema";
+import { areas, orders, restaurants, seats, sessionDevices, tableSessions } from "@/db/schema";
 import { DEFAULT_INACTIVITY } from "./tables";
 
-/** Sessions opened from a printed QR close after this long with no activity (until orders exist, M4). */
+/** Sessions opened from a printed QR close after this long with no activity (never while orders are in progress). */
 export const QR_SESSION_IDLE_MS = 4 * 60 * 60 * 1000;
 /** Extra margin before the server frees a picker seat whose phone went silent. */
 const PICKER_GRACE_MS = 2 * 60 * 1000;
@@ -31,6 +31,8 @@ export async function sweepStale(db: DB, r: Restaurant, now = new Date()): Promi
           and(eq(tableSessions.source, "picker"), lt(tableSessions.lastActivityAt, pickerCutoff)),
           lt(tableSessions.lastActivityAt, qrCutoff),
         ),
+        // A table with orders still in progress stays open whatever the phones do.
+        sql`not exists (select 1 from ${orders} where ${orders.sessionId} = ${tableSessions.id} and ${orders.status} in ('sent','confirmed','preparing','ready'))`,
       ),
     );
   if (stale.length === 0) return 0;
@@ -144,7 +146,11 @@ export async function leaveSession(db: DB, restaurantId: string, sessionId: stri
       .select({ n: sql<number>`count(*)::int` })
       .from(sessionDevices)
       .where(and(eq(sessionDevices.sessionId, sessionId), isNull(sessionDevices.leftAt)));
-    if ((left?.n ?? 0) === 0) {
+    const [active] = await tx
+      .select({ n: sql<number>`count(*)::int` })
+      .from(orders)
+      .where(and(eq(orders.sessionId, sessionId), inArray(orders.status, ["sent", "confirmed", "preparing", "ready"])));
+    if ((left?.n ?? 0) === 0 && (active?.n ?? 0) === 0) {
       await tx
         .update(tableSessions)
         .set({ status: "closed", closedAt: now, closedReason: reason })

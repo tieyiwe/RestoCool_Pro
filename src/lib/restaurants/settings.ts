@@ -58,6 +58,10 @@ export const ServiceInput = z.object({
   enabledLocales: z.array(z.enum(["fr", "en", "zh"])).default(["fr"]),
   /** Inactivity release in picker mode (seconds). */
   inactivity: z.object({ warnAfterSec: z.number().int().min(60).max(3600), releaseAfterSec: z.number().int().min(10).max(600) }).optional(),
+  serviceDelays: z
+    .object({ warnMin: z.number().int().min(1).max(120), lateMin: z.number().int().min(2).max(240) })
+    .refine((d) => d.lateMin > d.warnMin)
+    .optional(),
   /** Setup wizard: create tables 1..N (only when the restaurant has no tables yet). */
   tableCount: z.number().int().min(0).max(200).optional(),
 });
@@ -169,7 +173,7 @@ export async function saveService(ctx: SettingsCtx, input: z.input<typeof Servic
   const { tableCount, ...service } = p.data;
   await mergeSettings(
     ctx,
-    { ...service, enabledLocales, inactivity: service.inactivity ?? r.settings.inactivity },
+    { ...service, enabledLocales, inactivity: service.inactivity ?? r.settings.inactivity, serviceDelays: service.serviceDelays ?? r.settings.serviceDelays },
     "settings.service",
   );
   await syncSingletonSeats(ctx.db, ctx.repo.restaurantId, service.seatingModes);

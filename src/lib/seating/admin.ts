@@ -7,6 +7,7 @@ import { accessCodes, areas, seats, sessionDevices, tableSessions, type I18nText
 import { writeAudit } from "@/lib/audit";
 import type { Actor } from "@/lib/auth/can";
 import { NotFoundError } from "@/lib/errors";
+import { notify } from "@/lib/realtime/events";
 import { randomToken } from "@/lib/tokens";
 import { tableNumbers } from "./tables";
 
@@ -210,4 +211,5 @@ export async function closeSessionByStaff(ctx: SeatingCtx, sessionId: string) {
     .returning({ id: tableSessions.id });
   if (res.length === 0) throw new NotFoundError("session");
   await audit(ctx, "seating.session.closed", "table_session", sessionId);
+  await notify(ctx.db, { k: "session", r: rid, s: sessionId });
 }

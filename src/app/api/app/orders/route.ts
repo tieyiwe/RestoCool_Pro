@@ -1,0 +1,19 @@
+import { NextResponse } from "next/server";
+import { handle } from "@/lib/http";
+import { staffOrder } from "@/lib/orders/serialize";
+import { serviceOrders } from "@/lib/orders/service";
+import { serviceCtx } from "@/lib/orders/staff-api";
+
+export const dynamic = "force-dynamic";
+
+/** Front desk / kitchen board: open orders of the signed-in member's restaurant only. */
+export const GET = handle(async () => {
+  const ctx = await serviceCtx("orders.read");
+  const [list, seats, areas] = await Promise.all([serviceOrders(ctx), ctx.repo.seating.seats(), ctx.repo.seating.areas()]);
+  const areaBySeat = new Map(seats.map((s) => [s.id, areas.find((a) => a.id === s.areaId) ?? null]));
+  const areaOf = (seatId: string | null) => {
+    const a = seatId ? areaBySeat.get(seatId) : null;
+    return a ? { id: a.id, name: a.name } : null;
+  };
+  return NextResponse.json({ orders: list.map((o) => staffOrder(o, areaOf)), now: new Date().toISOString() }, { headers: { "Cache-Control": "no-store" } });
+});

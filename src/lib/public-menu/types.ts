@@ -45,4 +45,5 @@ export type PublicMenuData = {
   preview: boolean;
 };
 
-export type CartLine = { key: string; itemId: string; variantId: string | null; optionIds: string[]; qty: number };
+/** `note`: the customer's remark for the kitchen (« sans piment »). */
+export type CartLine = { key: string; itemId: string; variantId: string | null; optionIds: string[]; qty: number; note?: string };

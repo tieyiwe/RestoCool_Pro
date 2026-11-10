@@ -11,6 +11,8 @@ export type RestaurantSettings = {
   enabledLocales?: string[];
   features?: Partial<Record<FeatureFlag, boolean>>;
   inactivity?: { warnAfterSec: number; releaseAfterSec: number };
+  /** Front desk timers: an open order turns orange, then red, after these many minutes. */
+  serviceDelays?: { warnMin: number; lateMin: number };
 };
 
 export const FEATURE_FLAGS = ["welcomeScreen", "fortuneCookie", "takeawayWhatsapp", "share", "localBadge"] as const;

@@ -215,6 +215,17 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
           <input type="number" name="releaseAfterSec" min={10} max={600} step={5} defaultValue={s.inactivity?.releaseAfterSec ?? 30} className={input} />
         </label>
       </fieldset>
+      <fieldset className="grid gap-2 sm:grid-cols-2">
+        <legend className={label}>{t("delays")}</legend>
+        <label className="text-sm">
+          <span className="mb-1 block">{t("warnMin")}</span>
+          <input type="number" name="warnMin" min={1} max={120} step={1} defaultValue={s.serviceDelays?.warnMin ?? 10} className={input} />
+        </label>
+        <label className="text-sm">
+          <span className="mb-1 block">{t("lateMin")}</span>
+          <input type="number" name="lateMin" min={2} max={240} step={1} defaultValue={s.serviceDelays?.lateMin ?? 20} className={input} />
+        </label>
+      </fieldset>
     </SettingsForm>
   );
 }

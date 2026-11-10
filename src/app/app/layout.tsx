@@ -13,6 +13,8 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   const t = await getTranslations("app");
   const nav = [
     { href: "/app", label: t("dashboard") },
+    { href: "/app/service", label: t("frontDesk") },
+    { href: "/app/kitchen", label: t("kitchen") },
     { href: "/app/menu", label: t("menu") },
     { href: "/app/seating", label: t("seating") },
     { href: "/app/staff", label: t("staff") },
