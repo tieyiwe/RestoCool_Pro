@@ -5,6 +5,8 @@ import { Logo } from "@/components/brand/logo";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { RestaurantSwitcher } from "@/components/restaurant-switcher";
 import { UserMenu } from "@/components/user-menu";
+import { BottomTabs } from "@/components/app-shell/bottom-tabs";
+import { RegisterStaffSw } from "@/components/app-shell/register-sw";
 import { env } from "@/lib/env";
 import { setupState } from "@/lib/auth/setup";
 import { can, type Action } from "@/lib/auth/can";
@@ -21,17 +23,26 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   const allowed = (a: Action | null) => !a || (ctx ? can(ctx.actor, a, { restaurantId: ctx.repo.restaurantId }) : false);
   const nav = (
     [
-      { href: "/app", label: t("dashboard"), need: null },
-      { href: "/app/service", label: t("frontDesk"), need: "orders.read" },
-      { href: "/app/kitchen", label: t("kitchen"), need: "orders.read" },
-      { href: "/app/orders", label: t("history"), need: "reports.read" },
-      { href: "/app/menu", label: t("menu"), need: "menu.write" },
-      { href: "/app/seating", label: t("seating"), need: "seats.write" },
-      { href: "/app/staff", label: t("staff"), need: "staff.write" },
-      { href: "/app/settings", label: t("settings"), need: "settings.write" },
-      { href: "/app/guide", label: t("guide"), need: null },
+      { href: "/app", label: t("dashboard"), icon: "🏠", need: null },
+      { href: "/app/service", label: t("frontDesk"), icon: "🛎️", need: "orders.read" },
+      { href: "/app/kitchen", label: t("kitchen"), icon: "👩‍🍳", need: "orders.read" },
+      { href: "/app/scan", label: t("scan"), icon: "📷", need: null },
+      { href: "/app/orders", label: t("history"), icon: "🧾", need: "reports.read" },
+      { href: "/app/menu", label: t("menu"), icon: "📖", need: "menu.write" },
+      { href: "/app/seating", label: t("seating"), icon: "🪑", need: "seats.write" },
+      { href: "/app/staff", label: t("staff"), icon: "👥", need: "staff.write" },
+      { href: "/app/settings", label: t("settings"), icon: "⚙️", need: "settings.write" },
+      { href: "/app/guide", label: t("guide"), icon: "🎓", need: null },
     ] as const
   ).filter((n) => allowed(n.need));
+  // Phones: the 4 most used screens for this role as tabs, the rest under « Plus ».
+  const kitchenOnly = allowed("orders.prepare") && !allowed("orders.confirm");
+  const order = kitchenOnly ? ["/app/kitchen", "/app/scan", "/app"] : ["/app", "/app/service", "/app/scan", allowed("orders.prepare") && !allowed("reports.read") ? "/app/kitchen" : "/app/orders"];
+  const tabs = order.map((h) => nav.find((n) => n.href === h)).filter((n): n is (typeof nav)[number] => Boolean(n)).slice(0, 4);
+  const more = nav.filter((n) => !tabs.includes(n));
+  const toTab = (n: (typeof nav)[number]) => ({ href: n.href, label: n.label, icon: n.icon });
+  const SHORT: Record<string, "home" | "service" | "kitchen" | "history" | "scan"> = { "/app": "home", "/app/service": "service", "/app/kitchen": "kitchen", "/app/orders": "history", "/app/scan": "scan" };
+  const toShortTab = (n: (typeof nav)[number]) => ({ ...toTab(n), label: SHORT[n.href] ? t(`tabs.${SHORT[n.href]}`) : n.label });
   return (
     <AuthProvider>
       <div className="flex min-h-dvh flex-col">
@@ -50,18 +61,21 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
             {t("devBypass")}
           </p>
         )}
+        <RegisterStaffSw />
         {focus ? (
           <main className="flex-1 px-4 py-6 md:px-8">{children}</main>
         ) : (
         <div className="flex flex-1 flex-col md:flex-row">
-          <nav aria-label={t("title")} className="flex print:hidden gap-1 overflow-x-auto border-b border-border bg-surface px-2 py-1 md:w-56 md:flex-col md:border-r md:border-b-0 md:py-4">
+          <nav aria-label={t("title")} className="hidden print:hidden gap-1 border-r border-border bg-surface px-2 py-4 md:flex md:w-56 md:flex-col">
             {nav.map((n) => (
-              <Link key={n.href} href={n.href} className="flex min-h-11 shrink-0 items-center rounded-lg px-3 text-sm font-medium hover:bg-muted">
+              <Link key={n.href} href={n.href} className="flex min-h-11 shrink-0 items-center gap-2 rounded-lg px-3 text-sm font-medium hover:bg-muted">
+                <span aria-hidden>{n.icon}</span>
                 {n.label}
               </Link>
             ))}
           </nav>
-          <main className="flex-1 px-4 py-6 md:px-8 print:p-0">{children}</main>
+          <main className="flex-1 px-4 pt-5 pb-[calc(env(safe-area-inset-bottom)+6rem)] md:px-8 md:py-6 print:p-0">{children}</main>
+          <BottomTabs tabs={tabs.map(toShortTab)} more={more.map(toTab)} moreLabel={t("more")} closeLabel={t("close")} />
         </div>
         )}
       </div>

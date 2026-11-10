@@ -7,10 +7,12 @@ test("a server only sees the sections they can open", async ({ page }) => {
   await sql(`update members set role = 'server' where ${demoOwner}`);
   try {
     await page.goto("/app");
-    const nav = page.getByRole("navigation").first();
-    await expect(nav.getByRole("link", { name: "Service" })).toBeVisible();
-    await expect(nav.getByRole("link", { name: "Guide" })).toBeVisible();
-    for (const hidden of ["Menu", "Tables et salles", "Personnel", "Paramètres"]) await expect(nav.getByRole("link", { name: hidden, exact: true })).toHaveCount(0);
+    // Phones: bottom tabs + « Plus »; tablets and up: the side menu.
+    const phone = await page.getByTestId("bottom-tabs").isVisible();
+    if (phone) await page.getByTestId("more-tab").click();
+    await expect(page.locator('a[href="/app/service"]:visible').first()).toBeVisible();
+    await expect(page.locator('a[href="/app/guide"]:visible').first()).toBeVisible();
+    for (const hidden of ["/app/menu", "/app/seating", "/app/staff", "/app/settings", "/app/orders"]) await expect(page.locator(`a[href="${hidden}"]`)).toHaveCount(0);
   } finally {
     await sql(`update members set role = 'owner' where ${demoOwner}`);
   }

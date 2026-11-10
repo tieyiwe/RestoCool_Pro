@@ -354,7 +354,17 @@
     "frontDesk": "Service",
     "kitchen": "Cuisine",
     "guide": "Guide",
-    "history": "Historique des commandes"
+    "history": "Historique des commandes",
+    "scan": "Scanner",
+    "more": "Plus",
+    "close": "Fermer",
+    "tabs": {
+      "home": "Accueil",
+      "service": "Service",
+      "kitchen": "Cuisine",
+      "history": "Historique",
+      "scan": "Scanner"
+    }
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -1720,6 +1730,25 @@
       "served": "Servie par",
       "cancelled": "Annulée par",
       "reason": "Motif d'annulation"
+    }
+  },
+  "scan": {
+    "title": "Scanner",
+    "intro": "Visez le QR « Montrer au serveur » d'un client pour ouvrir sa commande, le QR de pointage, ou le QR d'une table.",
+    "camera": "Caméra du scanner",
+    "hint": "Placez le QR code dans le cadre : il s'ouvre tout seul.",
+    "torch": "Lampe",
+    "unknown": "Ce QR code n'est pas un code RestoCool :",
+    "manualLabel": "Ou tapez un numéro RC",
+    "manualPlaceholder": "Numéro RC ou lien",
+    "go": "Ouvrir",
+    "phase": {
+      "starting": "Ouverture de la caméra…",
+      "found": "Trouvé ! Ouverture…",
+      "denied": "La caméra est refusée. Autorisez-la dans les réglages du navigateur, ou tapez le numéro RC ci-dessous.",
+      "nocamera": "Pas de caméra disponible sur cet appareil. Tapez le numéro RC ci-dessous.",
+      "unknown": "QR code non reconnu. Réessayez.",
+      "scanning": ""
     }
   }
 }

@@ -354,7 +354,17 @@
     "frontDesk": "服务",
     "kitchen": "厨房",
     "guide": "指南",
-    "history": "订单记录"
+    "history": "订单记录",
+    "scan": "扫码",
+    "more": "更多",
+    "close": "关闭",
+    "tabs": {
+      "home": "首页",
+      "service": "服务",
+      "kitchen": "厨房",
+      "history": "记录",
+      "scan": "扫码"
+    }
   },
   "admin": {
     "title": "RestoCool 管理后台",
@@ -1720,6 +1730,25 @@
       "served": "上菜",
       "cancelled": "取消",
       "reason": "取消原因"
+    }
+  },
+  "scan": {
+    "title": "扫码",
+    "intro": "对准顾客的“出示给服务员”二维码可打开其订单，也可扫描打卡二维码或餐桌二维码。",
+    "camera": "扫码摄像头",
+    "hint": "将二维码放入框内，会自动打开。",
+    "torch": "手电筒",
+    "unknown": "这不是 RestoCool 二维码：",
+    "manualLabel": "或输入 RC 编号",
+    "manualPlaceholder": "RC 编号或链接",
+    "go": "打开",
+    "phase": {
+      "starting": "正在打开摄像头…",
+      "found": "已识别！正在打开…",
+      "denied": "摄像头权限被拒绝。请在浏览器设置中允许，或在下方输入 RC 编号。",
+      "nocamera": "此设备没有摄像头。请在下方输入 RC 编号。",
+      "unknown": "无法识别二维码，请重试。",
+      "scanning": ""
     }
   }
 }

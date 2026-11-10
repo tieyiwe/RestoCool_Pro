@@ -354,7 +354,17 @@
     "frontDesk": "Service",
     "kitchen": "Kitchen",
     "guide": "Guide",
-    "history": "Order history"
+    "history": "Order history",
+    "scan": "Scan",
+    "more": "More",
+    "close": "Close",
+    "tabs": {
+      "home": "Home",
+      "service": "Service",
+      "kitchen": "Kitchen",
+      "history": "History",
+      "scan": "Scan"
+    }
   },
   "admin": {
     "title": "RestoCool administration",
@@ -1720,6 +1730,25 @@
       "served": "Served by",
       "cancelled": "Cancelled by",
       "reason": "Cancellation reason"
+    }
+  },
+  "scan": {
+    "title": "Scan",
+    "intro": "Point at a customer's “Show the server” QR to open their order, the check-in QR, or a table QR.",
+    "camera": "Scanner camera",
+    "hint": "Put the QR code inside the frame: it opens by itself.",
+    "torch": "Torch",
+    "unknown": "This QR code is not a RestoCool code:",
+    "manualLabel": "Or type an RC number",
+    "manualPlaceholder": "RC number or link",
+    "go": "Open",
+    "phase": {
+      "starting": "Opening the camera…",
+      "found": "Found! Opening…",
+      "denied": "Camera access was denied. Allow it in the browser settings, or type the RC number below.",
+      "nocamera": "No camera on this device. Type the RC number below.",
+      "unknown": "QR code not recognised. Try again.",
+      "scanning": ""
     }
   }
 }
