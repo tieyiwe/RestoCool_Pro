@@ -9,12 +9,24 @@ const proxyUrl = process.env.NEXT_PUBLIC_CLERK_PROXY_URL || process.env.CLERK_PR
 const clerkConfigured = Boolean(process.env.CLERK_SECRET_KEY && publishableKey);
 const devBypass = process.env.NODE_ENV !== "production" && process.env.DEV_AUTH_BYPASS === "1";
 
+/**
+ * Proxy mode (Replit-managed Clerk sets a proxy URL): the browser loads Clerk from
+ * <this site>/__clerk/…, and this middleware forwards those requests to Clerk's Frontend API.
+ * The proxy runs on whatever domain the visitor uses (restocool.com or the replit.app URL).
+ */
+const CLERK_PROXY_PATH = proxyUrl ? (new URL(proxyUrl, "https://x.invalid").pathname.replace(/\/$/, "") || "/__clerk") : "/__clerk";
+
 const withClerk = clerkConfigured
   ? clerkMiddleware(
       async (auth, req) => {
         if (isProtected(req)) await auth.protect();
       },
-      { publishableKey, signInUrl: "/sign-in", signUpUrl: "/sign-up", ...(proxyUrl ? { proxyUrl } : {}) },
+      {
+        publishableKey,
+        signInUrl: "/sign-in",
+        signUpUrl: "/sign-up",
+        ...(proxyUrl ? { frontendApiProxy: { enabled: true, path: CLERK_PROXY_PATH } } : {}),
+      },
     )
   : null;
 
@@ -35,5 +47,6 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
 
 export const config = {
   // Skip static files; always run for API routes.
-  matcher: ["/((?!_next|.*\\.(?:svg|png|jpg|jpeg|webp|ico|css|js|woff2?|webmanifest)$).*)", "/(api|trpc)(.*)"],
+  // The Clerk proxy path serves .js files, so it is listed on its own.
+  matcher: ["/((?!_next|.*\\.(?:svg|png|jpg|jpeg|webp|ico|css|js|woff2?|webmanifest)$).*)", "/(api|trpc)(.*)", "/__clerk/(.*)"],
 };

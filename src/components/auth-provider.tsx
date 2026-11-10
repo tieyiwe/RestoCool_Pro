@@ -20,7 +20,7 @@ export async function AuthProvider({ children }: { children: React.ReactNode }) 
   return (
     <ClerkProvider
       publishableKey={env.clerkPublishableKey()}
-      {...(env.clerkProxyUrl() ? { proxyUrl: env.clerkProxyUrl() } : {})}
+      {...(env.clerkProxyPath() ? { proxyUrl: env.clerkProxyPath() } : {})}
       localization={CLERK_LOCALES[locale] ?? frFR}
       appearance={{
         variables: {

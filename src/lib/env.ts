@@ -31,6 +31,15 @@ export const env = {
     }
     return { mode: m[1] as "test" | "live", host: /^[a-z0-9.-]+$/i.test(host) ? host : "" };
   },
+  /**
+   * Path of the Clerk proxy on this site ("/__clerk"), when a proxy URL is configured. The browser
+   * uses it relative to the page, so it works on restocool.com and on the replit.app address.
+   */
+  clerkProxyPath(): string {
+    const url = env.clerkProxyUrl();
+    if (!url) return "";
+    return new URL(url, "https://x.invalid").pathname.replace(/\/$/, "") || "/__clerk";
+  },
   clerkConfigured(): boolean {
     return Boolean(process.env.CLERK_SECRET_KEY && env.clerkPublishableKey());
   },
