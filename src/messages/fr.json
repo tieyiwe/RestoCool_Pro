@@ -43,13 +43,14 @@
       "faq": "Questions",
       "signIn": "Se connecter",
       "cta": "Essayer gratuitement",
-      "menu": "Menu"
+      "menu": "Menu",
+      "restaurants": "Restaurants"
     },
     "hero": {
       "eyebrow": "Pour les restaurants, maquis et lounges du Burkina",
-      "title": "Votre menu, vos commandes, vos tables.",
-      "titleAccent": "Simple.",
-      "subtitle": "Un menu digital avec QR code, en français, anglais et chinois, que vos clients ouvrent sur leur téléphone sans rien installer. Prix en FCFA, contact WhatsApp, Orange Money et Moov Money.",
+      "title": "Fini les menus en papier.",
+      "titleAccent": "Vos serveurs respirent.",
+      "subtitle": "Vos clients scannent le QR code, choisissent et commandent depuis leur téléphone, en français, anglais ou chinois. La commande arrive au service et en cuisine, et tout est enregistré dans votre tableau de bord. Prix en FCFA, WhatsApp, Orange Money et Moov Money.",
       "cta": "Créer mon restaurant gratuitement",
       "demo": "Voir un menu de démonstration",
       "chip1": "30 jours d’essai Pro offerts",
@@ -211,6 +212,48 @@
       "rights": "© {year} {publisher}. Tous droits réservés.",
       "demo": "Menu de démonstration",
       "animation": "Démonstration animée"
+    },
+    "digitize": {
+      "eyebrow": "Comment ça marche",
+      "title": "Digitalisez votre service, sans réinventer la roue",
+      "subtitle": "Vous gardez votre façon de travailler : le client choisit, le serveur confirme, la cuisine prépare. RestoCool enlève juste le papier, les allers-retours et les oublis.",
+      "before": "Avant :",
+      "steps": {
+        "scan": {
+          "title": "Le client scanne et choisit",
+          "text": "Il ouvre votre menu sur son téléphone, avec photos et prix, et envoie sa sélection.",
+          "before": "attendre le menu, puis le serveur."
+        },
+        "confirm": {
+          "title": "Le serveur confirme",
+          "text": "La commande apparaît en direct sur la tablette ou le téléphone, avec le numéro de table. Un geste suffit.",
+          "before": "le carnet, le stylo et les erreurs."
+        },
+        "cook": {
+          "title": "La cuisine prépare",
+          "text": "L’écran cuisine affiche les plats à faire, poste par poste. « Prêt » prévient le service.",
+          "before": "le bon papier perdu ou illisible."
+        },
+        "record": {
+          "title": "Tout est enregistré",
+          "text": "Chaque commande, chaque vente et qui l’a servie restent dans votre tableau de bord.",
+          "before": "faire les comptes à la main le soir."
+        }
+      },
+      "recordsTitle": "Votre tableau de bord garde la trace de tout",
+      "recordsText": "Plus besoin de cahier : chaque commande est enregistrée avec l’heure, la table, les plats et la personne qui l’a traitée.",
+      "r1": "Ventes et nombre de commandes du jour, de la semaine, du mois",
+      "r2": "Temps de service et de cuisine, heures de pointe",
+      "r3": "Plats les plus commandés",
+      "r4": "Commandes traitées par chaque serveur, avec son matricule",
+      "mock": {
+        "orders": "Commandes",
+        "sales": "Ventes",
+        "service": "Service moyen",
+        "staffNo": "Matricule",
+        "name": "Nom",
+        "served": "Servies"
+      }
     }
   },
   "menu": {
@@ -910,7 +953,8 @@
     "tooMany": "Trop d’essais. Patientez une minute, puis réessayez.",
     "orScan": "Vous pouvez aussi scanner le QR code avec l’appareil photo de votre téléphone.",
     "homeTitle": "Vous êtes au restaurant ?",
-    "homeText": "Tapez le numéro RC écrit sous le QR code pour ouvrir le menu."
+    "homeText": "Tapez le numéro RC écrit sous le QR code pour ouvrir le menu.",
+    "short": "Numéro RC"
   },
   "service": {
     "frontDesk": "Service en salle",
@@ -1095,5 +1139,22 @@
         "hint": "Logo, photo et couleurs : votre marque passe en premier."
       }
     }
+  },
+  "directory": {
+    "title": "Restaurants sur RestoCool",
+    "intro": "Trouvez un restaurant, un maquis ou un café et ouvrez son menu. Cherchez par nom, par ville ou par numéro RC.",
+    "featured": "À la une",
+    "featuredBadge": "À la une",
+    "all": "Tous les restaurants",
+    "searchLabel": "Rechercher un restaurant",
+    "placeholder": "Nom, ville ou numéro RC (ex. : RC-K7M3P)",
+    "empty": "Aucun restaurant ne correspond. Essayez un autre nom, une ville ou un numéro RC.",
+    "open": "Voir le menu",
+    "count": "# restaurant(s)",
+    "searching": "Recherche…",
+    "addMine": "Ajouter mon restaurant",
+    "homeTitle": "Ils sont sur RestoCool",
+    "homeText": "Ouvrez le menu d’un restaurant, ou cherchez par nom ou numéro RC.",
+    "browse": "Parcourir les restaurants"
   }
 }

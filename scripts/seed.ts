@@ -3,7 +3,9 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { eq } from "drizzle-orm";
 import { closeDb, getDb, type DB } from "../src/db";
+import { generateCode } from "../src/lib/access-code-format";
 import {
+  accessCodes,
   areas,
   fortunes,
   menuCategories,
@@ -46,6 +48,8 @@ async function seedDemo(db: DB) {
   const [r] = await db
     .insert(restaurants)
     .values({
+      // Featured on restocool.com for the demo (the platform admin chooses real ones later).
+      featuredRank: 1,
       slug: DEMO_SLUG,
       name: "Restaurant Démo",
       description: {
@@ -163,6 +167,11 @@ async function seedDemo(db: DB) {
   }
 
   await db.insert(fortunes).values(DEMO_FORTUNES.map((text) => ({ restaurantId, text })));
+  // The demo's numéro RC (main QR), so it can be found in the directory right away.
+  for (let i = 0; i < 5; i++) {
+    const done = await db.insert(accessCodes).values({ code: generateCode(), restaurantId, seatId: null }).onConflictDoNothing().returning();
+    if (done.length) break;
+  }
   // Fictional personnel with their matricules. "dev-owner" is the local dev sign-in; the other
   // ids are placeholders nobody can sign in with.
   await db.insert(members).values([

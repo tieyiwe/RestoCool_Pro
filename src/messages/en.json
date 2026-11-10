@@ -43,13 +43,14 @@
       "faq": "FAQ",
       "signIn": "Sign in",
       "cta": "Try it free",
-      "menu": "Menu"
+      "menu": "Menu",
+      "restaurants": "Restaurants"
     },
     "hero": {
       "eyebrow": "For restaurants, maquis and lounges in Burkina Faso",
-      "title": "Your menu, your orders, your tables.",
-      "titleAccent": "Simple.",
-      "subtitle": "A QR code digital menu in French, English and Chinese that customers open on their phone without installing anything. Prices in CFA francs, WhatsApp contact, Orange Money and Moov Money.",
+      "title": "No more paper menus.",
+      "titleAccent": "Your servers can breathe.",
+      "subtitle": "Customers scan the QR code, choose and order from their phones, in French, English or Chinese. Orders reach the floor and the kitchen live, and everything is recorded in your dashboard. Prices in FCFA, WhatsApp, Orange Money and Moov Money.",
       "cta": "Create my restaurant for free",
       "demo": "See a demo menu",
       "chip1": "30-day Pro trial included",
@@ -211,6 +212,48 @@
       "rights": "© {year} {publisher}. All rights reserved.",
       "demo": "Demo menu",
       "animation": "Animated demo"
+    },
+    "digitize": {
+      "eyebrow": "How it works",
+      "title": "Digitize your service without reinventing the wheel",
+      "subtitle": "You keep your way of working: the customer chooses, the server confirms, the kitchen cooks. RestoCool just removes the paper, the back-and-forth and the mistakes.",
+      "before": "Before:",
+      "steps": {
+        "scan": {
+          "title": "The customer scans and chooses",
+          "text": "They open your menu on their phone, with photos and prices, and send their selection.",
+          "before": "waiting for the menu, then the server."
+        },
+        "confirm": {
+          "title": "The server confirms",
+          "text": "The order shows up live on the tablet or phone, with the table number. One tap.",
+          "before": "notepad, pen and mistakes."
+        },
+        "cook": {
+          "title": "The kitchen cooks",
+          "text": "The kitchen screen lists dishes to make, station by station. « Ready » tells the floor.",
+          "before": "lost or unreadable paper tickets."
+        },
+        "record": {
+          "title": "Everything is recorded",
+          "text": "Every order, every sale and who served it stays in your dashboard.",
+          "before": "doing the accounts by hand at night."
+        }
+      },
+      "recordsTitle": "Your dashboard keeps track of everything",
+      "recordsText": "No more notebook: every order is recorded with the time, table, dishes and the person who handled it.",
+      "r1": "Sales and number of orders today, this week, this month",
+      "r2": "Service and kitchen times, busy hours",
+      "r3": "Most ordered dishes",
+      "r4": "Orders handled by each server, with their staff ID",
+      "mock": {
+        "orders": "Orders",
+        "sales": "Sales",
+        "service": "Avg. service",
+        "staffNo": "Staff ID",
+        "name": "Name",
+        "served": "Served"
+      }
     }
   },
   "menu": {
@@ -910,7 +953,8 @@
     "tooMany": "Too many tries. Wait a minute, then try again.",
     "orScan": "You can also scan the QR code with your phone camera.",
     "homeTitle": "At a restaurant?",
-    "homeText": "Type the RC number printed under the QR code to open the menu."
+    "homeText": "Type the RC number printed under the QR code to open the menu.",
+    "short": "RC number"
   },
   "service": {
     "frontDesk": "Front desk",
@@ -1095,5 +1139,22 @@
         "hint": "Logo, photo and colours: your brand comes first."
       }
     }
+  },
+  "directory": {
+    "title": "Restaurants on RestoCool",
+    "intro": "Find a restaurant, maquis or café and open its menu. Search by name, city or RC number.",
+    "featured": "Featured",
+    "featuredBadge": "Featured",
+    "all": "All restaurants",
+    "searchLabel": "Search for a restaurant",
+    "placeholder": "Name, city or RC number (e.g. RC-K7M3P)",
+    "empty": "No restaurant matches. Try another name, a city or an RC number.",
+    "open": "See the menu",
+    "count": "# restaurant(s)",
+    "searching": "Searching…",
+    "addMine": "Add my restaurant",
+    "homeTitle": "They’re on RestoCool",
+    "homeText": "Open a restaurant’s menu, or search by name or RC number.",
+    "browse": "Browse restaurants"
   }
 }

@@ -43,13 +43,14 @@
       "faq": "常见问题",
       "signIn": "登录",
       "cta": "免费试用",
-      "menu": "菜单"
+      "menu": "菜单",
+      "restaurants": "餐厅"
     },
     "hero": {
       "eyebrow": "为布基纳法索的餐厅、小吃店和酒廊打造",
-      "title": "您的菜单、您的订单、您的餐桌。",
-      "titleAccent": "简单。",
-      "subtitle": "二维码数字菜单，支持法语、英语和中文，顾客用手机直接打开，无需安装任何应用。价格以西非法郎显示，支持 WhatsApp 联系、Orange Money 和 Moov Money。",
+      "title": "告别纸质菜单。",
+      "titleAccent": "让服务员更轻松。",
+      "subtitle": "顾客扫描二维码，用手机以法语、英语或中文选菜下单。订单实时送达前台和厨房，一切都记录在您的控制台中。以西非法郎计价，支持 WhatsApp、Orange Money 和 Moov Money。",
       "cta": "免费创建我的餐厅",
       "demo": "查看演示菜单",
       "chip1": "免费试用专业版 30 天",
@@ -211,6 +212,48 @@
       "rights": "© {year} {publisher}。保留所有权利。",
       "demo": "演示菜单",
       "animation": "动画演示"
+    },
+    "digitize": {
+      "eyebrow": "使用方式",
+      "title": "数字化您的服务，无需推倒重来",
+      "subtitle": "保留您原有的工作方式：顾客点菜，服务员确认，厨房制作。RestoCool 只是去掉纸张、来回奔波和遗漏。",
+      "before": "以前：",
+      "steps": {
+        "scan": {
+          "title": "顾客扫码选菜",
+          "text": "用手机打开带图片和价格的菜单，发送所选菜品。",
+          "before": "等菜单，再等服务员。"
+        },
+        "confirm": {
+          "title": "服务员确认",
+          "text": "订单实时显示在平板或手机上，附桌号，一键确认。",
+          "before": "本子、笔和出错。"
+        },
+        "cook": {
+          "title": "厨房制作",
+          "text": "厨房屏幕按工位显示待做菜品，“已好”即通知前台。",
+          "before": "纸质单子丢失或看不清。"
+        },
+        "record": {
+          "title": "一切都有记录",
+          "text": "每个订单、每笔销售以及服务人员都保存在控制台中。",
+          "before": "晚上手工算账。"
+        }
+      },
+      "recordsTitle": "控制台记录一切",
+      "recordsText": "不再需要本子：每个订单都记录时间、桌号、菜品和处理人员。",
+      "r1": "今日、本周、本月的销售额和订单数",
+      "r2": "上菜和厨房时间、高峰时段",
+      "r3": "最受欢迎的菜品",
+      "r4": "每位服务员处理的订单及其工号",
+      "mock": {
+        "orders": "订单",
+        "sales": "销售额",
+        "service": "平均上菜",
+        "staffNo": "工号",
+        "name": "姓名",
+        "served": "已上菜"
+      }
     }
   },
   "menu": {
@@ -910,7 +953,8 @@
     "tooMany": "尝试次数过多，请等一分钟后再试。",
     "orScan": "您也可以用手机相机扫描二维码。",
     "homeTitle": "在餐厅吗？",
-    "homeText": "输入二维码下方的 RC 号即可打开菜单。"
+    "homeText": "输入二维码下方的 RC 号即可打开菜单。",
+    "short": "RC 号"
   },
   "service": {
     "frontDesk": "前台服务",
@@ -1095,5 +1139,22 @@
         "hint": "标志、照片和颜色：您的品牌优先。"
       }
     }
+  },
+  "directory": {
+    "title": "RestoCool 上的餐厅",
+    "intro": "查找餐厅、maquis 或咖啡馆并打开菜单。可按名称、城市或 RC 号搜索。",
+    "featured": "精选",
+    "featuredBadge": "精选",
+    "all": "所有餐厅",
+    "searchLabel": "搜索餐厅",
+    "placeholder": "名称、城市或 RC 号（例如 RC-K7M3P）",
+    "empty": "没有匹配的餐厅。请尝试其他名称、城市或 RC 号。",
+    "open": "查看菜单",
+    "count": "# 家餐厅",
+    "searching": "搜索中…",
+    "addMine": "添加我的餐厅",
+    "homeTitle": "他们在用 RestoCool",
+    "homeText": "打开餐厅菜单，或按名称、RC 号搜索。",
+    "browse": "浏览餐厅"
   }
 }

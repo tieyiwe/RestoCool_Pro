@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { RestaurantCard } from "@/components/directory/restaurant-card";
+import { getDb } from "@/db";
+import { featuredRestaurants } from "@/lib/directory";
 import {
   Armchair,
   BellRing,
   CalendarCheck,
+  ArrowRight,
   Camera,
   Check,
+  ChefHat,
   ChevronDown,
+  LayoutDashboard,
   Languages,
   MessageCircle,
   PencilLine,
@@ -52,6 +58,10 @@ export default async function HomePage() {
   const tb = await getTranslations("brand");
   const tl = await getTranslations("legal");
   const tc = await getTranslations("codeEntry");
+  const td = await getTranslations("directory");
+  const locale = await getLocale();
+  // Featured restaurants are optional: the page renders without a database (build) or with none chosen.
+  const featured = await (async () => featuredRestaurants(getDb()))().catch(() => []);
   const year = new Date().getUTCFullYear();
 
   const features = [
@@ -86,20 +96,23 @@ export default async function HomePage() {
       {/* ---------------- Header ---------------- */}
       <header className="sticky top-0 z-40 border-b border-ligne/70 bg-creme/90 backdrop-blur">
         <div className={cn(section, "flex h-16 items-center justify-between gap-3")}>
-          <Link href="/" aria-label="RestoCool">
+          <Link href="/" aria-label="RestoCool" className="mr-2 shrink-0">
             <Logo />
           </Link>
-          <nav aria-label={t("nav.menu")} className="hidden items-center gap-1 text-sm font-semibold lg:flex">
-            <a href="#features" className="rounded-lg px-3 py-2 hover:bg-sable">
+          <nav aria-label={t("nav.menu")} className="hidden items-center gap-0.5 text-sm font-semibold whitespace-nowrap xl:flex">
+            <a href="#features" className="hidden rounded-lg px-3 py-2 hover:bg-sable 2xl:inline">
               {t("nav.features")}
             </a>
-            <a href="#demo" className="rounded-lg px-3 py-2 hover:bg-sable">
+            <a href="#how" className="rounded-lg px-3 py-2 hover:bg-sable">
               {t("nav.how")}
             </a>
+            <Link href="/restaurants" className="rounded-lg px-3 py-2 hover:bg-sable">
+              {t("nav.restaurants")}
+            </Link>
             <a href="#pricing" className="rounded-lg px-3 py-2 hover:bg-sable">
               {t("nav.pricing")}
             </a>
-            <a href="#faq" className="rounded-lg px-3 py-2 hover:bg-sable">
+            <a href="#faq" className="hidden rounded-lg px-3 py-2 hover:bg-sable 2xl:inline">
               {t("nav.faq")}
             </a>
           </nav>
@@ -107,13 +120,13 @@ export default async function HomePage() {
             <div className="hidden sm:block">
               <LocaleSwitcher />
             </div>
-            <Link href="/c" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:bg-sable lg:flex">
-              {tc("title")}
+            <Link href="/c" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold whitespace-nowrap hover:bg-sable lg:flex">
+              {tc("short")}
             </Link>
-            <Link href="/sign-in" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:bg-sable md:flex">
+            <Link href="/sign-in" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold whitespace-nowrap hover:bg-sable md:flex">
               {t("nav.signIn")}
             </Link>
-            <Link href="/sign-up" className="inline-flex min-h-11 items-center rounded-xl bg-vert px-4 text-sm font-bold text-creme hover:opacity-90">
+            <Link href="/sign-up" className="inline-flex min-h-11 items-center rounded-xl bg-vert px-4 text-sm font-bold whitespace-nowrap text-creme hover:opacity-90">
               {t("nav.cta")}
             </Link>
           </div>
@@ -185,6 +198,120 @@ export default async function HomePage() {
               <p className="text-encre-2">{tc("homeText")}</p>
             </div>
             <CodeForm compact />
+          </div>
+        </section>
+
+        {/* ---------------- Featured restaurants (chosen by the platform admin) ---------------- */}
+        <section className={cn(section, "pt-16")} data-testid="home-featured">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 className="font-display text-2xl font-extrabold sm:text-3xl">{td("homeTitle")}</h2>
+              <p className="mt-1 text-encre-2">{td("homeText")}</p>
+            </div>
+            <Link href="/restaurants" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-ligne bg-white px-4 font-bold hover:bg-sable" data-testid="home-directory-link">
+              {td("browse")} <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </div>
+          {featured.length > 0 && (
+            <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.map((r) => (
+                <li key={r.slug}>
+                  <RestaurantCard r={r} locale={locale} cta={td("open")} featuredLabel={td("featuredBadge")} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        {/* ---------------- Digitize the service you already run ---------------- */}
+        <section id="how" className={cn(section, "scroll-mt-16 py-20")} data-testid="home-digitize">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm font-bold tracking-widest text-vert uppercase">{t("digitize.eyebrow")}</p>
+            <h2 className="font-display mt-2 text-3xl font-extrabold sm:text-4xl">{t("digitize.title")}</h2>
+            <p className="mt-3 text-lg text-encre-2">{t("digitize.subtitle")}</p>
+          </div>
+          <ol className="mt-12 grid gap-4 md:grid-cols-4">
+            {(
+              [
+                ["scan", QrCode],
+                ["confirm", BellRing],
+                ["cook", ChefHat],
+                ["record", LayoutDashboard],
+              ] as const
+            ).map(([k, Icon], i) => (
+              <li key={k} className="relative flex flex-col gap-3 rounded-3xl border border-ligne bg-white p-6 shadow-sm">
+                <span className="flex items-center justify-between">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-vert/10 text-vert">
+                    <Icon className="h-6 w-6" aria-hidden />
+                  </span>
+                  <span className="font-display text-3xl font-extrabold text-sable" aria-hidden>
+                    {i + 1}
+                  </span>
+                </span>
+                <h3 className="text-lg font-extrabold">{t(`digitize.steps.${k}.title`)}</h3>
+                <p className="text-encre-2">{t(`digitize.steps.${k}.text`)}</p>
+                <p className="mt-auto rounded-xl bg-creme px-3 py-2 text-sm text-encre-2">
+                  <span className="font-semibold text-encre">{t("digitize.before")}</span> {t(`digitize.steps.${k}.before`)}
+                </p>
+                {i < 3 && <ArrowRight className="absolute top-1/2 -right-4 z-10 hidden h-6 w-6 -translate-y-1/2 text-vert md:block" aria-hidden />}
+              </li>
+            ))}
+          </ol>
+          {/* What the owner finds in the dashboard */}
+          <div className="mt-10 grid items-center gap-8 rounded-3xl bg-nuit p-6 text-creme sm:p-10 lg:grid-cols-[1fr_1.1fr]">
+            <div>
+              <h3 className="font-display text-2xl font-extrabold sm:text-3xl">{t("digitize.recordsTitle")}</h3>
+              <p className="mt-3 text-creme/85">{t("digitize.recordsText")}</p>
+              <ul className="mt-5 flex flex-col gap-2">
+                {(["r1", "r2", "r3", "r4"] as const).map((k) => (
+                  <li key={k} className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-5 w-5 shrink-0 text-or" aria-hidden />
+                    {t(`digitize.${k}`)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl bg-white p-4 text-encre shadow-2xl" aria-hidden>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  [t("digitize.mock.orders"), "48"],
+                  [t("digitize.mock.sales"), formatFCFA(186500)],
+                  [t("digitize.mock.service"), "14 min"],
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-xl bg-creme p-3">
+                    <p className="text-[11px] text-encre-2">{label}</p>
+                    <p className="text-base font-extrabold tabular-nums sm:text-lg">{value}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 flex h-20 items-end gap-1 rounded-xl bg-creme p-2">
+                {[2, 3, 6, 9, 7, 4, 3, 5, 8, 10, 6, 3].map((h, i) => (
+                  <span key={i} className="flex-1 rounded-t bg-vert" style={{ height: `${h * 9}%` }} />
+                ))}
+              </div>
+              <table className="mt-3 w-full text-left text-xs">
+                <thead className="text-encre-2">
+                  <tr>
+                    <th className="py-1">{t("digitize.mock.staffNo")}</th>
+                    <th className="py-1">{t("digitize.mock.name")}</th>
+                    <th className="py-1 text-right">{t("digitize.mock.served")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ["002", "Awa", 21],
+                    ["004", "Issouf", 17],
+                    ["005", "Mariam", 10],
+                  ].map(([no, name, n]) => (
+                    <tr key={String(no)} className="border-t border-ligne">
+                      <td className="py-1 font-mono font-bold">{no}</td>
+                      <td className="py-1">{name}</td>
+                      <td className="py-1 text-right tabular-nums">{n}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 

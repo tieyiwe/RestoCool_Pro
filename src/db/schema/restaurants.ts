@@ -51,6 +51,8 @@ export const restaurants = pgTable(
     planExpiresAt: timestamp("plan_expires_at", { withTimezone: true }),
     published: boolean("published").notNull().default(false),
     poweredBadge: boolean("powered_badge").notNull().default(true),
+    /** Shown on restocool.com (1 = first). Set by the platform admin; null = not featured. */
+    featuredRank: smallint("featured_rank"),
     ...timestamps,
   },
   (t) => [uniqueIndex("restaurants_slug_uq").on(t.slug), index("restaurants_parent_idx").on(t.parentRestaurantId)],
