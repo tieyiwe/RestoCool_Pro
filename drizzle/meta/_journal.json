@@ -85,6 +85,13 @@
       "when": 1794338431520,
       "tag": "0011_business_location",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1794339578169,
+      "tag": "0012_job_roles",
+      "breakpoints": true
     }
   ]
 }

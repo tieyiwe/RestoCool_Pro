@@ -2,11 +2,14 @@
  * Authorization rules. Pure function: the server calls this on every request.
  * The UI may call it too, but only to hide buttons; never rely on that.
  */
+import { actionsFor, type AccessArea } from "./access";
+
 export type StaffRole = "server" | "kitchen" | "cashier";
 export type MemberRole = "owner" | "manager" | StaffRole;
 
 export type Actor =
-  | { kind: "member"; userId: string; restaurantId: string; role: MemberRole }
+  /** `access`: the member's job role access (owner-editable); absent = the level's defaults. */
+  | { kind: "member"; userId: string; restaurantId: string; role: MemberRole; access?: readonly AccessArea[] }
   | { kind: "staff"; staffId: string; restaurantId: string; role: StaffRole }
   | { kind: "superadmin"; userId: string; email: string }
   | { kind: "customer"; deviceId: string; restaurantId: string };
@@ -90,6 +93,11 @@ export function can(actor: Actor | null | undefined, action: Action, resource?: 
   // Every non-platform actor is bound to exactly one restaurant.
   if (!resource || resource.restaurantId !== actor.restaurantId) return false;
   if (actor.kind === "customer") return CUSTOMER_ACTIONS.has(action);
+  // The owner always keeps every right; job roles never apply to them.
+  if (actor.kind === "member" && actor.role !== "owner" && actor.access) {
+    // A job role may give up to everything a manager has, never the owner's controls.
+    return ROLE_ACTIONS.manager.has(action) && actionsFor(actor.access).has(action);
+  }
   return ROLE_ACTIONS[actor.role].has(action);
 }
 

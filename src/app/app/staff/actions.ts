@@ -33,7 +33,7 @@ const Id = z.uuid();
 
 export async function addPersonAction(fd: FormData) {
   await run(async (c) => {
-    const r = await addPerson(c, { name: s(fd, "name"), role: s(fd, "role") as "server", pin: s(fd, "pin") });
+    const r = await addPerson(c, { name: s(fd, "name"), jobRoleId: s(fd, "jobRoleId"), pin: s(fd, "pin") });
     return `added&no=${r.staffNo}`;
   });
 }

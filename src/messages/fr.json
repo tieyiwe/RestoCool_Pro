@@ -1250,7 +1250,8 @@
       "in": "Arrivée enregistrée.",
       "out": "Départ enregistré.",
       "qr": "Nouveau QR code de pointage créé : imprimez-le.",
-      "status": "Statut mis à jour."
+      "status": "Statut mis à jour.",
+      "role": "Rôle mis à jour."
     },
     "err": {
       "invalid": "Vérifiez le nom (2 caractères minimum) et le code PIN (4 à 6 chiffres).",
@@ -1468,5 +1469,86 @@
       "noGps": "Impossible d'obtenir la position de ce téléphone. Activez la localisation, ou collez un lien Google Maps.",
       "denied": "La localisation est refusée. Autorisez-la dans les réglages du navigateur, ou collez un lien Google Maps."
     }
+  },
+  "roles": {
+    "back": "Personnel",
+    "title": "Rôles et accès",
+    "intro": "Chaque personne a un rôle. Cochez ce que chaque rôle peut ouvrir dans l'application ; le changement s'applique tout de suite à tous ceux qui l'ont. Vous pouvez aussi créer vos propres rôles.",
+    "introReadOnly": "Les rôles du restaurant et ce qu'ils permettent. Seul le propriétaire peut les modifier.",
+    "holders": "{n, plural, =0 {personne} one {# personne} other {# personnes}}",
+    "accessFor": "Accès du rôle {role}",
+    "noAccess": "Aucun accès à l'application : cette personne pointe seulement à l'arrivée et au départ.",
+    "save": "Enregistrer",
+    "delete": "Supprimer ce rôle",
+    "deleteConfirm": "Supprimer le rôle « {role} » ?",
+    "create": "Créer un rôle",
+    "createHint": "Tapez le nom utilisé chez vous (par exemple « Chef grillades » ou « Caissière principale ») et choisissez ses accès.",
+    "name": "Nom du rôle",
+    "namePlaceholder": "Chef grillades",
+    "group": "Équipe",
+    "access": "Accès",
+    "createSubmit": "Créer le rôle",
+    "legend": "Ce que donne chaque accès",
+    "ok": {
+      "created": "Rôle créé.",
+      "saved": "Accès enregistrés.",
+      "deleted": "Rôle supprimé."
+    },
+    "err": {
+      "invalid": "Vérifiez le nom du rôle (2 à 40 caractères).",
+      "forbidden": "Seul le propriétaire peut faire ce changement.",
+      "notFound": "Rôle introuvable.",
+      "duplicate": "Un rôle porte déjà ce nom.",
+      "inUse": "Des personnes ont encore ce rôle : donnez-leur un autre rôle d'abord."
+    },
+    "groups": {
+      "management": "Direction",
+      "front": "Salle",
+      "kitchen": "Cuisine",
+      "bar": "Bar",
+      "support": "Entretien et sécurité"
+    },
+    "areas": {
+      "service": "Prendre les commandes",
+      "kitchen": "Préparer (cuisine, bar)",
+      "cashier": "Encaisser",
+      "cancel": "Annuler et remises",
+      "soldOut": "Plats épuisés",
+      "menu": "Modifier le menu",
+      "seats": "Tables et QR codes",
+      "reservations": "Réservations",
+      "staff": "Gérer le personnel",
+      "reports": "Chiffres et historique"
+    },
+    "areaHints": {
+      "service": "Accueil des commandes : confirmer, prendre une commande, marquer servie.",
+      "kitchen": "Écran cuisine : en préparation, prête.",
+      "cashier": "Marquer une commande payée.",
+      "cancel": "Annuler une commande et faire une remise.",
+      "soldOut": "Marquer un plat épuisé aujourd'hui, avec une note.",
+      "menu": "Ajouter et modifier les plats, les prix et les photos.",
+      "seats": "Tables, salons, QR codes et kits à imprimer.",
+      "reservations": "Gérer les réservations.",
+      "staff": "Ajouter des personnes, leur rôle, leur PIN et le pointage. Rôle de responsable : seul le propriétaire le donne.",
+      "reports": "Statistiques des commandes et du personnel."
+    },
+    "names": {
+      "manager": "Gérant·e",
+      "assistant_manager": "Gérant·e adjoint·e",
+      "server": "Serveur·se",
+      "host": "Hôte·sse d'accueil",
+      "cashier": "Caissier·ère",
+      "head_cook": "Chef de cuisine",
+      "cook": "Cuisinier·ère",
+      "assistant_cook": "Aide-cuisinier·ère",
+      "dishwasher": "Plongeur·se",
+      "bartender": "Barman / barmaid",
+      "cleaner": "Agent·e d'entretien",
+      "guard": "Gardien·ne",
+      "rider": "Livreur·se"
+    },
+    "manage": "Rôles et accès",
+    "change": "Changer",
+    "roleOf": "Rôle de {name}"
   }
 }

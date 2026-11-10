@@ -1,9 +1,9 @@
 import "server-only";
 import { asc, eq, sql } from "drizzle-orm";
 import type { DB } from "@/db";
-import { members, orders } from "@/db/schema";
+import { jobRoles, members, orders } from "@/db/schema";
 
-export type Person = { id: string; name: string; staffNo: number | null; role: string; active: boolean; email: string | null; hasPin: boolean; lockedUntil: Date | null; hasLogin: boolean };
+export type Person = { id: string; name: string; staffNo: number | null; role: string; jobRoleId: string | null; jobRoleKey: string | null; jobRoleName: string | null; active: boolean; email: string | null; hasPin: boolean; lockedUntil: Date | null; hasLogin: boolean };
 
 /** « Matricule » as printed: 001, 002 … */
 export const formatStaffNo = (n: number | null | undefined) => (n ? String(n).padStart(3, "0") : "—");
@@ -17,12 +17,16 @@ export async function personnel(db: DB, restaurantId: string): Promise<Person[]>
       email: members.email,
       staffNo: members.staffNo,
       role: members.role,
+      jobRoleId: members.jobRoleId,
+      jobRoleKey: jobRoles.key,
+      jobRoleName: jobRoles.name,
       active: members.active,
       hasPin: sql<boolean>`${members.pinHash} is not null`,
       lockedUntil: members.lockedUntil,
       hasLogin: sql<boolean>`${members.clerkUserId} is not null`,
     })
     .from(members)
+    .leftJoin(jobRoles, eq(jobRoles.id, members.jobRoleId))
     .where(eq(members.restaurantId, restaurantId))
     .orderBy(asc(members.staffNo), asc(members.createdAt));
   return rows.map((r) => ({ ...r, name: r.name || r.email?.split("@")[0] || "—" }));

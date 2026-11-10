@@ -71,6 +71,26 @@ export const restaurants = pgTable(
 );
 
 /**
+ * Job roles of a restaurant (« Serveur·se », « Aide-cuisinier·ère », or one the owner typed in)
+ * and the access areas each one opens (see src/lib/auth/access.ts). Catalog roles have a `key`
+ * (translated name); custom roles have a `name`.
+ */
+export const jobRoles = pgTable(
+  "job_roles",
+  {
+    id: id(),
+    restaurantId: uuid("restaurant_id").notNull().references(() => restaurants.id, { onDelete: "cascade" }),
+    key: text("key"),
+    name: text("name"),
+    group: text("group").notNull().default("front"),
+    access: text("access").array().notNull().default([]),
+    sort: integer("sort").notNull().default(0),
+    ...timestamps,
+  },
+  (t) => [index("job_roles_restaurant_idx").on(t.restaurantId), uniqueIndex("job_roles_restaurant_key_uq").on(t.restaurantId, t.key)],
+);
+
+/**
  * Who can sign in to which restaurant, and with which RestoCool role.
  * App-managed tenants: Clerk only proves identity (clerk_user_id); restaurant
  * membership lives here, not in Clerk Organizations.
@@ -85,6 +105,8 @@ export const members = pgTable(
     email: text("email"),
     name: text("name"),
     role: memberRoleEnum("role").notNull().default("manager"),
+    /** The person's job role; its access replaces the level's defaults. Null = level defaults. */
+    jobRoleId: uuid("job_role_id").references((): AnyPgColumn => jobRoles.id, { onDelete: "set null" }),
     active: boolean("active").notNull().default(true),
     /**
      * « Matricule »: the person's staff number in this restaurant (1, 2, 3… shown as 001),

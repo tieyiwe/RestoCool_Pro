@@ -1250,7 +1250,8 @@
       "in": "已记录到岗。",
       "out": "已记录离岗。",
       "qr": "已创建新的打卡二维码：请打印。",
-      "status": "状态已更新。"
+      "status": "状态已更新。",
+      "role": "角色已更新。"
     },
     "err": {
       "invalid": "请检查姓名（至少 2 个字符）和 PIN 码（4 到 6 位数字）。",
@@ -1468,5 +1469,86 @@
       "noGps": "无法获取此手机的位置。请打开定位，或粘贴 Google 地图链接。",
       "denied": "定位权限被拒绝。请在浏览器设置中允许，或粘贴 Google 地图链接。"
     }
+  },
+  "roles": {
+    "back": "员工",
+    "title": "角色与权限",
+    "intro": "每个人都有一个角色。勾选每个角色可以在应用中打开的功能；更改会立即应用到所有拥有该角色的人。您也可以创建自己的角色。",
+    "introReadOnly": "餐厅的角色及其权限。只有店主可以修改。",
+    "holders": "{n, plural, =0 {无人} other {# 人}}",
+    "accessFor": "{role} 的权限",
+    "noAccess": "无应用权限：此人只需上下班打卡。",
+    "save": "保存",
+    "delete": "删除此角色",
+    "deleteConfirm": "删除角色“{role}”？",
+    "create": "创建角色",
+    "createHint": "输入您店里使用的名称（例如“烧烤主厨”或“主收银员”）并选择权限。",
+    "name": "角色名称",
+    "namePlaceholder": "烧烤主厨",
+    "group": "团队",
+    "access": "权限",
+    "createSubmit": "创建角色",
+    "legend": "每项权限的作用",
+    "ok": {
+      "created": "角色已创建。",
+      "saved": "权限已保存。",
+      "deleted": "角色已删除。"
+    },
+    "err": {
+      "invalid": "请检查角色名称（2 到 40 个字符）。",
+      "forbidden": "只有店主可以进行此更改。",
+      "notFound": "找不到该角色。",
+      "duplicate": "已有角色使用此名称。",
+      "inUse": "仍有人拥有此角色：请先给他们分配其他角色。"
+    },
+    "groups": {
+      "management": "管理层",
+      "front": "前厅",
+      "kitchen": "厨房",
+      "bar": "吧台",
+      "support": "清洁与安保"
+    },
+    "areas": {
+      "service": "接单",
+      "kitchen": "制作（厨房、吧台）",
+      "cashier": "收款",
+      "cancel": "取消与折扣",
+      "soldOut": "售罄菜品",
+      "menu": "编辑菜单",
+      "seats": "餐桌与二维码",
+      "reservations": "预订",
+      "staff": "管理员工",
+      "reports": "数据与记录"
+    },
+    "areaHints": {
+      "service": "前台：确认、代客下单、标记已上菜。",
+      "kitchen": "厨房屏幕：制作中、已完成。",
+      "cashier": "标记订单已付款。",
+      "cancel": "取消订单并给予折扣。",
+      "soldOut": "标记菜品今日售罄，并附说明。",
+      "menu": "添加和编辑菜品、价格和照片。",
+      "seats": "餐桌、包间、二维码和打印套件。",
+      "reservations": "管理预订。",
+      "staff": "添加人员及其角色、PIN 和打卡。负责人角色：只有店主可以分配。",
+      "reports": "订单和员工统计。"
+    },
+    "names": {
+      "manager": "经理",
+      "assistant_manager": "副经理",
+      "server": "服务员",
+      "host": "迎宾",
+      "cashier": "收银员",
+      "head_cook": "厨师长",
+      "cook": "厨师",
+      "assistant_cook": "帮厨",
+      "dishwasher": "洗碗工",
+      "bartender": "调酒师",
+      "cleaner": "保洁员",
+      "guard": "保安",
+      "rider": "送餐员"
+    },
+    "manage": "角色与权限",
+    "change": "更改",
+    "roleOf": "{name} 的角色"
   }
 }

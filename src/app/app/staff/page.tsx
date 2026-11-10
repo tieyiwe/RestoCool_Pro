@@ -10,6 +10,9 @@ import { ensureMainCode, formatRc } from "@/lib/access-codes";
 import { can } from "@/lib/auth/can";
 import { requireMemberPage } from "@/lib/auth/page";
 import { formatStaffNo, handledCounts, personnel } from "@/lib/personnel";
+import { listJobRoles } from "@/lib/personnel/roles";
+import { ROLE_GROUPS } from "@/lib/auth/access";
+import { assignRoleAction } from "./roles/actions";
 import { attendanceEnabled, attendanceLog, ensureAttendanceToken } from "@/lib/personnel/attendance";
 import { publicBaseUrl } from "@/lib/urls";
 import { addPersonAction, punchPersonAction, regenerateQrAction, setActivePersonAction, setPinAction } from "./actions";
@@ -29,10 +32,11 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   const ta = await getTranslations("attendance");
   const tp = await getTranslations("personnelAdmin");
   const tr = await getTranslations("app.role");
+  const tro = await getTranslations("roles");
   const format = await getFormatter();
   const sp = await searchParams;
   // Messages come from the URL: only known ones are shown (no raw keys on screen).
-  const ok = sp.ok && ["added", "pin", "in", "out", "qr", "status"].includes(sp.ok) ? sp.ok : null;
+  const ok = sp.ok && ["added", "pin", "in", "out", "qr", "status", "role"].includes(sp.ok) ? sp.ok : null;
   const error = sp.error && ["invalid", "forbidden", "notFound"].includes(sp.error) ? sp.error : null;
   const no = sp.no;
   // The owner and managers are changed by the owner only (managers.write).
@@ -41,7 +45,10 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   const r = (await ctx.repo.restaurant.get())!;
   const enabled = attendanceEnabled(r);
   const since = new Date(Date.now() - 7 * 24 * 3600_000);
+  const jobRoles = await listJobRoles(db, rid);
   const [people, counts, log] = await Promise.all([personnel(db, rid), handledCounts(db, rid, since), enabled ? attendanceLog(db, rid, 7) : Promise.resolve([])]);
+  const roleLabel = (r: { key: string | null; name: string | null }) => (r.key ? tro(`names.${r.key}` as "names.server") : (r.name ?? "—"));
+  const personRole = (p: (typeof people)[number]) => (p.role === "owner" ? tr("owner") : p.jobRoleId ? roleLabel({ key: p.jobRoleKey, name: p.jobRoleName }) : tr(p.role as "server"));
   const open = new Map(log.filter((l) => !l.checkOutAt).map((l) => [l.memberId, l]));
   const totals = new Map<string, number>();
   for (const l of log) totals.set(l.memberId, (totals.get(l.memberId) ?? 0) + l.minutes);
@@ -60,12 +67,22 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   const now = Date.now();
   // Only the owner changes a manager's (or the owner's) PIN or status; the server checks it too.
   const canLeads = can(ctx.actor, "managers.write", { restaurantId: rid });
+  // Roles a manager may give: those that don't manage the personnel (the owner gives those).
+  const assignable = jobRoles.filter((jr) => canLeads || !jr.access.includes("staff"));
+  const roleOptions = ROLE_GROUPS.map((g) => ({ g, list: assignable.filter((jr) => jr.group === g) })).filter((x) => x.list.length);
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-extrabold">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("intro")}</p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-extrabold">{t("title")}</h1>
+          <p className="text-muted-foreground">{t("intro")}</p>
+        </div>
+        <Button asChild variant="outline">
+          <Link href="/app/staff/roles" data-testid="roles-link">
+            🔑 {tro("manage")}
+          </Link>
+        </Button>
       </div>
       {ok && (
         <p role="status" className="rounded-lg bg-emerald-50 p-3 text-emerald-900" data-testid="staff-ok">
@@ -133,10 +150,30 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
                   </td>
                   <td className="px-3 py-2 align-top">
                     <span className="font-semibold">{p.name}</span>
-                    <span className="block text-xs text-muted-foreground">
-                      {tr(p.role)}
+                    <span className="block text-xs text-muted-foreground" data-testid="person-role">
+                      {personRole(p)}
                       {p.hasLogin ? ` · ${tp("loginEmail")}` : ""}
                     </span>
+                    {editable && p.role !== "owner" && (
+                      <form action={assignRoleAction} className="mt-1 flex items-center gap-1">
+                        <input type="hidden" name="id" value={p.id} />
+                        <select name="roleId" defaultValue={p.jobRoleId ?? ""} aria-label={tro("roleOf", { name: p.name })} className="min-h-11 max-w-40 rounded-lg border border-border bg-surface px-2 text-sm" data-testid="role-select">
+                          {!p.jobRoleId && <option value="">—</option>}
+                          {roleOptions.map(({ g, list }) => (
+                            <optgroup key={g} label={tro(`groups.${g}`)}>
+                              {list.map((jr) => (
+                                <option key={jr.id} value={jr.id}>
+                                  {roleLabel(jr)}
+                                </option>
+                              ))}
+                            </optgroup>
+                          ))}
+                        </select>
+                        <button className="min-h-11 rounded-lg px-2 text-sm font-semibold text-primary hover:bg-muted" data-testid="role-assign">
+                          {tro("change")}
+                        </button>
+                      </form>
+                    )}
                     {!p.active && (
                       <Badge variant="muted" className="mt-1">
                         {t("inactive")}
@@ -213,11 +250,15 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
           </label>
           <label className="text-sm">
             <span className="mb-1 block font-semibold">{tp("role")}</span>
-            <select name="role" className={input}>
-              {(["server", "kitchen", "cashier"] as const).map((role) => (
-                <option key={role} value={role}>
-                  {tr(role)}
-                </option>
+            <select name="jobRoleId" className={input} defaultValue={jobRoles.find((jr) => jr.key === "server")?.id} data-testid="new-person-role">
+              {roleOptions.map(({ g, list }) => (
+                <optgroup key={g} label={tro(`groups.${g}`)}>
+                  {list.map((jr) => (
+                    <option key={jr.id} value={jr.id}>
+                      {roleLabel(jr)}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </label>

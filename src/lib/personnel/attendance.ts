@@ -10,6 +10,7 @@ import { can, type Actor } from "@/lib/auth/can";
 import { ForbiddenError, NotFoundError } from "@/lib/errors";
 import { randomToken } from "@/lib/tokens";
 import { nextStaffNo } from "./index";
+import { roleForNewPerson } from "./roles";
 
 type Restaurant = typeof restaurants.$inferSelect;
 export type PersonnelCtx = { db: DB; actor: Actor; repo: TenantRepo };
@@ -154,20 +155,22 @@ export async function managerPunch(ctx: PersonnelCtx, memberId: string, action: 
 
 export const NewPersonInput = z.object({
   name: z.string().trim().min(2).max(60),
-  role: z.enum(["server", "kitchen", "cashier"]),
+  /** The job role (« Serveur·se », « Plongeur·se »…); its access decides what the person opens. */
+  jobRoleId: z.uuid(),
   pin: Pin,
 });
 
-/** Adds a server, cook or cashier who has no email: they get the next matricule and a PIN. */
+/** Adds a person who has no email (any job role): they get the next matricule and a PIN. */
 export async function addPerson(ctx: PersonnelCtx, input: z.input<typeof NewPersonInput>) {
   need(ctx);
   const d = NewPersonInput.parse(input);
   const rid = ctx.repo.restaurantId;
+  const role = await roleForNewPerson(ctx, d.jobRoleId);
   const pinHash = await hashPin(d.pin);
   const row = await ctx.db.transaction(async (tx) => {
     const staffNo = await nextStaffNo(tx, rid);
-    const [m] = await tx.insert(members).values({ restaurantId: rid, clerkUserId: null, name: d.name, role: d.role, staffNo, pinHash }).returning();
-    await writeAudit(tx, ctx.actor, { restaurantId: rid, action: "personnel.added", entity: "member", entityId: m!.id, data: { role: d.role, staffNo } });
+    const [m] = await tx.insert(members).values({ restaurantId: rid, clerkUserId: null, name: d.name, role: role.level, jobRoleId: role.id, staffNo, pinHash }).returning();
+    await writeAudit(tx, ctx.actor, { restaurantId: rid, action: "personnel.added", entity: "member", entityId: m!.id, data: { role: role.level, jobRoleId: role.id, staffNo } });
     return m!;
   });
   return { id: row.id, staffNo: row.staffNo! };

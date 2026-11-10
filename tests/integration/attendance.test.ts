@@ -2,6 +2,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
+const { roleId } = await import("./helpers/roles");
 
 const { closeDb, getDb } = await import("@/db");
 const { tenantRepo } = await import("@/db/repos/tenant");
@@ -38,7 +39,7 @@ describe.skipIf(!hasDb)("check-in PIN and personnel rights (database)", () => {
       .returning();
     managerId = rows[0]!.id;
     manager2Id = rows[1]!.id;
-    const added = await att.addPerson(ctxAs(OWNER, "owner"), { name: "Awa", role: "server", pin: "4321" });
+    const added = await att.addPerson(ctxAs(OWNER, "owner"), { name: "Awa", jobRoleId: await roleId(r.id, "server"), pin: "4321" });
     serverId = added.id;
     serverNo = added.staffNo;
   });

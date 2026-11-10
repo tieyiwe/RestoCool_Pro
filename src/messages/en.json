@@ -1250,7 +1250,8 @@
       "in": "Arrival recorded.",
       "out": "Departure recorded.",
       "qr": "New check-in QR code created: print it.",
-      "status": "Status updated."
+      "status": "Status updated.",
+      "role": "Role updated."
     },
     "err": {
       "invalid": "Check the name (at least 2 characters) and PIN (4 to 6 digits).",
@@ -1468,5 +1469,86 @@
       "noGps": "Couldn't get this phone's position. Turn on location, or paste a Google Maps link.",
       "denied": "Location access was denied. Allow it in the browser settings, or paste a Google Maps link."
     }
+  },
+  "roles": {
+    "back": "Personnel",
+    "title": "Roles and access",
+    "intro": "Everyone has a role. Tick what each role can open in the app; changes apply right away to everyone who has it. You can also create your own roles.",
+    "introReadOnly": "The restaurant's roles and what they allow. Only the owner can change them.",
+    "holders": "{n, plural, =0 {nobody} one {# person} other {# people}}",
+    "accessFor": "Access for {role}",
+    "noAccess": "No app access: this person only checks in and out.",
+    "save": "Save",
+    "delete": "Delete this role",
+    "deleteConfirm": "Delete the role “{role}”?",
+    "create": "Create a role",
+    "createHint": "Type the name you use (for example “Grill chef” or “Head cashier”) and choose its access.",
+    "name": "Role name",
+    "namePlaceholder": "Grill chef",
+    "group": "Team",
+    "access": "Access",
+    "createSubmit": "Create role",
+    "legend": "What each access gives",
+    "ok": {
+      "created": "Role created.",
+      "saved": "Access saved.",
+      "deleted": "Role deleted."
+    },
+    "err": {
+      "invalid": "Check the role name (2 to 40 characters).",
+      "forbidden": "Only the owner can make this change.",
+      "notFound": "Role not found.",
+      "duplicate": "A role already has this name.",
+      "inUse": "People still have this role: give them another role first."
+    },
+    "groups": {
+      "management": "Management",
+      "front": "Front of house",
+      "kitchen": "Kitchen",
+      "bar": "Bar",
+      "support": "Cleaning and security"
+    },
+    "areas": {
+      "service": "Take orders",
+      "kitchen": "Prepare (kitchen, bar)",
+      "cashier": "Take payments",
+      "cancel": "Cancel and discounts",
+      "soldOut": "Sold-out dishes",
+      "menu": "Edit the menu",
+      "seats": "Tables and QR codes",
+      "reservations": "Reservations",
+      "staff": "Manage personnel",
+      "reports": "Figures and history"
+    },
+    "areaHints": {
+      "service": "Front desk: confirm, take an order, mark served.",
+      "kitchen": "Kitchen screen: preparing, ready.",
+      "cashier": "Mark an order paid.",
+      "cancel": "Cancel an order and give a discount.",
+      "soldOut": "Mark a dish sold out today, with a note.",
+      "menu": "Add and edit dishes, prices and photos.",
+      "seats": "Tables, rooms, QR codes and print kits.",
+      "reservations": "Manage reservations.",
+      "staff": "Add people, their role, PIN and check-in. Lead role: only the owner gives it.",
+      "reports": "Order and personnel statistics."
+    },
+    "names": {
+      "manager": "Manager",
+      "assistant_manager": "Assistant manager",
+      "server": "Server",
+      "host": "Host",
+      "cashier": "Cashier",
+      "head_cook": "Head cook",
+      "cook": "Cook",
+      "assistant_cook": "Assistant cook",
+      "dishwasher": "Dishwasher",
+      "bartender": "Bartender",
+      "cleaner": "Cleaner",
+      "guard": "Security guard",
+      "rider": "Delivery rider"
+    },
+    "manage": "Roles and access",
+    "change": "Change",
+    "roleOf": "Role of {name}"
   }
 }

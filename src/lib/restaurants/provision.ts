@@ -1,4 +1,5 @@
 import { ensureMainCode } from "@/lib/access-codes";
+import { ensureJobRoles } from "@/lib/personnel/role-catalog";
 import { like } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
@@ -46,6 +47,8 @@ export async function createRestaurantForUser(
       const restaurant = await insertRestaurant(db, user, data);
       // The main QR (menu link) exists from the start; give it its typed code right away.
       await ensureMainCode(db, restaurant.id);
+      // Ready-made job roles (server, cook, cleaner…) that the owner can edit.
+      await ensureJobRoles(db, restaurant.id);
       return restaurant;
     } catch (err) {
       if (attempt >= 5 || !isUniqueViolation(err)) throw err;

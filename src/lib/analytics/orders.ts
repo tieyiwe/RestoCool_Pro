@@ -44,17 +44,18 @@ export async function orderAnalytics(db: DB, restaurantId: string, range: Range,
         and o.status <> 'cancelled' and i.status <> 'cancelled'
       group by i.name_snapshot, i.code order by 3 desc limit 5`),
     db.execute(sql`
-      select m.id, m.name, m.email, m.staff_no, m.role,
+      select m.id, m.name, m.email, m.staff_no, m.role, jr.key as role_key, jr.name as role_name,
         count(distinct o.id) filter (where o.confirmed_by = m.id)::int as confirmed,
         count(distinct o.id) filter (where o.prepared_by = m.id)::int as prepared,
         count(distinct o.id) filter (where o.served_by = m.id)::int as served,
         count(distinct o.id) filter (where o.cancelled_by = m.id)::int as cancelled,
         avg(extract(epoch from (o.served_at - o.sent_at)) / 60) filter (where o.served_by = m.id and o.status in ('served','paid')) as avg_service_min
       from members m
+      left join job_roles jr on jr.id = m.job_role_id
       left join orders o on o.restaurant_id = m.restaurant_id and o.sent_at >= ${from}
         and (o.confirmed_by = m.id or o.prepared_by = m.id or o.served_by = m.id or o.cancelled_by = m.id)
       where m.restaurant_id = ${restaurantId}
-      group by m.id order by m.staff_no nulls last`),
+      group by m.id, jr.key, jr.name order by m.staff_no nulls last`),
   ]);
   const s = summary.rows[0] ?? {};
   const served = n(s.served);
@@ -76,6 +77,8 @@ export async function orderAnalytics(db: DB, restaurantId: string, range: Range,
       name: (r.name as string | null) || String(r.email ?? "").split("@")[0] || "—",
       staffNo: formatStaffNo(r.staff_no as number | null),
       role: String(r.role),
+      roleKey: (r.role_key as string | null) ?? null,
+      roleName: (r.role_name as string | null) ?? null,
       confirmed: n(r.confirmed),
       prepared: n(r.prepared),
       served: n(r.served),

@@ -9,6 +9,7 @@ import { addPerson, setActive, setPin } from "@/lib/personnel/attendance";
 import { createRestaurantForUser } from "@/lib/restaurants/provision";
 
 vi.mock("server-only", () => ({}));
+const { roleId } = await import("./helpers/roles");
 
 const hasDb = Boolean(process.env.DATABASE_URL);
 
@@ -29,7 +30,7 @@ describe.skipIf(!hasDb)("personnel: who may change whom", () => {
     const [mgrA] = await db.insert(members).values({ restaurantId: r.id, clerkUserId: "user_test_personnel_mgr", role: "manager", staffNo: 2 }).returning();
     const [mgrB] = await db.insert(members).values({ restaurantId: r.id, clerkUserId: "user_test_personnel_mgr2", role: "manager", staffNo: 3 }).returning();
     const [own] = await db.select().from(members).where(and(eq(members.restaurantId, r.id), eq(members.role, "owner")));
-    const server = await addPerson({ db, actor: manager, repo }, { name: "Awa", role: "server", pin: "1234" });
+    const server = await addPerson({ db, actor: manager, repo }, { name: "Awa", jobRoleId: await roleId(r.id, "server"), pin: "1234" });
 
     // Servers: fine for a manager.
     await setPin({ db, actor: manager, repo }, server.id, "4321");

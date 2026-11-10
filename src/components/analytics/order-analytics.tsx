@@ -10,6 +10,9 @@ import { cn } from "@/lib/utils";
 export async function OrderAnalyticsPanel({ data, range }: { data: OrderAnalytics; range: Range }) {
   const t = await getTranslations("analytics");
   const tr = await getTranslations("app.role");
+  const tro = await getTranslations("roles");
+  const roleOf = (p: { role: string; roleKey: string | null; roleName: string | null }) =>
+    p.role === "owner" ? tr("owner") : p.roleKey ? tro(`names.${p.roleKey}` as "names.server") : (p.roleName ?? tr(p.role as "server"));
   const locale = await getLocale();
   const max = Math.max(1, ...data.byHour);
   const firstHour = data.byHour.findIndex((c) => c > 0);
@@ -104,7 +107,7 @@ export async function OrderAnalyticsPanel({ data, range }: { data: OrderAnalytic
               <tr key={p.id}>
                 <td className="px-4 py-2 font-mono font-bold">{p.staffNo}</td>
                 <td className="px-4 py-2">
-                  {p.name} <span className="text-xs text-muted-foreground">· {tr(p.role)}</span>
+                  {p.name} <span className="text-xs text-muted-foreground">· {roleOf(p)}</span>
                 </td>
                 <td className="px-4 py-2 text-right tabular-nums">{p.confirmed}</td>
                 <td className="px-4 py-2 text-right tabular-nums">{p.prepared}</td>

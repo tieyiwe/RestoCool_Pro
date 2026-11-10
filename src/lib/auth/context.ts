@@ -5,6 +5,7 @@ import { getDb } from "@/db";
 import { findRestaurantBySlug, membershipsForUser, tenantRepo, type Membership, type TenantRepo } from "@/db/repos/tenant";
 import { env } from "@/lib/env";
 import { ForbiddenError, UnauthorizedError } from "@/lib/errors";
+import { cleanAccess } from "./access";
 import { can, type Action, type Actor } from "./can";
 
 type MemberActor = Extract<Actor, { kind: "member" }>;
@@ -55,7 +56,7 @@ export const getMemberships = cache(async (): Promise<Membership[]> => {
     // Dev bypass: also act as owner of the demo restaurant without a member row.
     const demo = await findRestaurantBySlug(db, env.devRestaurantSlug(), { includeUnpublished: true });
     if (demo && !rows.some((m) => m.restaurantId === demo.id)) {
-      rows.unshift({ memberId: "dev", role: "owner", restaurantId: demo.id, restaurantName: demo.name, restaurantSlug: demo.slug });
+      rows.unshift({ memberId: "dev", role: "owner", access: null, restaurantId: demo.id, restaurantName: demo.name, restaurantSlug: demo.slug });
     }
   }
   return rows;
@@ -74,7 +75,7 @@ export const getMemberContext = cache(async (): Promise<MemberContext | null> =>
   const wanted = (await cookies()).get(ACTIVE_RESTAURANT_COOKIE)?.value;
   const active = memberships.find((m) => m.restaurantId === wanted) ?? memberships[0]!;
   return {
-    actor: { kind: "member", userId: id.userId, restaurantId: active.restaurantId, role: active.role },
+    actor: { kind: "member", userId: id.userId, restaurantId: active.restaurantId, role: active.role, ...(active.access ? { access: cleanAccess(active.access) } : {}) },
     repo: tenantRepo(getDb(), active.restaurantId),
     memberships,
   };

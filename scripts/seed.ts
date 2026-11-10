@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { closeDb, getDb, type DB } from "../src/db";
 import { generateCode } from "../src/lib/access-code-format";
 import { hashPin } from "../src/lib/personnel/pin";
+import { ensureJobRoles } from "../src/lib/personnel/role-catalog";
 import {
   accessCodes,
   areas,
@@ -188,6 +189,8 @@ async function seedDemo(db: DB) {
     { restaurantId, clerkUserId: null, name: "Awa (serveuse)", role: "server", staffNo: 2, pinHash: await hashPin("1234") },
     { restaurantId, clerkUserId: null, name: "Issa (cuisine)", role: "kitchen", staffNo: 3, pinHash: await hashPin("5678") },
   ]);
+  // Ready-made job roles; Awa becomes « Serveur·se », Issa « Cuisinier·ère ».
+  await ensureJobRoles(db, restaurantId);
   await db.insert(planEvents).values({ restaurantId, toPlan: "pro", toStatus: "trial", automatic: true, reference: "seed" });
   await writeAudit(db, null, { restaurantId, action: "restaurant.seeded", entity: "restaurant", entityId: restaurantId });
 

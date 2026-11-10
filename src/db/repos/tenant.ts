@@ -4,6 +4,7 @@ import {
   areas,
   auditLog,
   fortunes,
+  jobRoles,
   members,
   menuCategories,
   menuItemOptions,
@@ -110,12 +111,14 @@ export async function membershipsForUser(db: DB, clerkUserId: string) {
     .select({
       memberId: members.id,
       role: members.role,
+      access: jobRoles.access,
       restaurantId: restaurants.id,
       restaurantName: restaurants.name,
       restaurantSlug: restaurants.slug,
     })
     .from(members)
     .innerJoin(restaurants, eq(restaurants.id, members.restaurantId))
+    .leftJoin(jobRoles, and(eq(jobRoles.id, members.jobRoleId), eq(jobRoles.restaurantId, members.restaurantId)))
     .where(and(eq(members.clerkUserId, clerkUserId), eq(members.active, true)))
     .orderBy(asc(members.createdAt));
 }
