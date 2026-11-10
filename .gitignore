@@ -13,3 +13,6 @@ next-env.d.ts
 /public/demo/
 .DS_Store
 /.data/
+
+# Local agent worktrees (never commit)
+.claude/worktrees/
