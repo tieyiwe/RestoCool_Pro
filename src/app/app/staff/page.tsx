@@ -8,6 +8,7 @@ import { ConfirmButton } from "@/components/ui/confirm-button";
 import { getDb } from "@/db";
 import { ensureMainCode, formatRc } from "@/lib/access-codes";
 import { requireMemberPage } from "@/lib/auth/page";
+import { can } from "@/lib/auth/can";
 import { formatStaffNo, handledCounts, personnel } from "@/lib/personnel";
 import { attendanceEnabled, attendanceLog, ensureAttendanceToken } from "@/lib/personnel/attendance";
 import { publicBaseUrl } from "@/lib/urls";
@@ -29,7 +30,13 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   const tp = await getTranslations("personnelAdmin");
   const tr = await getTranslations("app.role");
   const format = await getFormatter();
-  const { ok, error, no } = await searchParams;
+  const sp = await searchParams;
+  // Messages come from the URL: only known ones are shown (no raw keys on screen).
+  const ok = sp.ok && ["added", "pin", "in", "out", "qr", "status"].includes(sp.ok) ? sp.ok : null;
+  const error = sp.error && ["invalid", "forbidden", "notFound"].includes(sp.error) ? sp.error : null;
+  const no = sp.no;
+  // The owner and managers are changed by the owner only (managers.write).
+  const canManagers = can(ctx.actor, "managers.write", { restaurantId: ctx.repo.restaurantId });
   const db = getDb();
   const rid = ctx.repo.restaurantId;
   const r = (await ctx.repo.restaurant.get())!;
@@ -161,6 +168,7 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
                   <td className="px-3 py-2 text-right align-top tabular-nums">{counts.get(p.id)?.served ?? 0}</td>
                   {enabled && <td className="px-3 py-2 text-right align-top tabular-nums">{hours(totals.get(p.id) ?? 0)}</td>}
                   <td className="px-3 py-2 align-top">
+                    {(canManagers || (p.role !== "owner" && p.role !== "manager")) && (
                     <form action={setPinAction} className="flex items-center gap-1">
                       <input type="hidden" name="id" value={p.id} />
                       <input
@@ -175,7 +183,8 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
                       />
                       <button className="min-h-11 rounded-lg px-2 text-sm font-semibold text-primary hover:bg-muted">{tp("savePin")}</button>
                     </form>
-                    {p.role !== "owner" && (
+                    )}
+                    {p.role !== "owner" && (p.role !== "manager" || canManagers) && (
                       <form action={setActivePersonAction}>
                         <input type="hidden" name="id" value={p.id} />
                         <input type="hidden" name="active" value={p.active ? "0" : "1"} />

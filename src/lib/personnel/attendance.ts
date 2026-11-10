@@ -24,6 +24,12 @@ function need(ctx: PersonnelCtx) {
   if (!can(ctx.actor, "staff.write", { restaurantId: ctx.repo.restaurantId })) throw new ForbiddenError();
 }
 
+/** The owner and managers are « managers.write » (owner only): a manager can't lock them out or set their PIN. */
+function needForTarget(ctx: PersonnelCtx, target: { role: string }) {
+  need(ctx);
+  if ((target.role === "owner" || target.role === "manager") && !can(ctx.actor, "managers.write", { restaurantId: ctx.repo.restaurantId })) throw new ForbiddenError();
+}
+
 async function actingMemberId(ctx: PersonnelCtx): Promise<string | null> {
   if (ctx.actor.kind !== "member") return null;
   const [m] = await ctx.db.select({ id: members.id }).from(members).where(and(eq(members.restaurantId, ctx.repo.restaurantId), eq(members.clerkUserId, ctx.actor.userId))).limit(1);
@@ -154,6 +160,9 @@ export async function addPerson(ctx: PersonnelCtx, input: z.input<typeof NewPers
 export async function setPin(ctx: PersonnelCtx, memberId: string, pin: string) {
   need(ctx);
   const p = Pin.parse(pin);
+  const m = await ctx.db.query.members.findFirst({ where: and(eq(members.restaurantId, ctx.repo.restaurantId), eq(members.id, memberId)), columns: { role: true } });
+  if (!m) throw new NotFoundError();
+  needForTarget(ctx, m);
   const done = await ctx.db
     .update(members)
     .set({ pinHash: await hashPin(p), pinFailures: 0, lockedUntil: null })
@@ -169,6 +178,8 @@ export async function setActive(ctx: PersonnelCtx, memberId: string, active: boo
   if (!m) throw new NotFoundError();
   // The owner stays: a restaurant always keeps its owner.
   if (m.role === "owner") throw new ForbiddenError();
+  // Removing a manager is the owner's call (managers.write), not another manager's.
+  needForTarget(ctx, m);
   await ctx.db.update(members).set({ active }).where(eq(members.id, m.id));
   await writeAudit(ctx.db, ctx.actor, { restaurantId: ctx.repo.restaurantId, action: active ? "personnel.activated" : "personnel.deactivated", entity: "member", entityId: m.id });
 }
