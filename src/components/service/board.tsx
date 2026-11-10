@@ -25,27 +25,40 @@ function store(key: string, value?: string | null): string | null {
 
 /* ---------------------------------------------------------------- live data */
 
-/** Orders of the member's restaurant, live (SSE) with polling while the stream is down. */
-export function useServiceOrders(onNew: (o: StaffOrder) => void) {
+/**
+ * Orders of the member's restaurant, live (SSE) with polling while the stream is down.
+ * `onNew` runs for an order that appeared or changed status since the last refresh (`before`:
+ * its previous status, undefined when it is new), never on the first load.
+ */
+export function useServiceOrders(onNew: (o: StaffOrder, before: StaffOrder["status"] | undefined) => void) {
   const [orders, setOrders] = useState<StaffOrder[] | null>(null);
   const [error, setError] = useState<"plan" | "network" | null>(null);
   const [connected, setConnected] = useState(false);
   const [menuTick, setMenuTick] = useState(0);
-  const seen = useRef<Set<string> | null>(null);
+  const seen = useRef<Map<string, StaffOrder["status"]> | null>(null);
   const onNewRef = useRef(onNew);
   useEffect(() => {
     onNewRef.current = onNew;
   }, [onNew]);
 
+  // One refresh per live event: answers can arrive out of order, and an older one must not
+  // put an order back to a previous status (or ring twice for it).
+  const seq = useRef(0);
+  const applied = useRef(0);
   const refresh = useCallback(async () => {
+    const mine = ++seq.current;
     const res = await fetch("/api/app/orders", { cache: "no-store" }).catch(() => null);
+    if (mine < applied.current) return;
     if (!res) return setError("network");
     if (res.status === 402 || res.status === 403) return setError("plan");
     if (!res.ok) return setError("network");
-    const body = (await res.json()) as { orders: StaffOrder[] };
+    const body = (await res.json().catch(() => null)) as { orders: StaffOrder[] } | null;
+    if (!body) return setError("network");
+    if (mine < applied.current) return;
+    applied.current = mine;
     setError(null);
-    if (seen.current) for (const o of body.orders) if (!seen.current.has(o.id)) onNewRef.current(o);
-    seen.current = new Set(body.orders.map((o) => o.id));
+    if (seen.current) for (const o of body.orders) if (seen.current.get(o.id) !== o.status) onNewRef.current(o, seen.current.get(o.id));
+    seen.current = new Map(body.orders.map((o) => [o.id, o.status]));
     setOrders(body.orders);
   }, []);
 
@@ -416,8 +429,8 @@ export function FrontDesk({ delays }: { delays: Delays }) {
   useEffect(() => {
     soundRef.current = sound;
   }, [sound]);
-  const onNew = useCallback((o: StaffOrder) => {
-    if (soundRef.current && (o.status === "sent" || o.status === "confirmed")) chime();
+  const onNew = useCallback((o: StaffOrder, before: StaffOrder["status"] | undefined) => {
+    if (soundRef.current && before === undefined && (o.status === "sent" || o.status === "confirmed")) chime();
   }, []);
   const { orders, error, connected, refresh, menuTick } = useServiceOrders(onNew);
   useWakeLock(wake);
@@ -491,8 +504,10 @@ export function KitchenDisplay({ delays }: { delays: Delays }) {
   useEffect(() => {
     soundRef.current = sound;
   }, [sound]);
-  const onNew = useCallback((o: StaffOrder) => {
-    if (soundRef.current && o.status === "confirmed") chime();
+  // An order reaches the kitchen when it becomes « confirmée »: straight away in direct mode,
+  // or when the server confirms it (it was already on the board as « envoyée »).
+  const onNew = useCallback((o: StaffOrder, before: StaffOrder["status"] | undefined) => {
+    if (soundRef.current && o.status === "confirmed" && (before === undefined || before === "sent")) chime();
   }, []);
   const { orders, error, connected, refresh, menuTick } = useServiceOrders(onNew);
   useWakeLock(wake);
@@ -544,6 +559,7 @@ export function KitchenDisplay({ delays }: { delays: Delays }) {
         ))}
       </div>
       {error && <BoardError error={error} />}
+      {orders === null && !error && <p className="text-muted-foreground">{t("loading")}</p>}
       {orders !== null && shown.length === 0 && <p className="rounded-2xl bg-muted p-8 text-center text-lg text-muted-foreground">{t("kitchenEmpty")}</p>}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {shown.map((o) => (
@@ -608,9 +624,29 @@ export function OrderDetail({ initial, delays }: { initial: StaffOrder; delays: 
     if (res?.ok) setOrder(((await res.json()) as { order: StaffOrder }).order);
   }, [initial.id]);
   useEffect(() => {
+    // Same live rules as the board: catch up when the stream (re)connects, poll while it is down.
+    let poll: number | undefined;
+    const startPolling = () => {
+      if (poll === undefined) poll = window.setInterval(() => void reload(), POLL_MS);
+    };
     const es = typeof EventSource === "undefined" ? null : new EventSource("/api/app/stream");
-    es?.addEventListener("order", () => void reload());
-    return () => es?.close();
+    if (!es) startPolling();
+    else {
+      es.addEventListener("ready", () => {
+        window.clearInterval(poll);
+        poll = undefined;
+        void reload();
+      });
+      es.addEventListener("order", () => void reload());
+      es.onerror = startPolling;
+    }
+    const onVisible = () => document.visibilityState === "visible" && void reload();
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      es?.close();
+      window.clearInterval(poll);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, [reload]);
   return (
     <div className="mx-auto max-w-lg">

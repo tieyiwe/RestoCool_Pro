@@ -8,6 +8,11 @@ import { DEFAULT_INACTIVITY } from "./tables";
 export const QR_SESSION_IDLE_MS = 4 * 60 * 60 * 1000;
 /** Extra margin before the server frees a picker seat whose phone went silent. */
 const PICKER_GRACE_MS = 2 * 60 * 1000;
+/**
+ * Seats one group of people occupies (and shares a bill at). Counter, takeaway and delivery are
+ * one seat shared by unrelated customers: never « occupied », never « joined ».
+ */
+const OCCUPIABLE = new Set(["table", "room", "area"]);
 
 export type JoinResult =
   | { ok: true; sessionId: string; seat: { id: string; type: string; label: string }; joined: boolean }
@@ -28,7 +33,13 @@ export async function sweepStale(db: DB, r: Restaurant, now = new Date()): Promi
         eq(tableSessions.restaurantId, r.id),
         eq(tableSessions.status, "open"),
         or(
-          and(eq(tableSessions.source, "picker"), lt(tableSessions.lastActivityAt, pickerCutoff)),
+          // Inactivity release only frees a picker seat before any order is sent from it;
+          // once the table has ordered, it follows the long idle rule like a QR table.
+          and(
+            eq(tableSessions.source, "picker"),
+            lt(tableSessions.lastActivityAt, pickerCutoff),
+            sql`not exists (select 1 from ${orders} where ${orders.sessionId} = ${tableSessions.id} and ${orders.status} <> 'cancelled')`,
+          ),
           lt(tableSessions.lastActivityAt, qrCutoff),
         ),
         // A table with orders still in progress stays open whatever the phones do.
@@ -80,7 +91,7 @@ export async function joinSession(
             .from(sessionDevices)
             .where(and(eq(sessionDevices.sessionId, open.id), isNull(sessionDevices.leftAt)));
           const mine = others.some((o) => o.deviceId === input.deviceId);
-          const taken = others.some((o) => o.deviceId !== input.deviceId);
+          const taken = OCCUPIABLE.has(input.seat.type) && others.some((o) => o.deviceId !== input.deviceId);
           if (input.source === "picker" && taken && !mine && !input.confirmJoin) return { ok: false as const, reason: "occupied" as const };
           sessionId = open.id;
           joined = taken;
@@ -181,6 +192,6 @@ export async function pickerSeats(db: DB, r: Restaurant) {
       label: s.label,
       capacity: s.capacity,
       area: s.areaId ? (areaRows.find((a) => a.id === s.areaId)?.name ?? null) : null,
-      occupied: occupied.has(s.id),
+      occupied: OCCUPIABLE.has(s.type) && occupied.has(s.id),
     }));
 }

@@ -3,7 +3,8 @@ import { Client } from "pg";
 import { log } from "@/lib/log";
 import { CHANNEL, parseEvent, type RtEvent } from "./events";
 
-type Listener = (ev: RtEvent) => void;
+/** Receives every live event, or `null` once when the LISTEN connection is lost. */
+type Listener = (ev: RtEvent | null) => void;
 type State = { client: Client | null; connecting: Promise<void> | null; listeners: Set<Listener>; retry: number };
 
 // One LISTEN connection per server process, shared by every open stream (kept across hot reloads).
@@ -26,11 +27,19 @@ async function connect(): Promise<void> {
       client.end().catch(() => {});
       // Reconnect while someone is listening; screens fall back to polling meanwhile.
       if (state.listeners.size > 0) setTimeout(() => void connect().catch(() => {}), Math.min(30_000, 1000 * 2 ** state.retry++));
+      // Open streams would otherwise stay « live » but silent: tell them, so they close and the
+      // screens poll until they reconnect.
+      for (const l of [...state.listeners]) l(null);
     };
     client.on("error", drop);
     client.on("end", () => drop());
-    await client.connect();
-    await client.query(`LISTEN ${CHANNEL}`);
+    try {
+      await client.connect();
+      await client.query(`LISTEN ${CHANNEL}`);
+    } catch (err) {
+      client.end().catch(() => {});
+      throw err;
+    }
     state.client = client;
     state.retry = 0;
   })().finally(() => {

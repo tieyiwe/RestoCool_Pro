@@ -61,6 +61,7 @@ function isCartLine(x: unknown): x is CartLine {
 }
 
 const pick = (t: { fr: string } & Partial<Record<string, string>> | null | undefined, lang: Lang) => (t ? t[lang]?.trim() || t.fr : "");
+const soldOutIds = (d: PublicMenuData) => d.categories.flatMap((c) => c.items.filter((i) => i.soldOut).map((i) => i.id));
 
 export function MenuApp({
   data: initialData,
@@ -262,7 +263,8 @@ export function MenuApp({
   const myOrders = live.orders;
   const activeOrders = myOrders.filter((o) => o.mine && ["sent", "confirmed", "preparing", "ready"].includes(o.status));
   useEffect(() => {
-    setHeldSeat(Boolean(seat && myOrders.some((o) => o.mine && o.status !== "cancelled")));
+    // Only an order sent from this seat holds it (not one from an earlier visit today).
+    setHeldSeat(Boolean(seat && myOrders.some((o) => o.mine && o.current && o.status !== "cancelled")));
   }, [seat, myOrders]);
 
   async function submitOrder() {
@@ -295,7 +297,8 @@ export function MenuApp({
       return;
     }
     if (res.error === "unavailable") {
-      setLiveSoldOut((prev) => new Set([...(prev ?? []), ...res.itemIds]));
+      // The live set replaces the server-rendered flags: start from them, never from nothing.
+      setLiveSoldOut((prev) => new Set([...(prev ?? soldOutIds(initialData)), ...res.itemIds]));
       setLines((l) => l.filter((x) => !res.itemIds.includes(x.itemId)));
       flash(t("orderUnavailable"));
     } else if (res.error === "no_seat") {

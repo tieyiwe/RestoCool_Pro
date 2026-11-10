@@ -30,11 +30,11 @@ export async function orderAnalytics(db: DB, restaurantId: string, range: Range,
         count(*) filter (where status in ('sent','confirmed','preparing','ready'))::int as open,
         coalesce(sum(subtotal) filter (where status in ('served','paid')), 0)::int as revenue,
         count(*) filter (where status in ('served','paid'))::int as served,
-        avg(extract(epoch from (served_at - sent_at)) / 60) filter (where served_at is not null) as avg_service_min,
-        avg(extract(epoch from (ready_at - coalesce(confirmed_at, sent_at))) / 60) filter (where ready_at is not null) as avg_prep_min
+        avg(extract(epoch from (served_at - sent_at)) / 60) filter (where status in ('served','paid') and served_at is not null) as avg_service_min,
+        avg(extract(epoch from (ready_at - coalesce(confirmed_at, sent_at))) / 60) filter (where status <> 'cancelled' and ready_at is not null) as avg_prep_min
       from orders where restaurant_id = ${restaurantId} and sent_at >= ${from}`),
     db.execute(sql`
-      select extract(hour from sent_at)::int as h, count(*)::int as c
+      select extract(hour from sent_at at time zone 'Africa/Ouagadougou')::int as h, count(*)::int as c
       from orders where restaurant_id = ${restaurantId} and sent_at >= ${from} and status <> 'cancelled'
       group by 1 order by 1`),
     db.execute(sql`
@@ -49,7 +49,7 @@ export async function orderAnalytics(db: DB, restaurantId: string, range: Range,
         count(distinct o.id) filter (where o.prepared_by = m.id)::int as prepared,
         count(distinct o.id) filter (where o.served_by = m.id)::int as served,
         count(distinct o.id) filter (where o.cancelled_by = m.id)::int as cancelled,
-        avg(extract(epoch from (o.served_at - o.sent_at)) / 60) filter (where o.served_by = m.id) as avg_service_min
+        avg(extract(epoch from (o.served_at - o.sent_at)) / 60) filter (where o.served_by = m.id and o.status in ('served','paid')) as avg_service_min
       from members m
       left join orders o on o.restaurant_id = m.restaurant_id and o.sent_at >= ${from}
         and (o.confirmed_by = m.id or o.prepared_by = m.id or o.served_by = m.id or o.cancelled_by = m.id)
