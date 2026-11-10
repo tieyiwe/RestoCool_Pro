@@ -351,7 +351,8 @@
       "branding": "Ajoutez votre logo et vos couleurs"
     },
     "frontDesk": "Service",
-    "kitchen": "Cuisine"
+    "kitchen": "Cuisine",
+    "guide": "Guide"
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -1184,7 +1185,8 @@
     "poster1": "Scannez ce QR code avec votre téléphone.",
     "poster2": "Entrez votre matricule et votre code PIN.",
     "poster3": "À l’arrivée comme au départ : le même code.",
-    "posterRc": "Sans QR code : {site} · numéro {rc}"
+    "posterRc": "Sans QR code : {site} · numéro {rc}",
+    "guideLink": "Guide du personnel (tutoriels animés)"
   },
   "attendance": {
     "title": "Pointage",
@@ -1241,6 +1243,186 @@
       "invalid": "Vérifiez le nom (2 caractères minimum) et le code PIN (4 à 6 chiffres).",
       "forbidden": "Action non autorisée.",
       "notFound": "Introuvable."
+    }
+  },
+  "guide": {
+    "title": "Guide RestoCool",
+    "intro": "De courts tutoriels animés pour prendre en main RestoCool. Touchez une étape pour la revoir.",
+    "introPublic": "Tutoriels animés pour le personnel et les gérants : pointage, commandes, cuisine, numéro RC.",
+    "audience": "Pour qui ?",
+    "for": {
+      "manager": "Gérants",
+      "staff": "Personnel"
+    },
+    "prev": "Étape précédente",
+    "next": "Étape suivante",
+    "play": "Lecture",
+    "pause": "Pause",
+    "tryIt": "Essayer maintenant",
+    "progress": "{done} tutoriel(s) vu(s) sur {total}",
+    "listLabel": "Tutoriels",
+    "seen": "Vu",
+    "cardTitle": "Apprendre à utiliser RestoCool",
+    "allSeen": "Bravo, vous avez vu tous les tutoriels ! Revoyez-les quand vous voulez.",
+    "seeAll": "Voir tous les tutoriels",
+    "checkinLink": "Pointage",
+    "ui": {
+      "menu": "Menu",
+      "addDish": "+ Ajouter un plat",
+      "newDish": "Nouveau plat",
+      "name": "Nom",
+      "price": "Prix",
+      "suggest": "Suggérer",
+      "photoOk": "Photo compressée",
+      "save": "Enregistrer le plat",
+      "seating": "Tables et salles",
+      "printQr": "Imprimer les QR codes",
+      "settings": "Paramètres",
+      "publishTitle": "Publier mon menu",
+      "publishBtn": "Publier",
+      "online": "Votre menu est en ligne",
+      "share": "Partager",
+      "frontDesk": "Service en salle",
+      "toConfirm": "À confirmer",
+      "inKitchen": "En cuisine",
+      "ready": "Prête",
+      "sent": "Envoyée",
+      "newOrder": "Nouvelle commande",
+      "confirm": "Confirmer",
+      "cooking": "En cours",
+      "served": "Servie",
+      "bonAppetit": "Vous avez été servi ! Bon appétit",
+      "readyShort": "Prêt",
+      "todo": "À faire",
+      "allReady": "Tout est prêt",
+      "kitchenScreen": "Écran cuisine",
+      "floorNotified": "Le service est prévenu : commande prête",
+      "soldOutBtn": "Épuisé ?",
+      "soldOutTitle": "Plats épuisés aujourd’hui",
+      "soldOut": "Épuisé",
+      "personnel": "Personnel",
+      "add": "Ajouter",
+      "qrPoster": "QR code de pointage à l’entrée du personnel",
+      "present": "Présent",
+      "checkIn": "Pointer l’arrivée",
+      "orders": "Commandes",
+      "sales": "Ventes",
+      "serviceTime": "Service moyen",
+      "dashboard": "Tableau de bord",
+      "today": "Aujourd’hui",
+      "days7": "7 jours",
+      "checkinTitle": "Pointage",
+      "staffNo": "Matricule",
+      "punch": "Pointer",
+      "helloMariam": "Bonjour Mariam !",
+      "arrivalAt": "Arrivée enregistrée à 08:02.",
+      "rcNumber": "Numéro RC",
+      "openMenu": "Ouvrir le menu",
+      "table": "Table",
+      "orderNo": "N° 12",
+      "all": "Tous",
+      "grill": "Grill",
+      "drinks": "Boissons",
+      "owner": "Propriétaire"
+    },
+    "items": {
+      "menu": {
+        "title": "Ajouter vos plats",
+        "intro": "Créez votre menu en quelques minutes, avec photos et prix en FCFA.",
+        "s1": "Ouvrez Menu, puis touchez « + Ajouter un plat ».",
+        "s2": "Tapez le nom et le prix. « Suggérer » remplit l’anglais et le chinois.",
+        "s3": "Ajoutez une photo : elle est compressée automatiquement. Enregistrez.",
+        "s4": "Le plat apparaît tout de suite sur le menu de vos clients."
+      },
+      "qr": {
+        "title": "Imprimer et placer vos QR codes",
+        "intro": "Chaque table a son QR code et son numéro RC.",
+        "s1": "Ouvrez Tables et salles, puis touchez « Imprimer les QR codes ».",
+        "s2": "Imprimez la page (ou enregistrez-la en PDF) : une carte par table.",
+        "s3": "Posez chaque carte sur sa table, bien visible.",
+        "s4": "Le client scanne : son téléphone sait déjà à quelle table il est."
+      },
+      "publish": {
+        "title": "Publier et partager votre menu",
+        "intro": "Rendez votre menu visible à tous, puis partagez-le.",
+        "s1": "Dans Paramètres, section Publier, touchez « Publier ».",
+        "s2": "Votre menu est en ligne et apparaît dans l’annuaire RestoCool.",
+        "s3": "Partagez le lien ou votre numéro RC sur WhatsApp et vos réseaux."
+      },
+      "service": {
+        "title": "Suivre les commandes en salle",
+        "intro": "Toutes les commandes arrivent en direct sur la tablette du service.",
+        "s1": "Une nouvelle commande arrive avec un son, le numéro de table bien visible.",
+        "s2": "Touchez « Confirmer » : elle part en cuisine.",
+        "s3": "Elle passe dans « En cuisine » pendant la préparation.",
+        "s4": "Quand elle est « Prête », servez-la et touchez « Servie »."
+      },
+      "soldout": {
+        "title": "Marquer un plat épuisé",
+        "intro": "Un plat est fini ? Vos clients le voient tout de suite.",
+        "s1": "Sur l’écran cuisine ou le service, touchez « Épuisé ? ».",
+        "s2": "Cochez le plat : il est épuisé jusqu’à minuit.",
+        "s3": "Sur le téléphone des clients, le plat affiche « Épuisé »."
+      },
+      "staff": {
+        "title": "Ajouter votre personnel et le pointage",
+        "intro": "Chaque personne a un matricule et un code PIN, même sans e-mail.",
+        "s1": "Dans Personnel, tapez le nom, le rôle et un code PIN, puis « Ajouter ».",
+        "s2": "La personne reçoit son matricule (ex. : 004), enregistré sur chaque commande.",
+        "s3": "Imprimez le QR code de pointage et placez-le à l’entrée du personnel.",
+        "s4": "Voyez qui est présent, et pointez quelqu’un à la main s’il a oublié."
+      },
+      "analytics": {
+        "title": "Lire vos chiffres",
+        "intro": "Ventes, commandes et personnel, sans cahier.",
+        "s1": "Le tableau de bord montre les commandes, les ventes et le temps de service.",
+        "s2": "Changez la période : aujourd’hui, 7 jours ou 30 jours.",
+        "s3": "Voyez les commandes traitées par chaque personne, avec son matricule."
+      },
+      "checkin": {
+        "title": "Pointer à l’arrivée et au départ",
+        "intro": "Votre matricule et votre code PIN suffisent.",
+        "s1": "Scannez le QR code de pointage à l’entrée du personnel.",
+        "s2": "Tapez votre matricule (ex. : 004).",
+        "s3": "Tapez votre code PIN, puis « Pointer ».",
+        "s4": "C’est enregistré ! Au départ, refaites la même chose."
+      },
+      "confirm": {
+        "title": "Confirmer une nouvelle commande",
+        "intro": "Les commandes des clients arrivent sur la tablette ou le téléphone.",
+        "s1": "Une commande arrive avec un son : regardez le numéro de table.",
+        "s2": "Vérifiez avec le client si besoin, puis touchez « Confirmer ».",
+        "s3": "La commande part en cuisine automatiquement."
+      },
+      "serve": {
+        "title": "Servir une commande prête",
+        "intro": "La cuisine vous prévient quand c’est prêt.",
+        "s1": "La commande passe dans « Prête » : apportez-la à la bonne table.",
+        "s2": "Touchez « Servie » : la commande est enregistrée à votre nom.",
+        "s3": "Le client voit « Vous avez été servi ! Bon appétit »."
+      },
+      "scan": {
+        "title": "Lire la commande d’un client",
+        "intro": "Le client peut vous montrer sa commande sur son téléphone.",
+        "s1": "Le client touche « Montrer au serveur » : grand écran avec la table et les plats.",
+        "s2": "Scannez le QR code de son écran avec votre téléphone.",
+        "s3": "La commande s’ouvre chez vous : confirmez-la."
+      },
+      "kitchen": {
+        "title": "Utiliser l’écran cuisine",
+        "intro": "Les plats à préparer s’affichent par poste.",
+        "s1": "Une commande confirmée arrive sur l’écran cuisine.",
+        "s2": "Touchez un plat quand vous commencez : il passe « En cours ».",
+        "s3": "Touchez « Tout est prêt » quand tout est terminé.",
+        "s4": "Le service est prévenu tout de suite."
+      },
+      "rc": {
+        "title": "Aider un client qui ne peut pas scanner",
+        "intro": "Le numéro RC ouvre le même menu que le QR code.",
+        "s1": "Montrez au client le numéro RC écrit sous le QR code (ex. : RC-K7M3P).",
+        "s2": "Il va sur restocool.com/c et tape le numéro.",
+        "s3": "Le menu s’ouvre, déjà à la bonne table."
+      }
     }
   }
 }

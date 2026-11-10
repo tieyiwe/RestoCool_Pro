@@ -351,7 +351,8 @@
       "branding": "Add your logo and colours"
     },
     "frontDesk": "Service",
-    "kitchen": "Kitchen"
+    "kitchen": "Kitchen",
+    "guide": "Guide"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -1184,7 +1185,8 @@
     "poster1": "Scan this QR code with your phone.",
     "poster2": "Enter your staff ID and PIN.",
     "poster3": "On arrival and on departure: the same code.",
-    "posterRc": "Without the QR code: {site} · number {rc}"
+    "posterRc": "Without the QR code: {site} · number {rc}",
+    "guideLink": "Staff guide (animated tutorials)"
   },
   "attendance": {
     "title": "Check-in",
@@ -1241,6 +1243,186 @@
       "invalid": "Check the name (at least 2 characters) and PIN (4 to 6 digits).",
       "forbidden": "Not allowed.",
       "notFound": "Not found."
+    }
+  },
+  "guide": {
+    "title": "RestoCool guide",
+    "intro": "Short animated tutorials to get started with RestoCool. Tap a step to see it again.",
+    "introPublic": "Animated tutorials for staff and managers: check-in, orders, kitchen, RC number.",
+    "audience": "For whom?",
+    "for": {
+      "manager": "Managers",
+      "staff": "Staff"
+    },
+    "prev": "Previous step",
+    "next": "Next step",
+    "play": "Play",
+    "pause": "Pause",
+    "tryIt": "Try it now",
+    "progress": "{done} of {total} tutorials watched",
+    "listLabel": "Tutorials",
+    "seen": "Watched",
+    "cardTitle": "Learn to use RestoCool",
+    "allSeen": "Well done, you’ve watched every tutorial! Watch them again any time.",
+    "seeAll": "See all tutorials",
+    "checkinLink": "Check-in",
+    "ui": {
+      "menu": "Menu",
+      "addDish": "+ Add a dish",
+      "newDish": "New dish",
+      "name": "Name",
+      "price": "Price",
+      "suggest": "Suggest",
+      "photoOk": "Photo compressed",
+      "save": "Save the dish",
+      "seating": "Tables & rooms",
+      "printQr": "Print the QR codes",
+      "settings": "Settings",
+      "publishTitle": "Publish my menu",
+      "publishBtn": "Publish",
+      "online": "Your menu is online",
+      "share": "Share",
+      "frontDesk": "Front desk",
+      "toConfirm": "To confirm",
+      "inKitchen": "In the kitchen",
+      "ready": "Ready",
+      "sent": "Sent",
+      "newOrder": "New order",
+      "confirm": "Confirm",
+      "cooking": "Cooking",
+      "served": "Served",
+      "bonAppetit": "You’ve been served! Enjoy your meal",
+      "readyShort": "Ready",
+      "todo": "To do",
+      "allReady": "All ready",
+      "kitchenScreen": "Kitchen display",
+      "floorNotified": "The floor is notified: order ready",
+      "soldOutBtn": "Sold out?",
+      "soldOutTitle": "Sold out today",
+      "soldOut": "Sold out",
+      "personnel": "Personnel",
+      "add": "Add",
+      "qrPoster": "Check-in QR code at the staff entrance",
+      "present": "Present",
+      "checkIn": "Check in",
+      "orders": "Orders",
+      "sales": "Sales",
+      "serviceTime": "Avg. service",
+      "dashboard": "Dashboard",
+      "today": "Today",
+      "days7": "7 days",
+      "checkinTitle": "Check-in",
+      "staffNo": "Staff ID",
+      "punch": "Check in / out",
+      "helloMariam": "Hello Mariam!",
+      "arrivalAt": "Arrival recorded at 08:02.",
+      "rcNumber": "RC number",
+      "openMenu": "Open the menu",
+      "table": "Table",
+      "orderNo": "No. 12",
+      "all": "All",
+      "grill": "Grill",
+      "drinks": "Drinks",
+      "owner": "Owner"
+    },
+    "items": {
+      "menu": {
+        "title": "Add your dishes",
+        "intro": "Build your menu in minutes, with photos and prices in FCFA.",
+        "s1": "Open Menu, then tap « + Add a dish ».",
+        "s2": "Type the name and price. « Suggest » fills in English and Chinese.",
+        "s3": "Add a photo: it’s compressed automatically. Save.",
+        "s4": "The dish shows up right away on your customers’ menu."
+      },
+      "qr": {
+        "title": "Print and place your QR codes",
+        "intro": "Each table has its QR code and RC number.",
+        "s1": "Open Tables & rooms, then tap « Print the QR codes ».",
+        "s2": "Print the page (or save it as PDF): one card per table.",
+        "s3": "Put each card on its table, easy to see.",
+        "s4": "The customer scans: their phone already knows the table."
+      },
+      "publish": {
+        "title": "Publish and share your menu",
+        "intro": "Make your menu visible to everyone, then share it.",
+        "s1": "In Settings, Publish section, tap « Publish ».",
+        "s2": "Your menu is online and listed in the RestoCool directory.",
+        "s3": "Share the link or your RC number on WhatsApp and social media."
+      },
+      "service": {
+        "title": "Follow orders on the floor",
+        "intro": "Every order arrives live on the front desk tablet.",
+        "s1": "A new order arrives with a sound, the table number easy to see.",
+        "s2": "Tap « Confirm »: it goes to the kitchen.",
+        "s3": "It moves to « In the kitchen » while being prepared.",
+        "s4": "When it’s « Ready », serve it and tap « Served »."
+      },
+      "soldout": {
+        "title": "Mark a dish as sold out",
+        "intro": "A dish ran out? Customers see it right away.",
+        "s1": "On the kitchen or front desk screen, tap « Sold out? ».",
+        "s2": "Tick the dish: it’s sold out until midnight.",
+        "s3": "On customers’ phones, the dish shows « Sold out »."
+      },
+      "staff": {
+        "title": "Add your staff and check-in",
+        "intro": "Each person has a staff ID and a PIN, even without email.",
+        "s1": "In Personnel, type the name, role and a PIN, then « Add ».",
+        "s2": "They get their staff ID (e.g. 004), recorded on every order.",
+        "s3": "Print the check-in QR code and place it at the staff entrance.",
+        "s4": "See who is present, and check someone in by hand if they forgot."
+      },
+      "analytics": {
+        "title": "Read your numbers",
+        "intro": "Sales, orders and staff, no notebook needed.",
+        "s1": "The dashboard shows orders, sales and service time.",
+        "s2": "Change the period: today, 7 days or 30 days.",
+        "s3": "See orders handled by each person, with their staff ID."
+      },
+      "checkin": {
+        "title": "Check in and out",
+        "intro": "Your staff ID and PIN are all you need.",
+        "s1": "Scan the check-in QR code at the staff entrance.",
+        "s2": "Type your staff ID (e.g. 004).",
+        "s3": "Type your PIN, then « Check in / out ».",
+        "s4": "Done! When you leave, do the same again."
+      },
+      "confirm": {
+        "title": "Confirm a new order",
+        "intro": "Customers’ orders arrive on the tablet or phone.",
+        "s1": "An order arrives with a sound: look at the table number.",
+        "s2": "Check with the customer if needed, then tap « Confirm ».",
+        "s3": "The order goes to the kitchen automatically."
+      },
+      "serve": {
+        "title": "Serve a ready order",
+        "intro": "The kitchen tells you when it’s ready.",
+        "s1": "The order moves to « Ready »: take it to the right table.",
+        "s2": "Tap « Served »: the order is recorded under your name.",
+        "s3": "The customer sees « You’ve been served! Enjoy your meal »."
+      },
+      "scan": {
+        "title": "Read a customer’s order",
+        "intro": "Customers can show you their order on their phone.",
+        "s1": "The customer taps « Show to the server »: big screen with the table and dishes.",
+        "s2": "Scan the QR code on their screen with your phone.",
+        "s3": "The order opens on your side: confirm it."
+      },
+      "kitchen": {
+        "title": "Use the kitchen display",
+        "intro": "Dishes to prepare show up by station.",
+        "s1": "A confirmed order arrives on the kitchen display.",
+        "s2": "Tap a dish when you start: it turns « Cooking ».",
+        "s3": "Tap « All ready » when everything is done.",
+        "s4": "The floor is notified right away."
+      },
+      "rc": {
+        "title": "Help a customer who can’t scan",
+        "intro": "The RC number opens the same menu as the QR code.",
+        "s1": "Show the customer the RC number printed under the QR code (e.g. RC-K7M3P).",
+        "s2": "They go to restocool.com/c and type the number.",
+        "s3": "The menu opens, already at the right table."
+      }
     }
   }
 }

@@ -73,6 +73,9 @@ export function KioskForm({ token, askRc }: { token?: string; askRc?: boolean })
           {t(`error.${state.error}`, { minutes: state.minutesLeft ?? 10, tries: state.triesLeft ?? 0 })}
         </p>
       )}
+      <a href="/guide?for=staff" className="text-center text-sm font-semibold text-primary underline-offset-2 hover:underline" data-testid="kiosk-guide">
+        🎓 {t("guideLink")}
+      </a>
     </form>
   );
 }

@@ -22,6 +22,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     { href: "/app/seating", label: t("seating") },
     { href: "/app/staff", label: t("staff") },
     { href: "/app/settings", label: t("settings") },
+    { href: "/app/guide", label: t("guide") },
   ];
   return (
     <AuthProvider>

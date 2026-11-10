@@ -10,6 +10,7 @@ import { can } from "@/lib/auth/can";
 import { effectiveStatus } from "@/lib/plan";
 import { MainQrCard } from "@/components/qr/main-qr-card";
 import { OrderAnalyticsPanel } from "@/components/analytics/order-analytics";
+import { LearnCard } from "@/components/guide/learn-card";
 import { getDb } from "@/db";
 import { orderAnalytics, type Range } from "@/lib/analytics/orders";
 
@@ -100,6 +101,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           </ol>
         </Card>
       )}
+
+      <LearnCard audience={ctx.actor.role === "owner" || ctx.actor.role === "manager" ? "manager" : "staff"} />
 
       {analytics && <OrderAnalyticsPanel data={analytics} range={range} />}
 
