@@ -16,8 +16,10 @@ export async function POST(req: Request) {
   const parsed = PostBody.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
   const { slug, deviceId, ...input } = parsed.data;
-  // General limit, plus at most a few orders a minute from one phone.
-  if (!allow(req, deviceId) || !rateLimit(`order:${clientIp(req)}|${deviceId}`, { capacity: 6, refillPerSec: 1 / 30 })) return tooMany();
+  // General limit, plus at most a few orders a minute from one phone, and a cap per IP so new
+  // device ids cannot flood a restaurant's front desk with orders.
+  const ip = clientIp(req);
+  if (!allow(req, deviceId) || !rateLimit(`order:${ip}|${deviceId}`, { capacity: 6, refillPerSec: 1 / 30 }) || !rateLimit(`order-ip:${ip}`, { capacity: 60, refillPerSec: 1 / 5 })) return tooMany();
   const r = await publicRestaurant(slug);
   if (!r) return notFound();
   try {

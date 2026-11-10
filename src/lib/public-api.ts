@@ -14,9 +14,14 @@ export const Slug = z.string().regex(/^[a-z0-9-]{1,64}$/);
 export const tooMany = () => NextResponse.json({ error: "rate_limited" }, { status: 429, headers: { "Retry-After": "10" } });
 export const notFound = () => NextResponse.json({ error: "not_found" }, { status: 404 });
 
-/** 30 requests burst, 1 per second sustained, per IP + device. */
+/**
+ * 30 requests burst, 1 per second sustained, per IP + device. The device id is chosen by the
+ * browser, so a fresh one per request must not escape the limit: one IP also has its own, larger
+ * bucket (generous, since a restaurant's Wi-Fi or a mobile operator puts many phones behind one IP).
+ */
 export function allow(req: Request, deviceId = "-"): boolean {
-  return rateLimit(`${clientIp(req)}|${deviceId}`, { capacity: 30, refillPerSec: 1 });
+  const ip = clientIp(req);
+  return rateLimit(`ip:${ip}`, { capacity: 600, refillPerSec: 20 }) && rateLimit(`${ip}|${deviceId}`, { capacity: 30, refillPerSec: 1 });
 }
 
 /**
