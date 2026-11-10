@@ -467,12 +467,12 @@ export default async function HomePage() {
           <h2 className="font-display text-center text-3xl font-extrabold sm:text-4xl">{t("faq.title")}</h2>
           <div className="mx-auto mt-10 flex max-w-3xl flex-col gap-3">
             {([1, 2, 3, 4, 5, 6] as const).map((n) => (
-              <details key={n} className="group rounded-2xl border border-ligne bg-white p-5 shadow-sm open:shadow-md">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold [&::-webkit-details-marker]:hidden">
+              <details key={n} className="group rounded-2xl border border-ligne bg-white shadow-sm open:shadow-md">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 rounded-2xl p-5 font-bold [&::-webkit-details-marker]:hidden">
                   {t(`faq.q${n}`)}
                   <ChevronDown className="h-5 w-5 shrink-0 transition group-open:rotate-180" aria-hidden />
                 </summary>
-                <p className="mt-3 text-encre-2">
+                <p className="-mt-2 px-5 pb-5 text-encre-2">
                   {t(`faq.a${n}`)}
                   {n === 6 && (
                     <>

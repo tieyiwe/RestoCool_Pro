@@ -112,7 +112,7 @@ export async function HoursSection({ hours, next, submitLabel }: { hours: Hours;
             <div key={d} className="flex flex-wrap items-center gap-x-3 gap-y-2 p-2">
               <span className="w-24 font-semibold">{days[d]}</span>
               <label className="flex min-h-11 items-center gap-2 text-sm">
-                <input type="checkbox" name={`open_${d}`} defaultChecked={Boolean(h) || hours.length === 0} className="h-5 w-5" />
+                <input type="checkbox" name={`open_${d}`} defaultChecked={Boolean(h) || hours.length === 0} className="h-5 w-5 shrink-0" />
                 {t("open")}
               </label>
               <span className="flex flex-wrap items-center gap-2">
@@ -148,7 +148,7 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
         <div className="grid gap-2 sm:grid-cols-2">
           {SEATING_MODES.map((m) => (
             <label key={m} className={opt}>
-              <input type="checkbox" name="seatingModes" value={m} defaultChecked={modes.includes(m)} className="h-5 w-5" />
+              <input type="checkbox" name="seatingModes" value={m} defaultChecked={modes.includes(m)} className="h-5 w-5 shrink-0" />
               {t(`modes.${m}`)}
             </label>
           ))}
@@ -165,11 +165,11 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
         <legend className={label}>{t("qr")}</legend>
         <div className="grid gap-2">
           <label className={opt}>
-            <input type="radio" name="qrStrategy" value="per_seat" defaultChecked={(s.qrStrategy ?? "per_seat") === "per_seat"} className="h-5 w-5" />
+            <input type="radio" name="qrStrategy" value="per_seat" defaultChecked={(s.qrStrategy ?? "per_seat") === "per_seat"} className="h-5 w-5 shrink-0" />
             {t("qrPerSeat")}
           </label>
           <label className={opt}>
-            <input type="radio" name="qrStrategy" value="generic" defaultChecked={s.qrStrategy === "generic"} className="h-5 w-5" />
+            <input type="radio" name="qrStrategy" value="generic" defaultChecked={s.qrStrategy === "generic"} className="h-5 w-5 shrink-0" />
             {t("qrGeneric")}
           </label>
         </div>
@@ -178,11 +178,11 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
         <legend className={label}>{t("validation")}</legend>
         <div className="grid gap-2">
           <label className={opt}>
-            <input type="radio" name="orderValidation" value="server_confirms" defaultChecked={(s.orderValidation ?? "server_confirms") === "server_confirms"} className="h-5 w-5" />
+            <input type="radio" name="orderValidation" value="server_confirms" defaultChecked={(s.orderValidation ?? "server_confirms") === "server_confirms"} className="h-5 w-5 shrink-0" />
             {t("serverConfirms")}
           </label>
           <label className={opt}>
-            <input type="radio" name="orderValidation" value="direct" defaultChecked={s.orderValidation === "direct"} className="h-5 w-5" />
+            <input type="radio" name="orderValidation" value="direct" defaultChecked={s.orderValidation === "direct"} className="h-5 w-5 shrink-0" />
             {t("direct")}
           </label>
         </div>
@@ -196,7 +196,7 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
             ["zh", "中文"],
           ].map(([code, name]) => (
             <label key={code} className={opt}>
-              <input type="checkbox" name="enabledLocales" value={code} defaultChecked={code === "fr" || locales.includes(code!)} disabled={code === "fr"} className="h-5 w-5" />
+              <input type="checkbox" name="enabledLocales" value={code} defaultChecked={code === "fr" || locales.includes(code!)} disabled={code === "fr"} className="h-5 w-5 shrink-0" />
               {name}
             </label>
           ))}
@@ -245,12 +245,12 @@ export async function FeaturesSection({ r }: SectionProps) {
     <SettingsForm action={saveFeaturesAction} testId="features-form">
       {FEATURE_FLAGS.map((flag) => (
         <label key={flag} className="flex min-h-11 items-center gap-3">
-          <input type="checkbox" name={flag} defaultChecked={f[flag] ?? defaults[flag]} className="h-5 w-5" />
+          <input type="checkbox" name={flag} defaultChecked={f[flag] ?? defaults[flag]} className="h-5 w-5 shrink-0" />
           {t(flag)}
         </label>
       ))}
       <label className="flex min-h-11 items-center gap-3">
-        <input type="checkbox" name="poweredBadge" defaultChecked={r.poweredBadge} className="h-5 w-5" />
+        <input type="checkbox" name="poweredBadge" defaultChecked={r.poweredBadge} className="h-5 w-5 shrink-0" />
         <span>
           {t("poweredBadge")}
           <span className="block text-xs text-muted-foreground">{t("poweredBadgeHint")}</span>

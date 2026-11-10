@@ -10,6 +10,8 @@ export function KioskForm({ token, askRc }: { token?: string; askRc?: boolean })
   const [state, action, pending] = useActionState<KioskState, FormData>(punchAction, undefined);
   const [staffNo, setStaffNo] = useState("");
   const [pin, setPin] = useState("");
+  // Controlled, so React's reset after each submission doesn't wipe the restaurant's number.
+  const [rc, setRc] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
   // After a successful check-in/out, clear the form for the next person.
   useEffect(() => {
@@ -28,7 +30,18 @@ export function KioskForm({ token, askRc }: { token?: string; askRc?: boolean })
       {askRc && (
         <label className="flex flex-col gap-1.5">
           <span className="text-sm font-bold">{t("rc")}</span>
-          <input name="rc" required autoComplete="off" autoCapitalize="characters" placeholder="RC-K7M3P" className={input} />
+          <input
+            name="rc"
+            required
+            autoComplete="off"
+            autoCapitalize="characters"
+            spellCheck={false}
+            placeholder="RC-K7M3P"
+            value={rc}
+            onChange={(e) => setRc(e.target.value.toUpperCase().slice(0, 12))}
+            className={input}
+            autoFocus
+          />
         </label>
       )}
       <label className="flex flex-col gap-1.5">

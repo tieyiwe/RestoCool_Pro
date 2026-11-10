@@ -30,7 +30,12 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   const tp = await getTranslations("personnelAdmin");
   const tr = await getTranslations("app.role");
   const format = await getFormatter();
-  const { ok, error, no } = await searchParams;
+  const sp = await searchParams;
+  // Messages come from the URL: only known ones are shown (no raw keys on screen).
+  const ok = sp.ok && ["added", "pin", "in", "out", "qr", "status"].includes(sp.ok) ? sp.ok : null;
+  const error = sp.error && ["invalid", "forbidden", "notFound"].includes(sp.error) ? sp.error : null;
+  const no = sp.no;
+  // The owner and managers are changed by the owner only (managers.write).
   const db = getDb();
   const rid = ctx.repo.restaurantId;
   const r = (await ctx.repo.restaurant.get())!;

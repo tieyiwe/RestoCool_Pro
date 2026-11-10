@@ -31,6 +31,8 @@ export default async function AttendanceQrPage() {
         </Link>
         <PrintButton label={ta("print")} />
       </div>
+      {/* A4 preview: on a phone it scrolls inside its frame, not the whole page. */}
+      <div className="overflow-x-auto print:overflow-visible">
       <section className="mx-auto flex h-[270mm] w-[186mm] flex-col items-center justify-center gap-6 bg-white p-[12mm] text-center text-black shadow-lg print:shadow-none" data-testid="attendance-poster">
         <p className="text-[6mm] font-bold">{r.name}</p>
         <h1 className="font-display text-[12mm] leading-tight font-extrabold">{t("title")}</h1>
@@ -42,6 +44,7 @@ export default async function AttendanceQrPage() {
         </ol>
         <p className="text-[4mm] text-neutral-600">{t("posterRc", { site: `${codeEntryHost(base).replace(/\/c$/, "")}/pointage`, rc: formatRc(code) })}</p>
       </section>
+      </div>
     </div>
   );
 }
