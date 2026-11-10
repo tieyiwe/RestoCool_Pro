@@ -36,7 +36,7 @@ export async function saveProfileAction(_p: SettingsResult, fd: FormData) {
       description: { fr: s(fd, "description_fr"), en: s(fd, "description_en"), zh: s(fd, "description_zh") },
       city: s(fd, "city"),
       address: s(fd, "address"),
-      gmapsUrl: s(fd, "gmapsUrl"),
+      ...(fd.has("gmapsUrl") ? { gmapsUrl: s(fd, "gmapsUrl") } : {}),
     }),
   );
 }
@@ -110,4 +110,41 @@ export async function setPublishedAction(_p: SettingsResult, fd: FormData) {
 
 export async function finishOnboardingAction() {
   return run((ctx) => settings.markOnboarded(ctx));
+}
+
+/* ---------- Business location (GPS on site, or a Google Maps link) ---------- */
+
+export type LocationResult = { ok: true; lat: number; lng: number } | { ok: false; error: "invalid" | "no_coordinates" | "too_imprecise" | "unknown" } | null;
+
+async function runLocation(fn: (ctx: settings.SettingsCtx) => Promise<void>): Promise<LocationResult> {
+  const { LocationError } = await import("@/lib/restaurants/location");
+  try {
+    const { actor, repo } = await requireMember("settings.write");
+    await fn({ db: getDb(), actor, repo });
+    const r = await repo.restaurant.get();
+    revalidatePath("/app", "layout");
+    return r?.latitude != null && r.longitude != null ? { ok: true, lat: r.latitude, lng: r.longitude } : { ok: false, error: "unknown" };
+  } catch (err) {
+    if (err instanceof LocationError) return { ok: false, error: err.code };
+    log.error("location_save_failed", { err });
+    return { ok: false, error: "unknown" };
+  }
+}
+
+export async function saveGpsLocationAction(input: { lat: number; lng: number; accuracyM?: number }) {
+  const { saveGpsLocation } = await import("@/lib/restaurants/location");
+  return runLocation((ctx) => saveGpsLocation(ctx, input));
+}
+
+export async function saveLinkLocationAction(link: string) {
+  const { saveLinkLocation } = await import("@/lib/restaurants/location");
+  return runLocation((ctx) => saveLinkLocation(ctx, String(link ?? "")));
+}
+
+export async function clearLocationAction() {
+  const { clearLocation } = await import("@/lib/restaurants/location");
+  const { actor, repo } = await requireMember("settings.write");
+  await clearLocation({ db: getDb(), actor, repo });
+  revalidatePath("/app", "layout");
+  return { ok: true as const };
 }

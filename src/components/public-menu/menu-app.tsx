@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { formatBfPhone, formatFCFA, telHref, whatsappHref } from "@/lib/format";
+import { directionsUrl } from "@/lib/location/parse";
 import { addToCart, cartTotals, changeQty, indexItems, lineMatchesMenu, qtyForItem, takeawayMessage, unitPrice } from "@/lib/public-menu/cart";
 import { openStatus } from "@/lib/public-menu/hours";
 import { itemMatches } from "@/lib/public-menu/search";
@@ -1313,10 +1314,24 @@ function Contact({
               {data.address.toLowerCase().includes(data.city.toLowerCase()) ? data.address : `${data.address}, ${data.city}`}
             </p>
           )}
-          {data.gmapsUrl && (
-            <a href={data.gmapsUrl} target="_blank" rel="noopener" className="flex min-h-11 items-center font-semibold underline underline-offset-2">
-              📍 {t("directions")}
+          {data.location ? (
+            // Opens the Google Maps app on phones, with directions to the business.
+            <a
+              href={directionsUrl(data.location)}
+              target="_blank"
+              rel="noopener"
+              className="flex min-h-12 items-center justify-center gap-2 rounded-xl font-bold"
+              style={{ background: "var(--accent)", color: "var(--on-accent)" }}
+              data-testid="directions"
+            >
+              🧭 {t("directions")}
             </a>
+          ) : (
+            data.gmapsUrl && (
+              <a href={data.gmapsUrl} target="_blank" rel="noopener" className="flex min-h-11 items-center font-semibold underline underline-offset-2" data-testid="directions">
+                📍 {t("directions")}
+              </a>
+            )
           )}
         </div>
         <div className="flex flex-col gap-3">

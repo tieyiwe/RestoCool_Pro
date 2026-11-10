@@ -29,6 +29,8 @@ export type PublicMenuData = {
   city: string;
   address: string | null;
   gmapsUrl: string | null;
+  /** Exact business location, when the owner saved it (« Itinéraire » opens Google Maps navigation). */
+  location: { lat: number; lng: number } | null;
   phones: string[];
   whatsapp: string | null;
   orangeMoney: string | null;

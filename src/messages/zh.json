@@ -1439,5 +1439,34 @@
         "s3": "菜单打开，已经是正确的桌号。"
       }
     }
+  },
+  "location": {
+    "title": "店铺位置",
+    "hint": "在布基纳法索，大家用 Google 地图找地方。保存您的位置后，顾客会在菜单上看到“路线”按钮。",
+    "previewTitle": "位置预览",
+    "savedGps": "已通过手机保存位置（精度 ± {m} 米）",
+    "savedLink": "已通过 Google 地图链接保存位置",
+    "openMaps": "在 Google 地图中查看",
+    "remove": "移除",
+    "confirmTitle": "您现在在店里吗？",
+    "confirmText": "您手机的当前位置将成为店铺位置，顾客可以看到它以便找到您。请仅在店内时操作。",
+    "confirmYes": "是的，我在店里：保存",
+    "confirmNo": "取消",
+    "locating": "正在定位…",
+    "here": "📍 我在店里",
+    "hereAgain": "📍 用我的位置更新",
+    "linkLabel": "或粘贴 Google 地图链接",
+    "useLink": "使用此链接",
+    "linkHelp": "在 Google 地图中找到您的店铺（或您的位置），点击“分享”，然后“复制链接”。",
+    "openGoogleMaps": "打开 Google 地图",
+    "saved": "位置已保存。",
+    "error": {
+      "invalid": "位置无效，请重试。",
+      "no_coordinates": "此链接不含位置。请在 Google 地图中通过“分享”复制链接。",
+      "too_imprecise": "位置太不精确。请到室外、打开 GPS 后重试。",
+      "unknown": "出错了，请重试。",
+      "noGps": "无法获取此手机的位置。请打开定位，或粘贴 Google 地图链接。",
+      "denied": "定位权限被拒绝。请在浏览器设置中允许，或粘贴 Google 地图链接。"
+    }
   }
 }

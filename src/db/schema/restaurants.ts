@@ -1,4 +1,4 @@
-import { boolean, index, integer, jsonb, smallint, text, time, timestamp, uniqueIndex, uuid, pgTable, type AnyPgColumn } from "drizzle-orm/pg-core";
+import { boolean, doublePrecision, index, integer, jsonb, smallint, text, time, timestamp, uniqueIndex, uuid, pgTable, type AnyPgColumn } from "drizzle-orm/pg-core";
 import { id, timestamps, type I18nText } from "./_shared";
 import { memberRoleEnum, planEnum, planStatusEnum, themeEnum } from "./enums";
 
@@ -45,6 +45,16 @@ export const restaurants = pgTable(
     address: text("address"),
     city: text("city").notNull().default("Ouagadougou"),
     gmapsUrl: text("gmaps_url"),
+    /**
+     * Business location (customers' « Itinéraire », the platform map). Saved from the owner's phone
+     * GPS (on site, after a warning) or read from a Google Maps link. WGS84 degrees.
+     */
+    latitude: doublePrecision("latitude"),
+    longitude: doublePrecision("longitude"),
+    /** GPS accuracy in metres when saved from the phone; null for a link. */
+    locationAccuracyM: integer("location_accuracy_m"),
+    locationSource: text("location_source").$type<"gps" | "link">(),
+    locationSetAt: timestamp("location_set_at", { withTimezone: true }),
     timezone: text("timezone").notNull().default("Africa/Ouagadougou"),
     defaultLocale: text("default_locale").notNull().default("fr"),
     settings: jsonb("settings").$type<RestaurantSettings>().notNull().default({}),

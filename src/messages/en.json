@@ -1439,5 +1439,34 @@
         "s3": "The menu opens, already at the right table."
       }
     }
+  },
+  "location": {
+    "title": "Business location",
+    "hint": "In Burkina, people find places with Google Maps. Save your location: customers get a “Directions” button on your menu.",
+    "previewTitle": "Location preview",
+    "savedGps": "Location saved from the phone (accuracy ± {m} m)",
+    "savedLink": "Location saved from a Google Maps link",
+    "openMaps": "View in Google Maps",
+    "remove": "Remove",
+    "confirmTitle": "Are you at your business right now?",
+    "confirmText": "Your phone's current position will become your business location. Customers will see it so they can find you. Only do this if you are on site.",
+    "confirmYes": "Yes, I'm here: save it",
+    "confirmNo": "Cancel",
+    "locating": "Locating…",
+    "here": "📍 I'm at my business",
+    "hereAgain": "📍 Update from my position",
+    "linkLabel": "Or paste a Google Maps link",
+    "useLink": "Use this link",
+    "linkHelp": "In Google Maps, find your business (or your position), tap “Share”, then “Copy link”.",
+    "openGoogleMaps": "Open Google Maps",
+    "saved": "Location saved.",
+    "error": {
+      "invalid": "Invalid position. Please try again.",
+      "no_coordinates": "This link has no position in it. Copy the link from “Share” in Google Maps.",
+      "too_imprecise": "The position is too imprecise. Go outside, turn on GPS and try again.",
+      "unknown": "Something went wrong. Please try again.",
+      "noGps": "Couldn't get this phone's position. Turn on location, or paste a Google Maps link.",
+      "denied": "Location access was denied. Allow it in the browser settings, or paste a Google Maps link."
+    }
   }
 }

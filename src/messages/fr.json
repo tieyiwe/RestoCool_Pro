@@ -1439,5 +1439,34 @@
         "s3": "Le menu s’ouvre, déjà à la bonne table."
       }
     }
+  },
+  "location": {
+    "title": "Emplacement de l'établissement",
+    "hint": "Au Burkina, on se retrouve avec Google Maps. Enregistrez votre position : vos clients auront un bouton « Itinéraire » sur votre menu.",
+    "previewTitle": "Aperçu de l'emplacement",
+    "savedGps": "Position enregistrée depuis le téléphone (précision ± {m} m)",
+    "savedLink": "Position enregistrée depuis un lien Google Maps",
+    "openMaps": "Voir dans Google Maps",
+    "remove": "Retirer",
+    "confirmTitle": "Êtes-vous à votre établissement en ce moment ?",
+    "confirmText": "La position actuelle de votre téléphone deviendra l'adresse de votre établissement. Elle sera visible par vos clients pour qu'ils puissent vous trouver. Ne le faites que si vous êtes sur place.",
+    "confirmYes": "Oui, j'y suis : enregistrer",
+    "confirmNo": "Annuler",
+    "locating": "Localisation en cours…",
+    "here": "📍 Je suis à mon établissement",
+    "hereAgain": "📍 Mettre à jour depuis ma position",
+    "linkLabel": "Ou collez un lien Google Maps",
+    "useLink": "Utiliser ce lien",
+    "linkHelp": "Dans Google Maps, cherchez votre établissement (ou votre position), touchez « Partager » puis « Copier le lien ».",
+    "openGoogleMaps": "Ouvrir Google Maps",
+    "saved": "Emplacement enregistré.",
+    "error": {
+      "invalid": "Position invalide. Réessayez.",
+      "no_coordinates": "Ce lien ne contient pas de position. Copiez le lien depuis « Partager » dans Google Maps.",
+      "too_imprecise": "La position est trop imprécise. Sortez à découvert, activez le GPS et réessayez.",
+      "unknown": "Une erreur est survenue. Réessayez.",
+      "noGps": "Impossible d'obtenir la position de ce téléphone. Activez la localisation, ou collez un lien Google Maps.",
+      "denied": "La localisation est refusée. Autorisez-la dans les réglages du navigateur, ou collez un lien Google Maps."
+    }
   }
 }

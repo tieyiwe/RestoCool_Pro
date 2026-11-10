@@ -38,6 +38,7 @@ export async function loadPublicMenu(db: DB, r: Restaurant, opts: { preview: boo
     city: r.city,
     address: r.address,
     gmapsUrl: r.gmapsUrl,
+    location: r.latitude != null && r.longitude != null ? { lat: r.latitude, lng: r.longitude } : null,
     phones: r.phones,
     whatsapp: r.whatsapp,
     orangeMoney: r.orangeMoney,

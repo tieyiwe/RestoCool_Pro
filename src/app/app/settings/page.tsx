@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Card } from "@/components/ui/card";
-import { AppearanceSection, ContactsSection, FeaturesSection, HoursSection, ProfileSection, PublishSection, ServiceSection } from "@/components/settings/sections";
+import { AppearanceSection, ContactsSection, FeaturesSection, HoursSection, LocationSection, ProfileSection, PublishSection, ServiceSection } from "@/components/settings/sections";
 import { requireMemberPage } from "@/lib/auth/page";
 
 export default async function SettingsPage() {
@@ -10,7 +10,14 @@ export default async function SettingsPage() {
   if (!r) return null;
   const sections: Array<[string, string, React.ReactNode]> = [
     ["publish", t("publish.title"), <PublishSection key="p" r={r} />],
-    ["profile", t("profile.title"), <ProfileSection key="pr" r={r} />],
+    [
+      "profile",
+      t("profile.title"),
+      <div key="pr" className="flex flex-col gap-6">
+        <ProfileSection r={r} />
+        <LocationSection r={r} />
+      </div>,
+    ],
     ["contacts", t("contacts.title"), <ContactsSection key="c" r={r} />],
     ["hours", t("hours.title"), <HoursSection key="h" hours={hours} />],
     ["service", t("service.title"), <ServiceSection key="s" r={r} />],

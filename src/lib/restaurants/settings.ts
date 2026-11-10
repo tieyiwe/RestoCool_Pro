@@ -38,7 +38,8 @@ export const ProfileInput = z.object({
   description: z.object({ fr: opt(240), en: opt(240), zh: opt(240) }),
   city: z.string().trim().min(2).max(60),
   address: opt(200),
-  gmapsUrl: z.union([z.literal(""), z.url().max(500).refine((u) => u.startsWith("https://"))]).default(""),
+  /** Left out = unchanged (the location widget manages it). */
+  gmapsUrl: z.union([z.literal(""), z.url().max(500).refine((u) => u.startsWith("https://"))]).optional(),
 });
 
 export const ContactsInput = z.object({
@@ -118,7 +119,7 @@ export async function saveProfile(ctx: SettingsCtx, input: z.input<typeof Profil
         description: i18nOrNull(p.data.description),
         city: p.data.city,
         address: p.data.address || null,
-        gmapsUrl: p.data.gmapsUrl || null,
+        ...(p.data.gmapsUrl !== undefined ? { gmapsUrl: p.data.gmapsUrl || null } : {}),
       },
       "settings.profile",
     );

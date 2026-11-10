@@ -15,6 +15,7 @@ import { env } from "@/lib/env";
 import { formatBfPhone } from "@/lib/format";
 import { SEATING_MODES } from "@/lib/restaurants/settings";
 import { BrandingEditor } from "./branding-editor";
+import { LocationField } from "./location-field";
 import { SettingsForm } from "./settings-form";
 
 type Restaurant = typeof restaurants.$inferSelect;
@@ -60,11 +61,16 @@ export async function ProfileSection({ r, next, submitLabel }: SectionProps) {
           <input name="address" defaultValue={r.address ?? ""} maxLength={200} placeholder={t("addressPlaceholder")} className={input} />
         </label>
       </div>
-      <label>
-        <span className={label}>{t("gmaps")}</span>
-        <input name="gmapsUrl" type="url" defaultValue={r.gmapsUrl ?? ""} placeholder="https://maps.app.goo.gl/…" className={input} />
-      </label>
     </SettingsForm>
+  );
+}
+
+/** Business location: GPS on site or a Google Maps link (outside the profile form: saved on its own). */
+export function LocationSection({ r }: { r: Restaurant }) {
+  return (
+    <LocationField
+      initial={r.latitude != null && r.longitude != null ? { lat: r.latitude, lng: r.longitude, source: r.locationSource, accuracyM: r.locationAccuracyM } : null}
+    />
   );
 }
 

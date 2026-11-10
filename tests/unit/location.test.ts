@@ -1,4 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("server-only", () => ({}));
+const { coordinatesFromLink } = await import("@/lib/restaurants/location");
 import { directionsUrl, isShortMapsLink, latLngFromText } from "@/lib/location/parse";
 
 describe("business location from Google Maps links", () => {
@@ -19,5 +22,26 @@ describe("business location from Google Maps links", () => {
     expect(isShortMapsLink("http://maps.app.goo.gl/x")).toBe(false);
     expect(isShortMapsLink("https://evil.example/maps.app.goo.gl")).toBe(false);
     expect(directionsUrl({ lat: 12.37, lng: -1.52 })).toBe("https://www.google.com/maps/dir/?api=1&destination=12.37,-1.52");
+  });
+});
+
+describe("resolving short Google Maps links", () => {
+  const redirect = (to: string) => new Response(null, { status: 302, headers: { location: to } });
+
+  it("follows Google redirects to the coordinates", async () => {
+    const spy = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(redirect("https://www.google.com/maps/place/X/@12.3714,-1.5197,17z"));
+    expect(await coordinatesFromLink("https://maps.app.goo.gl/AbC123")).toEqual({ lat: 12.3714, lng: -1.5197 });
+    spy.mockRestore();
+  });
+  it("never follows a redirect off Google", async () => {
+    const spy = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(redirect("https://evil.example/@12.3714,-1.5197"));
+    expect(await coordinatesFromLink("https://maps.app.goo.gl/AbC123")).toBeNull();
+    spy.mockRestore();
+  });
+  it("does not fetch links that are not Google short links", async () => {
+    const spy = vi.spyOn(globalThis, "fetch");
+    expect(await coordinatesFromLink("https://example.com/somewhere")).toBeNull();
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
   });
 });

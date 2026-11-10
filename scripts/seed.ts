@@ -69,7 +69,12 @@ async function seedDemo(db: DB) {
       moovMoney: "22660000004",
       address: "Avenue de la Démo, Ouagadougou",
       city: "Ouagadougou",
-      gmapsUrl: "https://maps.google.com/?q=Ouagadougou",
+      // Fictional point in central Ouagadougou (not a real business).
+      latitude: 12.3714,
+      longitude: -1.5197,
+      locationSource: "link",
+      locationSetAt: new Date(),
+      gmapsUrl: "https://www.google.com/maps/search/?api=1&query=12.3714,-1.5197",
       plan: "pro",
       planStatus: "trial",
       planExpiresAt: new Date(Date.now() + 30 * 86_400_000),

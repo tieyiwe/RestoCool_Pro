@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { MainQrCard } from "@/components/qr/main-qr-card";
-import { AppearanceSection, ContactsSection, HoursSection, ProfileSection, ServiceSection } from "@/components/settings/sections";
+import { AppearanceSection, ContactsSection, HoursSection, LocationSection, ProfileSection, ServiceSection } from "@/components/settings/sections";
 import { SetupShell } from "@/components/setup/setup-shell";
 import { getDb } from "@/db";
 import { requireMemberPage } from "@/lib/auth/page";
@@ -76,7 +76,12 @@ export default async function OnboardingStep({ params }: { params: Promise<{ ste
           <p className="mt-1 text-muted-foreground">{ts(`steps.${step}.hint`)}</p>
         </div>
         <div className="rounded-3xl border border-border bg-surface p-5 shadow-sm sm:p-7">
-          {step === "profile" && <ProfileSection {...props} />}
+          {step === "profile" && (
+            <div className="flex flex-col gap-6">
+              <ProfileSection {...props} />
+              <LocationSection r={r} />
+            </div>
+          )}
           {step === "contacts" && <ContactsSection {...props} />}
           {step === "hours" && <HoursSection hours={hours} next={next} submitLabel={props.submitLabel} />}
           {step === "service" && <ServiceSection {...props} askTableCount={!seatRows.some((x) => x.type === "table")} />}
