@@ -16,8 +16,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
   const r = await findRestaurantBySlug(db, slug.data);
   if (!r) return notFound();
   const rows = await db
-    .select({ id: menuItems.id })
+    .select({ id: menuItems.id, note: menuItems.unavailableNote, until: menuItems.soldOutUntil })
     .from(menuItems)
     .where(and(eq(menuItems.restaurantId, r.id), or(gt(menuItems.soldOutUntil, new Date()), eq(menuItems.available, false))));
-  return NextResponse.json({ soldOut: rows.map((x) => x.id) }, { headers: { "Cache-Control": "no-store" } });
+  const now = Date.now();
+  const notes = Object.fromEntries(rows.filter((x) => x.note && x.until && x.until.getTime() > now).map((x) => [x.id, x.note]));
+  return NextResponse.json({ soldOut: rows.map((x) => x.id), notes }, { headers: { "Cache-Control": "no-store" } });
 }

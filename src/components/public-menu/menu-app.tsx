@@ -79,12 +79,19 @@ export function MenuApp({
 }) {
   // Live « épuisé » (sold out / hidden) from the restaurant, applied over the server-rendered menu.
   const [liveSoldOut, setLiveSoldOut] = useState<Set<string> | null>(null);
+  const [liveNotes, setLiveNotes] = useState<Record<string, string> | null>(null);
   const data = useMemo(
     () =>
       liveSoldOut
-        ? { ...initialData, categories: initialData.categories.map((c) => ({ ...c, items: c.items.map((i) => ({ ...i, soldOut: liveSoldOut.has(i.id) })) })) }
+        ? {
+            ...initialData,
+            categories: initialData.categories.map((c) => ({
+              ...c,
+              items: c.items.map((i) => ({ ...i, soldOut: liveSoldOut.has(i.id), soldOutNote: liveSoldOut.has(i.id) ? (liveNotes ? (liveNotes[i.id] ?? null) : i.soldOutNote) : null })),
+            })),
+          }
         : initialData,
-    [initialData, liveSoldOut],
+    [initialData, liveSoldOut, liveNotes],
   );
   // French on every new visit; the choice lasts for this visit only (sessionStorage).
   const [lang, setLang] = useState<Lang>("fr");
@@ -244,7 +251,11 @@ export function MenuApp({
   const { seat, warning, stillHere, choose, forget } = useSeat({ slug: data.slug, token: seatToken, config: seating, onToast: flash, t, hold: heldSeat });
   const refreshAvailability = useCallback(async () => {
     const res = await fetch(`/api/public/r/${initialData.slug}/availability`, { cache: "no-store" }).catch(() => null);
-    if (res?.ok) setLiveSoldOut(new Set(((await res.json()) as { soldOut: string[] }).soldOut));
+    if (res?.ok) {
+      const body = (await res.json()) as { soldOut: string[]; notes?: Record<string, string> };
+      setLiveSoldOut(new Set(body.soldOut));
+      setLiveNotes(body.notes ?? {});
+    }
   }, [initialData.slug]);
   const sessionIdForCheck = seat?.sessionId ?? null;
   const onSessionChange = useCallback(() => {
@@ -945,6 +956,11 @@ function DishCard({
         {(badges.length > 0 || item.soldOut) && (
           <div className="mt-1 flex flex-wrap gap-1">
             {item.soldOut && <span className="rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-900">{t("soldOut")}</span>}
+            {item.soldOut && item.soldOutNote && (
+              <span className="w-full text-xs font-semibold text-red-900 dark:text-red-200" data-testid="sold-out-note">
+                {item.soldOutNote}
+              </span>
+            )}
             {badges.map((b) => (
               <span key={b} className={cn("rounded-full px-2 py-0.5 text-[11px] font-bold", b === "new" ? "bg-amber-100 text-amber-900" : "bg-muted text-muted-foreground")}>
                 {t(b)}

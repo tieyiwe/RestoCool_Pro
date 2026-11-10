@@ -14,22 +14,22 @@ export const GET = handle(async () => {
   const m = await requireMember("menu.soldOut");
   const now = new Date();
   const rows = await getDb()
-    .select({ id: menuItems.id, code: menuItems.code, name: menuItems.name, soldOutUntil: menuItems.soldOutUntil, category: menuCategories.name })
+    .select({ id: menuItems.id, code: menuItems.code, name: menuItems.name, soldOutUntil: menuItems.soldOutUntil, note: menuItems.unavailableNote, category: menuCategories.name })
     .from(menuItems)
     .innerJoin(menuCategories, eq(menuCategories.id, menuItems.categoryId))
     .where(and(eq(menuItems.restaurantId, m.repo.restaurantId), eq(menuItems.available, true)))
     .orderBy(asc(menuCategories.sort), asc(menuItems.sort));
   return NextResponse.json(
-    { items: rows.map((r) => ({ id: r.id, code: r.code, name: r.name, category: r.category, soldOut: Boolean(r.soldOutUntil && r.soldOutUntil > now) })) },
+    { items: rows.map((r) => ({ id: r.id, code: r.code, name: r.name, category: r.category, soldOut: Boolean(r.soldOutUntil && r.soldOutUntil > now), note: r.soldOutUntil && r.soldOutUntil > now ? r.note : null })) },
     { headers: { "Cache-Control": "no-store" } },
   );
 });
 
-const Body = z.object({ itemId: z.uuid(), soldOut: z.boolean() });
+const Body = z.object({ itemId: z.uuid(), soldOut: z.boolean(), note: z.string().max(200).optional() });
 
 export const POST = handle(async (req: Request) => {
   const body = Body.parse(await req.json().catch(() => null));
   const m = await requireMember("menu.soldOut");
-  await setSoldOutToday({ db: getDb(), actor: m.actor, repo: m.repo }, body.itemId, body.soldOut);
+  await setSoldOutToday({ db: getDb(), actor: m.actor, repo: m.repo }, body.itemId, body.soldOut, body.note);
   return NextResponse.json({ ok: true });
 });

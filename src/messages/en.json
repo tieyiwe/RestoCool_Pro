@@ -527,7 +527,9 @@
       "desserts": "Desserts"
     },
     "saveCategory": "Save",
-    "timeWindowHint": "Leave empty for all day."
+    "timeWindowHint": "Leave empty for all day.",
+    "soldOutNoteLabel": "Note for customers (optional)",
+    "soldOutNotePlaceholder": "E.g. back tomorrow"
   },
   "settings": {
     "title": "Settings",
@@ -1049,7 +1051,12 @@
       "served": "Served by {name} · staff ID {no}",
       "cancelled": "Cancelled by {name} · staff ID {no}"
     },
-    "minutes": "{n} min"
+    "minutes": "{n} min",
+    "noteLabel": "Note for customers",
+    "notePlaceholder": "E.g. back tomorrow",
+    "noteTomorrow": "Back tomorrow",
+    "noteTonight": "Back tonight",
+    "noteSoon": "Available soon"
   },
   "personnel": {
     "title": "Personnel",

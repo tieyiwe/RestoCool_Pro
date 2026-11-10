@@ -103,8 +103,11 @@ test("« Épuisé » in one tap shows on the customer's menu without reloading, 
   await page.getByTestId("open-sold-out").click();
   await page.getByTestId("sold-out-panel").getByPlaceholder("Rechercher").fill("Salade de fruits");
   await page.getByTestId("sold-out-toggle").check();
+  // A short note for customers, from the quick suggestions.
+  await page.getByTestId("sold-out-note-field").getByRole("button", { name: "De retour demain" }).click();
 
   await expect(dish(phone, "Salade de fruits")).toContainText("Épuisé");
+  await expect(dish(phone, "Salade de fruits").getByTestId("sold-out-note")).toHaveText("De retour demain");
   await phone.getByTestId("cart-bar").click();
   await phone.getByTestId("send-order").click();
   await expect(phone.getByRole("status").filter({ hasText: "vient d’être épuisé" })).toBeVisible();

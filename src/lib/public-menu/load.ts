@@ -77,6 +77,7 @@ export async function loadPublicMenu(db: DB, r: Restaurant, opts: { preview: boo
             thumbUrl: i.thumbUrl,
             photoUrl: i.photoUrl,
             soldOut: i.soldOutUntil !== null && i.soldOutUntil.getTime() > now.getTime(),
+            soldOutNote: i.soldOutUntil !== null && i.soldOutUntil.getTime() > now.getTime() ? i.unavailableNote : null,
           })),
       }))
       .filter((c) => c.items.length > 0),

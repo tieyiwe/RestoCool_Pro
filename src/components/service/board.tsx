@@ -321,7 +321,7 @@ function HandledBy({ order }: { order: StaffOrder }) {
 
 /* ---------------------------------------------------------------- sold out */
 
-type SoldOutItem = { id: string; code: string | null; name: I18n; category: I18n; soldOut: boolean };
+type SoldOutItem = { id: string; code: string | null; name: I18n; category: I18n; soldOut: boolean; note: string | null };
 
 /** « Épuisé » in one tap; customers' menus update live. */
 export function SoldOutPanel({ tick, onClose }: { tick: number; onClose: () => void }) {
@@ -337,8 +337,14 @@ export function SoldOutPanel({ tick, onClose }: { tick: number; onClose: () => v
     void load();
   }, [load, tick]);
   const toggle = async (it: SoldOutItem) => {
-    setItems((list) => list?.map((x) => (x.id === it.id ? { ...x, soldOut: !x.soldOut } : x)) ?? null);
+    setItems((list) => list?.map((x) => (x.id === it.id ? { ...x, soldOut: !x.soldOut, note: null } : x)) ?? null);
     const r = await post("/api/app/sold-out", { itemId: it.id, soldOut: !it.soldOut });
+    if (!r.ok) void load();
+  };
+  /** Short note for customers while sold out (saved when the field loses focus or a suggestion is tapped). */
+  const saveNote = async (it: SoldOutItem, note: string) => {
+    setItems((list) => list?.map((x) => (x.id === it.id ? { ...x, note } : x)) ?? null);
+    const r = await post("/api/app/sold-out", { itemId: it.id, soldOut: true, note });
     if (!r.ok) void load();
   };
   const shown = (items ?? []).filter((i) => !q.trim() || `${i.code ?? ""} ${pick(i.name, locale)} ${i.name.fr}`.toLowerCase().includes(q.trim().toLowerCase()));
@@ -365,9 +371,46 @@ export function SoldOutPanel({ tick, onClose }: { tick: number; onClose: () => v
                 </span>
                 {i.soldOut && <span className="rounded-full bg-red-100 px-2 text-xs font-bold text-red-900">{t("soldOut")}</span>}
               </label>
+            {i.soldOut && <NoteField item={i} onSave={saveNote} />}
             </li>
           ))}
         </ul>
+      </div>
+    </div>
+  );
+}
+
+/** Note shown to customers under « Épuisé » (« De retour demain »), with quick suggestions. */
+function NoteField({ item, onSave }: { item: SoldOutItem; onSave: (it: SoldOutItem, note: string) => void }) {
+  const t = useTranslations("service");
+  const [value, setValue] = useState(item.note ?? "");
+  const suggestions = [t("noteTomorrow"), t("noteTonight"), t("noteSoon")];
+  return (
+    <div className="mb-2 flex flex-col gap-1 pl-9" data-testid="sold-out-note-field">
+      <input
+        value={value}
+        maxLength={80}
+        placeholder={t("notePlaceholder")}
+        aria-label={`${t("noteLabel")} · ${item.name.fr}`}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={() => value !== (item.note ?? "") && onSave(item, value)}
+        onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
+        className="min-h-11 rounded-lg border border-border bg-surface px-2 text-base"
+      />
+      <div className="flex flex-wrap gap-1">
+        {suggestions.map((s) => (
+          <button
+            key={s}
+            type="button"
+            onClick={() => {
+              setValue(s);
+              onSave(item, s);
+            }}
+            className="min-h-9 rounded-full border border-border px-2.5 text-xs font-semibold hover:bg-muted"
+          >
+            {s}
+          </button>
+        ))}
       </div>
     </div>
   );

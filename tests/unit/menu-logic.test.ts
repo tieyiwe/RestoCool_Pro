@@ -10,6 +10,7 @@ import type { PublicItem, PublicMenuData } from "@/lib/public-menu/types";
 const N = " ";
 const item = (over: Partial<PublicItem>): PublicItem => ({
   id: "i1",
+  soldOutNote: null,
   code: "10",
   name: { fr: "Poulet bicyclette", en: "Free-range chicken", zh: "走地鸡" },
   description: null,

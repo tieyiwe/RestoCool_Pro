@@ -37,6 +37,8 @@ export const menuItems = pgTable(
     thumbUrl: text("thumb_url"),
     available: boolean("available").notNull().default(true),
     soldOutUntil: timestamp("sold_out_until", { withTimezone: true }),
+    /** Short note shown to customers while the dish is « Épuisé » (« De retour demain »). */
+    unavailableNote: text("unavailable_note"),
     sort: integer("sort").notNull().default(0),
     ...timestamps,
   },

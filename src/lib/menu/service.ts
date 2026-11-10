@@ -249,15 +249,22 @@ export async function moveItem(ctx: MenuCtx, itemId: string, dir: "up" | "down")
 }
 
 /** Toggle « Épuisé aujourd'hui » (resets automatically at midnight). Allowed for kitchen and servers too. */
-export async function setSoldOutToday(ctx: MenuCtx, itemId: string, soldOut: boolean) {
+/** Short customer-facing note while sold out (trimmed, at most 80 characters). */
+export const cleanUnavailableNote = (note: string | null | undefined) => (note ?? "").replace(/\s+/g, " ").trim().slice(0, 80) || null;
+
+/**
+ * Toggle « Épuisé aujourd'hui » (resets automatically at midnight), with an optional short note for
+ * customers. Allowed for kitchen and servers too (menu.soldOut). Customers' menus update live.
+ */
+export async function setSoldOutToday(ctx: MenuCtx, itemId: string, soldOut: boolean, note?: string | null) {
   await requireItem(ctx, itemId);
   const rid = ctx.repo.restaurantId;
+  const text = soldOut ? cleanUnavailableNote(note) : null;
   await ctx.db
     .update(menuItems)
-    .set({ soldOutUntil: soldOut ? endOfLocalDay() : null })
+    .set({ soldOutUntil: soldOut ? endOfLocalDay() : null, unavailableNote: text })
     .where(and(eq(menuItems.restaurantId, rid), eq(menuItems.id, itemId)));
-  await writeAudit(ctx.db, ctx.actor, { restaurantId: rid, action: soldOut ? "menu.item.sold_out" : "menu.item.back_in_stock", entity: "menu_item", entityId: itemId });
-  // Customers' menus update live (« Épuisé » appears or disappears).
+  await writeAudit(ctx.db, ctx.actor, { restaurantId: rid, action: soldOut ? "menu.item.sold_out" : "menu.item.back_in_stock", entity: "menu_item", entityId: itemId, data: text ? { note: text } : undefined });
   await notify(ctx.db, { k: "menu", r: rid });
 }
 

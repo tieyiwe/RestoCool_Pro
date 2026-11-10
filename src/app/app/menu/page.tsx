@@ -167,11 +167,22 @@ export default async function MenuManagerPage({ searchParams }: { searchParams: 
                           {soldOut && <Badge variant="danger">{t("soldOutToday")}</Badge>}
                           {!item.available && <Badge variant="muted">{t("hidden")}</Badge>}
                         </div>
+                        {soldOut && item.unavailableNote && <p className="mt-1 text-xs text-red-800 italic">« {item.unavailableNote} »</p>}
                       </div>
                       <div className="flex flex-wrap items-center gap-1">
-                        <form action={soldOutAction}>
+                        <form action={soldOutAction} className="flex flex-wrap items-center gap-1">
                           <input type="hidden" name="id" value={item.id} />
                           <input type="hidden" name="soldOut" value={soldOut ? "0" : "1"} />
+                          {!soldOut && (
+                            <input
+                              name="note"
+                              maxLength={80}
+                              placeholder={t("soldOutNotePlaceholder")}
+                              aria-label={`${t("soldOutNoteLabel")} · ${pickText(item.name, locale)}`}
+                              className="min-h-11 w-40 rounded-lg border border-border bg-surface px-2 text-base"
+                              data-testid="sold-out-note-input"
+                            />
+                          )}
                           <button className={btn} title={t("soldOutHint")}>
                             {soldOut ? t("backInStock") : t("markSoldOut")}
                           </button>

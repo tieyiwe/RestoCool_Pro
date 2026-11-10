@@ -76,7 +76,8 @@ export async function deleteItemAction(fd: FormData) {
 
 /** Kitchen and servers may also do this (menu.soldOut). */
 export async function soldOutAction(fd: FormData) {
-  await menu.setSoldOutToday(await ctx("menu.soldOut"), Id.parse(fd.get("id")), fd.get("soldOut") === "1");
+  const note = fd.get("note");
+  await menu.setSoldOutToday(await ctx("menu.soldOut"), Id.parse(fd.get("id")), fd.get("soldOut") === "1", typeof note === "string" ? note : null);
   done();
 }
 

@@ -527,7 +527,9 @@
       "desserts": "Desserts"
     },
     "saveCategory": "Enregistrer",
-    "timeWindowHint": "Laissez vide pour toute la journée."
+    "timeWindowHint": "Laissez vide pour toute la journée.",
+    "soldOutNoteLabel": "Note pour les clients (facultative)",
+    "soldOutNotePlaceholder": "Ex. : de retour demain"
   },
   "settings": {
     "title": "Paramètres",
@@ -1049,7 +1051,12 @@
       "served": "Servie par {name} · matricule {no}",
       "cancelled": "Annulée par {name} · matricule {no}"
     },
-    "minutes": "{n} min"
+    "minutes": "{n} min",
+    "noteLabel": "Note pour les clients",
+    "notePlaceholder": "Ex. : de retour demain",
+    "noteTomorrow": "De retour demain",
+    "noteTonight": "De retour ce soir",
+    "noteSoon": "Bientôt disponible"
   },
   "personnel": {
     "title": "Personnel",

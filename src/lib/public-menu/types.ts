@@ -16,6 +16,8 @@ export type PublicItem = {
   thumbUrl: string | null;
   photoUrl: string | null;
   soldOut: boolean;
+  /** Owner's short note while sold out (« De retour demain »), shown under « Épuisé ». */
+  soldOutNote: string | null;
 };
 export type PublicCategory = { id: string; name: I18nText; items: PublicItem[] };
 export type PublicHours = { weekday: number; opens: string; closes: string };

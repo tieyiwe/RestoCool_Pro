@@ -527,7 +527,9 @@
       "desserts": "甜点"
     },
     "saveCategory": "保存",
-    "timeWindowHint": "留空表示全天供应。"
+    "timeWindowHint": "留空表示全天供应。",
+    "soldOutNoteLabel": "给顾客的说明（可选）",
+    "soldOutNotePlaceholder": "例如：明天恢复供应"
   },
   "settings": {
     "title": "设置",
@@ -1049,7 +1051,12 @@
       "served": "上菜：{name} · 工号 {no}",
       "cancelled": "取消：{name} · 工号 {no}"
     },
-    "minutes": "{n} 分钟"
+    "minutes": "{n} 分钟",
+    "noteLabel": "给顾客的说明",
+    "notePlaceholder": "例如：明天恢复供应",
+    "noteTomorrow": "明天恢复供应",
+    "noteTonight": "今晚恢复供应",
+    "noteSoon": "即将供应"
   },
   "personnel": {
     "title": "员工",
