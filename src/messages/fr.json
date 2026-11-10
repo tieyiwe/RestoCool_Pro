@@ -132,7 +132,8 @@
       "whatsapp": "WhatsApp partout : contact, commandes, partage du menu",
       "network": "Pages légères, utilisables avec peu de réseau",
       "french": "En français d’abord, avec un « Laafi ! » pour accueillir vos clients",
-      "phone": "Numéros +226, lien Google Maps, horaires « Ouvert / Fermé »"
+      "phone": "Numéros +226, lien Google Maps, horaires « Ouvert / Fermé »",
+      "founder": "Fondé par un Burkinabè, pour les restaurants du Burkina."
     },
     "who": {
       "title": "Pour tous les établissements",
@@ -151,7 +152,7 @@
       "popular": "Le plus choisi",
       "cta": "Commencer l’essai gratuit",
       "ctaFree": "Créer mon menu gratuit",
-      "note": "Prix indicatifs. Paiement par Orange Money, Moov Money ou en espèces.",
+      "note": "Prix mensuels en FCFA. Paiement par Orange Money, Moov Money ou en espèces.",
       "gratuit": {
         "name": "Gratuit",
         "desc": "Pour mettre votre menu en ligne.",

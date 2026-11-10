@@ -1,6 +1,6 @@
 /**
  * Single source of truth for plan limits and features.
- * Prices are placeholders (integer FCFA per month) until confirmed.
+ * Prices are integer FCFA per month, confirmed by the founder (Nov 2026): Pro 10 000 F, Business 25 000 F.
  */
 export const PLAN_IDS = ["gratuit", "pro", "business"] as const;
 export type PlanId = (typeof PLAN_IDS)[number];

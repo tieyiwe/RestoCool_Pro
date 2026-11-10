@@ -236,6 +236,12 @@ export default async function HomePage() {
               <h2 className="font-display text-3xl font-extrabold sm:text-4xl">{t("burkina.title")}</h2>
               <p className="mt-4 text-lg text-creme/85">{t("burkina.subtitle")}</p>
               <p className="font-display mt-6 text-2xl font-extrabold text-or">« {tb("greeting")} »</p>
+              {LOCAL_CLAIMS.founderBurkinabe && (
+                <div className="mt-6 flex flex-col items-start gap-2">
+                  <LocalBadge label={tb("local")} className="bg-nuit" />
+                  <p className="font-semibold">{t("burkina.founder")}</p>
+                </div>
+              )}
             </div>
             <ul className="grid gap-3 sm:grid-cols-2">
               {(["fcfa", "mobile", "whatsapp", "network", "french", "phone"] as const).map((k) => (

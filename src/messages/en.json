@@ -132,7 +132,8 @@
       "whatsapp": "WhatsApp everywhere: contact, orders, sharing the menu",
       "network": "Light pages that work with a weak network",
       "french": "French first, with a “Laafi!” to welcome your customers",
-      "phone": "+226 numbers, Google Maps link, “Open / Closed” hours"
+      "phone": "+226 numbers, Google Maps link, “Open / Closed” hours",
+      "founder": "Founded by a Burkinabè, for Burkina’s restaurants."
     },
     "who": {
       "title": "For every kind of place",
@@ -151,7 +152,7 @@
       "popular": "Most popular",
       "cta": "Start the free trial",
       "ctaFree": "Create my free menu",
-      "note": "Indicative prices. Payment by Orange Money, Moov Money or cash.",
+      "note": "Monthly prices in CFA francs. Payment by Orange Money, Moov Money or cash.",
       "gratuit": {
         "name": "Free",
         "desc": "To put your menu online.",

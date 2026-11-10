@@ -132,7 +132,8 @@
       "whatsapp": "处处 WhatsApp：联系、点餐、分享菜单",
       "network": "页面轻巧，网络差也能用",
       "french": "以法语为主，并用一句“Laafi！”欢迎顾客",
-      "phone": "+226 号码、谷歌地图链接、“营业中 / 已打烊”"
+      "phone": "+226 号码、谷歌地图链接、“营业中 / 已打烊”",
+      "founder": "由布基纳法索人创立，服务布基纳法索的餐厅。"
     },
     "who": {
       "title": "适合各类餐饮场所",
@@ -151,7 +152,7 @@
       "popular": "最受欢迎",
       "cta": "开始免费试用",
       "ctaFree": "创建免费菜单",
-      "note": "价格仅供参考。可通过 Orange Money、Moov Money 或现金付款。",
+      "note": "月费以西非法郎计价。可通过 Orange Money、Moov Money 或现金付款。",
       "gratuit": {
         "name": "免费版",
         "desc": "把菜单放到网上。",
