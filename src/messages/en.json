@@ -271,7 +271,15 @@
       "addAnother": "Add a restaurant"
     },
     "switchRestaurant": "Switch restaurant",
-    "comingSoon": "This section is coming soon."
+    "comingSoon": "This section is coming soon.",
+    "nextSteps": {
+      "title": "Next steps",
+      "dishes": "Add your dishes",
+      "seats": "Create your tables and their QR codes",
+      "print": "Print your main QR code",
+      "publish": "Publish your menu",
+      "done": "Done"
+    }
   },
   "admin": {
     "title": "RestoCool administration",
@@ -527,7 +535,9 @@
       "languagesHint": "French is always shown.",
       "inactivity": "Releasing seats (single QR)",
       "warnAfterMin": "Ask “Are you still there?” after (minutes)",
-      "releaseAfterSec": "Then free the seat after (seconds)"
+      "releaseAfterSec": "Then free the seat after (seconds)",
+      "tableCount": "How many tables do you have?",
+      "tableCountHint": "We create tables 1 to N, each with its own QR code. You can change them in “Seats & QR”. Leave 0 if you have no numbered tables."
     },
     "appearance": {
       "title": "Appearance",
@@ -776,11 +786,47 @@
       "scanEn": "Scan to see the menu",
       "scanZh": "扫码查看菜单",
       "poweredBy": "Menu by RestoCool",
-      "fold": "Fold here"
-    }
+      "fold": "Fold here",
+      "step1": "Ouvrez l’appareil photo de votre téléphone",
+      "step1En": "Open your phone camera",
+      "step1Zh": "打开手机相机",
+      "step2": "Visez le code, puis touchez le lien qui s’affiche",
+      "step2En": "Point at the code, tap the link",
+      "step2Zh": "对准二维码，点击链接",
+      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → code :"
+    },
+    "mainPrintHint": "6 stickers per A4 page. Cut them out and place them at the entrance, on tables, at the counter or on the window.",
+    "mainCode": "Restaurant code (for customers who don’t scan):",
+    "seatCode": "Seat code"
   },
   "legal": {
     "privacy": "Privacy",
     "terms": "Terms"
+  },
+  "mainQr": {
+    "title": "Your main QR code",
+    "ready": "It’s already ready: it opens your menu on your customers’ phones.",
+    "howPrint": "Print it (sticker or poster).",
+    "howPlace": "Put it wherever customers can see it: at the entrance, on tables, at the counter, on the window.",
+    "howScan": "Customers scan it with their phone camera: the 2 steps are printed on the sticker.",
+    "notPublished": "Your menu isn’t published yet. Publish it in Settings so customers can see it.",
+    "print": "Print my QR codes",
+    "download": "Download the image (PNG)",
+    "codeLabel": "Without scanning, customers can also go to {site} and type this code:"
+  },
+  "codeEntry": {
+    "pageTitle": "Open a menu with a code",
+    "title": "Have a code?",
+    "intro": "The 5-character code is printed under the restaurant’s QR code. It opens the same menu as scanning.",
+    "hint": "Enter the code printed under the restaurant’s QR code.",
+    "label": "Restaurant code",
+    "placeholder": "K7M3P",
+    "submit": "Open the menu",
+    "invalid": "This code doesn’t look right: 5 letters or digits, printed under the QR code.",
+    "notFound": "No restaurant matches this code. Check it, or scan the QR code.",
+    "tooMany": "Too many tries. Wait a minute, then try again.",
+    "orScan": "You can also scan the QR code with your phone camera.",
+    "homeTitle": "At a restaurant?",
+    "homeText": "Type the code printed under the QR code to open the menu."
   }
 }

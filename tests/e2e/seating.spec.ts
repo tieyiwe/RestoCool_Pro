@@ -29,7 +29,7 @@ test("owner bulk-adds tables, downloads a QR, prints the kit, and a regenerated 
 
   await page.goto("/app/seating/print?layout=grid");
   await expect(page.getByTestId("print-card")).toHaveCount(16); // 13 tables + 3 salons
-  await expect(page.getByTestId("print-card").first()).toContainText("扫码查看菜单");
+  await expect(page.getByTestId("print-card").first()).toContainText("打开手机相机");
 
   // Regenerate table 11's QR: the old link no longer seats anyone.
   const oldToken = await seatToken("11");

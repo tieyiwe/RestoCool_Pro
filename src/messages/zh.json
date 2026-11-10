@@ -271,7 +271,15 @@
       "addAnother": "添加餐厅"
     },
     "switchRestaurant": "切换餐厅",
-    "comingSoon": "此功能即将推出。"
+    "comingSoon": "此功能即将推出。",
+    "nextSteps": {
+      "title": "下一步",
+      "dishes": "添加菜品",
+      "seats": "创建桌子及其二维码",
+      "print": "打印主二维码",
+      "publish": "发布菜单",
+      "done": "已完成"
+    }
   },
   "admin": {
     "title": "RestoCool 管理后台",
@@ -527,7 +535,9 @@
       "languagesHint": "法语始终显示。",
       "inactivity": "释放座位（通用二维码）",
       "warnAfterMin": "无操作多久后询问“您还在吗？”（分钟）",
-      "releaseAfterSec": "之后多久释放座位（秒）"
+      "releaseAfterSec": "之后多久释放座位（秒）",
+      "tableCount": "您有多少张桌子？",
+      "tableCountHint": "我们会创建 1 到 N 号桌，每张桌子都有自己的二维码。可在“座位与二维码”中修改。没有编号桌子请填 0。"
     },
     "appearance": {
       "title": "外观",
@@ -776,11 +786,47 @@
       "scanEn": "Scan to see the menu",
       "scanZh": "扫码查看菜单",
       "poweredBy": "菜单由 RestoCool 提供",
-      "fold": "沿此折叠"
-    }
+      "fold": "沿此折叠",
+      "step1": "Ouvrez l’appareil photo de votre téléphone",
+      "step1En": "Open your phone camera",
+      "step1Zh": "打开手机相机",
+      "step2": "Visez le code, puis touchez le lien qui s’affiche",
+      "step2En": "Point at the code, tap the link",
+      "step2Zh": "对准二维码，点击链接",
+      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → code :"
+    },
+    "mainPrintHint": "每张 A4 纸 6 个贴纸。剪下后贴在门口、餐桌、柜台或橱窗上。",
+    "mainCode": "餐厅代码（供不扫码的顾客使用）：",
+    "seatCode": "座位代码"
   },
   "legal": {
     "privacy": "隐私政策",
     "terms": "使用条款"
+  },
+  "mainQr": {
+    "title": "您的主二维码",
+    "ready": "已经准备好：顾客用手机扫码即可打开您的菜单。",
+    "howPrint": "打印出来（贴纸或海报）。",
+    "howPlace": "贴在顾客看得到的地方：门口、餐桌、柜台、橱窗。",
+    "howScan": "顾客用手机相机扫码：贴纸上印有两个步骤。",
+    "notPublished": "您的菜单尚未发布。请在设置中发布，顾客才能看到。",
+    "print": "打印我的二维码",
+    "download": "下载图片 (PNG)",
+    "codeLabel": "不扫码的顾客也可以访问 {site} 并输入此代码："
+  },
+  "codeEntry": {
+    "pageTitle": "用代码打开菜单",
+    "title": "有代码吗？",
+    "intro": "5 位代码印在餐厅二维码下方，打开的菜单与扫码相同。",
+    "hint": "请输入餐厅二维码下方的代码。",
+    "label": "餐厅代码",
+    "placeholder": "K7M3P",
+    "submit": "打开菜单",
+    "invalid": "代码格式不正确：二维码下方的 5 位字母或数字。",
+    "notFound": "没有与此代码对应的餐厅。请检查代码，或扫描二维码。",
+    "tooMany": "尝试次数过多，请等一分钟后再试。",
+    "orScan": "您也可以用手机相机扫描二维码。",
+    "homeTitle": "在餐厅吗？",
+    "homeText": "输入二维码下方的代码即可打开菜单。"
   }
 }

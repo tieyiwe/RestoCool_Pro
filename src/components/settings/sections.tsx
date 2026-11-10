@@ -135,7 +135,7 @@ export async function HoursSection({ hours, next, submitLabel }: { hours: Hours;
   );
 }
 
-export async function ServiceSection({ r, next, submitLabel }: SectionProps) {
+export async function ServiceSection({ r, next, submitLabel, askTableCount }: SectionProps & { askTableCount?: boolean }) {
   const t = await getTranslations("settings.service");
   const s = r.settings;
   const modes = s.seatingModes ?? ["table", "takeaway"];
@@ -155,6 +155,13 @@ export async function ServiceSection({ r, next, submitLabel }: SectionProps) {
           ))}
         </div>
       </fieldset>
+      {askTableCount && (
+        <label className="text-sm">
+          <span className={label}>{t("tableCount")}</span>
+          <input type="number" name="tableCount" min={0} max={200} step={1} defaultValue={10} inputMode="numeric" className={input + " max-w-32"} data-testid="table-count" />
+          <span className="mt-1 block text-xs text-muted-foreground">{t("tableCountHint")}</span>
+        </label>
+      )}
       <fieldset>
         <legend className={label}>{t("qr")}</legend>
         <div className="grid gap-2">

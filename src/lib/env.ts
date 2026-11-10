@@ -15,6 +15,22 @@ export const env = {
   clerkProxyUrl(): string {
     return process.env.NEXT_PUBLIC_CLERK_PROXY_URL || process.env.CLERK_PROXY_URL || "";
   },
+  /**
+   * Public diagnostics for a sign-in page that cannot load Clerk: the key type and the Clerk
+   * server ("frontend API") the publishable key points to. Both are public (they are in the page).
+   */
+  clerkDiagnostics(): { mode: "test" | "live" | "unknown"; host: string } {
+    const pk = env.clerkPublishableKey();
+    const m = /^pk_(test|live)_(.+)$/.exec(pk);
+    if (!m) return { mode: "unknown", host: "" };
+    let host = "";
+    try {
+      host = Buffer.from(m[2]!, "base64").toString("utf8").replace(/\$$/, "");
+    } catch {
+      host = "";
+    }
+    return { mode: m[1] as "test" | "live", host: /^[a-z0-9.-]+$/i.test(host) ? host : "" };
+  },
   clerkConfigured(): boolean {
     return Boolean(process.env.CLERK_SECRET_KEY && env.clerkPublishableKey());
   },

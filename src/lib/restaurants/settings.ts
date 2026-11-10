@@ -11,7 +11,7 @@ import { isUniqueViolation } from "@/lib/errors";
 import { normalizeBfPhone } from "@/lib/format";
 import { hasFeature } from "@/lib/plan";
 import { RESERVED_SLUGS, slugify } from "@/lib/slug";
-import { syncSingletonSeats } from "@/lib/seating/admin";
+import { addTables, syncSingletonSeats } from "@/lib/seating/admin";
 
 export type SettingsCtx = { db: DB; actor: Actor; repo: TenantRepo };
 export type SettingsError =
@@ -58,6 +58,8 @@ export const ServiceInput = z.object({
   enabledLocales: z.array(z.enum(["fr", "en", "zh"])).default(["fr"]),
   /** Inactivity release in picker mode (seconds). */
   inactivity: z.object({ warnAfterSec: z.number().int().min(60).max(3600), releaseAfterSec: z.number().int().min(10).max(600) }).optional(),
+  /** Setup wizard: create tables 1..N (only when the restaurant has no tables yet). */
+  tableCount: z.number().int().min(0).max(200).optional(),
 });
 
 const OwnMedia = z.union([z.literal(""), z.string().regex(/^\/api\/media\/r\/[0-9a-f-]{36}\/[A-Za-z0-9_-]+(-t)?\.(?:webp|jpg)$/)]).default("");
@@ -164,12 +166,17 @@ export async function saveService(ctx: SettingsCtx, input: z.input<typeof Servic
   const r = await current(ctx);
   // One QR per table/room needs Pro or Business; Gratuit has one generic QR.
   if (p.data.qrStrategy === "per_seat" && !hasFeature(r, "qrPerSeat")) throw new SettingsValidationError("qr_plan");
+  const { tableCount, ...service } = p.data;
   await mergeSettings(
     ctx,
-    { ...p.data, enabledLocales, inactivity: p.data.inactivity ?? r.settings.inactivity },
+    { ...service, enabledLocales, inactivity: service.inactivity ?? r.settings.inactivity },
     "settings.service",
   );
-  await syncSingletonSeats(ctx.db, ctx.repo.restaurantId, p.data.seatingModes);
+  await syncSingletonSeats(ctx.db, ctx.repo.restaurantId, service.seatingModes);
+  if (tableCount && service.seatingModes.includes("table")) {
+    const hasTables = (await ctx.repo.seating.seats()).some((s) => s.type === "table");
+    if (!hasTables) await addTables(ctx, { from: 1, to: tableCount, skip: [], areaId: null, capacity: null });
+  }
 }
 
 export async function saveAppearance(ctx: SettingsCtx, input: z.input<typeof AppearanceInput>) {

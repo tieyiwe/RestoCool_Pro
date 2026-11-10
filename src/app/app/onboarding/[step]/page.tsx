@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AppearanceSection, ContactsSection, HoursSection, ProfileSection, ServiceSection } from "@/components/settings/sections";
 import { requireMemberPage } from "@/lib/auth/page";
+import { MainQrCard } from "@/components/qr/main-qr-card";
 import { FinishOnboarding } from "./finish";
 
 const STEPS = ["profile", "contacts", "hours", "service", "appearance"] as const;
@@ -15,18 +16,21 @@ export default async function OnboardingStep({ params }: { params: Promise<{ ste
   const n = Number((await params).step);
   if (!Number.isInteger(n) || n < 1 || n > STEPS.length + 1) notFound();
   const t = await getTranslations("settings");
-  const [r, hours] = await Promise.all([ctx.repo.restaurant.get(), ctx.repo.restaurant.openingHours()]);
+  const [r, hours, seatRows] = await Promise.all([ctx.repo.restaurant.get(), ctx.repo.restaurant.openingHours(), ctx.repo.seating.seats()]);
   if (!r) redirect("/app");
 
   if (n === STEPS.length + 1) {
     return (
-      <Card className="mx-auto flex max-w-lg flex-col items-center gap-4 p-8 text-center">
-        <p className="text-5xl" aria-hidden>
-          🎉
-        </p>
-        <h1 className="text-2xl font-extrabold">{t("wizard.done")}</h1>
-        <FinishOnboarding label={t("wizard.goMenu")} />
-      </Card>
+      <div className="mx-auto flex max-w-2xl flex-col gap-4">
+        <Card className="flex flex-col items-center gap-4 p-8 text-center">
+          <p className="text-5xl" aria-hidden>
+            🎉
+          </p>
+          <h1 className="text-2xl font-extrabold">{t("wizard.done")}</h1>
+          <FinishOnboarding label={t("wizard.goMenu")} />
+        </Card>
+        <MainQrCard restaurantId={r.id} slug={r.slug} published={r.published} />
+      </div>
     );
   }
 
@@ -46,7 +50,7 @@ export default async function OnboardingStep({ params }: { params: Promise<{ ste
         {step === "profile" && <ProfileSection {...props} />}
         {step === "contacts" && <ContactsSection {...props} />}
         {step === "hours" && <HoursSection hours={hours} next={next} submitLabel={t("next")} />}
-        {step === "service" && <ServiceSection {...props} />}
+        {step === "service" && <ServiceSection {...props} askTableCount={!seatRows.some((x) => x.type === "table")} />}
         {step === "appearance" && <AppearanceSection {...props} />}
       </Card>
       <div className="flex flex-wrap justify-between gap-2">

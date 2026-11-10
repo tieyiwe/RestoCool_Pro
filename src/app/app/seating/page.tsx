@@ -1,4 +1,5 @@
 import QRCode from "qrcode";
+import { ensureMainCode, ensureSeatCodes } from "@/lib/access-codes";
 import Link from "next/link";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
@@ -40,6 +41,10 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
   const base = await publicBaseUrl();
   const perSeatAllowed = hasFeature(r, "qrPerSeat");
   const perSeat = (r.settings.qrStrategy ?? "per_seat") === "per_seat" && perSeatAllowed;
+  const [mainCode, seatCodes] = await Promise.all([
+    ensureMainCode(getDb(), r.id),
+    perSeat ? ensureSeatCodes(getDb(), r.id, seatRows.filter((s) => s.type === "table" || s.type === "room" || s.type === "area").map((s) => s.id)) : Promise.resolve(new Map<string, string>()),
+  ]);
   const genericQr = await QRCode.toString(menuUrl(base, r.slug), { type: "svg", margin: 1, color: { dark: "#17231C", light: "#FFFFFF" } });
   const areaName = (id: string | null) => (id ? pickText(areaRows.find((a) => a.id === id)?.name, locale) : "");
 
@@ -72,6 +77,12 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
         <div className="flex flex-1 flex-col gap-3">
           <h2 className="text-lg font-bold">{perSeat ? t("qr") : t("genericTitle")}</h2>
           <p className="text-sm text-muted-foreground">{perSeat ? t("perSeatHint") : t("genericHint")}</p>
+          <p className="text-sm">
+            {t("mainCode")}{" "}
+            <span className="rounded-md bg-muted px-2 py-0.5 font-mono font-bold tracking-widest" data-testid="seating-main-code">
+              {mainCode}
+            </span>
+          </p>
           {!perSeatAllowed && <p className="rounded-lg bg-amber-50 p-2 text-sm text-amber-900">{t("planQr")}</p>}
           <div className="flex flex-wrap gap-2">
             {!perSeat && (
@@ -206,6 +217,11 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
                   <span className="min-w-0 flex-1 text-sm">
                     {areaName(s.areaId)}
                     {s.capacity ? ` · ${s.capacity} ${t("capacity").toLowerCase()}` : ""}
+                    {seatCodes.get(s.id) && (
+                      <span className="ml-2 rounded bg-muted px-1.5 font-mono text-xs font-bold tracking-wider" title={t("seatCode")} data-testid="seat-code">
+                        {seatCodes.get(s.id)}
+                      </span>
+                    )}
                     {!s.active && (
                       <Badge variant="muted" className="ml-2">
                         {t("inactive")}

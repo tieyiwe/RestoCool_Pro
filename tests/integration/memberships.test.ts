@@ -1,10 +1,12 @@
 import { eq, inArray } from "drizzle-orm";
-import { afterAll, describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it, vi } from "vitest";
 import { closeDb, getDb } from "@/db";
 import { membershipsForUser, tenantRepo } from "@/db/repos/tenant";
 import { auditLog, members, planEvents, restaurants } from "@/db/schema";
 import { isUniqueViolation } from "@/lib/errors";
 import { createRestaurantForUser } from "@/lib/restaurants/provision";
+
+vi.mock("server-only", () => ({}));
 
 const hasDb = Boolean(process.env.DATABASE_URL);
 const USER = "user_test_memberships";

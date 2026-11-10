@@ -88,3 +88,23 @@ export const sessionDevices = pgTable(
     uniqueIndex("session_devices_session_device_uq").on(t.sessionId, t.deviceId),
   ],
 );
+
+/**
+ * Short codes printed under every QR (5 characters, no 0/O/1/I/L), for customers who can't or
+ * don't want to scan: they type it at restocool.com/c. seat_id null = the restaurant's main code.
+ * Codes are global (one namespace for all restaurants), so the code alone finds the restaurant.
+ */
+export const accessCodes = pgTable(
+  "access_codes",
+  {
+    code: text("code").primaryKey(),
+    restaurantId: uuid("restaurant_id").notNull().references(() => restaurants.id, { onDelete: "cascade" }),
+    seatId: uuid("seat_id").references(() => seats.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("access_codes_restaurant_idx").on(t.restaurantId),
+    uniqueIndex("access_codes_seat_uq").on(t.seatId),
+    uniqueIndex("access_codes_main_uq").on(t.restaurantId).where(sql`${t.seatId} is null`),
+  ],
+);

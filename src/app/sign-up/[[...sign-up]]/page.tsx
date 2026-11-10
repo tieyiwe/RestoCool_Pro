@@ -17,7 +17,7 @@ export default async function Page() {
         <Logo />
         {env.clerkConfigured() ? (
           <>
-            <ClerkStatus />
+            <ClerkStatus diag={{ ...env.clerkDiagnostics(), proxy: Boolean(env.clerkProxyUrl()) }} />
             <SignUp />
           </>
         ) : (

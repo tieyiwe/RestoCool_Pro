@@ -16,3 +16,6 @@ export async function publicBaseUrl(): Promise<string> {
 
 export const seatUrl = (base: string, slug: string, token: string) => `${base}/r/${slug}/t/${token}`;
 export const menuUrl = (base: string, slug: string) => `${base}/r/${slug}`;
+
+/** "restocool.com/c": where customers type the code printed under a QR (shown on stickers). */
+export const codeEntryHost = (base: string) => `${base.replace(/^https?:\/\//, "")}/c`;

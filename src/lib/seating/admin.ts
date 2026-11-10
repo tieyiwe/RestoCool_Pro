@@ -3,7 +3,7 @@ import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
 import type { TenantRepo } from "@/db/repos/tenant";
-import { areas, seats, sessionDevices, tableSessions, type I18nText } from "@/db/schema";
+import { accessCodes, areas, seats, sessionDevices, tableSessions, type I18nText } from "@/db/schema";
 import { writeAudit } from "@/lib/audit";
 import type { Actor } from "@/lib/auth/can";
 import { NotFoundError } from "@/lib/errors";
@@ -139,6 +139,8 @@ export async function deleteSeat(ctx: SeatingCtx, seatId: string) {
 export async function regenerateToken(ctx: SeatingCtx, seatId: string) {
   await ownSeat(ctx, seatId);
   await ctx.db.update(seats).set({ qrToken: randomToken() }).where(and(eq(seats.restaurantId, ctx.repo.restaurantId), eq(seats.id, seatId)));
+  // The typed code is a second way into the same seat: it changes too (a new one is made on next print).
+  await ctx.db.delete(accessCodes).where(and(eq(accessCodes.restaurantId, ctx.repo.restaurantId), eq(accessCodes.seatId, seatId)));
   await audit(ctx, "seating.seat.qr_regenerated", "seat", seatId);
 }
 

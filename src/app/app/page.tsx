@@ -7,6 +7,7 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { getMemberContext } from "@/lib/auth/context";
 import { can } from "@/lib/auth/can";
 import { effectiveStatus } from "@/lib/plan";
+import { MainQrCard } from "@/components/qr/main-qr-card";
 
 export default async function DashboardPage() {
   const t = await getTranslations("app");
@@ -29,6 +30,16 @@ export default async function DashboardPage() {
     canReadAudit ? ctx.repo.audit.recent(10) : Promise.resolve([]),
   ]);
   const status = effectiveStatus(r);
+  const canManage = can(ctx.actor, "settings.write", { restaurantId: ctx.repo.restaurantId });
+  const canSeats = can(ctx.actor, "seats.write", { restaurantId: ctx.repo.restaurantId });
+  const placeSeats = seats.filter((s) => s.type === "table" || s.type === "room" || s.type === "area");
+  const steps = [
+    { key: "dishes", done: itemCount > 0, href: "/app/menu" },
+    { key: "seats", done: placeSeats.length > 0, href: "/app/seating" },
+    { key: "print", done: false, href: "/app/seating/print?qr=main&layout=grid" },
+    { key: "publish", done: r.published, href: "/app/settings#publish" },
+  ] as const;
+  const showSteps = canManage && !(itemCount > 0 && placeSeats.length > 0 && r.published);
 
   const stats = [
     { label: t("stats.categories"), value: categories.length },
@@ -58,6 +69,27 @@ export default async function DashboardPage() {
       {status === "trial" && r.planExpiresAt && (
         <p className="text-sm text-muted-foreground">{t("plan.trialEnds", { date: format.dateTime(r.planExpiresAt, { dateStyle: "long" }) })}</p>
       )}
+
+      {showSteps && (
+        <Card data-testid="next-steps">
+          <CardTitle className="mb-3">{t("nextSteps.title")}</CardTitle>
+          <ol className="flex flex-col gap-2">
+            {steps.map((s, i) => (
+              <li key={s.key}>
+                <Link href={s.href} className="flex min-h-11 items-center gap-3 rounded-lg border border-border px-3 py-2 hover:bg-muted" data-done={s.done}>
+                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${s.done ? "bg-primary text-primary-foreground" : "bg-muted"}`} aria-hidden>
+                    {s.done ? "✓" : i + 1}
+                  </span>
+                  <span className={s.done ? "text-muted-foreground line-through" : "font-semibold"}>{t(`nextSteps.${s.key}`)}</span>
+                  {s.done && <span className="sr-only">({t("nextSteps.done")})</span>}
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </Card>
+      )}
+
+      {canSeats && <MainQrCard restaurantId={r.id} slug={r.slug} published={r.published} />}
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {stats.map((s) => (

@@ -26,6 +26,7 @@ import { LOCAL_CLAIMS } from "@/config/marketing";
 import { PLANS } from "@/config/plans";
 import { formatFCFA } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { CodeForm } from "@/components/code-entry/code-form";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("landing");
@@ -50,6 +51,7 @@ export default async function HomePage() {
   const t = await getTranslations("landing");
   const tb = await getTranslations("brand");
   const tl = await getTranslations("legal");
+  const tc = await getTranslations("codeEntry");
   const year = new Date().getUTCFullYear();
 
   const features = [
@@ -105,6 +107,9 @@ export default async function HomePage() {
             <div className="hidden sm:block">
               <LocaleSwitcher />
             </div>
+            <Link href="/c" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:bg-sable lg:flex">
+              {tc("title")}
+            </Link>
             <Link href="/sign-in" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:bg-sable md:flex">
               {t("nav.signIn")}
             </Link>
@@ -169,6 +174,17 @@ export default async function HomePage() {
                 <li key={k}>{t(`strip.${k}`)}</li>
               ))}
             </ul>
+          </div>
+        </section>
+
+        {/* ---------------- Customers at a restaurant: type the code under the QR ---------------- */}
+        <section id="code" className="border-b border-sable bg-creme" data-testid="home-code">
+          <div className={cn(section, "flex flex-col gap-4 py-8 md:flex-row md:items-center md:justify-between")}>
+            <div>
+              <h2 className="font-display text-xl font-extrabold">{tc("homeTitle")}</h2>
+              <p className="text-encre-2">{tc("homeText")}</p>
+            </div>
+            <CodeForm compact />
           </div>
         </section>
 

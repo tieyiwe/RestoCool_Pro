@@ -28,10 +28,19 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await expect(page).toHaveURL(/\/onboarding\/3$/);
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/\/onboarding\/4$/);
+  // A new restaurant has no tables yet: the wizard asks how many and creates them with their QR.
+  await page.getByTestId("table-count").fill("6");
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/\/onboarding\/5$/);
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page.getByRole("heading", { name: /Votre restaurant est prêt/ })).toBeVisible();
+  // The main QR code is ready at once, with print-and-place instructions.
+  const mainQr = page.getByTestId("main-qr");
+  await expect(mainQr.locator("svg")).toBeVisible();
+  await expect(mainQr).toContainText("Placez-le partout");
+  await expect(page.getByTestId("main-qr-url")).toHaveText(/\/r\/maquis-e2e-/);
+  const mainCode = (await page.getByTestId("main-qr-code").textContent())!.trim();
+  expect(mainCode).toMatch(/^[A-Z2-9]{5}$/);
   await page.getByRole("button", { name: "Ajouter mes plats" }).click();
   await expect(page).toHaveURL(/\/app\/menu$/);
 
@@ -64,6 +73,15 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await expect(page.getByRole("radio", { name: /^Pimenté/ })).toBeChecked();
   await expect(page.getByTestId("name-zh")).toHaveValue("油焖饭");
   await page.goto("/app/menu");
+
+  // Tables 1..6 exist; the main QR sticker sheet carries the 2 scan steps.
+  await page.goto("/app/seating");
+  await expect(page.getByTestId("seats-table").getByTestId("seat-row")).toHaveCount(6);
+  await page.goto("/app/seating/print?qr=main&layout=grid");
+  await expect(page.getByTestId("print-card")).toHaveCount(6);
+  await expect(page.getByTestId("scan-steps").first()).toContainText("Ouvrez l’appareil photo");
+  await expect(page.getByTestId("scan-steps").first()).toContainText("touchez le lien");
+  await expect(page.getByTestId("card-code").first()).toContainText(mainCode);
 
   // 4. Publish from Settings, then the public menu shows the dish and its photo
   await page.goto("/app/settings#publish");

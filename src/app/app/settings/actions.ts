@@ -77,6 +77,7 @@ export async function saveServiceAction(_p: SettingsResult, fd: FormData) {
         fd.get("warnAfterMin") !== null
           ? { warnAfterSec: Math.round(Number(s(fd, "warnAfterMin")) * 60), releaseAfterSec: Math.round(Number(s(fd, "releaseAfterSec"))) }
           : undefined,
+      tableCount: fd.get("tableCount") !== null && s(fd, "tableCount") !== "" ? Math.round(Number(s(fd, "tableCount"))) : undefined,
     }),
   );
 }

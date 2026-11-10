@@ -1,3 +1,4 @@
+import { ensureMainCode } from "@/lib/access-codes";
 import { like } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
@@ -42,7 +43,10 @@ export async function createRestaurantForUser(
   // Two sign-ups with the same name can pick the same free slug at once: retry on the unique index.
   for (let attempt = 1; ; attempt++) {
     try {
-      return await insertRestaurant(db, user, data);
+      const restaurant = await insertRestaurant(db, user, data);
+      // The main QR (menu link) exists from the start; give it its typed code right away.
+      await ensureMainCode(db, restaurant.id);
+      return restaurant;
     } catch (err) {
       if (attempt >= 5 || !isUniqueViolation(err)) throw err;
     }
