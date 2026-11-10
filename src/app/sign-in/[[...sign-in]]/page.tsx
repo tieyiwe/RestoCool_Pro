@@ -14,7 +14,9 @@ export default async function Page() {
   return (
     <AuthProvider>
       <main className="rc-weave flex min-h-dvh flex-col items-center justify-center gap-6 px-4 py-10">
-        <Logo />
+        <Link href="/" aria-label="RestoCool">
+          <Logo />
+        </Link>
         {env.clerkConfigured() ? (
           <>
             <ClerkStatus diag={{ ...env.clerkDiagnostics(), proxy: Boolean(env.clerkProxyUrl()) }} />

@@ -28,12 +28,16 @@ export async function MainQrCard({ restaurantId, slug, published }: { restaurant
           <li>{t("howPlace")}</li>
           <li>{t("howScan")}</li>
         </ol>
-        <p className="text-sm">
-          {t("codeLabel", { site: codeEntryHost(base) })}{" "}
-          <span className="rounded-md bg-muted px-2 py-0.5 font-mono text-lg font-bold tracking-widest" data-testid="main-qr-code">
-            {formatRc(code)}
-          </span>
-        </p>
+        {/* The restaurant's « Numéro RC »: its unique identifier on RestoCool (also printed on stickers). */}
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-muted/50 p-3" data-testid="rc-block">
+          <div>
+            <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">{t("rcTitle")}</p>
+            <p className="font-mono text-2xl font-extrabold tracking-widest" data-testid="main-qr-code">
+              {formatRc(code)}
+            </p>
+          </div>
+          <p className="min-w-0 flex-1 text-xs text-muted-foreground">{t("codeLabel", { site: codeEntryHost(base) })}</p>
+        </div>
         <p className="truncate font-mono text-xs text-muted-foreground" data-testid="main-qr-url">
           {url}
         </p>

@@ -28,7 +28,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     <AuthProvider>
       <div className="flex min-h-dvh flex-col">
         <header className="sticky top-0 z-20 flex print:hidden items-center justify-between gap-3 border-b border-border bg-surface px-4 py-2">
-          <Link href="/app" aria-label="RestoCool">
+          <Link href="/" aria-label="RestoCool">
             <Logo />
           </Link>
           <div className="flex flex-wrap items-center justify-end gap-2">

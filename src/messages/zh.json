@@ -921,7 +921,7 @@
       "step2": "Visez le code, puis touchez le lien qui s’affiche",
       "step2En": "Point at the code, tap the link",
       "step2Zh": "对准二维码，点击链接",
-      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} →"
+      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → Numéro RC :"
     },
     "mainPrintHint": "每张 A4 纸 6 个贴纸。剪下后贴在门口、餐桌、柜台或橱窗上。",
     "mainCode": "餐厅 RC 号（供不扫码的顾客使用）：",
@@ -940,7 +940,8 @@
     "notPublished": "您的菜单尚未发布。请在设置中发布，顾客才能看到。",
     "print": "打印我的二维码",
     "download": "下载图片 (PNG)",
-    "codeLabel": "不扫码的顾客也可以访问 {site} 并输入您的 RC 号："
+    "codeLabel": "您的商家在 RestoCool 上的唯一编号。不扫码的顾客可以访问 {site} 输入此号。",
+    "rcTitle": "RC 号"
   },
   "codeEntry": {
     "pageTitle": "用代码打开菜单",
@@ -956,7 +957,7 @@
     "orScan": "您也可以用手机相机扫描二维码。",
     "homeTitle": "在餐厅吗？",
     "homeText": "输入二维码下方的 RC 号即可打开菜单。",
-    "short": "RC 号"
+    "short": "输入 RC 号"
   },
   "service": {
     "frontDesk": "前台服务",

@@ -512,7 +512,9 @@ export default async function HomePage() {
       <footer className="border-t border-ligne bg-white">
         <div className={cn(section, "flex flex-col gap-8 py-10 md:flex-row md:items-start md:justify-between")}>
           <div className="flex flex-col gap-2">
-            <Logo />
+            <Link href="/" aria-label="RestoCool" className="self-start">
+              <Logo />
+            </Link>
             <p className="max-w-xs text-sm text-encre-2">{tb("tagline")}</p>
             <p className="text-sm text-encre-2">
               {t("footer.product", { publisher: LEGAL.publisher })} · {t("footer.group", { group: LEGAL.parentGroup })}

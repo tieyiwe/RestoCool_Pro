@@ -921,7 +921,7 @@
       "step2": "Visez le code, puis touchez le lien qui s’affiche",
       "step2En": "Point at the code, tap the link",
       "step2Zh": "对准二维码，点击链接",
-      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} →"
+      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → Numéro RC :"
     },
     "mainPrintHint": "6 stickers per A4 page. Cut them out and place them at the entrance, on tables, at the counter or on the window.",
     "mainCode": "Restaurant RC number (for customers who don’t scan):",
@@ -940,7 +940,8 @@
     "notPublished": "Your menu isn’t published yet. Publish it in Settings so customers can see it.",
     "print": "Print my QR codes",
     "download": "Download the image (PNG)",
-    "codeLabel": "Without scanning, customers can also go to {site} and type your RC number:"
+    "codeLabel": "Your business’s unique ID on RestoCool. Without scanning, customers can go to {site} and type it.",
+    "rcTitle": "RC number"
   },
   "codeEntry": {
     "pageTitle": "Open a menu with a code",
@@ -956,7 +957,7 @@
     "orScan": "You can also scan the QR code with your phone camera.",
     "homeTitle": "At a restaurant?",
     "homeText": "Type the RC number printed under the QR code to open the menu.",
-    "short": "RC number"
+    "short": "Enter an RC number"
   },
   "service": {
     "frontDesk": "Front desk",
