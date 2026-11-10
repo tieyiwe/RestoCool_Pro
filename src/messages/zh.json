@@ -644,7 +644,8 @@
       "takeawayWhatsapp": "通过 WhatsApp 外带点餐",
       "localBadge": "突出本地食材（“本地食材”筛选）",
       "poweredBadge": "显示“菜单由 RestoCool 提供”标志",
-      "poweredBadgeHint": "商业版可隐藏。"
+      "poweredBadgeHint": "商业版可隐藏。",
+      "attendance": "员工打卡（到岗和离岗）"
     },
     "publish": {
       "title": "发布",
@@ -1156,5 +1157,90 @@
     "homeTitle": "他们在用 RestoCool",
     "homeText": "打开餐厅菜单，或按名称、RC 号搜索。",
     "browse": "浏览餐厅"
+  },
+  "pointage": {
+    "title": "员工打卡",
+    "intro": "输入工号和 PIN 码。同一个码先记录到岗，再记录离岗。",
+    "introRc": "输入餐厅 RC 号、您的工号和 PIN 码。同一个码先记录到岗，再记录离岗。",
+    "rc": "餐厅 RC 号",
+    "staffNo": "工号",
+    "pin": "PIN 码",
+    "submit": "打卡",
+    "sending": "保存中…",
+    "hello": "{name}，您好！",
+    "bye": "{name}，再见！",
+    "inAt": "已于 {time} 记录到岗。工作顺利！",
+    "outAt": "已于 {time} 记录离岗 · 在岗 {hours}。",
+    "error": {
+      "invalid": "请检查工号（数字）和 PIN 码（4 到 6 位数字）。",
+      "restaurant": "找不到餐厅。请检查 RC 号，或扫描打卡二维码。",
+      "disabled": "此餐厅未开启打卡。",
+      "unknown": "此餐厅没有这个工号。",
+      "no_pin": "此工号没有 PIN 码，请让负责人创建。",
+      "wrong_pin": "PIN 码错误，还剩 {tries} 次机会。",
+      "locked": "尝试次数过多：此账号锁定 {minutes} 分钟。请让负责人为您打卡。",
+      "too_many": "此设备尝试次数过多，请等一分钟。"
+    },
+    "poster1": "用手机扫描此二维码。",
+    "poster2": "输入您的工号和 PIN 码。",
+    "poster3": "到岗和离岗都用同一个码。",
+    "posterRc": "没有二维码时：{site} · 号码 {rc}"
+  },
+  "attendance": {
+    "title": "打卡",
+    "enabledHint": "员工通过扫描打卡二维码或访问 restocool.com/pointage，用工号和 PIN 码记录到岗和离岗。",
+    "disabled": "打卡已关闭。可在设置 → 功能中开启。",
+    "qrTitle": "打卡二维码",
+    "qrText": "打印后贴在员工入口（不要放在餐厅大堂）。扫码后每人输入工号和 PIN 码。",
+    "print": "打印",
+    "regenerate": "更换二维码",
+    "regenerateConfirm": "旧的打印二维码将失效。继续吗？",
+    "orRc": "没有二维码时：访问 restocool.com/pointage，输入 {rc}。",
+    "present": "在岗",
+    "absent": "不在岗",
+    "since": "自 {time}",
+    "checkIn": "记录到岗",
+    "checkOut": "记录离岗",
+    "log": "最近 7 天出勤",
+    "in": "到岗",
+    "out": "离岗",
+    "duration": "时长",
+    "method": "方式",
+    "methods": {
+      "qr": "二维码",
+      "code": "RC 号",
+      "manager": "负责人"
+    },
+    "stillHere": "进行中",
+    "total": "7 天合计",
+    "noLog": "此时段没有打卡记录。",
+    "locked": "已锁定（尝试过多）"
+  },
+  "personnelAdmin": {
+    "add": "添加员工",
+    "addHint": "适用于没有邮箱的员工（服务员、厨房、收银）。将获得下一个工号。",
+    "name": "姓名",
+    "role": "角色",
+    "pin": "PIN 码（4 到 6 位数字）",
+    "submit": "添加",
+    "setPin": "新 PIN 码",
+    "savePin": "保存",
+    "deactivate": "停用",
+    "activate": "重新启用",
+    "noPin": "无 PIN",
+    "loginEmail": "邮箱登录",
+    "ok": {
+      "added": "已添加，工号 {no}。",
+      "pin": "PIN 码已保存。",
+      "in": "已记录到岗。",
+      "out": "已记录离岗。",
+      "qr": "已创建新的打卡二维码：请打印。",
+      "status": "状态已更新。"
+    },
+    "err": {
+      "invalid": "请检查姓名（至少 2 个字符）和 PIN 码（4 到 6 位数字）。",
+      "forbidden": "无权操作。",
+      "notFound": "找不到。"
+    }
   }
 }

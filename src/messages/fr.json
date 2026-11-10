@@ -644,7 +644,8 @@
       "takeawayWhatsapp": "Commande à emporter par WhatsApp",
       "localBadge": "Mettre en avant les produits locaux (filtre « Produits locaux »)",
       "poweredBadge": "Afficher le badge « Menu par RestoCool »",
-      "poweredBadgeHint": "Le masquer est possible avec la formule Business."
+      "poweredBadgeHint": "Le masquer est possible avec la formule Business.",
+      "attendance": "Pointage du personnel (arrivée et départ)"
     },
     "publish": {
       "title": "Publication",
@@ -1156,5 +1157,90 @@
     "homeTitle": "Ils sont sur RestoCool",
     "homeText": "Ouvrez le menu d’un restaurant, ou cherchez par nom ou numéro RC.",
     "browse": "Parcourir les restaurants"
+  },
+  "pointage": {
+    "title": "Pointage du personnel",
+    "intro": "Entrez votre matricule et votre code PIN. Le même code enregistre l’arrivée, puis le départ.",
+    "introRc": "Entrez le numéro RC du restaurant, votre matricule et votre code PIN. Le même code enregistre l’arrivée, puis le départ.",
+    "rc": "Numéro RC du restaurant",
+    "staffNo": "Matricule",
+    "pin": "Code PIN",
+    "submit": "Pointer",
+    "sending": "Enregistrement…",
+    "hello": "Bonjour {name} !",
+    "bye": "Au revoir {name} !",
+    "inAt": "Arrivée enregistrée à {time}. Bon service !",
+    "outAt": "Départ enregistré à {time} · {hours} de présence.",
+    "error": {
+      "invalid": "Vérifiez le matricule (chiffres) et le code PIN (4 à 6 chiffres).",
+      "restaurant": "Restaurant introuvable. Vérifiez le numéro RC, ou scannez le QR code de pointage.",
+      "disabled": "Le pointage n’est pas activé dans ce restaurant.",
+      "unknown": "Ce matricule n’existe pas dans ce restaurant.",
+      "no_pin": "Aucun code PIN pour ce matricule. Demandez au responsable d’en créer un.",
+      "wrong_pin": "Code PIN incorrect. Il vous reste encore {tries} essai(s).",
+      "locked": "Trop d’essais : ce profil est bloqué pendant {minutes} min. Demandez au responsable de vous pointer.",
+      "too_many": "Trop d’essais depuis cet appareil. Patientez une minute."
+    },
+    "poster1": "Scannez ce QR code avec votre téléphone.",
+    "poster2": "Entrez votre matricule et votre code PIN.",
+    "poster3": "À l’arrivée comme au départ : le même code.",
+    "posterRc": "Sans QR code : {site} · numéro {rc}"
+  },
+  "attendance": {
+    "title": "Pointage",
+    "enabledHint": "Le personnel pointe son arrivée et son départ avec son matricule et son code PIN, en scannant le QR code de pointage ou sur restocool.com/pointage.",
+    "disabled": "Le pointage est désactivé. Vous pouvez l’activer dans Paramètres → Fonctions.",
+    "qrTitle": "QR code de pointage",
+    "qrText": "Imprimez-le et placez-le à l’entrée du personnel (pas en salle). En le scannant, chacun entre son matricule et son code PIN.",
+    "print": "Imprimer",
+    "regenerate": "Changer le QR code",
+    "regenerateConfirm": "L’ancien QR code imprimé ne fonctionnera plus. Continuer ?",
+    "orRc": "Sans QR code : restocool.com/pointage avec le numéro {rc}.",
+    "present": "Présent",
+    "absent": "Absent",
+    "since": "depuis {time}",
+    "checkIn": "Pointer l’arrivée",
+    "checkOut": "Pointer le départ",
+    "log": "Présences des 7 derniers jours",
+    "in": "Arrivée",
+    "out": "Départ",
+    "duration": "Durée",
+    "method": "Par",
+    "methods": {
+      "qr": "QR code",
+      "code": "Numéro RC",
+      "manager": "Responsable"
+    },
+    "stillHere": "en cours",
+    "total": "Total 7 jours",
+    "noLog": "Aucun pointage sur cette période.",
+    "locked": "Bloqué (trop d’essais)"
+  },
+  "personnelAdmin": {
+    "add": "Ajouter une personne",
+    "addHint": "Pour le personnel sans adresse e-mail (serveurs, cuisine, caisse). Il recevra le prochain matricule.",
+    "name": "Nom",
+    "role": "Rôle",
+    "pin": "Code PIN (4 à 6 chiffres)",
+    "submit": "Ajouter",
+    "setPin": "Nouveau code PIN",
+    "savePin": "Enregistrer",
+    "deactivate": "Désactiver",
+    "activate": "Réactiver",
+    "noPin": "Pas de PIN",
+    "loginEmail": "Connexion par e-mail",
+    "ok": {
+      "added": "Personne ajoutée avec le matricule {no}.",
+      "pin": "Code PIN enregistré.",
+      "in": "Arrivée enregistrée.",
+      "out": "Départ enregistré.",
+      "qr": "Nouveau QR code de pointage créé : imprimez-le.",
+      "status": "Statut mis à jour."
+    },
+    "err": {
+      "invalid": "Vérifiez le nom (2 caractères minimum) et le code PIN (4 à 6 chiffres).",
+      "forbidden": "Action non autorisée.",
+      "notFound": "Introuvable."
+    }
   }
 }

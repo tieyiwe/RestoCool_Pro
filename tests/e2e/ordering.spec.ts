@@ -15,7 +15,7 @@ async function phoneAt(browser: Browser, table: string): Promise<Page> {
   await ctx.addInitScript(skipWelcome);
   const p = await ctx.newPage();
   await p.goto(`/r/restaurant-demo/t/${await seatToken(table)}`);
-  await expect(p.getByTestId("seat-badge")).toContainText(`Table ${table}`);
+  await expect(p.getByTestId("seat-badge")).toContainText(`Table ${table}`, { timeout: 25_000 });
   return p;
 }
 

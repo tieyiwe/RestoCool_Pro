@@ -644,7 +644,8 @@
       "takeawayWhatsapp": "Takeaway orders by WhatsApp",
       "localBadge": "Highlight local produce (“Local produce” filter)",
       "poweredBadge": "Show the “Menu by RestoCool” badge",
-      "poweredBadgeHint": "Hiding it is possible with the Business plan."
+      "poweredBadgeHint": "Hiding it is possible with the Business plan.",
+      "attendance": "Staff check-in (arrival and departure)"
     },
     "publish": {
       "title": "Publishing",
@@ -1156,5 +1157,90 @@
     "homeTitle": "They’re on RestoCool",
     "homeText": "Open a restaurant’s menu, or search by name or RC number.",
     "browse": "Browse restaurants"
+  },
+  "pointage": {
+    "title": "Staff check-in",
+    "intro": "Enter your staff ID and PIN. The same code records your arrival, then your departure.",
+    "introRc": "Enter the restaurant’s RC number, your staff ID and your PIN. The same code records your arrival, then your departure.",
+    "rc": "Restaurant RC number",
+    "staffNo": "Staff ID",
+    "pin": "PIN",
+    "submit": "Check in / out",
+    "sending": "Saving…",
+    "hello": "Hello {name}!",
+    "bye": "Goodbye {name}!",
+    "inAt": "Arrival recorded at {time}. Have a good shift!",
+    "outAt": "Departure recorded at {time} · {hours} on site.",
+    "error": {
+      "invalid": "Check your staff ID (digits) and PIN (4 to 6 digits).",
+      "restaurant": "Restaurant not found. Check the RC number, or scan the check-in QR code.",
+      "disabled": "Check-in isn’t turned on in this restaurant.",
+      "unknown": "This staff ID doesn’t exist in this restaurant.",
+      "no_pin": "No PIN for this staff ID. Ask your manager to create one.",
+      "wrong_pin": "Wrong PIN. {tries} more tr(ies) left.",
+      "locked": "Too many tries: this profile is locked for {minutes} min. Ask your manager to check you in.",
+      "too_many": "Too many tries from this device. Wait a minute."
+    },
+    "poster1": "Scan this QR code with your phone.",
+    "poster2": "Enter your staff ID and PIN.",
+    "poster3": "On arrival and on departure: the same code.",
+    "posterRc": "Without the QR code: {site} · number {rc}"
+  },
+  "attendance": {
+    "title": "Check-in",
+    "enabledHint": "Staff record their arrival and departure with their staff ID and PIN, by scanning the check-in QR code or on restocool.com/pointage.",
+    "disabled": "Check-in is turned off. You can turn it on in Settings → Features.",
+    "qrTitle": "Check-in QR code",
+    "qrText": "Print it and put it at the staff entrance (not in the dining room). Scanning it, each person enters their staff ID and PIN.",
+    "print": "Print",
+    "regenerate": "Change the QR code",
+    "regenerateConfirm": "The old printed QR code will stop working. Continue?",
+    "orRc": "Without the QR code: restocool.com/pointage with number {rc}.",
+    "present": "Present",
+    "absent": "Away",
+    "since": "since {time}",
+    "checkIn": "Check in",
+    "checkOut": "Check out",
+    "log": "Attendance, last 7 days",
+    "in": "In",
+    "out": "Out",
+    "duration": "Duration",
+    "method": "By",
+    "methods": {
+      "qr": "QR code",
+      "code": "RC number",
+      "manager": "Manager"
+    },
+    "stillHere": "ongoing",
+    "total": "7-day total",
+    "noLog": "No check-ins in this period.",
+    "locked": "Locked (too many tries)"
+  },
+  "personnelAdmin": {
+    "add": "Add a person",
+    "addHint": "For staff without an email (servers, kitchen, cashier). They get the next staff ID.",
+    "name": "Name",
+    "role": "Role",
+    "pin": "PIN (4 to 6 digits)",
+    "submit": "Add",
+    "setPin": "New PIN",
+    "savePin": "Save",
+    "deactivate": "Deactivate",
+    "activate": "Reactivate",
+    "noPin": "No PIN",
+    "loginEmail": "Email login",
+    "ok": {
+      "added": "Person added with staff ID {no}.",
+      "pin": "PIN saved.",
+      "in": "Arrival recorded.",
+      "out": "Departure recorded.",
+      "qr": "New check-in QR code created: print it.",
+      "status": "Status updated."
+    },
+    "err": {
+      "invalid": "Check the name (at least 2 characters) and PIN (4 to 6 digits).",
+      "forbidden": "Not allowed.",
+      "notFound": "Not found."
+    }
   }
 }

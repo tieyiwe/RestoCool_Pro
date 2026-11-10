@@ -57,6 +57,13 @@
       "when": 1794319549854,
       "tag": "0007_featured",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794319807784,
+      "tag": "0008_attendance",
+      "breakpoints": true
     }
   ]
 }

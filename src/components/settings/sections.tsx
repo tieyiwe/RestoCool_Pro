@@ -240,7 +240,7 @@ export async function AppearanceSection({ r, next, submitLabel }: SectionProps) 
 export async function FeaturesSection({ r }: SectionProps) {
   const t = await getTranslations("settings.features");
   const f = r.settings.features ?? {};
-  const defaults: Record<(typeof FEATURE_FLAGS)[number], boolean> = { welcomeScreen: true, fortuneCookie: true, share: true, takeawayWhatsapp: true, localBadge: false };
+  const defaults: Record<(typeof FEATURE_FLAGS)[number], boolean> = { welcomeScreen: true, fortuneCookie: true, share: true, takeawayWhatsapp: true, localBadge: false, attendance: true };
   return (
     <SettingsForm action={saveFeaturesAction} testId="features-form">
       {FEATURE_FLAGS.map((flag) => (

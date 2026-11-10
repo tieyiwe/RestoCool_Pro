@@ -4,6 +4,7 @@ import path from "node:path";
 import { eq } from "drizzle-orm";
 import { closeDb, getDb, type DB } from "../src/db";
 import { generateCode } from "../src/lib/access-code-format";
+import { hashPin } from "../src/lib/personnel/pin";
 import {
   accessCodes,
   areas,
@@ -176,8 +177,9 @@ async function seedDemo(db: DB) {
   // ids are placeholders nobody can sign in with.
   await db.insert(members).values([
     { restaurantId, clerkUserId: "dev-owner", name: "Propriétaire Démo", role: "owner", staffNo: 1 },
-    { restaurantId, clerkUserId: "demo-server-awa", name: "Awa (serveuse)", role: "server", staffNo: 2 },
-    { restaurantId, clerkUserId: "demo-kitchen-issa", name: "Issa (cuisine)", role: "kitchen", staffNo: 3 },
+    // Demo PINs (fictional personnel, demo restaurant only): Awa 002 → 1234, Issa 003 → 5678.
+    { restaurantId, clerkUserId: null, name: "Awa (serveuse)", role: "server", staffNo: 2, pinHash: await hashPin("1234") },
+    { restaurantId, clerkUserId: null, name: "Issa (cuisine)", role: "kitchen", staffNo: 3, pinHash: await hashPin("5678") },
   ]);
   await db.insert(planEvents).values({ restaurantId, toPlan: "pro", toStatus: "trial", automatic: true, reference: "seed" });
   await writeAudit(db, null, { restaurantId, action: "restaurant.seeded", entity: "restaurant", entityId: restaurantId });

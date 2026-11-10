@@ -3,7 +3,7 @@ import { asc, eq, sql } from "drizzle-orm";
 import type { DB } from "@/db";
 import { members, orders } from "@/db/schema";
 
-export type Person = { id: string; name: string; staffNo: number | null; role: string; active: boolean; email: string | null };
+export type Person = { id: string; name: string; staffNo: number | null; role: string; active: boolean; email: string | null; hasPin: boolean; lockedUntil: Date | null; hasLogin: boolean };
 
 /** « Matricule » as printed: 001, 002 … */
 export const formatStaffNo = (n: number | null | undefined) => (n ? String(n).padStart(3, "0") : "—");
@@ -11,7 +11,17 @@ export const formatStaffNo = (n: number | null | undefined) => (n ? String(n).pa
 /** Personnel of one restaurant, by matricule. */
 export async function personnel(db: DB, restaurantId: string): Promise<Person[]> {
   const rows = await db
-    .select({ id: members.id, name: members.name, email: members.email, staffNo: members.staffNo, role: members.role, active: members.active })
+    .select({
+      id: members.id,
+      name: members.name,
+      email: members.email,
+      staffNo: members.staffNo,
+      role: members.role,
+      active: members.active,
+      hasPin: sql<boolean>`${members.pinHash} is not null`,
+      lockedUntil: members.lockedUntil,
+      hasLogin: sql<boolean>`${members.clerkUserId} is not null`,
+    })
     .from(members)
     .where(eq(members.restaurantId, restaurantId))
     .orderBy(asc(members.staffNo), asc(members.createdAt));
