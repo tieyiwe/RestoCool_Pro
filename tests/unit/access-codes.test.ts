@@ -11,6 +11,10 @@ describe("access codes", () => {
   it("accept what people type: lower case, spaces, dashes", () => {
     expect(normalizeCode(" k7m-3p ")).toBe("K7M3P");
     expect(normalizeCode("K7 M3P")).toBe("K7M3P");
+    // « Numéro RC »: with or without the RC prefix.
+    expect(normalizeCode("RC-K7M3P")).toBe("K7M3P");
+    expect(normalizeCode("rc k7m3p")).toBe("K7M3P");
+    expect(normalizeCode("RC#K7M3P")).toBe("K7M3P");
   });
   it("reject anything else", () => {
     for (const bad of ["", "K7M3", "K7M3PQ", "K0M3P", "K7M3!", "<script>"]) expect(normalizeCode(bad)).toBeNull();

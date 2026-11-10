@@ -1,4 +1,4 @@
-import { boolean, index, jsonb, smallint, text, time, timestamp, uniqueIndex, uuid, pgTable, type AnyPgColumn } from "drizzle-orm/pg-core";
+import { boolean, index, integer, jsonb, smallint, text, time, timestamp, uniqueIndex, uuid, pgTable, type AnyPgColumn } from "drizzle-orm/pg-core";
 import { id, timestamps, type I18nText } from "./_shared";
 import { memberRoleEnum, planEnum, planStatusEnum, themeEnum } from "./enums";
 
@@ -71,10 +71,16 @@ export const members = pgTable(
     name: text("name"),
     role: memberRoleEnum("role").notNull().default("manager"),
     active: boolean("active").notNull().default(true),
+    /**
+     * « Matricule »: the person's staff number in this restaurant (1, 2, 3… shown as 001),
+     * never reused. Orders record it for every step they handle.
+     */
+    staffNo: integer("staff_no"),
     ...timestamps,
   },
   (t) => [
     index("members_restaurant_idx").on(t.restaurantId),
+    uniqueIndex("members_restaurant_staff_no_uq").on(t.restaurantId, t.staffNo),
     index("members_user_idx").on(t.clerkUserId),
     uniqueIndex("members_restaurant_user_uq").on(t.restaurantId, t.clerkUserId),
   ],

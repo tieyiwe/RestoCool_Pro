@@ -19,9 +19,14 @@ export function generateCode(): string {
   return s;
 }
 
-/** Uppercases and drops spaces, dashes and dots. Null if it can't be a code. */
+/** Shown as « Numéro RC » (RC = RestoCool): RC-K7M3P. Stored without the prefix. */
+export const RC_PREFIX = "RC";
+export const formatRc = (code: string) => `${RC_PREFIX}-${code}`;
+
+/** Uppercases, drops spaces, dashes, dots, « # » and the optional RC prefix. Null if it can't be a code. */
 export function normalizeCode(input: string): string | null {
-  const s = input.toUpperCase().replace(/[\s\-_.]/g, "");
+  let s = input.toUpperCase().replace(/[\s\-_.#]/g, "");
+  if (s.length === CODE_LENGTH + RC_PREFIX.length && s.startsWith(RC_PREFIX)) s = s.slice(RC_PREFIX.length);
   return CODE_RE.test(s) ? s : null;
 }
 

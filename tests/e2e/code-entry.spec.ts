@@ -18,7 +18,7 @@ test("a customer types the code from restocool.com and lands on the menu", async
   const code = await demoCode();
   await page.goto("/");
   const box = page.getByTestId("home-code");
-  await box.getByLabel("Code du restaurant").fill(code.toLowerCase().replace(/^(..)/, "$1 "));
+  await box.getByLabel("Numéro RC du restaurant").fill(`rc-${code.toLowerCase()}`);
   await box.getByRole("button", { name: "Ouvrir le menu" }).click();
   await expect(page).toHaveURL(/\/r\/restaurant-demo$/);
 });
@@ -31,10 +31,10 @@ test("a table code opens that table, like its QR", async ({ page }) => {
 
 test("wrong codes say what to do", async ({ page }) => {
   await page.goto("/c");
-  await page.getByLabel("Code du restaurant").fill("AB");
+  await page.getByLabel("Numéro RC du restaurant").fill("AB");
   await page.getByRole("button", { name: "Ouvrir le menu" }).click();
   await expect(page.getByTestId("code-error")).toContainText("5 lettres ou chiffres");
-  await page.getByLabel("Code du restaurant").fill("ZZZZZ");
+  await page.getByLabel("Numéro RC du restaurant").fill("ZZZZZ");
   await page.getByRole("button", { name: "Ouvrir le menu" }).click();
   await expect(page.getByTestId("code-error")).toContainText("Aucun restaurant ne correspond");
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);

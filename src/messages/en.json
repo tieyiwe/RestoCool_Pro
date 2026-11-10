@@ -26,7 +26,8 @@
     "authFailed": "Sign-in could not load. Check your internet connection and reload the page. If it keeps happening, contact support.",
     "notFoundTitle": "Page not found",
     "notFoundText": "This page does not exist, or the menu is not published yet.",
-    "backHome": "Back to home"
+    "backHome": "Back to home",
+    "authLoadingSlow": "Sign-in is taking longer than usual… Check your network; the page is still loading."
   },
   "landing": {
     "cta": "Create my restaurant for free",
@@ -259,7 +260,7 @@
     "noActivity": "No activity yet.",
     "newRestaurant": {
       "title": "Create your restaurant",
-      "intro": "Laafi! A few details to get started. You can complete everything later.",
+      "intro": "Laafi! Restaurant, maquis, café or bar: give it a name, the rest is set up step by step.",
       "name": "Restaurant name",
       "namePlaceholder": "e.g. Maquis Le Baobab",
       "city": "City",
@@ -268,7 +269,32 @@
       "trial": "30-day Pro trial included, no commitment.",
       "errorName": "Enter a name with at least 2 characters.",
       "errorLimit": "You have reached the maximum number of restaurants. Contact us on WhatsApp to add more.",
-      "addAnother": "Add a restaurant"
+      "addAnother": "Add a restaurant",
+      "eyebrow": "Step 1 · Your business",
+      "eyebrowAnother": "New business",
+      "nameHint": "The name your customers know. You can change it later.",
+      "urlPreview": "Your menu address (and QR code)",
+      "urlPlaceholder": "your-restaurant",
+      "noCard": "No card needed",
+      "benefitsTitle": "What you get",
+      "benefits": {
+        "menu": {
+          "title": "No more paper menus",
+          "text": "An online menu in 3 languages, always up to date."
+        },
+        "qr": {
+          "title": "QR code ready to print",
+          "text": "Customers scan and choose from their phones."
+        },
+        "orders": {
+          "title": "Easy orders",
+          "text": "They reach the floor and the kitchen live."
+        },
+        "records": {
+          "title": "Everything recorded",
+          "text": "Sales, orders and personnel in your dashboard."
+        }
+      }
     },
     "switchRestaurant": "Switch restaurant",
     "comingSoon": "This section is coming soon.",
@@ -278,7 +304,8 @@
       "seats": "Create your tables and their QR codes",
       "print": "Print your main QR code",
       "publish": "Publish your menu",
-      "done": "Done"
+      "done": "Done",
+      "branding": "Add your logo and colours"
     },
     "frontDesk": "Service",
     "kitchen": "Kitchen"
@@ -545,7 +572,7 @@
       "lateMin": "Red after"
     },
     "appearance": {
-      "title": "Appearance",
+      "title": "Branding",
       "theme": "Menu theme",
       "themes": {
         "warm": "Warm",
@@ -557,7 +584,14 @@
       "contrastOk": "Good readability",
       "contrastLow": "Not readable enough",
       "logo": "Logo",
-      "cover": "Cover photo"
+      "cover": "Cover photo",
+      "intro": "Your logo, photo and colours show at the top of your menu, on your QR codes and stickers. Your brand always comes first.",
+      "logoHint": "Preferably square (at least 512 × 512 px), PNG or JPG. It is compressed automatically.",
+      "coverHint": "A nice photo of your dining room, terrace or signature dish (landscape).",
+      "preview": "Preview of your menu",
+      "previewTagline": "Open · Menu in French, English, 中文",
+      "previewDish": "Riz gras · 2,000 F",
+      "noLogoYet": "No logo yet: we show the first letter of your name meanwhile."
     },
     "features": {
       "title": "Menu features",
@@ -583,9 +617,10 @@
       "step": "Step {n} of {total}",
       "done": "Your restaurant is ready! Now add your dishes.",
       "goMenu": "Add my dishes",
-      "finishLater": "Finish later",
       "banner": "Finish setting up your restaurant.",
-      "resume": "Resume"
+      "resume": "Resume",
+      "back": "Back",
+      "finish": "Finish setup"
     }
   },
   "public": {
@@ -841,10 +876,10 @@
       "step2": "Visez le code, puis touchez le lien qui s’affiche",
       "step2En": "Point at the code, tap the link",
       "step2Zh": "对准二维码，点击链接",
-      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → code :"
+      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} →"
     },
     "mainPrintHint": "6 stickers per A4 page. Cut them out and place them at the entrance, on tables, at the counter or on the window.",
-    "mainCode": "Restaurant code (for customers who don’t scan):",
+    "mainCode": "Restaurant RC number (for customers who don’t scan):",
     "seatCode": "Seat code"
   },
   "legal": {
@@ -860,22 +895,22 @@
     "notPublished": "Your menu isn’t published yet. Publish it in Settings so customers can see it.",
     "print": "Print my QR codes",
     "download": "Download the image (PNG)",
-    "codeLabel": "Without scanning, customers can also go to {site} and type this code:"
+    "codeLabel": "Without scanning, customers can also go to {site} and type your RC number:"
   },
   "codeEntry": {
     "pageTitle": "Open a menu with a code",
-    "title": "Have a code?",
-    "intro": "The 5-character code is printed under the restaurant’s QR code. It opens the same menu as scanning.",
-    "hint": "Enter the code printed under the restaurant’s QR code.",
-    "label": "Restaurant code",
-    "placeholder": "K7M3P",
+    "title": "Have an RC number?",
+    "intro": "The RC number (RC = RestoCool) is printed under the restaurant’s QR code. It opens the same menu as scanning.",
+    "hint": "Enter the RC number printed under the restaurant’s QR code (e.g. RC-K7M3P).",
+    "label": "Restaurant RC number",
+    "placeholder": "RC-K7M3P",
     "submit": "Open the menu",
-    "invalid": "This code doesn’t look right: 5 letters or digits, printed under the QR code.",
-    "notFound": "No restaurant matches this code. Check it, or scan the QR code.",
+    "invalid": "This number doesn’t look right: RC followed by 5 letters or digits, printed under the QR code.",
+    "notFound": "No restaurant matches this RC number. Check it, or scan the QR code.",
     "tooMany": "Too many tries. Wait a minute, then try again.",
     "orScan": "You can also scan the QR code with your phone camera.",
     "homeTitle": "At a restaurant?",
-    "homeText": "Type the code printed under the QR code to open the menu."
+    "homeText": "Type the RC number printed under the QR code to open the menu."
   },
   "service": {
     "frontDesk": "Front desk",
@@ -957,6 +992,108 @@
     "planRequiredTitle": "Live service: Pro plan",
     "planRequired": "Customer orders, the kitchen display and the front desk come with the Pro and Business plans.",
     "seePlans": "See plans",
-    "networkError": "Can’t load orders. Check the connection: the screen updates as soon as it’s back."
+    "networkError": "Can’t load orders. Check the connection: the screen updates as soon as it’s back.",
+    "by": {
+      "confirmed": "Confirmed by {name} · staff ID {no}",
+      "prepared": "Prepared by {name} · staff ID {no}",
+      "served": "Served by {name} · staff ID {no}",
+      "cancelled": "Cancelled by {name} · staff ID {no}"
+    }
+  },
+  "personnel": {
+    "title": "Personnel",
+    "intro": "Everyone has a unique staff ID in your restaurant. It is recorded on every order they confirm, prepare, serve or cancel.",
+    "staffNo": "Staff ID",
+    "name": "Name",
+    "role": "Role",
+    "confirmed": "Confirmed",
+    "prepared": "Prepared",
+    "served": "Served",
+    "cancelled": "Cancelled",
+    "inactive": "Inactive",
+    "period": "Figures for the last 7 days.",
+    "comingM5": "Coming soon: add servers, kitchen and cashier staff, with a PIN login on the restaurant tablet (no email needed)."
+  },
+  "analytics": {
+    "title": "Activity and sales",
+    "period": "Period",
+    "range": {
+      "today": "Today",
+      "7d": "7 days",
+      "30d": "30 days"
+    },
+    "kpi": {
+      "orders": "Orders",
+      "revenue": "Sales (served)",
+      "avgTicket": "Average ticket",
+      "avgService": "Service time",
+      "cancelled": "Cancelled"
+    },
+    "openNow": "{n} in progress",
+    "servedCount": "{n} served",
+    "prep": "Kitchen: {n} min",
+    "empty": "No orders in this period. Figures appear with the first orders.",
+    "byHour": "Orders by hour",
+    "byHourAlt": "Number of orders for each hour of the day",
+    "topDishes": "Most ordered dishes",
+    "personnel": "Personnel: orders handled",
+    "col": {
+      "staffNo": "Staff ID",
+      "name": "Name",
+      "confirmed": "Confirmed",
+      "prepared": "Prepared",
+      "served": "Served",
+      "avgService": "Avg. service"
+    },
+    "note": "Sales: served orders, excluding « on request » dishes. Service time: from sending the order to serving it."
+  },
+  "setup": {
+    "guide": "Setup steps",
+    "eyebrow": "Welcome to RestoCool",
+    "guideTitle": "Your place online in 5 minutes",
+    "stepOf": "Step {n} of {total}",
+    "allDone": "Setup complete",
+    "unlocks": "Unlocked at the end:",
+    "time": "Every step can be skipped and changed later in Settings.",
+    "doneText": "{name} is ready. Add your dishes, print your QR code, and customers can order from their phones. Every order is recorded in your dashboard.",
+    "next": {
+      "dishes": "Add my dishes",
+      "print": "Print my QR code",
+      "preview": "See my menu"
+    },
+    "locked": {
+      "menu": "Menu",
+      "seating": "Tables & QR",
+      "service": "Service",
+      "kitchen": "Kitchen",
+      "staff": "Personnel",
+      "analytics": "Analytics"
+    },
+    "steps": {
+      "create": {
+        "title": "Your business",
+        "hint": "A name and a city: that’s all to start."
+      },
+      "profile": {
+        "title": "Profile",
+        "hint": "What customers see at the top of your menu."
+      },
+      "contacts": {
+        "title": "Contacts",
+        "hint": "Phone, WhatsApp for takeaway orders, Orange Money and Moov."
+      },
+      "hours": {
+        "title": "Opening hours",
+        "hint": "Shown live as « Open » or « Closed » on your menu."
+      },
+      "service": {
+        "title": "Service & tables",
+        "hint": "How customers sit and order."
+      },
+      "appearance": {
+        "title": "Branding",
+        "hint": "Logo, photo and colours: your brand comes first."
+      }
+    }
   }
 }

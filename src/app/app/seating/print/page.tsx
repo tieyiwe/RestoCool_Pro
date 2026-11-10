@@ -5,7 +5,7 @@ import { PrintButton } from "@/components/print-button";
 import { requireMemberPage } from "@/lib/auth/page";
 import { hasFeature } from "@/lib/plan";
 import { getDb } from "@/db";
-import { ensureMainCode, ensureSeatCodes } from "@/lib/access-codes";
+import { ensureMainCode, ensureSeatCodes, formatRc } from "@/lib/access-codes";
 import { codeEntryHost, menuUrl, publicBaseUrl, seatUrl } from "@/lib/urls";
 
 type Card = { key: string; title: string; svg: string; code: string };
@@ -71,7 +71,7 @@ export default async function PrintCardsPage({ searchParams }: { searchParams: P
       </ol>
       {/* No scan? Type the code on the website: opens the same page as the QR. */}
       <p className="w-full rounded-[1.5mm] border border-neutral-300 px-[2mm] py-[1mm] text-[2.8mm] leading-tight" data-testid="card-code">
-        {t("card.noScan", { site })} <b className="font-mono text-[4.4mm] tracking-[0.6mm] text-black">{c.code}</b>
+        {t("card.noScan", { site })} <b className="font-mono text-[4.4mm] tracking-[0.6mm] text-black">{formatRc(c.code)}</b>
       </p>
       {r.poweredBadge && (
         <p className="flex items-center gap-1 text-[2.6mm] text-neutral-500">

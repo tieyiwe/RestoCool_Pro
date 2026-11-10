@@ -81,7 +81,7 @@ export function takeawayMessage(
     const detail = [variant?.name.fr, ...opts].filter(Boolean).join(", ");
     const p = unitPrice(item, l.variantId, l.optionIds);
     const price = p === null ? "sur demande" : formatFCFA(p * l.qty);
-    rows.push(`- ${l.qty} × ${item.code ? `${item.code}. ` : ""}${item.name.fr}${detail ? ` (${detail})` : ""} : ${price}`);
+    rows.push(`- ${l.qty} × ${item.code ? `${item.code}. ` : ""}${item.name.fr}${detail ? ` (${detail})` : ""} : ${price}${l.note ? ` — « ${l.note} »` : ""}`);
   }
   const t = cartTotals(items, lines);
   return [

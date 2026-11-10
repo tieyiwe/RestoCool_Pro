@@ -15,12 +15,19 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await page.getByRole("button", { name: "Créer mon restaurant" }).click();
   await expect(page.getByRole("alert").filter({ hasText: "au moins 2 caractères" })).toBeVisible();
   await page.getByLabel("Nom du restaurant").fill(name);
+  await expect(page.getByTestId("slug-preview")).toContainText("restocool.com/r/maquis-e2e-");
   await page.getByLabel("Ville").fill("Koudougou");
   await page.getByRole("button", { name: "Créer mon restaurant" }).click();
 
   // 2. Wizard: profile → contacts → hours → service → appearance → done
   await expect(page).toHaveURL(/\/app\/onboarding\/1$/);
-  await expect(page.getByText("Étape 1 sur 5")).toBeVisible();
+  // Business first: other sections stay locked (no navigation, pages lead back to the setup).
+  await expect(page.getByRole("link", { name: "Personnel" })).toHaveCount(0);
+  await page.goto("/app/staff");
+  await expect(page).toHaveURL(/\/app\/onboarding\/1$/);
+  await page.goto("/app/menu");
+  await expect(page).toHaveURL(/\/app\/onboarding\/1$/);
+  await expect(page.getByText("Étape 2 sur 6")).toBeVisible();
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/\/onboarding\/2$/);
   await page.getByLabel("WhatsApp").fill("70 12 34 56");
@@ -32,7 +39,8 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await page.getByTestId("table-count").fill("6");
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/\/onboarding\/5$/);
-  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page.getByTestId("branding-preview")).toContainText(name);
+  await page.getByRole("button", { name: "Terminer la configuration" }).click();
   await expect(page.getByRole("heading", { name: /Votre restaurant est prêt/ })).toBeVisible();
   // The main QR code is ready at once, with print-and-place instructions.
   const mainQr = page.getByTestId("main-qr");
@@ -40,8 +48,8 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await expect(mainQr).toContainText("Placez-le partout");
   await expect(page.getByTestId("main-qr-url")).toHaveText(/\/r\/maquis-e2e-/);
   const mainCode = (await page.getByTestId("main-qr-code").textContent())!.trim();
-  expect(mainCode).toMatch(/^[A-Z2-9]{5}$/);
-  await page.getByRole("button", { name: "Ajouter mes plats" }).click();
+  expect(mainCode).toMatch(/^RC-[A-Z2-9]{5}$/);
+  await page.getByTestId("done-dishes").click();
   await expect(page).toHaveURL(/\/app\/menu$/);
 
   // 3. Menu: a category, then a dish with « Suggérer », variants and a photo

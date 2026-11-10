@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ConfirmButton } from "@/components/ui/confirm-button";
 import { getMemberContext } from "@/lib/auth/context";
+import { setupState } from "@/lib/auth/setup";
 import { can } from "@/lib/auth/can";
 import { formatFCFA } from "@/lib/format";
 import { pickText } from "@/i18n/config";
@@ -28,6 +29,7 @@ const input = "min-h-11 w-full rounded-lg border border-border bg-surface px-3";
 export default async function MenuManagerPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const ctx = await getMemberContext();
   if (!ctx) redirect("/app/new");
+  if ((await setupState()) === "setup") redirect("/app/onboarding/1");
   const t = await getTranslations("menuAdmin");
   const locale = await getLocale();
   const { error } = await searchParams;

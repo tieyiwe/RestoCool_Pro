@@ -7,7 +7,7 @@ export default function globalSetup() {
   execSync("npx tsx scripts/seed.ts --with-test-tenant", { stdio: "inherit", env });
   // Remove restaurants created by earlier e2e runs with the dev user.
   execSync(
-    `psql "${process.env.E2E_DATABASE_URL}" -qc "delete from restaurants where id in (select restaurant_id from members where clerk_user_id = 'dev-owner')"`,
+    `psql "${process.env.E2E_DATABASE_URL}" -qc "delete from restaurants where id in (select restaurant_id from members where clerk_user_id = 'dev-owner') and slug <> 'restaurant-demo'"`,
     { stdio: "inherit" },
   );
 }

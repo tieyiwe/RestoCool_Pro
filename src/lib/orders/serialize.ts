@@ -1,3 +1,4 @@
+import type { PersonRef } from "@/lib/personnel";
 import type { OrderWithItems } from "./service";
 
 /** What a customer's phone receives: no device ids, no staff ids, no phone/address of others. */
@@ -36,8 +37,16 @@ export function publicOrder(o: OrderWithItems, deviceId: string) {
 export type PublicOrder = ReturnType<typeof publicOrder>;
 
 /** Front desk and kitchen view of an order. */
-export function staffOrder(o: OrderWithItems, areaOf?: (seatId: string | null) => { id: string; name: { fr: string } & Partial<Record<string, string>> } | null) {
+export function staffOrder(
+  o: OrderWithItems,
+  areaOf?: (seatId: string | null) => { id: string; name: { fr: string } & Partial<Record<string, string>> } | null,
+  who?: (memberId: string | null) => PersonRef,
+) {
   return {
+    /** Personnel who handled each step: name + matricule. */
+    handledBy: who
+      ? { confirmed: who(o.confirmedBy), prepared: who(o.preparedBy), served: who(o.servedBy), cancelled: who(o.cancelledBy) }
+      : { confirmed: null, prepared: null, served: null, cancelled: null },
     area: areaOf ? areaOf(o.seatId) : null,
     id: o.id,
     number: o.number,

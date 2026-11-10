@@ -68,6 +68,8 @@ async function insertRestaurant(db: DB, user: { clerkUserId: string; email?: str
         restaurantId: restaurant.id,
         clerkUserId: user.clerkUserId,
         role: "owner",
+        // The founder is personnel n° 001.
+        staffNo: 1,
         email: user.email ?? null,
         name: user.name ?? null,
       })

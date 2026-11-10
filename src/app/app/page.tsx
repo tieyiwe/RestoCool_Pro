@@ -5,11 +5,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getMemberContext } from "@/lib/auth/context";
+import { setupState } from "@/lib/auth/setup";
 import { can } from "@/lib/auth/can";
 import { effectiveStatus } from "@/lib/plan";
 import { MainQrCard } from "@/components/qr/main-qr-card";
+import { OrderAnalyticsPanel } from "@/components/analytics/order-analytics";
+import { getDb } from "@/db";
+import { orderAnalytics, type Range } from "@/lib/analytics/orders";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
   const t = await getTranslations("app");
   const ts = await getTranslations("settings");
   const format = await getFormatter();
@@ -17,6 +21,8 @@ export default async function DashboardPage() {
 
   // Signed in but no restaurant yet: start onboarding.
   if (!ctx) redirect("/app/new");
+  // The setup comes first: the dashboard opens once it is finished.
+  if ((await setupState()) === "setup") redirect("/app/onboarding/1");
 
   const r = await ctx.repo.restaurant.get();
   if (!r) return null;
@@ -30,16 +36,22 @@ export default async function DashboardPage() {
     canReadAudit ? ctx.repo.audit.recent(10) : Promise.resolve([]),
   ]);
   const status = effectiveStatus(r);
+  // Analytics: owners and managers only (reports.read), checked on the server.
+  const canReports = can(ctx.actor, "reports.read", { restaurantId: ctx.repo.restaurantId });
+  const rq = (await searchParams).range;
+  const range: Range = rq === "7d" || rq === "30d" ? rq : "today";
+  const analytics = canReports ? await orderAnalytics(getDb(), ctx.repo.restaurantId, range) : null;
   const canManage = can(ctx.actor, "settings.write", { restaurantId: ctx.repo.restaurantId });
   const canSeats = can(ctx.actor, "seats.write", { restaurantId: ctx.repo.restaurantId });
   const placeSeats = seats.filter((s) => s.type === "table" || s.type === "room" || s.type === "area");
   const steps = [
+    { key: "branding", done: Boolean(r.logoUrl), href: "/app/settings#appearance" },
     { key: "dishes", done: itemCount > 0, href: "/app/menu" },
     { key: "seats", done: placeSeats.length > 0, href: "/app/seating" },
     { key: "print", done: false, href: "/app/seating/print?qr=main&layout=grid" },
     { key: "publish", done: r.published, href: "/app/settings#publish" },
   ] as const;
-  const showSteps = canManage && !(itemCount > 0 && placeSeats.length > 0 && r.published);
+  const showSteps = canManage && !(r.logoUrl && itemCount > 0 && placeSeats.length > 0 && r.published);
 
   const stats = [
     { label: t("stats.categories"), value: categories.length },
@@ -88,6 +100,8 @@ export default async function DashboardPage() {
           </ol>
         </Card>
       )}
+
+      {analytics && <OrderAnalyticsPanel data={analytics} range={range} />}
 
       {canSeats && <MainQrCard restaurantId={r.id} slug={r.slug} published={r.published} />}
 

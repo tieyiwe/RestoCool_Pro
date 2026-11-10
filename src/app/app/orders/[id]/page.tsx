@@ -8,6 +8,7 @@ import { ServicePlanGate } from "@/components/service/plan-gate";
 import { NotFoundError } from "@/lib/errors";
 import { servicePage } from "@/lib/orders/page";
 import { staffOrder } from "@/lib/orders/serialize";
+import { personLookup, personnel } from "@/lib/personnel";
 import { getOrder } from "@/lib/orders/service";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +30,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
       <Link href="/app/service" className="min-h-11 self-start rounded-lg border border-border px-4 py-2.5 font-semibold">
         ← {t("frontDesk")}
       </Link>
-      <OrderDetail initial={staffOrder(order)} delays={delays} />
+      <OrderDetail initial={staffOrder(order, undefined, personLookup(await personnel(getDb(), ctx.repo.restaurantId)))} delays={delays} />
     </div>
   );
 }

@@ -26,7 +26,8 @@
     "authFailed": "登录无法加载。请检查网络连接并刷新页面。如果问题仍然存在，请联系客服。",
     "notFoundTitle": "页面未找到",
     "notFoundText": "此页面不存在，或菜单尚未发布。",
-    "backHome": "返回首页"
+    "backHome": "返回首页",
+    "authLoadingSlow": "登录加载时间比平时长…请检查网络，页面仍在加载。"
   },
   "landing": {
     "cta": "免费创建我的餐厅",
@@ -259,7 +260,7 @@
     "noActivity": "暂无活动。",
     "newRestaurant": {
       "title": "创建您的餐厅",
-      "intro": "Laafi！先填写几项信息，其余内容可以稍后完善。",
+      "intro": "Laafi！餐厅、maquis、咖啡馆或酒吧：起个名字，其余一步步设置。",
       "name": "餐厅名称",
       "namePlaceholder": "例如：Maquis Le Baobab",
       "city": "城市",
@@ -268,7 +269,32 @@
       "trial": "免费试用专业版 30 天，无需承诺。",
       "errorName": "请输入至少 2 个字符的名称。",
       "errorLimit": "您已达到餐厅数量上限。如需添加，请通过 WhatsApp 联系我们。",
-      "addAnother": "添加餐厅"
+      "addAnother": "添加餐厅",
+      "eyebrow": "第 1 步 · 您的商家",
+      "eyebrowAnother": "新商家",
+      "nameHint": "顾客熟知的名称，之后可以修改。",
+      "urlPreview": "菜单地址（也是二维码地址）",
+      "urlPlaceholder": "your-restaurant",
+      "noCard": "无需银行卡",
+      "benefitsTitle": "您将获得",
+      "benefits": {
+        "menu": {
+          "title": "告别纸质菜单",
+          "text": "三种语言的在线菜单，随时更新。"
+        },
+        "qr": {
+          "title": "可直接打印的二维码",
+          "text": "顾客扫码，用手机选菜。"
+        },
+        "orders": {
+          "title": "轻松点单",
+          "text": "订单实时送达前台和厨房。"
+        },
+        "records": {
+          "title": "一切都有记录",
+          "text": "销售、订单和员工数据都在控制台。"
+        }
+      }
     },
     "switchRestaurant": "切换餐厅",
     "comingSoon": "此功能即将推出。",
@@ -278,7 +304,8 @@
       "seats": "创建桌子及其二维码",
       "print": "打印主二维码",
       "publish": "发布菜单",
-      "done": "已完成"
+      "done": "已完成",
+      "branding": "添加标志和颜色"
     },
     "frontDesk": "服务",
     "kitchen": "厨房"
@@ -545,7 +572,7 @@
       "lateMin": "红色：超过"
     },
     "appearance": {
-      "title": "外观",
+      "title": "品牌形象",
       "theme": "菜单主题",
       "themes": {
         "warm": "温暖",
@@ -557,7 +584,14 @@
       "contrastOk": "清晰易读",
       "contrastLow": "不够清晰",
       "logo": "标志",
-      "cover": "封面照片"
+      "cover": "封面照片",
+      "intro": "您的标志、照片和颜色会显示在菜单顶部、二维码和贴纸上。您的品牌永远优先。",
+      "logoHint": "最好是正方形（至少 512 × 512 像素），PNG 或 JPG，会自动压缩。",
+      "coverHint": "一张漂亮的餐厅、露台或招牌菜照片（横向）。",
+      "preview": "菜单预览",
+      "previewTagline": "营业中 · 法语、English、中文菜单",
+      "previewDish": "Riz gras · 2 000 F",
+      "noLogoYet": "还没有标志：暂时显示您名称的首字母。"
     },
     "features": {
       "title": "菜单功能",
@@ -583,9 +617,10 @@
       "step": "第 {n} 步，共 {total} 步",
       "done": "餐厅已就绪！现在添加您的菜品吧。",
       "goMenu": "添加菜品",
-      "finishLater": "稍后完成",
       "banner": "请完成餐厅设置。",
-      "resume": "继续"
+      "resume": "继续",
+      "back": "返回",
+      "finish": "完成设置"
     }
   },
   "public": {
@@ -841,10 +876,10 @@
       "step2": "Visez le code, puis touchez le lien qui s’affiche",
       "step2En": "Point at the code, tap the link",
       "step2Zh": "对准二维码，点击链接",
-      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → code :"
+      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} →"
     },
     "mainPrintHint": "每张 A4 纸 6 个贴纸。剪下后贴在门口、餐桌、柜台或橱窗上。",
-    "mainCode": "餐厅代码（供不扫码的顾客使用）：",
+    "mainCode": "餐厅 RC 号（供不扫码的顾客使用）：",
     "seatCode": "座位代码"
   },
   "legal": {
@@ -860,22 +895,22 @@
     "notPublished": "您的菜单尚未发布。请在设置中发布，顾客才能看到。",
     "print": "打印我的二维码",
     "download": "下载图片 (PNG)",
-    "codeLabel": "不扫码的顾客也可以访问 {site} 并输入此代码："
+    "codeLabel": "不扫码的顾客也可以访问 {site} 并输入您的 RC 号："
   },
   "codeEntry": {
     "pageTitle": "用代码打开菜单",
-    "title": "有代码吗？",
-    "intro": "5 位代码印在餐厅二维码下方，打开的菜单与扫码相同。",
-    "hint": "请输入餐厅二维码下方的代码。",
-    "label": "餐厅代码",
-    "placeholder": "K7M3P",
+    "title": "有 RC 号吗？",
+    "intro": "RC 号（RC = RestoCool）印在餐厅二维码下方，打开的菜单与扫码相同。",
+    "hint": "请输入餐厅二维码下方的 RC 号（例如 RC-K7M3P）。",
+    "label": "餐厅 RC 号",
+    "placeholder": "RC-K7M3P",
     "submit": "打开菜单",
-    "invalid": "代码格式不正确：二维码下方的 5 位字母或数字。",
-    "notFound": "没有与此代码对应的餐厅。请检查代码，或扫描二维码。",
+    "invalid": "号码格式不正确：RC 加 5 位字母或数字，印在二维码下方。",
+    "notFound": "没有与此 RC 号对应的餐厅。请检查，或扫描二维码。",
     "tooMany": "尝试次数过多，请等一分钟后再试。",
     "orScan": "您也可以用手机相机扫描二维码。",
     "homeTitle": "在餐厅吗？",
-    "homeText": "输入二维码下方的代码即可打开菜单。"
+    "homeText": "输入二维码下方的 RC 号即可打开菜单。"
   },
   "service": {
     "frontDesk": "前台服务",
@@ -957,6 +992,108 @@
     "planRequiredTitle": "实时服务：专业版",
     "planRequired": "顾客点单、厨房显示屏和前台服务包含在专业版和商业版中。",
     "seePlans": "查看套餐",
-    "networkError": "无法加载订单。请检查网络，恢复后屏幕会自动更新。"
+    "networkError": "无法加载订单。请检查网络，恢复后屏幕会自动更新。",
+    "by": {
+      "confirmed": "确认：{name} · 工号 {no}",
+      "prepared": "制作：{name} · 工号 {no}",
+      "served": "上菜：{name} · 工号 {no}",
+      "cancelled": "取消：{name} · 工号 {no}"
+    }
+  },
+  "personnel": {
+    "title": "员工",
+    "intro": "每位员工在餐厅都有唯一的工号，确认、制作、上菜或取消的每个订单都会记录工号。",
+    "staffNo": "工号",
+    "name": "姓名",
+    "role": "角色",
+    "confirmed": "已确认",
+    "prepared": "已制作",
+    "served": "已上菜",
+    "cancelled": "已取消",
+    "inactive": "停用",
+    "period": "最近 7 天的数据。",
+    "comingM5": "即将推出：添加服务员、厨房和收银员，在餐厅平板上用 PIN 码登录（无需邮箱）。"
+  },
+  "analytics": {
+    "title": "营业与销售",
+    "period": "时段",
+    "range": {
+      "today": "今天",
+      "7d": "7 天",
+      "30d": "30 天"
+    },
+    "kpi": {
+      "orders": "订单",
+      "revenue": "销售额（已上菜）",
+      "avgTicket": "平均客单价",
+      "avgService": "上菜时间",
+      "cancelled": "已取消"
+    },
+    "openNow": "{n} 个进行中",
+    "servedCount": "{n} 个已上菜",
+    "prep": "厨房：{n} 分钟",
+    "empty": "此时段没有订单。有订单后会显示数据。",
+    "byHour": "每小时订单",
+    "byHourAlt": "每小时的订单数量",
+    "topDishes": "最受欢迎的菜品",
+    "personnel": "员工：处理的订单",
+    "col": {
+      "staffNo": "工号",
+      "name": "姓名",
+      "confirmed": "已确认",
+      "prepared": "已制作",
+      "served": "已上菜",
+      "avgService": "平均上菜"
+    },
+    "note": "销售额：已上菜的订单，不含“面议”菜品。上菜时间：从发送订单到上菜。"
+  },
+  "setup": {
+    "guide": "设置步骤",
+    "eyebrow": "欢迎使用 RestoCool",
+    "guideTitle": "5 分钟让您的餐厅上线",
+    "stepOf": "第 {n} 步，共 {total} 步",
+    "allDone": "设置完成",
+    "unlocks": "完成后解锁：",
+    "time": "每一步都可以跳过，之后在设置中修改。",
+    "doneText": "{name} 已准备就绪。添加菜品、打印二维码，顾客就能用手机点餐。每个订单都会记录在您的控制台中。",
+    "next": {
+      "dishes": "添加菜品",
+      "print": "打印二维码",
+      "preview": "查看菜单"
+    },
+    "locked": {
+      "menu": "菜单",
+      "seating": "餐桌与二维码",
+      "service": "服务",
+      "kitchen": "厨房",
+      "staff": "员工",
+      "analytics": "数据分析"
+    },
+    "steps": {
+      "create": {
+        "title": "您的商家",
+        "hint": "名称和城市，就可以开始了。"
+      },
+      "profile": {
+        "title": "简介",
+        "hint": "顾客在菜单顶部看到的内容。"
+      },
+      "contacts": {
+        "title": "联系方式",
+        "hint": "电话、用于外带订单的 WhatsApp、Orange Money 和 Moov。"
+      },
+      "hours": {
+        "title": "营业时间",
+        "hint": "在菜单上实时显示“营业中”或“已打烊”。"
+      },
+      "service": {
+        "title": "服务与餐桌",
+        "hint": "顾客如何就座和点餐。"
+      },
+      "appearance": {
+        "title": "品牌形象",
+        "hint": "标志、照片和颜色：您的品牌优先。"
+      }
+    }
   }
 }

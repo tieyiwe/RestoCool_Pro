@@ -62,8 +62,8 @@ export function ItemForm({
     startTransition(async () => {
       const res = await saveItemAction(itemId, values);
       if (res.ok) {
+        // The action revalidates /app/menu; a refresh here would race the navigation.
         router.push("/app/menu");
-        router.refresh();
       } else {
         setServerError(res.error === "plan_limit" ? t("planLimit") : t("errorGeneric"));
       }

@@ -6,11 +6,14 @@ import { LocaleSwitcher } from "@/components/locale-switcher";
 import { RestaurantSwitcher } from "@/components/restaurant-switcher";
 import { UserMenu } from "@/components/user-menu";
 import { env } from "@/lib/env";
+import { setupState } from "@/lib/auth/setup";
 
 export const dynamic = "force-dynamic";
 
 export default async function StaffAppLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("app");
+  // Business first: until it is created and set up, no other section is shown (focus mode).
+  const focus = (await setupState().catch(() => "none" as const)) !== "ready";
   const nav = [
     { href: "/app", label: t("dashboard") },
     { href: "/app/service", label: t("frontDesk") },
@@ -38,6 +41,9 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
             {t("devBypass")}
           </p>
         )}
+        {focus ? (
+          <main className="flex-1 px-4 py-6 md:px-8">{children}</main>
+        ) : (
         <div className="flex flex-1 flex-col md:flex-row">
           <nav aria-label={t("title")} className="flex print:hidden gap-1 overflow-x-auto border-b border-border bg-surface px-2 py-1 md:w-56 md:flex-col md:border-r md:border-b-0 md:py-4">
             {nav.map((n) => (
@@ -48,6 +54,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
           </nav>
           <main className="flex-1 px-4 py-6 md:px-8 print:p-0">{children}</main>
         </div>
+        )}
       </div>
     </AuthProvider>
   );

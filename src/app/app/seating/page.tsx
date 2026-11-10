@@ -1,5 +1,5 @@
 import QRCode from "qrcode";
-import { ensureMainCode, ensureSeatCodes } from "@/lib/access-codes";
+import { ensureMainCode, ensureSeatCodes, formatRc } from "@/lib/access-codes";
 import Link from "next/link";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
@@ -80,7 +80,7 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
           <p className="text-sm">
             {t("mainCode")}{" "}
             <span className="rounded-md bg-muted px-2 py-0.5 font-mono font-bold tracking-widest" data-testid="seating-main-code">
-              {mainCode}
+              {formatRc(mainCode)}
             </span>
           </p>
           {!perSeatAllowed && <p className="rounded-lg bg-amber-50 p-2 text-sm text-amber-900">{t("planQr")}</p>}
@@ -219,7 +219,7 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
                     {s.capacity ? ` · ${s.capacity} ${t("capacity").toLowerCase()}` : ""}
                     {seatCodes.get(s.id) && (
                       <span className="ml-2 rounded bg-muted px-1.5 font-mono text-xs font-bold tracking-wider" title={t("seatCode")} data-testid="seat-code">
-                        {seatCodes.get(s.id)}
+                        {formatRc(seatCodes.get(s.id)!)}
                       </span>
                     )}
                     {!s.active && (

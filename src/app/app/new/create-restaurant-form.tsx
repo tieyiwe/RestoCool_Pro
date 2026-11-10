@@ -1,44 +1,80 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { slugify } from "@/lib/slug";
 import { createRestaurantAction, type CreateRestaurantState } from "../actions";
+
+const CITIES = ["Ouagadougou", "Bobo-Dioulasso", "Koudougou", "Ouahigouya", "Banfora", "Kaya", "Tenkodogo", "Fada N’Gourma", "Dédougou", "Dori", "Ziniaré", "Gaoua"];
 
 export function CreateRestaurantForm() {
   const t = useTranslations("app.newRestaurant");
   const tc = useTranslations("common");
   const [state, action, pending] = useActionState<CreateRestaurantState, FormData>(createRestaurantAction, undefined);
+  const [name, setName] = useState("");
+  const [city, setCity] = useState("Ouagadougou");
   const error = state?.error === "name" ? t("errorName") : state?.error === "limit" ? t("errorLimit") : state?.error ? tc("error") : null;
+  const slug = name.trim().length >= 2 ? slugify(name) : null;
+  const input = "min-h-12 w-full rounded-xl border border-border bg-background px-4 text-base outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15";
 
   return (
-    <form action={action} className="flex flex-col gap-4" noValidate>
+    <form action={action} className="flex flex-col gap-5" noValidate>
       <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-semibold">{t("name")}</span>
+        <span className="text-sm font-bold">{t("name")}</span>
         <input
           name="name"
           required
           minLength={2}
           maxLength={80}
           autoComplete="organization"
+          autoFocus
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder={t("namePlaceholder")}
           aria-invalid={state?.error === "name" || undefined}
-          className="min-h-11 rounded-lg border border-border bg-surface px-3"
+          aria-describedby="name-hint"
+          className={input + " text-lg font-semibold"}
         />
+        <span id="name-hint" className="text-xs text-muted-foreground">
+          {t("nameHint")}
+        </span>
       </label>
       <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-semibold">{t("city")}</span>
-        <input name="city" defaultValue="Ouagadougou" maxLength={60} autoComplete="address-level2" className="min-h-11 rounded-lg border border-border bg-surface px-3" />
+        <span className="text-sm font-bold">{t("city")}</span>
+        <input name="city" value={city} onChange={(e) => setCity(e.target.value)} list="bf-cities" maxLength={60} autoComplete="address-level2" className={input} />
+        <datalist id="bf-cities">
+          {CITIES.map((c) => (
+            <option key={c} value={c} />
+          ))}
+        </datalist>
       </label>
+
+      {/* Live preview of the menu address and the QR it will be printed on. */}
+      <div className="flex items-center gap-3 rounded-2xl border border-dashed border-primary/40 bg-primary/5 p-4" data-testid="slug-preview" aria-live="polite">
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-surface text-2xl shadow-sm" aria-hidden>
+          🔳
+        </span>
+        <span className="min-w-0">
+          <span className="block text-xs font-semibold text-muted-foreground">{t("urlPreview")}</span>
+          <span className="block truncate font-mono text-sm font-bold">
+            restocool.com/r/<span className="text-primary">{slug ?? t("urlPlaceholder")}</span>
+          </span>
+        </span>
+      </div>
+
       {error && (
-        <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-900">
+        <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-900">
           {error}
         </p>
       )}
-      <Button type="submit" size="lg" disabled={pending}>
-        {pending ? t("submitting") : t("submit")}
+      <Button type="submit" size="lg" disabled={pending} className="min-h-14 rounded-xl text-lg">
+        {pending ? t("submitting") : `${t("submit")} →`}
       </Button>
-      <p className="text-center text-sm text-muted-foreground">{t("trial")}</p>
+      <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-sm text-muted-foreground">
+        <span>✓ {t("trial")}</span>
+        <span>✓ {t("noCard")}</span>
+      </p>
     </form>
   );
 }

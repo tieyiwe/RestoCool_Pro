@@ -72,9 +72,12 @@ export function useServiceOrders(onNew: (o: StaffOrder) => void) {
     }
     const onVisible = () => document.visibilityState === "visible" && void refresh();
     document.addEventListener("visibilitychange", onVisible);
+    // Safety net: a live connection can stall silently (tablet on a weak network).
+    const safety = window.setInterval(() => void refresh(), 20_000);
     return () => {
       es?.close();
       window.clearInterval(poll);
+      window.clearInterval(safety);
       document.removeEventListener("visibilitychange", onVisible);
     };
   }, [refresh]);
@@ -261,6 +264,7 @@ export function OrderCard({ order, now, delays, onChanged, big = false }: { orde
         <span>{t(`status.${order.status}`)}</span>
         <span className="tabular-nums">{order.subtotal === 0 && order.hasOnRequest ? t("onRequest") : `${formatFCFA(order.subtotal)}${order.hasOnRequest ? " +" : ""}`}</span>
       </p>
+      <HandledBy order={order} />
       {msg && (
         <p role="alert" className="text-sm font-semibold text-red-700">
           {msg}
@@ -282,6 +286,22 @@ export function OrderCard({ order, now, delays, onChanged, big = false }: { orde
       )}
       {cancelling && <CancelForm onCancel={(r) => void move("cancelled", r)} onClose={() => setCancelling(false)} />}
     </article>
+  );
+}
+
+/** Who handled each step, with their matricule (« Confirmée par Awa · 002 »). */
+function HandledBy({ order }: { order: StaffOrder }) {
+  const t = useTranslations("service");
+  const steps = (["confirmed", "prepared", "served", "cancelled"] as const).filter((k) => order.handledBy[k]);
+  if (steps.length === 0) return null;
+  return (
+    <ul className="flex flex-col gap-0.5 text-xs text-muted-foreground" data-testid="handled-by">
+      {steps.map((k) => (
+        <li key={k}>
+          {t(`by.${k}`, { name: order.handledBy[k]!.name, no: order.handledBy[k]!.staffNo })}
+        </li>
+      ))}
+    </ul>
   );
 }
 

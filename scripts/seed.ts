@@ -10,6 +10,7 @@ import {
   menuItemOptions,
   menuItemVariants,
   menuItems,
+  members,
   openingHours,
   planEvents,
   restaurants,
@@ -162,6 +163,13 @@ async function seedDemo(db: DB) {
   }
 
   await db.insert(fortunes).values(DEMO_FORTUNES.map((text) => ({ restaurantId, text })));
+  // Fictional personnel with their matricules. "dev-owner" is the local dev sign-in; the other
+  // ids are placeholders nobody can sign in with.
+  await db.insert(members).values([
+    { restaurantId, clerkUserId: "dev-owner", name: "Propriétaire Démo", role: "owner", staffNo: 1 },
+    { restaurantId, clerkUserId: "demo-server-awa", name: "Awa (serveuse)", role: "server", staffNo: 2 },
+    { restaurantId, clerkUserId: "demo-kitchen-issa", name: "Issa (cuisine)", role: "kitchen", staffNo: 3 },
+  ]);
   await db.insert(planEvents).values({ restaurantId, toPlan: "pro", toStatus: "trial", automatic: true, reference: "seed" });
   await writeAudit(db, null, { restaurantId, action: "restaurant.seeded", entity: "restaurant", entityId: restaurantId });
 

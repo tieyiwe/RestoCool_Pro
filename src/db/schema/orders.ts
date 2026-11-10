@@ -2,7 +2,7 @@ import { boolean, date, index, integer, jsonb, pgTable, smallint, text, timestam
 import { id, timestamps, type I18nText } from "./_shared";
 import { orderItemStatusEnum, orderSourceEnum, orderStatusEnum, seatTypeEnum, stationEnum } from "./enums";
 import { menuItems } from "./menu";
-import { restaurants } from "./restaurants";
+import { members, restaurants } from "./restaurants";
 import { seats, tableSessions } from "./seating";
 
 /**
@@ -43,6 +43,12 @@ export const orders = pgTable(
     paidAt: timestamp("paid_at", { withTimezone: true }),
     cancelledAt: timestamp("cancelled_at", { withTimezone: true }),
     cancelledReason: text("cancelled_reason"),
+    /** Personnel who handled each step (members.id; their matricule is shown on screens). */
+    takenBy: uuid("taken_by").references(() => members.id, { onDelete: "set null" }),
+    confirmedBy: uuid("confirmed_by").references(() => members.id, { onDelete: "set null" }),
+    preparedBy: uuid("prepared_by").references(() => members.id, { onDelete: "set null" }),
+    servedBy: uuid("served_by").references(() => members.id, { onDelete: "set null" }),
+    cancelledBy: uuid("cancelled_by").references(() => members.id, { onDelete: "set null" }),
     /** Who made the last status change: "member:<userId>", "staff:<id>", "customer", "system". */
     updatedBy: text("updated_by"),
     ...timestamps,

@@ -26,7 +26,8 @@
     "authFailed": "La connexion n’a pas pu se charger. Vérifiez votre connexion Internet et rechargez la page. Si le problème continue, contactez le support.",
     "notFoundTitle": "Page introuvable",
     "notFoundText": "Cette page n’existe pas, ou le menu n’est pas encore publié.",
-    "backHome": "Retour à l’accueil"
+    "backHome": "Retour à l’accueil",
+    "authLoadingSlow": "La connexion prend plus de temps que d’habitude… Vérifiez votre réseau, la page continue de charger."
   },
   "landing": {
     "cta": "Créer mon restaurant gratuitement",
@@ -258,8 +259,8 @@
     "recentActivity": "Activité récente",
     "noActivity": "Aucune activité pour le moment.",
     "newRestaurant": {
-      "title": "Créer votre restaurant",
-      "intro": "Laafi ! Quelques informations pour commencer. Vous pourrez tout compléter ensuite.",
+      "title": "Créez votre restaurant",
+      "intro": "Laafi ! Restaurant, maquis, café ou bar : donnez-lui un nom, le reste se configure pas à pas.",
       "name": "Nom du restaurant",
       "namePlaceholder": "Ex. : Maquis Le Baobab",
       "city": "Ville",
@@ -268,7 +269,32 @@
       "trial": "30 jours d’essai Pro offerts, sans engagement.",
       "errorName": "Indiquez un nom d’au moins 2 caractères.",
       "errorLimit": "Vous avez atteint le nombre maximum de restaurants. Contactez-nous sur WhatsApp pour en ajouter.",
-      "addAnother": "Ajouter un restaurant"
+      "addAnother": "Ajouter un restaurant",
+      "eyebrow": "Étape 1 · Votre établissement",
+      "eyebrowAnother": "Nouvel établissement",
+      "nameHint": "Le nom tel que vos clients le connaissent. Vous pourrez le changer.",
+      "urlPreview": "Adresse de votre menu (et de votre QR code)",
+      "urlPlaceholder": "votre-restaurant",
+      "noCard": "Sans carte bancaire",
+      "benefitsTitle": "Ce que vous obtenez",
+      "benefits": {
+        "menu": {
+          "title": "Fini les menus en papier",
+          "text": "Un menu en ligne en 3 langues, toujours à jour."
+        },
+        "qr": {
+          "title": "QR code prêt à imprimer",
+          "text": "Vos clients scannent et choisissent depuis leur téléphone."
+        },
+        "orders": {
+          "title": "Commandes faciles",
+          "text": "Elles arrivent en direct au service et en cuisine."
+        },
+        "records": {
+          "title": "Tout est enregistré",
+          "text": "Ventes, commandes et personnel dans votre tableau de bord."
+        }
+      }
     },
     "switchRestaurant": "Changer de restaurant",
     "comingSoon": "Cette section arrive bientôt.",
@@ -278,7 +304,8 @@
       "seats": "Créez vos tables et leurs QR codes",
       "print": "Imprimez votre QR code principal",
       "publish": "Publiez votre menu",
-      "done": "Fait"
+      "done": "Fait",
+      "branding": "Ajoutez votre logo et vos couleurs"
     },
     "frontDesk": "Service",
     "kitchen": "Cuisine"
@@ -545,7 +572,7 @@
       "lateMin": "Rouge après"
     },
     "appearance": {
-      "title": "Apparence",
+      "title": "Image de marque",
       "theme": "Thème du menu",
       "themes": {
         "warm": "Chaleureux",
@@ -557,7 +584,14 @@
       "contrastOk": "Bonne lisibilité",
       "contrastLow": "Pas assez lisible",
       "logo": "Logo",
-      "cover": "Photo de couverture"
+      "cover": "Photo de couverture",
+      "intro": "Votre logo, votre photo et vos couleurs apparaissent en haut de votre menu, sur vos QR codes et vos autocollants. Votre marque passe toujours en premier.",
+      "logoHint": "Image carrée de préférence (au moins 512 × 512 px), PNG ou JPG. Elle est compressée automatiquement.",
+      "coverHint": "Une belle photo de votre salle, terrasse ou plat phare (format paysage).",
+      "preview": "Aperçu de votre menu",
+      "previewTagline": "Ouvert · Menu en français, English, 中文",
+      "previewDish": "Riz gras · 2 000 F",
+      "noLogoYet": "Pas encore de logo : nous affichons la première lettre de votre nom en attendant."
     },
     "features": {
       "title": "Fonctions du menu",
@@ -583,9 +617,10 @@
       "step": "Étape {n} sur {total}",
       "done": "Votre restaurant est prêt ! Ajoutez maintenant vos plats.",
       "goMenu": "Ajouter mes plats",
-      "finishLater": "Terminer plus tard",
       "banner": "Terminez la configuration de votre restaurant.",
-      "resume": "Reprendre"
+      "resume": "Reprendre",
+      "back": "Retour",
+      "finish": "Terminer la configuration"
     }
   },
   "public": {
@@ -841,10 +876,10 @@
       "step2": "Visez le code, puis touchez le lien qui s’affiche",
       "step2En": "Point at the code, tap the link",
       "step2Zh": "对准二维码，点击链接",
-      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → code :"
+      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} →"
     },
     "mainPrintHint": "6 autocollants par page A4. Découpez-les et placez-les à l’entrée, sur les tables, au comptoir ou sur la vitrine.",
-    "mainCode": "Code du restaurant (pour les clients qui ne scannent pas) :",
+    "mainCode": "Numéro RC du restaurant (pour les clients qui ne scannent pas) :",
     "seatCode": "Code de la place"
   },
   "legal": {
@@ -860,22 +895,22 @@
     "notPublished": "Votre menu n’est pas encore publié. Publiez-le dans Réglages pour que vos clients puissent le voir.",
     "print": "Imprimer mes QR codes",
     "download": "Télécharger l’image (PNG)",
-    "codeLabel": "Sans scanner, vos clients peuvent aussi aller sur {site} et taper ce code :"
+    "codeLabel": "Sans scanner, vos clients peuvent aussi aller sur {site} et taper votre numéro RC :"
   },
   "codeEntry": {
     "pageTitle": "Ouvrir un menu avec un code",
-    "title": "Vous avez un code ?",
-    "intro": "Le code à 5 caractères est écrit sous le QR code du restaurant. Il ouvre le même menu que le scan.",
-    "hint": "Entrez le code écrit sous le QR code du restaurant.",
-    "label": "Code du restaurant",
-    "placeholder": "K7M3P",
+    "title": "Vous avez un numéro RC ?",
+    "intro": "Le numéro RC (RC = RestoCool) est écrit sous le QR code du restaurant. Il ouvre le même menu que le scan.",
+    "hint": "Entrez le numéro RC écrit sous le QR code du restaurant (ex. : RC-K7M3P).",
+    "label": "Numéro RC du restaurant",
+    "placeholder": "RC-K7M3P",
     "submit": "Ouvrir le menu",
-    "invalid": "Ce code n’a pas le bon format : 5 lettres ou chiffres, écrits sous le QR code.",
-    "notFound": "Aucun restaurant ne correspond à ce code. Vérifiez-le, ou scannez le QR code.",
+    "invalid": "Ce numéro n’a pas le bon format : RC suivi de 5 lettres ou chiffres, écrit sous le QR code.",
+    "notFound": "Aucun restaurant ne correspond à ce numéro RC. Vérifiez-le, ou scannez le QR code.",
     "tooMany": "Trop d’essais. Patientez une minute, puis réessayez.",
     "orScan": "Vous pouvez aussi scanner le QR code avec l’appareil photo de votre téléphone.",
     "homeTitle": "Vous êtes au restaurant ?",
-    "homeText": "Tapez le code écrit sous le QR code pour ouvrir le menu."
+    "homeText": "Tapez le numéro RC écrit sous le QR code pour ouvrir le menu."
   },
   "service": {
     "frontDesk": "Service en salle",
@@ -957,6 +992,108 @@
     "planRequiredTitle": "Service en direct : offre Pro",
     "planRequired": "Les commandes des clients, l’écran cuisine et le service en salle sont inclus dans les offres Pro et Business.",
     "seePlans": "Voir les offres",
-    "networkError": "Impossible de charger les commandes. Vérifiez la connexion : l’écran se met à jour dès qu’elle revient."
+    "networkError": "Impossible de charger les commandes. Vérifiez la connexion : l’écran se met à jour dès qu’elle revient.",
+    "by": {
+      "confirmed": "Confirmée par {name} · matricule {no}",
+      "prepared": "Préparée par {name} · matricule {no}",
+      "served": "Servie par {name} · matricule {no}",
+      "cancelled": "Annulée par {name} · matricule {no}"
+    }
+  },
+  "personnel": {
+    "title": "Personnel",
+    "intro": "Chaque personne a un matricule unique dans votre restaurant. Il est enregistré sur chaque commande qu’elle confirme, prépare, sert ou annule.",
+    "staffNo": "Matricule",
+    "name": "Nom",
+    "role": "Rôle",
+    "confirmed": "Confirmées",
+    "prepared": "Préparées",
+    "served": "Servies",
+    "cancelled": "Annulées",
+    "inactive": "Inactif",
+    "period": "Chiffres des 7 derniers jours.",
+    "comingM5": "Bientôt : ajoutez vos serveurs, la cuisine et la caisse, avec une connexion par code PIN sur la tablette du restaurant (sans adresse e-mail)."
+  },
+  "analytics": {
+    "title": "Activité et ventes",
+    "period": "Période",
+    "range": {
+      "today": "Aujourd’hui",
+      "7d": "7 jours",
+      "30d": "30 jours"
+    },
+    "kpi": {
+      "orders": "Commandes",
+      "revenue": "Ventes (servies)",
+      "avgTicket": "Ticket moyen",
+      "avgService": "Temps de service",
+      "cancelled": "Annulées"
+    },
+    "openNow": "{n} en cours",
+    "servedCount": "{n} servies",
+    "prep": "Cuisine : {n} min",
+    "empty": "Aucune commande sur cette période. Les chiffres apparaîtront dès les premières commandes.",
+    "byHour": "Commandes par heure",
+    "byHourAlt": "Nombre de commandes pour chaque heure de la journée",
+    "topDishes": "Plats les plus commandés",
+    "personnel": "Personnel : commandes traitées",
+    "col": {
+      "staffNo": "Matricule",
+      "name": "Nom",
+      "confirmed": "Confirmées",
+      "prepared": "Préparées",
+      "served": "Servies",
+      "avgService": "Service moyen"
+    },
+    "note": "Ventes : commandes servies, hors plats « sur demande ». Temps de service : de l’envoi de la commande au service."
+  },
+  "setup": {
+    "guide": "Étapes de la configuration",
+    "eyebrow": "Bienvenue sur RestoCool",
+    "guideTitle": "Votre établissement en ligne en 5 minutes",
+    "stepOf": "Étape {n} sur {total}",
+    "allDone": "Configuration terminée",
+    "unlocks": "Débloqué à la fin :",
+    "time": "Chaque étape peut être passée et modifiée plus tard dans Paramètres.",
+    "doneText": "{name} est prêt. Ajoutez vos plats, imprimez votre QR code et vos clients pourront commander depuis leur téléphone. Chaque commande est enregistrée dans votre tableau de bord.",
+    "next": {
+      "dishes": "Ajouter mes plats",
+      "print": "Imprimer mon QR code",
+      "preview": "Voir mon menu"
+    },
+    "locked": {
+      "menu": "Menu",
+      "seating": "Tables et QR",
+      "service": "Service",
+      "kitchen": "Cuisine",
+      "staff": "Personnel",
+      "analytics": "Analyses"
+    },
+    "steps": {
+      "create": {
+        "title": "Votre établissement",
+        "hint": "Le nom et la ville : c’est tout pour commencer."
+      },
+      "profile": {
+        "title": "Profil",
+        "hint": "Ce que vos clients voient en haut du menu."
+      },
+      "contacts": {
+        "title": "Contacts",
+        "hint": "Téléphone, WhatsApp pour les commandes à emporter, Orange Money et Moov."
+      },
+      "hours": {
+        "title": "Horaires",
+        "hint": "Affichés « Ouvert » ou « Fermé » en direct sur votre menu."
+      },
+      "service": {
+        "title": "Service et tables",
+        "hint": "Comment vos clients s’installent et commandent."
+      },
+      "appearance": {
+        "title": "Image de marque",
+        "hint": "Logo, photo et couleurs : votre marque passe en premier."
+      }
+    }
   }
 }

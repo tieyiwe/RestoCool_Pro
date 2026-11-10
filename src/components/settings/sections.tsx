@@ -14,8 +14,7 @@ import {
 import { env } from "@/lib/env";
 import { formatBfPhone } from "@/lib/format";
 import { SEATING_MODES } from "@/lib/restaurants/settings";
-import { AccentInput } from "./accent-input";
-import { MediaInput } from "./media-input";
+import { BrandingEditor } from "./branding-editor";
 import { SettingsForm } from "./settings-form";
 
 type Restaurant = typeof restaurants.$inferSelect;
@@ -231,14 +230,9 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
 }
 
 export async function AppearanceSection({ r, next, submitLabel }: SectionProps) {
-  const t = await getTranslations("settings.appearance");
   return (
     <SettingsForm action={saveAppearanceAction} next={next} submitLabel={submitLabel} testId="appearance-form">
-      <AccentInput initialColor={r.accentColor} initialTheme={r.theme} />
-      <div className="grid gap-4 sm:grid-cols-2">
-        <MediaInput name="logoUrl" kind="logo" label={t("logo")} initial={r.logoUrl} />
-        <MediaInput name="coverUrl" kind="cover" label={t("cover")} initial={r.coverUrl} />
-      </div>
+      <BrandingEditor name={r.name} initial={{ logoUrl: r.logoUrl, coverUrl: r.coverUrl, accentColor: r.accentColor, theme: r.theme }} />
     </SettingsForm>
   );
 }

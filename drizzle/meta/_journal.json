@@ -43,6 +43,13 @@
       "when": 1794285702513,
       "tag": "0005_m4_orders",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794317534986,
+      "tag": "0006_staff_numbers",
+      "breakpoints": true
     }
   ]
 }

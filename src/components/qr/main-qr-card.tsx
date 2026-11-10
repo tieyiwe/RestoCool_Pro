@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getDb } from "@/db";
-import { ensureMainCode } from "@/lib/access-codes";
+import { ensureMainCode, formatRc } from "@/lib/access-codes";
 import { codeEntryHost, menuUrl, publicBaseUrl } from "@/lib/urls";
 
 /**
@@ -31,7 +31,7 @@ export async function MainQrCard({ restaurantId, slug, published }: { restaurant
         <p className="text-sm">
           {t("codeLabel", { site: codeEntryHost(base) })}{" "}
           <span className="rounded-md bg-muted px-2 py-0.5 font-mono text-lg font-bold tracking-widest" data-testid="main-qr-code">
-            {code}
+            {formatRc(code)}
           </span>
         </p>
         <p className="truncate font-mono text-xs text-muted-foreground" data-testid="main-qr-url">

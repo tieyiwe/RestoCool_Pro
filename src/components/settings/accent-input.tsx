@@ -5,10 +5,27 @@ import { useState } from "react";
 import { accentIsReadable, type MenuTheme } from "@/lib/color";
 
 /** Colour picker with a live readability check against the chosen theme. */
-export function AccentInput({ initialColor, initialTheme }: { initialColor: string; initialTheme: MenuTheme }) {
+export function AccentInput({
+  initialColor,
+  initialTheme,
+  onChange,
+}: {
+  initialColor: string;
+  initialTheme: MenuTheme;
+  /** Lets a parent show a live preview. */
+  onChange?: (v: { color: string; theme: MenuTheme }) => void;
+}) {
   const t = useTranslations("settings.appearance");
-  const [color, setColor] = useState(initialColor);
-  const [theme, setTheme] = useState<MenuTheme>(initialTheme);
+  const [color, setColorState] = useState(initialColor);
+  const [theme, setThemeState] = useState<MenuTheme>(initialTheme);
+  const setColor = (c: string) => {
+    setColorState(c);
+    onChange?.({ color: c, theme });
+  };
+  const setTheme = (th: MenuTheme) => {
+    setThemeState(th);
+    onChange?.({ color, theme: th });
+  };
   const ok = accentIsReadable(color, theme);
   const previews: Record<MenuTheme, { bg: string; fg: string }> = {
     warm: { bg: "#FFF8EC", fg: "#17231C" },

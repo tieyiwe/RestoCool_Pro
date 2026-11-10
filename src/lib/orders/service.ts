@@ -7,6 +7,7 @@ import {
   menuItemOptions,
   menuItems,
   menuItemVariants,
+  members,
   orderItems,
   orders,
   restaurants,
@@ -256,6 +257,27 @@ function need(ctx: ServiceCtx, action: Action) {
   if (!can(ctx.actor, action, { restaurantId: ctx.repo.restaurantId })) throw new ForbiddenError();
 }
 
+/** members.id of the person acting (their matricule goes on the order), or null (dev bypass, system). */
+async function memberIdOf(ctx: ServiceCtx): Promise<string | null> {
+  if (ctx.actor.kind !== "member") return null;
+  const [m] = await ctx.db
+    .select({ id: members.id })
+    .from(members)
+    .where(and(eq(members.restaurantId, ctx.repo.restaurantId), eq(members.clerkUserId, ctx.actor.userId)))
+    .limit(1);
+  return m?.id ?? null;
+}
+
+/** Which "by" column each move fills. */
+const BY: Record<TargetStatusKey, "confirmedBy" | "preparedBy" | "servedBy" | "cancelledBy"> = {
+  confirmed: "confirmedBy",
+  preparing: "preparedBy",
+  ready: "preparedBy",
+  served: "servedBy",
+  cancelled: "cancelledBy",
+};
+type TargetStatusKey = "confirmed" | "preparing" | "ready" | "served" | "cancelled";
+
 const actorTag = (a: Actor) => (a.kind === "member" ? `member:${a.userId}` : a.kind === "staff" ? `staff:${a.staffId}` : a.kind);
 
 /** Open orders for the front desk and kitchen, plus those served in the last 30 minutes. */
@@ -314,8 +336,13 @@ export async function setOrderStatus(ctx: ServiceCtx, orderId: string, to: Targe
   const existing = await ctx.db.query.orders.findFirst({ where: and(eq(orders.restaurantId, rid), eq(orders.id, orderId)) });
   if (!existing) throw new NotFoundError();
   if (!rule.from.includes(existing.status)) throw new OrderError("conflict");
+  const by = await memberIdOf(ctx);
   await ctx.db.transaction(async (tx) => {
     const set: Partial<Order> = { status: to, [STAMP[to]]: now, updatedBy: actorTag(ctx.actor), updatedAt: now };
+    // Record who handled this step (the kitchen keeps the first person who prepared it).
+    if (by && !(BY[to] === "preparedBy" && existing.preparedBy)) set[BY[to]] = by;
+    // Confirming by moving straight on also counts as confirming.
+    if (by && to !== "cancelled" && to !== "confirmed" && !existing.confirmedBy && !existing.confirmedAt) set.confirmedBy = by;
     // Moving straight to a later step fills the skipped timestamps (reports need them).
     if (to !== "cancelled") for (const k of TARGET_STATUSES.slice(0, TARGET_STATUSES.indexOf(to))) if (k !== "cancelled" && !existing[STAMP[k]]) Object.assign(set, { [STAMP[k]]: now });
     if (to === "cancelled") set.cancelledReason = reason!.trim().slice(0, 200);
@@ -348,6 +375,7 @@ export async function setItemStatus(ctx: ServiceCtx, orderId: string, itemId: st
   const o = await ctx.db.query.orders.findFirst({ where: and(eq(orders.restaurantId, rid), eq(orders.id, orderId)) });
   if (!o) throw new NotFoundError();
   if (!["sent", "confirmed", "preparing", "ready"].includes(o.status)) throw new OrderError("conflict");
+  const by = await memberIdOf(ctx);
   await ctx.db.transaction(async (tx) => {
     const done = await tx
       .update(orderItems)
@@ -365,6 +393,7 @@ export async function setItemStatus(ctx: ServiceCtx, orderId: string, itemId: st
       if (next === "preparing" && !o.preparingAt) set.preparingAt = now;
       if (next === "ready") set.readyAt = now;
       if (!o.confirmedAt) set.confirmedAt = now;
+      if (by && !o.preparedBy && (next === "preparing" || next === "ready")) set.preparedBy = by;
       await tx.update(orders).set(set).where(and(eq(orders.restaurantId, rid), eq(orders.id, orderId)));
     }
     await writeAudit(tx, ctx.actor, { restaurantId: rid, action: `order.item.${to}`, entity: "order", entityId: orderId, data: { itemId } });
