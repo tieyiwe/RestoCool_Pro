@@ -159,6 +159,19 @@ export async function leaveSession(db: DB, restaurantId: string, sessionId: stri
   });
 }
 
+/** Seats that have their own printed QR (with the « one QR per table/room » strategy). */
+const PRINTED_SEATS = new Set(["table", "room", "area"]);
+
+/**
+ * May a customer choose this seat by id (seat picker)? With one QR per table/room, those seats
+ * are chosen by scanning their printed token only: a seat id seen once (it comes back from a
+ * join) must not let a phone rejoin that table later from anywhere.
+ */
+export function pickable(r: Pick<Restaurant, "settings">, seat: { type: string }): boolean {
+  const perSeat = (r.settings.qrStrategy ?? "per_seat") === "per_seat";
+  const modes = new Set<string>(r.settings.seatingModes ?? ["table", "takeaway"]);
+  return modes.has(seat.type) && (!perSeat || !PRINTED_SEATS.has(seat.type));
+}
 /** Seats the customer may pick, with an « occupied » flag (open session). Tokens are never returned. */
 export async function pickerSeats(db: DB, r: Restaurant) {
   await sweepStale(db, r);
@@ -168,12 +181,8 @@ export async function pickerSeats(db: DB, r: Restaurant) {
     db.select({ seatId: tableSessions.seatId }).from(tableSessions).where(and(eq(tableSessions.restaurantId, r.id), eq(tableSessions.status, "open"))),
   ]);
   const occupied = new Set(open.map((o) => o.seatId));
-  const perSeat = (r.settings.qrStrategy ?? "per_seat") === "per_seat";
-  // With one QR per table/room, those seats are chosen by scanning; the picker only offers the rest.
-  const printed = new Set(["table", "room", "area"]);
-  const modes = new Set(r.settings.seatingModes ?? ["table", "takeaway"]);
   return rows
-    .filter((s) => modes.has(s.type) && (!perSeat || !printed.has(s.type)))
+    .filter((s) => pickable(r, s))
     .sort((a, b) => a.type.localeCompare(b.type) || a.sort - b.sort || a.label.localeCompare(b.label, "fr", { numeric: true }))
     .map((s) => ({
       id: s.id,

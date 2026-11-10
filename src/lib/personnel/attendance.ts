@@ -1,5 +1,5 @@
 import "server-only";
-import { and, desc, eq, gte, isNull, or, sql } from "drizzle-orm";
+import { and, desc, eq, gte, isNull, lte, or, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
 import type { TenantRepo } from "@/db/repos/tenant";
@@ -83,20 +83,42 @@ export async function punch(db: DB, r: Restaurant, staffNo: number, pin: string,
   if (m.lockedUntil && m.lockedUntil > now) return { ok: false, error: "locked", minutesLeft: Math.ceil((m.lockedUntil.getTime() - now.getTime()) / 60_000) };
   if (!m.pinHash) return { ok: false, error: "no_pin" };
   const actor: Actor = { kind: "staff", staffId: m.id, restaurantId: r.id, role: m.role === "kitchen" || m.role === "cashier" ? m.role : "server" };
-  if (!(await verifyPin(pin, m.pinHash))) {
-    const failures = m.pinFailures + 1;
-    const lock = failures >= MAX_PIN_FAILURES;
-    await db
-      .update(members)
-      .set({ pinFailures: lock ? 0 : failures, lockedUntil: lock ? new Date(now.getTime() + LOCK_MINUTES * 60_000) : m.lockedUntil })
-      .where(eq(members.id, m.id));
-    await writeAudit(db, actor, { restaurantId: r.id, action: lock ? "attendance.pin.locked" : "attendance.pin.wrong", entity: "member", entityId: m.id, data: { method } });
-    return lock ? { ok: false, error: "locked", minutesLeft: LOCK_MINUTES } : { ok: false, error: "wrong_pin", triesLeft: MAX_PIN_FAILURES - failures };
+  // Count the try before checking the PIN, in one atomic update: parallel requests cannot all read
+  // the same failure count and get more than MAX_PIN_FAILURES guesses. The last allowed try locks
+  // the profile up front; a right PIN clears it again.
+  const attempt = await reservePinAttempt(db, m.id, now);
+  if (!attempt) {
+    const fresh = await db.query.members.findFirst({ columns: { lockedUntil: true }, where: eq(members.id, m.id) });
+    const until = fresh?.lockedUntil?.getTime() ?? now.getTime() + LOCK_MINUTES * 60_000;
+    return { ok: false, error: "locked", minutesLeft: Math.max(1, Math.ceil((until - now.getTime()) / 60_000)) };
   }
-  if (m.pinFailures) await db.update(members).set({ pinFailures: 0 }).where(eq(members.id, m.id));
+  if (!(await verifyPin(pin, m.pinHash))) {
+    const lock = attempt.failures >= MAX_PIN_FAILURES;
+    await writeAudit(db, actor, { restaurantId: r.id, action: lock ? "attendance.pin.locked" : "attendance.pin.wrong", entity: "member", entityId: m.id, data: { method } });
+    return lock ? { ok: false, error: "locked", minutesLeft: LOCK_MINUTES } : { ok: false, error: "wrong_pin", triesLeft: MAX_PIN_FAILURES - attempt.failures };
+  }
+  await db.update(members).set({ pinFailures: 0, lockedUntil: null }).where(eq(members.id, m.id));
   const result = await toggle(db, r.id, m.id, method, null, now);
   await writeAudit(db, actor, { restaurantId: r.id, action: `attendance.${result.action}`, entity: "member", entityId: m.id, data: { method } });
   return { ok: true, name: m.name ?? "—", staffNo: m.staffNo ?? 0, ...result };
+}
+
+/**
+ * Takes one PIN try for this person, or null when they are locked. An expired lock starts a
+ * fresh count. Reaching MAX_PIN_FAILURES sets the lock in the same statement.
+ */
+async function reservePinAttempt(db: DB, memberId: string, now: Date): Promise<{ failures: number } | null> {
+  const lockUntil = new Date(now.getTime() + LOCK_MINUTES * 60_000);
+  const count = sql`(case when ${members.lockedUntil} is not null and ${members.lockedUntil} <= ${now} then 0 else ${members.pinFailures} end) + 1`;
+  const [row] = await db
+    .update(members)
+    .set({
+      pinFailures: count,
+      lockedUntil: sql`case when ${count} >= ${MAX_PIN_FAILURES} then ${lockUntil}::timestamptz else null end`,
+    })
+    .where(and(eq(members.id, memberId), or(isNull(members.lockedUntil), lte(members.lockedUntil, now))))
+    .returning({ failures: members.pinFailures });
+  return row ?? null;
 }
 
 async function toggle(db: DB, restaurantId: string, memberId: string, method: "qr" | "code" | "manager", by: string | null, now: Date, force?: "in" | "out") {
@@ -151,13 +173,29 @@ export async function addPerson(ctx: PersonnelCtx, input: z.input<typeof NewPers
   return { id: row.id, staffNo: row.staffNo! };
 }
 
+/**
+ * Managers handle the personnel; only the owner (managers.write) may change a manager's or the
+ * owner's PIN or status (a manager may set their own PIN), so a manager cannot deactivate or
+ * take the check-in identity of another manager or the owner.
+ */
+async function managedMember(ctx: PersonnelCtx, memberId: string, opts: { allowSelf?: boolean } = {}) {
+  const m = await ctx.db.query.members.findFirst({ where: and(eq(members.restaurantId, ctx.repo.restaurantId), eq(members.id, memberId)) });
+  if (!m) throw new NotFoundError();
+  const self = ctx.actor.kind === "member" && m.clerkUserId === ctx.actor.userId;
+  const lead = m.role === "owner" || m.role === "manager";
+  if (lead && !(opts.allowSelf && self) && !can(ctx.actor, "managers.write", { restaurantId: ctx.repo.restaurantId })) throw new ForbiddenError();
+  return m;
+}
+
 export async function setPin(ctx: PersonnelCtx, memberId: string, pin: string) {
   need(ctx);
   const p = Pin.parse(pin);
+  // Anyone who manages the personnel may set their own PIN.
+  const m = await managedMember(ctx, memberId, { allowSelf: true });
   const done = await ctx.db
     .update(members)
     .set({ pinHash: await hashPin(p), pinFailures: 0, lockedUntil: null })
-    .where(and(eq(members.restaurantId, ctx.repo.restaurantId), eq(members.id, memberId)))
+    .where(and(eq(members.restaurantId, ctx.repo.restaurantId), eq(members.id, m.id)))
     .returning({ id: members.id });
   if (!done.length) throw new NotFoundError();
   await writeAudit(ctx.db, ctx.actor, { restaurantId: ctx.repo.restaurantId, action: "personnel.pin.set", entity: "member", entityId: memberId });
@@ -165,8 +203,7 @@ export async function setPin(ctx: PersonnelCtx, memberId: string, pin: string) {
 
 export async function setActive(ctx: PersonnelCtx, memberId: string, active: boolean) {
   need(ctx);
-  const m = await ctx.db.query.members.findFirst({ where: and(eq(members.restaurantId, ctx.repo.restaurantId), eq(members.id, memberId)) });
-  if (!m) throw new NotFoundError();
+  const m = await managedMember(ctx, memberId);
   // The owner stays: a restaurant always keeps its owner.
   if (m.role === "owner") throw new ForbiddenError();
   await ctx.db.update(members).set({ active }).where(eq(members.id, m.id));

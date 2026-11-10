@@ -7,6 +7,7 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { ConfirmButton } from "@/components/ui/confirm-button";
 import { getDb } from "@/db";
 import { ensureMainCode, formatRc } from "@/lib/access-codes";
+import { can } from "@/lib/auth/can";
 import { requireMemberPage } from "@/lib/auth/page";
 import { formatStaffNo, handledCounts, personnel } from "@/lib/personnel";
 import { attendanceEnabled, attendanceLog, ensureAttendanceToken } from "@/lib/personnel/attendance";
@@ -52,6 +53,8 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
     rc = formatRc(code);
   }
   const now = Date.now();
+  // Only the owner changes a manager's (or the owner's) PIN or status; the server checks it too.
+  const canLeads = can(ctx.actor, "managers.write", { restaurantId: rid });
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -115,6 +118,8 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
           <tbody className="divide-y divide-border">
             {people.map((p) => {
               const here = open.get(p.id);
+              const editable = canLeads || (p.role !== "owner" && p.role !== "manager");
+              const pinEditable = editable || p.id === ctx.memberships.find((x) => x.restaurantId === rid)?.memberId;
               const locked = p.lockedUntil && p.lockedUntil.getTime() > now;
               return (
                 <tr key={p.id} data-testid="personnel-row" data-staff-no={p.staffNo ?? ""} className={p.active ? "" : "opacity-60"}>
@@ -161,21 +166,23 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
                   <td className="px-3 py-2 text-right align-top tabular-nums">{counts.get(p.id)?.served ?? 0}</td>
                   {enabled && <td className="px-3 py-2 text-right align-top tabular-nums">{hours(totals.get(p.id) ?? 0)}</td>}
                   <td className="px-3 py-2 align-top">
-                    <form action={setPinAction} className="flex items-center gap-1">
-                      <input type="hidden" name="id" value={p.id} />
-                      <input
-                        name="pin"
-                        inputMode="numeric"
-                        pattern="\d{4,6}"
-                        maxLength={6}
-                        required
-                        placeholder={p.hasPin ? "••••" : tp("noPin")}
-                        aria-label={`${tp("setPin")} · ${p.name}`}
-                        className="min-h-11 w-24 rounded-lg border border-border bg-surface px-2 text-base"
-                      />
-                      <button className="min-h-11 rounded-lg px-2 text-sm font-semibold text-primary hover:bg-muted">{tp("savePin")}</button>
-                    </form>
-                    {p.role !== "owner" && (
+                    {pinEditable && (
+                      <form action={setPinAction} className="flex items-center gap-1">
+                        <input type="hidden" name="id" value={p.id} />
+                        <input
+                          name="pin"
+                          inputMode="numeric"
+                          pattern="\d{4,6}"
+                          maxLength={6}
+                          required
+                          placeholder={p.hasPin ? "••••" : tp("noPin")}
+                          aria-label={`${tp("setPin")} · ${p.name}`}
+                          className="min-h-11 w-24 rounded-lg border border-border bg-surface px-2 text-base"
+                        />
+                        <button className="min-h-11 rounded-lg px-2 text-sm font-semibold text-primary hover:bg-muted">{tp("savePin")}</button>
+                      </form>
+                    )}
+                    {editable && p.role !== "owner" && (
                       <form action={setActivePersonAction}>
                         <input type="hidden" name="id" value={p.id} />
                         <input type="hidden" name="active" value={p.active ? "0" : "1"} />
