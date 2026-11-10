@@ -7,6 +7,8 @@ import { RestaurantSwitcher } from "@/components/restaurant-switcher";
 import { UserMenu } from "@/components/user-menu";
 import { BottomTabs } from "@/components/app-shell/bottom-tabs";
 import { RegisterStaffSw } from "@/components/app-shell/register-sw";
+import { NavProgress } from "@/components/app-shell/nav-progress";
+import { Suspense } from "react";
 import { env } from "@/lib/env";
 import { setupState } from "@/lib/auth/setup";
 import { can, type Action } from "@/lib/auth/can";
@@ -62,6 +64,9 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
           </p>
         )}
         <RegisterStaffSw />
+        <Suspense fallback={null}>
+          <NavProgress />
+        </Suspense>
         {focus ? (
           <main className="flex-1 px-4 py-6 md:px-8">{children}</main>
         ) : (

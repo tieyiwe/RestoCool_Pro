@@ -61,11 +61,12 @@ test.describe("owner app (dev sign-in bypass)", () => {
   test("language switch is remembered for the staff app", async ({ page }) => {
     await page.goto("/app");
     await page.getByRole("button", { name: "en", exact: true }).click();
-    await expect(page.getByRole("link", { name: "Dashboard" })).toBeVisible();
+    // Phones show the short tab name, tablets the side menu.
+    await expect(page.getByRole("link", { name: /^(Dashboard|Home)$/ }).first()).toBeVisible();
     await page.getByRole("button", { name: "zh", exact: true }).click();
-    await expect(page.getByRole("link", { name: "概览" })).toBeVisible();
+    await expect(page.getByRole("link", { name: /^(概览|首页)$/ }).first()).toBeVisible();
     await page.getByRole("button", { name: "fr", exact: true }).click();
-    await expect(page.getByRole("link", { name: "Tableau de bord" })).toBeVisible();
+    await expect(page.getByRole("link", { name: /^(Tableau de bord|Accueil)$/ }).first()).toBeVisible();
   });
 });
 

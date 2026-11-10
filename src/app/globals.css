@@ -252,3 +252,8 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   .guide-finger, .demo-tap, .demo-pop, .demo-fade-in, .demo-pulse, .demo-beam { animation: none !important; }
 }
+
+@keyframes rc-progress {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
