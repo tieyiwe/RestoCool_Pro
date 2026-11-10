@@ -31,10 +31,12 @@ function escapeXml(s: string) {
   return s.replace(/[<>&"']/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&apos;" })[c]!);
 }
 
-/** Locally generated placeholder (no stock photos): category color, dish number and name. */
-function placeholderSvg(code: string, label: string, color: string): string {
-  const short = label.length > 22 ? `${label.slice(0, 21)}…` : label;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${color}"/><stop offset="1" stop-color="#1c1917"/></linearGradient></defs><rect width="400" height="400" fill="url(#g)"/><circle cx="200" cy="175" r="105" fill="#fff" opacity=".14"/><circle cx="200" cy="175" r="78" fill="#fff" opacity=".18"/><text x="200" y="198" font-family="system-ui,sans-serif" font-size="72" font-weight="800" fill="#fff" text-anchor="middle">${escapeXml(code)}</text><text x="200" y="335" font-family="system-ui,sans-serif" font-size="26" font-weight="700" fill="#fff" text-anchor="middle">${escapeXml(short)}</text></svg>`;
+/**
+ * Locally generated placeholder (no stock photos): category color and dish number only, so the
+ * picture reads the same in French, English and Chinese (the name is shown next to it, translated).
+ */
+function placeholderSvg(code: string, _label: string, color: string): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${color}"/><stop offset="1" stop-color="#1c1917"/></linearGradient></defs><rect width="400" height="400" fill="url(#g)"/><circle cx="200" cy="175" r="105" fill="#fff" opacity=".14"/><circle cx="200" cy="175" r="78" fill="#fff" opacity=".18"/><text x="200" y="198" font-family="system-ui,sans-serif" font-size="72" font-weight="800" fill="#fff" text-anchor="middle">${escapeXml(code)}</text></svg>`;
 }
 
 async function resetRestaurant(db: DB, slug: string) {
