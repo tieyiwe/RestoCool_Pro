@@ -17,6 +17,7 @@ import { liveStatus, personnelRanking, type RankedPerson } from "@/lib/analytics
 import { ActivityFeed, Alerts, LiveStrip, RankingCard, Shortcuts, type Alert, type Shortcut } from "@/components/backoffice/backoffice";
 import { attendanceEnabled } from "@/lib/personnel/attendance";
 import { personnel } from "@/lib/personnel";
+import { pendingJoinCount } from "@/lib/personnel/join";
 
 export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
   const t = await getTranslations("app");
@@ -67,6 +68,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     if (live.locked) alerts.push({ key: "locked", n: live.locked, href: "/app/staff", tone: "amber" });
     if (live.soldOut) alerts.push({ key: "soldOut", n: live.soldOut, href: "/app/menu", tone: "info" });
   }
+  if (allowed("staff.write")) {
+    const waiting = await pendingJoinCount(db, rid);
+    if (waiting) alerts.push({ key: "join", n: waiting, href: "/app/staff#join", tone: "red" });
+  }
   if (allowed("settings.write")) {
     if (!r.published) alerts.push({ key: "unpublished", href: "/app/settings#publish", tone: "amber" });
     if (r.latitude == null) alerts.push({ key: "noLocation", href: "/app/settings#location", tone: "info" });
@@ -80,6 +85,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       { key: "seating", href: "/app/seating", icon: "🪑", need: "seats.write" },
       { key: "qr", href: "/app/seating/print?qr=main&layout=grid", icon: "🖨️", need: "seats.write" },
       { key: "staff", href: "/app/staff", icon: "👥", need: "staff.write" },
+      { key: "invite", href: "/app/staff/invite", icon: "📲", need: "staff.write" },
       { key: "roles", href: "/app/staff/roles", icon: "🔑", need: "staff.write" },
       { key: "settings", href: "/app/settings", icon: "⚙️", need: "settings.write" },
       { key: "menuPage", href: `/r/${r.slug}`, icon: "📱", need: null },

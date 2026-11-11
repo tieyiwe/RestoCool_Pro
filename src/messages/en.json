@@ -1262,7 +1262,10 @@
       "out": "Departure recorded.",
       "qr": "New check-in QR code created: print it.",
       "status": "Status updated.",
-      "role": "Role updated."
+      "role": "Role updated.",
+      "joined": "Request accepted: staff number {no} given.",
+      "declined": "Request declined.",
+      "joinQr": "New invitation QR code created."
     },
     "err": {
       "invalid": "Check the name (at least 2 characters) and PIN (4 to 6 digits).",
@@ -1579,7 +1582,8 @@
       "locked": "{n, plural, one {# person} other {# people}} locked (too many wrong PINs)",
       "soldOut": "{n, plural, one {# dish} other {# dishes}} sold out or unavailable",
       "unpublished": "Your menu isn't published yet: customers can't see it",
-      "noLocation": "Add your business location so customers can find you"
+      "noLocation": "Add your business location so customers can find you",
+      "join": "{n, plural, one {# person is} other {# people are}} waiting to join the team"
     },
     "shortcuts": {
       "title": "Run everything",
@@ -1593,7 +1597,8 @@
       "roles": "Roles & access",
       "settings": "Settings",
       "menuPage": "View my menu",
-      "guide": "Guide"
+      "guide": "Guide",
+      "invite": "Invite my team"
     },
     "ranking": {
       "title": "Personnel ranking",
@@ -1749,6 +1754,67 @@
       "nocamera": "No camera on this device. Type the RC number below.",
       "unknown": "QR code not recognised. Try again.",
       "scanning": ""
+    }
+  },
+  "join": {
+    "title": "Join the team",
+    "intro": "Do you work at {name}? Enter your details: the manager will confirm you as part of the team.",
+    "name": "Full name",
+    "namePlaceholder": "Awa Ouédraogo",
+    "phone": "Phone number",
+    "pin": "Choose a PIN",
+    "pin2": "Repeat the PIN",
+    "pinHint": "4 to 6 digits. You use it to check in and out. Don't share it.",
+    "submit": "Send my request",
+    "sending": "Sending…",
+    "privacy": "Your name and phone are only visible to the business's managers.",
+    "invalidTitle": "This QR code is no longer valid",
+    "invalidText": "Ask the manager to show you the new “Invite my team” QR code.",
+    "error": {
+      "invalid": "Check your name (at least 3 characters) and your PIN (4 to 6 digits).",
+      "phone": "Invalid phone number. Example: 70 00 00 00, or with the +226 code.",
+      "full": "Too many requests waiting for this business. Ask the manager to handle them, then try again.",
+      "closed": "This number is already in the team, or this QR code is no longer valid.",
+      "too_many": "Too many tries. Please wait a few minutes.",
+      "pin_mismatch": "The two PINs don't match."
+    },
+    "noRequest": "No request on this phone. Scan the manager's “Invite my team” QR code.",
+    "pendingTitle": "Request sent",
+    "pendingText": "Thank you {name}! {business} now needs to confirm your request. Keep this page open: it updates by itself.",
+    "acceptedTitle": "Welcome to the {business} team!",
+    "acceptedText": "Your profile is active.",
+    "staffNo": "Your staff number",
+    "acceptedHint": "Remember this number: with your PIN, you use it to check in and out.",
+    "checkIn": "Check in",
+    "guide": "Learn to use RestoCool",
+    "declinedTitle": "Request not accepted",
+    "declinedText": "{business} did not accept the request. Talk to the manager.",
+    "invite": {
+      "back": "Personnel",
+      "title": "Invite my team",
+      "intro": "Show this QR code to the new person. They scan it with their phone, enter their name and number, then you accept their request.",
+      "qrLabel": "QR code to join the team",
+      "step1": "The person scans this QR code with their phone camera.",
+      "step2": "They enter their full name and phone, and choose a PIN.",
+      "step3": "You get the request: choose their role and accept. They get their staff number right away.",
+      "regenerate": "New QR code",
+      "regenerateConfirm": "Create a new QR code? The old one will stop working.",
+      "safety": "Don't post this QR code publicly: every request still needs your approval."
+    },
+    "owner": {
+      "invite": "Invite my team",
+      "title": "{n, plural, one {# person wants} other {# people want}} to join the team",
+      "intro": "Check that you know the person, choose their role, then accept. They get their staff number right away.",
+      "roleFor": "Role of {name}",
+      "accept": "Accept",
+      "decline": "Decline",
+      "declineConfirm": "Decline {name}'s request?"
+    },
+    "prompt": {
+      "one": "{name} is asking to join the team",
+      "many": "{name} and {n, plural, one {# other person} other {# other people}} are asking to join the team",
+      "open": "See the request",
+      "later": "Later"
     }
   }
 }

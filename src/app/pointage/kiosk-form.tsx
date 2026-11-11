@@ -39,7 +39,7 @@ export function KioskForm({ token, askRc }: { token?: string; askRc?: boolean })
             placeholder="RC-K7M3P"
             value={rc}
             onChange={(e) => setRc(e.target.value.toUpperCase().slice(0, 12))}
-            className={input}
+            className={`${input} rc-code-input font-mono font-bold tracking-widest`}
             autoFocus
           />
         </label>

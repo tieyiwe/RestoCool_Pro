@@ -22,7 +22,7 @@ export async function CodeForm({ error, defaultValue, compact = false }: { error
           placeholder={t("placeholder")}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? "code-error" : undefined}
-          className="min-h-12 w-48 rounded-lg border border-border bg-surface px-3 text-center font-mono text-xl tracking-[0.2em] uppercase"
+          className="rc-code-input min-h-12 w-52 rounded-lg px-3 text-center font-mono text-xl font-bold tracking-[0.2em] uppercase"
         />
         <button type="submit" className="min-h-12 rounded-lg bg-primary px-5 font-semibold text-primary-foreground hover:opacity-90">
           {t("submit")}

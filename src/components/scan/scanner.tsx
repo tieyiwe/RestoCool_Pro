@@ -197,7 +197,7 @@ export function Scanner() {
           onChange={(e) => setManual(e.target.value)}
           placeholder={t("manualPlaceholder")}
           autoCapitalize="characters"
-          className="min-h-12 min-w-0 flex-1 rounded-xl border border-border bg-surface px-3 text-base"
+          className="rc-code-input min-h-12 min-w-0 flex-1 rounded-xl px-3 font-mono text-base font-bold"
           data-testid="scan-manual"
         />
         <button className="min-h-12 rounded-xl bg-primary px-4 font-bold text-primary-foreground" data-testid="scan-manual-go">

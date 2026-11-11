@@ -31,6 +31,8 @@ export async function GET(req: Request) {
     if (ev.r !== r.id) return null;
     if (ev.k === "menu") return "menu";
     if (ev.k === "session") return ev.s === sessionId ? "session" : null;
+    // Team requests are for staff screens only.
+    if (ev.k !== "order") return null;
     return ev.d === deviceId || (shared !== null && ev.s === shared) ? "order" : null;
   });
 }

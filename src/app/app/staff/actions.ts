@@ -6,6 +6,7 @@ import { z } from "zod";
 import { getDb } from "@/db";
 import { requireMember } from "@/lib/auth/context";
 import { AppError } from "@/lib/errors";
+import { acceptJoinRequest, declineJoinRequest, regenerateJoinToken } from "@/lib/personnel/join";
 import { addPerson, managerPunch, regenerateAttendanceToken, setActive, setPin, type PersonnelCtx } from "@/lib/personnel/attendance";
 
 async function ctx(): Promise<PersonnelCtx> {
@@ -60,5 +61,26 @@ export async function regenerateQrAction() {
   await run(async (c) => {
     await regenerateAttendanceToken(c);
     return "qr";
+  });
+}
+
+/* ---------------------------------------------------------------- « Rejoindre l'équipe » */
+
+export async function acceptJoinAction(fd: FormData) {
+  await run(async (c) => {
+    const r = await acceptJoinRequest(c, Id.parse(s(fd, "id")), Id.parse(s(fd, "roleId")));
+    return `joined&no=${r.staffNo}`;
+  });
+}
+export async function declineJoinAction(fd: FormData) {
+  await run(async (c) => {
+    await declineJoinRequest(c, Id.parse(s(fd, "id")));
+    return "declined";
+  });
+}
+export async function regenerateJoinQrAction() {
+  await run(async (c) => {
+    await regenerateJoinToken(c);
+    return "joinQr";
   });
 }

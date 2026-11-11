@@ -1262,7 +1262,10 @@
       "out": "Départ enregistré.",
       "qr": "Nouveau QR code de pointage créé : imprimez-le.",
       "status": "Statut mis à jour.",
-      "role": "Rôle mis à jour."
+      "role": "Rôle mis à jour.",
+      "joined": "Demande acceptée : matricule {no} attribué.",
+      "declined": "Demande refusée.",
+      "joinQr": "Nouveau QR code d'invitation créé."
     },
     "err": {
       "invalid": "Vérifiez le nom (2 caractères minimum) et le code PIN (4 à 6 chiffres).",
@@ -1579,7 +1582,8 @@
       "locked": "{n, plural, one {# personne bloquée} other {# personnes bloquées}} (trop d'erreurs de PIN)",
       "soldOut": "{n, plural, one {# plat épuisé} other {# plats épuisés}} ou indisponibles",
       "unpublished": "Votre menu n'est pas encore publié : les clients ne le voient pas",
-      "noLocation": "Ajoutez l'emplacement de l'établissement pour que les clients vous trouvent"
+      "noLocation": "Ajoutez l'emplacement de l'établissement pour que les clients vous trouvent",
+      "join": "{n, plural, one {# personne attend} other {# personnes attendent}} pour rejoindre l'équipe"
     },
     "shortcuts": {
       "title": "Tout gérer",
@@ -1593,7 +1597,8 @@
       "roles": "Rôles et accès",
       "settings": "Paramètres",
       "menuPage": "Voir mon menu",
-      "guide": "Guide"
+      "guide": "Guide",
+      "invite": "Inviter mon équipe"
     },
     "ranking": {
       "title": "Classement du personnel",
@@ -1749,6 +1754,67 @@
       "nocamera": "Pas de caméra disponible sur cet appareil. Tapez le numéro RC ci-dessous.",
       "unknown": "QR code non reconnu. Réessayez.",
       "scanning": ""
+    }
+  },
+  "join": {
+    "title": "Rejoindre l'équipe",
+    "intro": "Vous travaillez chez {name} ? Entrez vos informations : le responsable va confirmer votre arrivée dans l'équipe.",
+    "name": "Nom complet",
+    "namePlaceholder": "Awa Ouédraogo",
+    "phone": "Numéro de téléphone",
+    "pin": "Choisissez un code PIN",
+    "pin2": "Répétez le code PIN",
+    "pinHint": "4 à 6 chiffres. Il sert à pointer votre arrivée et votre départ. Ne le donnez à personne.",
+    "submit": "Envoyer ma demande",
+    "sending": "Envoi…",
+    "privacy": "Votre nom et votre téléphone ne sont visibles que par les responsables de l'établissement.",
+    "invalidTitle": "Ce QR code n'est plus valable",
+    "invalidText": "Demandez au responsable de vous montrer le nouveau QR code « Inviter mon équipe ».",
+    "error": {
+      "invalid": "Vérifiez votre nom (3 caractères minimum) et votre code PIN (4 à 6 chiffres).",
+      "phone": "Numéro de téléphone invalide. Exemple : 70 00 00 00, ou avec l'indicatif +226.",
+      "full": "Trop de demandes en attente pour cet établissement. Demandez au responsable de les traiter, puis réessayez.",
+      "closed": "Ce numéro fait déjà partie de l'équipe, ou ce QR code n'est plus valable.",
+      "too_many": "Trop d'essais. Patientez quelques minutes.",
+      "pin_mismatch": "Les deux codes PIN ne sont pas identiques."
+    },
+    "noRequest": "Aucune demande en cours sur ce téléphone. Scannez le QR code « Inviter mon équipe » du responsable.",
+    "pendingTitle": "Demande envoyée",
+    "pendingText": "Merci {name} ! {business} doit maintenant confirmer votre demande. Gardez cette page ouverte : elle se met à jour toute seule.",
+    "acceptedTitle": "Bienvenue dans l'équipe de {business} !",
+    "acceptedText": "Votre profil est activé.",
+    "staffNo": "Votre matricule",
+    "acceptedHint": "Retenez ce numéro : avec votre code PIN, il sert à pointer votre arrivée et votre départ.",
+    "checkIn": "Pointer mon arrivée",
+    "guide": "Apprendre à utiliser RestoCool",
+    "declinedTitle": "Demande non acceptée",
+    "declinedText": "{business} n'a pas accepté la demande. Parlez-en avec le responsable.",
+    "invite": {
+      "back": "Personnel",
+      "title": "Inviter mon équipe",
+      "intro": "Montrez ce QR code à la nouvelle personne. Elle le scanne avec son téléphone, entre son nom et son numéro, puis vous acceptez sa demande.",
+      "qrLabel": "QR code pour rejoindre l'équipe",
+      "step1": "La personne scanne ce QR code avec l'appareil photo de son téléphone.",
+      "step2": "Elle entre son nom complet, son téléphone et choisit un code PIN.",
+      "step3": "Vous recevez la demande : choisissez son rôle et acceptez. Elle reçoit aussitôt son matricule.",
+      "regenerate": "Nouveau QR code",
+      "regenerateConfirm": "Créer un nouveau QR code ? L'ancien ne fonctionnera plus.",
+      "safety": "Ne publiez pas ce QR code : toute demande doit de toute façon être acceptée par vous."
+    },
+    "owner": {
+      "invite": "Inviter mon équipe",
+      "title": "{n, plural, one {# personne veut} other {# personnes veulent}} rejoindre l'équipe",
+      "intro": "Vérifiez que vous connaissez la personne, choisissez son rôle, puis acceptez. Elle reçoit son matricule tout de suite.",
+      "roleFor": "Rôle de {name}",
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "declineConfirm": "Refuser la demande de {name} ?"
+    },
+    "prompt": {
+      "one": "{name} demande à rejoindre l'équipe",
+      "many": "{name} et {n, plural, one {# autre personne} other {# autres personnes}} demandent à rejoindre l'équipe",
+      "open": "Voir la demande",
+      "later": "Plus tard"
     }
   }
 }

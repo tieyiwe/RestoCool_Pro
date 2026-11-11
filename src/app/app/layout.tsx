@@ -8,6 +8,9 @@ import { UserMenu } from "@/components/user-menu";
 import { BottomTabs } from "@/components/app-shell/bottom-tabs";
 import { RegisterStaffSw } from "@/components/app-shell/register-sw";
 import { NavProgress } from "@/components/app-shell/nav-progress";
+import { JoinPrompt } from "@/components/app-shell/join-prompt";
+import { getDb } from "@/db";
+import { pendingJoinRequests } from "@/lib/personnel/join";
 import { Suspense } from "react";
 import { env } from "@/lib/env";
 import { setupState } from "@/lib/auth/setup";
@@ -45,6 +48,8 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   const toTab = (n: (typeof nav)[number]) => ({ href: n.href, label: n.label, icon: n.icon });
   const SHORT: Record<string, "home" | "service" | "kitchen" | "history" | "scan"> = { "/app": "home", "/app/service": "service", "/app/kitchen": "kitchen", "/app/orders": "history", "/app/scan": "scan" };
   const toShortTab = (n: (typeof nav)[number]) => ({ ...toTab(n), label: SHORT[n.href] ? t(`tabs.${SHORT[n.href]}`) : n.label });
+  // Personnel managers are prompted live when someone asks to join the team.
+  const joinPending = !focus && ctx && allowed("staff.write") ? await pendingJoinRequests(getDb(), ctx.repo.restaurantId).catch(() => []) : null;
   return (
     <AuthProvider>
       <div className="flex min-h-dvh flex-col">
@@ -80,6 +85,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
             ))}
           </nav>
           <main className="flex-1 px-4 pt-5 pb-[calc(env(safe-area-inset-bottom)+6rem)] md:px-8 md:py-6 print:p-0">{children}</main>
+          {joinPending && <JoinPrompt initial={{ count: joinPending.length, latest: joinPending[0] ? { id: joinPending[0].id, name: joinPending[0].name } : null }} />}
           <BottomTabs tabs={tabs.map(toShortTab)} more={more.map(toTab)} moreLabel={t("more")} closeLabel={t("close")} />
         </div>
         )}

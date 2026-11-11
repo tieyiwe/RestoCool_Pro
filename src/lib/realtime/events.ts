@@ -11,7 +11,9 @@ export const CHANNEL = "rc_events";
 export type RtEvent =
   | { k: "order"; r: string; o: string; s: string | null; d: string | null }
   | { k: "session"; r: string; s: string }
-  | { k: "menu"; r: string };
+  | { k: "menu"; r: string }
+  /** Someone asked to join the team, or a request was decided (staff screens only). */
+  | { k: "join"; r: string };
 
 type Executor = Pick<DB, "execute">;
 
@@ -24,7 +26,7 @@ export function parseEvent(payload: string | undefined): RtEvent | null {
   if (!payload) return null;
   try {
     const ev = JSON.parse(payload) as RtEvent;
-    return typeof ev?.r === "string" && (ev.k === "order" || ev.k === "session" || ev.k === "menu") ? ev : null;
+    return typeof ev?.r === "string" && (ev.k === "order" || ev.k === "session" || ev.k === "menu" || ev.k === "join") ? ev : null;
   } catch {
     return null;
   }

@@ -257,3 +257,15 @@ html { scroll-behavior: smooth; }
   0% { transform: translateX(-100%); }
   100% { transform: translateX(300%); }
 }
+
+/* Numéro RC fields: always light with dark text and a strong border, whatever the phone's
+   dark mode, so what is typed stays readable in the sun. */
+.rc-code-input {
+  background-color: #ffffff;
+  color: #17231c;
+  border: 2px solid #0f6b3e;
+  caret-color: #0f6b3e;
+  color-scheme: light;
+}
+.rc-code-input::placeholder { color: #8a948e; opacity: 1; }
+.rc-code-input:focus { outline: 3px solid #e9b530; outline-offset: 2px; border-color: #0f6b3e; }

@@ -13,6 +13,9 @@ import { formatStaffNo, handledCounts, personnel } from "@/lib/personnel";
 import { listJobRoles } from "@/lib/personnel/roles";
 import { ROLE_GROUPS } from "@/lib/auth/access";
 import { assignRoleAction } from "./roles/actions";
+import { pendingJoinRequests } from "@/lib/personnel/join";
+import { formatBfPhone } from "@/lib/format";
+import { acceptJoinAction, declineJoinAction } from "./actions";
 import { attendanceEnabled, attendanceLog, ensureAttendanceToken } from "@/lib/personnel/attendance";
 import { publicBaseUrl } from "@/lib/urls";
 import { addPersonAction, punchPersonAction, regenerateQrAction, setActivePersonAction, setPinAction } from "./actions";
@@ -36,7 +39,7 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   const format = await getFormatter();
   const sp = await searchParams;
   // Messages come from the URL: only known ones are shown (no raw keys on screen).
-  const ok = sp.ok && ["added", "pin", "in", "out", "qr", "status", "role"].includes(sp.ok) ? sp.ok : null;
+  const ok = sp.ok && ["added", "pin", "in", "out", "qr", "status", "role", "joined", "declined", "joinQr"].includes(sp.ok) ? sp.ok : null;
   const error = sp.error && ["invalid", "forbidden", "notFound"].includes(sp.error) ? sp.error : null;
   const no = sp.no;
   // The owner and managers are changed by the owner only (managers.write).
@@ -45,7 +48,8 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   const r = (await ctx.repo.restaurant.get())!;
   const enabled = attendanceEnabled(r);
   const since = new Date(Date.now() - 7 * 24 * 3600_000);
-  const jobRoles = await listJobRoles(db, rid);
+  const [jobRoles, pending] = await Promise.all([listJobRoles(db, rid), pendingJoinRequests(db, rid)]);
+  const tj = await getTranslations("join.owner");
   const [people, counts, log] = await Promise.all([personnel(db, rid), handledCounts(db, rid, since), enabled ? attendanceLog(db, rid, 7) : Promise.resolve([])]);
   const roleLabel = (r: { key: string | null; name: string | null }) => (r.key ? tro(`names.${r.key}` as "names.server") : (r.name ?? "—"));
   const personRole = (p: (typeof people)[number]) => (p.role === "owner" ? tr("owner") : p.jobRoleId ? roleLabel({ key: p.jobRoleKey, name: p.jobRoleName }) : tr(p.role as "server"));
@@ -78,11 +82,18 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
           <h1 className="text-2xl font-extrabold">{t("title")}</h1>
           <p className="text-muted-foreground">{t("intro")}</p>
         </div>
-        <Button asChild variant="outline">
-          <Link href="/app/staff/roles" data-testid="roles-link">
-            🔑 {tro("manage")}
-          </Link>
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild>
+            <Link href="/app/staff/invite" data-testid="invite-link">
+              📲 {tj("invite")}
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/app/staff/roles" data-testid="roles-link">
+              🔑 {tro("manage")}
+            </Link>
+          </Button>
+        </div>
       </div>
       {ok && (
         <p role="status" className="rounded-lg bg-emerald-50 p-3 text-emerald-900" data-testid="staff-ok">
@@ -93,6 +104,55 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
         <p role="alert" className="rounded-lg bg-red-50 p-3 text-red-900">
           {tp(`err.${error}` as "err.invalid")}
         </p>
+      )}
+
+      {/* People who scanned the team QR and wait for an answer */}
+      {pending.length > 0 && (
+        <Card id="join" className="scroll-mt-20 border-2 border-or bg-or/10" data-testid="join-requests">
+          <CardTitle className="mb-1">🙋 {tj("title", { n: pending.length })}</CardTitle>
+          <p className="mb-3 text-sm text-muted-foreground">{tj("intro")}</p>
+          <ul className="flex flex-col gap-3">
+            {pending.map((j) => (
+              <li key={j.id} className="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-3" data-testid="join-request">
+                <div>
+                  <p className="font-bold">{j.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    <a href={`tel:+${j.phone}`} className="underline-offset-2 hover:underline">
+                      {formatBfPhone(j.phone).startsWith("+") ? formatBfPhone(j.phone) : `+${j.phone}`}
+                    </a>
+                    {" · "}
+                    {time(j.createdAt)}
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <form action={acceptJoinAction} className="flex flex-1 flex-wrap items-center gap-2">
+                    <input type="hidden" name="id" value={j.id} />
+                    <select name="roleId" required defaultValue={jobRoles.find((jr) => jr.key === "server")?.id} aria-label={tj("roleFor", { name: j.name })} className="min-h-11 min-w-0 flex-1 rounded-lg border border-border bg-surface px-2 text-base" data-testid="join-role">
+                      {roleOptions.map(({ g, list }) => (
+                        <optgroup key={g} label={tro(`groups.${g}`)}>
+                          {list.map((jr) => (
+                            <option key={jr.id} value={jr.id}>
+                              {roleLabel(jr)}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </select>
+                    <Button type="submit" data-testid="join-accept">
+                      ✓ {tj("accept")}
+                    </Button>
+                  </form>
+                  <form action={declineJoinAction}>
+                    <input type="hidden" name="id" value={j.id} />
+                    <ConfirmButton message={tj("declineConfirm", { name: j.name })} className="min-h-11 rounded-lg px-3 text-sm font-semibold text-red-800 hover:bg-red-50" data-testid="join-decline">
+                      {tj("decline")}
+                    </ConfirmButton>
+                  </form>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Card>
       )}
 
       {/* Check-in QR */}

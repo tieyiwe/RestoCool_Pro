@@ -1262,7 +1262,10 @@
       "out": "已记录离岗。",
       "qr": "已创建新的打卡二维码：请打印。",
       "status": "状态已更新。",
-      "role": "角色已更新。"
+      "role": "角色已更新。",
+      "joined": "已接受申请：已分配工号 {no}。",
+      "declined": "已拒绝申请。",
+      "joinQr": "已创建新的邀请二维码。"
     },
     "err": {
       "invalid": "请检查姓名（至少 2 个字符）和 PIN 码（4 到 6 位数字）。",
@@ -1579,7 +1582,8 @@
       "locked": "{n} 人被锁定（PIN 错误次数过多）",
       "soldOut": "{n} 道菜售罄或不可用",
       "unpublished": "您的菜单尚未发布：顾客看不到",
-      "noLocation": "添加店铺位置，方便顾客找到您"
+      "noLocation": "添加店铺位置，方便顾客找到您",
+      "join": "{n} 人等待加入团队"
     },
     "shortcuts": {
       "title": "全面管理",
@@ -1593,7 +1597,8 @@
       "roles": "角色与权限",
       "settings": "设置",
       "menuPage": "查看我的菜单",
-      "guide": "指南"
+      "guide": "指南",
+      "invite": "邀请团队"
     },
     "ranking": {
       "title": "员工排名",
@@ -1749,6 +1754,67 @@
       "nocamera": "此设备没有摄像头。请在下方输入 RC 编号。",
       "unknown": "无法识别二维码，请重试。",
       "scanning": ""
+    }
+  },
+  "join": {
+    "title": "加入团队",
+    "intro": "您在 {name} 工作吗？请填写您的信息，负责人会确认您加入团队。",
+    "name": "全名",
+    "namePlaceholder": "Awa Ouédraogo",
+    "phone": "电话号码",
+    "pin": "设置 PIN 码",
+    "pin2": "再次输入 PIN 码",
+    "pinHint": "4 到 6 位数字，用于上下班打卡。请勿告诉他人。",
+    "submit": "发送申请",
+    "sending": "发送中…",
+    "privacy": "您的姓名和电话只有本店负责人可见。",
+    "invalidTitle": "此二维码已失效",
+    "invalidText": "请负责人出示新的“邀请团队”二维码。",
+    "error": {
+      "invalid": "请检查姓名（至少 3 个字符）和 PIN 码（4 到 6 位数字）。",
+      "phone": "电话号码无效。例如：70 00 00 00，或带区号 +226。",
+      "full": "此店铺待处理的申请过多。请负责人处理后再试。",
+      "closed": "此号码已在团队中，或此二维码已失效。",
+      "too_many": "尝试次数过多，请稍等几分钟。",
+      "pin_mismatch": "两次输入的 PIN 码不一致。"
+    },
+    "noRequest": "此手机上没有申请。请扫描负责人的“邀请团队”二维码。",
+    "pendingTitle": "申请已发送",
+    "pendingText": "谢谢 {name}！现在需要 {business} 确认您的申请。请保持此页面打开，它会自动更新。",
+    "acceptedTitle": "欢迎加入 {business} 团队！",
+    "acceptedText": "您的资料已激活。",
+    "staffNo": "您的工号",
+    "acceptedHint": "请记住此号码：配合 PIN 码用于上下班打卡。",
+    "checkIn": "上班打卡",
+    "guide": "学习使用 RestoCool",
+    "declinedTitle": "申请未通过",
+    "declinedText": "{business} 未接受申请。请与负责人沟通。",
+    "invite": {
+      "back": "员工",
+      "title": "邀请团队",
+      "intro": "向新成员出示此二维码。对方用手机扫描，填写姓名和电话，然后由您确认申请。",
+      "qrLabel": "加入团队的二维码",
+      "step1": "对方用手机相机扫描此二维码。",
+      "step2": "填写全名、电话并设置 PIN 码。",
+      "step3": "您收到申请：选择角色并接受，对方立即获得工号。",
+      "regenerate": "新的二维码",
+      "regenerateConfirm": "创建新的二维码？旧的将失效。",
+      "safety": "请勿公开此二维码：每个申请都需要您确认。"
+    },
+    "owner": {
+      "invite": "邀请团队",
+      "title": "{n} 人申请加入团队",
+      "intro": "确认您认识此人，选择角色后接受。对方会立即获得工号。",
+      "roleFor": "{name} 的角色",
+      "accept": "接受",
+      "decline": "拒绝",
+      "declineConfirm": "拒绝 {name} 的申请？"
+    },
+    "prompt": {
+      "one": "{name} 申请加入团队",
+      "many": "{name} 等 {n} 人申请加入团队",
+      "open": "查看申请",
+      "later": "稍后"
     }
   }
 }
