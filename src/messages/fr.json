@@ -651,14 +651,16 @@
       "contrastOk": "Bonne lisibilité",
       "contrastLow": "Pas assez lisible",
       "logo": "Logo",
-      "cover": "Photo de couverture",
+      "cover": "Photo de l'établissement (façade ou intérieur)",
       "intro": "Votre logo, votre photo et vos couleurs apparaissent en haut de votre menu, sur vos QR codes et vos autocollants. Votre marque passe toujours en premier.",
       "logoHint": "Image carrée de préférence (au moins 512 × 512 px), PNG ou JPG. Elle est compressée automatiquement.",
-      "coverHint": "Une belle photo de votre salle, terrasse ou plat phare (format paysage).",
+      "coverHint": "Format paysage. Elle s'affiche en haut de votre menu et dans l'annuaire RestoCool.",
       "preview": "Aperçu de votre menu",
       "previewTagline": "Ouvert · Menu en français, English, 中文",
       "previewDish": "Riz gras · 2 000 F",
-      "noLogoYet": "Pas encore de logo : nous affichons la première lettre de votre nom en attendant."
+      "noLogoYet": "Pas encore de logo : nous affichons la première lettre de votre nom en attendant.",
+      "coverReminderTitle": "Ajoutez une photo de votre établissement.",
+      "coverReminderText": "La façade aide les clients à vous reconnaître en arrivant ; l'intérieur ou la terrasse leur donne envie de venir. Une vraie photo inspire confiance."
     },
     "features": {
       "title": "Fonctions du menu",
@@ -1599,7 +1601,8 @@
       "soldOut": "{n, plural, one {# plat épuisé} other {# plats épuisés}} ou indisponibles",
       "unpublished": "Votre menu n'est pas encore publié : les clients ne le voient pas",
       "noLocation": "Ajoutez l'emplacement de l'établissement pour que les clients vous trouvent",
-      "join": "{n, plural, one {# personne attend} other {# personnes attendent}} pour rejoindre l'équipe"
+      "join": "{n, plural, one {# personne attend} other {# personnes attendent}} pour rejoindre l'équipe",
+      "noPhoto": "Ajoutez une photo de votre façade ou de l'intérieur : les clients vous reconnaîtront plus vite"
     },
     "shortcuts": {
       "title": "Tout gérer",
@@ -1614,7 +1617,7 @@
       "settings": "Paramètres",
       "menuPage": "Voir mon menu",
       "guide": "Guide",
-      "invite": "Inviter mon équipe"
+      "invite": "Ajouter du personnel"
     },
     "ranking": {
       "title": "Classement du personnel",
@@ -1824,7 +1827,14 @@
       "roleFor": "Rôle de {name}",
       "accept": "Accepter",
       "decline": "Refuser",
-      "declineConfirm": "Refuser la demande de {name} ?"
+      "declineConfirm": "Refuser la demande de {name} ?",
+      "addButton": "Ajouter du personnel",
+      "addTitle": "Ajouter un employé",
+      "addStep1": "Montrez ce QR code à la personne : elle le scanne avec son téléphone.",
+      "addStep2": "Elle entre son nom complet, son téléphone et choisit un code PIN.",
+      "addStep3": "Vous recevez sa demande ici : choisissez son rôle et acceptez. Elle reçoit aussitôt son matricule.",
+      "fullScreen": "Afficher en grand",
+      "manual": "Ajouter à la main"
     },
     "prompt": {
       "one": "{name} demande à rejoindre l'équipe",

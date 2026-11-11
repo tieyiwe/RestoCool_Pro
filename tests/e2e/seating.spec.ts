@@ -24,8 +24,9 @@ test("owner bulk-adds tables, downloads a QR, prints the kit, and a regenerated 
   await expect(page.getByTestId("seats-table").getByTestId("seat-row")).toHaveCount(13);
 
   const row = page.getByTestId("seat-row").filter({ hasText: /^11/ });
-  const png = await page.request.get((await row.getByRole("link", { name: "Télécharger" }).getAttribute("href"))!);
-  expect(png.headers()["content-type"]).toBe("image/png");
+  // The table's sticker downloads as a PNG named after the table.
+  const [download] = await Promise.all([page.waitForEvent("download"), row.getByTestId("seat-sticker-download").click()]);
+  expect(download.suggestedFilename()).toBe("restaurant-demo-table-11.png");
 
   await page.goto("/app/seating/print?layout=grid");
   await expect(page.getByTestId("print-card")).toHaveCount(16); // 13 tables + 3 salons

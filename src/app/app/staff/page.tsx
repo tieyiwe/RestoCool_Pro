@@ -13,7 +13,7 @@ import { formatStaffNo, handledCounts, personnel } from "@/lib/personnel";
 import { listJobRoles } from "@/lib/personnel/roles";
 import { ROLE_GROUPS } from "@/lib/auth/access";
 import { assignRoleAction } from "./roles/actions";
-import { pendingJoinRequests } from "@/lib/personnel/join";
+import { ensureJoinToken, pendingJoinRequests } from "@/lib/personnel/join";
 import { formatBfPhone } from "@/lib/format";
 import { acceptJoinAction, declineJoinAction } from "./actions";
 import { attendanceEnabled, attendanceLog, ensureAttendanceToken } from "@/lib/personnel/attendance";
@@ -50,6 +50,7 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   const since = new Date(Date.now() - 7 * 24 * 3600_000);
   const [jobRoles, pending] = await Promise.all([listJobRoles(db, rid), pendingJoinRequests(db, rid)]);
   const tj = await getTranslations("join.owner");
+  const joinQr = brandedQrSvg(`${await publicBaseUrl()}/rejoindre/${await ensureJoinToken(db, r)}`);
   const [people, counts, log] = await Promise.all([personnel(db, rid), handledCounts(db, rid, since), enabled ? attendanceLog(db, rid, 7) : Promise.resolve([])]);
   const roleLabel = (r: { key: string | null; name: string | null }) => (r.key ? tro(`names.${r.key}` as "names.server") : (r.name ?? "—"));
   const personRole = (p: (typeof people)[number]) => (p.role === "owner" ? tr("owner") : p.jobRoleId ? roleLabel({ key: p.jobRoleKey, name: p.jobRoleName }) : tr(p.role as "server"));
@@ -84,9 +85,9 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
         </div>
         <div className="flex flex-wrap gap-2">
           <Button asChild>
-            <Link href="/app/staff/invite" data-testid="invite-link">
-              📲 {tj("invite")}
-            </Link>
+            <a href="#add" data-testid="add-staff-button">
+              ➕ {tj("addButton")}
+            </a>
           </Button>
           <Button asChild variant="outline">
             <Link href="/app/staff/roles" data-testid="roles-link">
@@ -105,6 +106,29 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
           {tp(`err.${error}` as "err.invalid")}
         </p>
       )}
+
+      {/* « Ajouter du personnel »: the onboarding QR the new person scans, right here. */}
+      <Card id="add" className="scroll-mt-20 flex flex-col gap-4 border-2 border-primary/30 sm:flex-row sm:items-center" data-testid="add-staff">
+        <div className="mx-auto w-44 shrink-0 rounded-2xl border-4 border-primary bg-white p-2 sm:mx-0" role="img" aria-label={tj("invite")} data-testid="add-staff-qr" dangerouslySetInnerHTML={{ __html: joinQr }} />
+        <div className="flex min-w-0 flex-col gap-2">
+          <CardTitle>➕ {tj("addTitle")}</CardTitle>
+          <ol className="list-decimal space-y-1 pl-5 text-sm">
+            <li>{tj("addStep1")}</li>
+            <li>{tj("addStep2")}</li>
+            <li>{tj("addStep3")}</li>
+          </ol>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild>
+              <Link href="/app/staff/invite" data-testid="invite-link">
+                📲 {tj("fullScreen")}
+              </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <a href="#add-manual">✍️ {tj("manual")}</a>
+            </Button>
+          </div>
+        </div>
+      </Card>
 
       {/* People who scanned the team QR and wait for an answer */}
       {pending.length > 0 && (
@@ -299,8 +323,8 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
         </table>
       </Card>
 
-      {/* Add a person without email */}
-      <Card>
+      {/* Add a person by hand (no phone at hand, or no smartphone) */}
+      <Card id="add-manual" className="scroll-mt-20">
         <CardTitle className="mb-1">{tp("add")}</CardTitle>
         <p className="mb-3 text-sm text-muted-foreground">{tp("addHint")}</p>
         <form action={addPersonAction} className="grid gap-3 sm:grid-cols-[1fr_12rem_12rem_auto] sm:items-end" data-testid="add-person">

@@ -5,11 +5,15 @@ test("the owner's back office: live figures, alerts, every section, personnel ra
   await expect(page.getByTestId("live-strip")).toBeVisible();
   await expect(page.getByTestId("live-revenue")).toContainText("F");
   await expect(page.getByTestId("alerts")).toBeVisible();
+  // No photo of the place yet: a reminder that leads to the branding settings.
+  await page.getByTestId("alert-noPhoto").click();
+  await expect(page.getByTestId("cover-reminder")).toContainText("Ajoutez une photo de votre établissement");
+  await page.goto("/app");
   const shortcuts = page.getByTestId("shortcuts");
   for (const name of ["Accueil commandes", "Cuisine", "Historique", "Menu", "Personnel", "Rôles et accès", "Paramètres"]) await expect(shortcuts.getByRole("link", { name, exact: true })).toBeVisible();
   // Demo personnel are ranked (the owner is not).
   const ranking = page.getByTestId("ranking");
-  await expect(ranking.getByTestId("ranking-row").filter({ hasText: "Awa" })).toBeVisible();
+  await expect(ranking.getByTestId("ranking-row").filter({ hasText: "Awa (serveuse)" })).toBeVisible();
   await expect(ranking.getByTestId("ranking-row").filter({ hasText: "Propriétaire Démo" })).toHaveCount(0);
   await expect(ranking).toContainText("Calcul");
   // No horizontal scroll on phones.

@@ -651,14 +651,16 @@
       "contrastOk": "清晰易读",
       "contrastLow": "不够清晰",
       "logo": "标志",
-      "cover": "封面照片",
+      "cover": "店铺照片（门面或店内）",
       "intro": "您的标志、照片和颜色会显示在菜单顶部、二维码和贴纸上。您的品牌永远优先。",
       "logoHint": "最好是正方形（至少 512 × 512 像素），PNG 或 JPG，会自动压缩。",
-      "coverHint": "一张漂亮的餐厅、露台或招牌菜照片（横向）。",
+      "coverHint": "横向照片。显示在菜单顶部和 RestoCool 店铺目录中。",
       "preview": "菜单预览",
       "previewTagline": "营业中 · 法语、English、中文菜单",
       "previewDish": "Riz gras · 2 000 F",
-      "noLogoYet": "还没有标志：暂时显示您名称的首字母。"
+      "noLogoYet": "还没有标志：暂时显示您名称的首字母。",
+      "coverReminderTitle": "请添加店铺照片。",
+      "coverReminderText": "门面照片帮助顾客到店时认出您；店内或露台照片让顾客更想光临。真实照片更能赢得信任。"
     },
     "features": {
       "title": "菜单功能",
@@ -1599,7 +1601,8 @@
       "soldOut": "{n} 道菜售罄或不可用",
       "unpublished": "您的菜单尚未发布：顾客看不到",
       "noLocation": "添加店铺位置，方便顾客找到您",
-      "join": "{n} 人等待加入团队"
+      "join": "{n} 人等待加入团队",
+      "noPhoto": "添加门面或店内照片：顾客能更快认出您"
     },
     "shortcuts": {
       "title": "全面管理",
@@ -1614,7 +1617,7 @@
       "settings": "设置",
       "menuPage": "查看我的菜单",
       "guide": "指南",
-      "invite": "邀请团队"
+      "invite": "添加员工"
     },
     "ranking": {
       "title": "员工排名",
@@ -1824,7 +1827,14 @@
       "roleFor": "{name} 的角色",
       "accept": "接受",
       "decline": "拒绝",
-      "declineConfirm": "拒绝 {name} 的申请？"
+      "declineConfirm": "拒绝 {name} 的申请？",
+      "addButton": "添加员工",
+      "addTitle": "添加员工",
+      "addStep1": "向对方出示此二维码：对方用手机扫描。",
+      "addStep2": "填写全名、电话并设置 PIN 码。",
+      "addStep3": "申请会显示在这里：选择角色并接受，对方立即获得工号。",
+      "fullScreen": "全屏显示",
+      "manual": "手动添加"
     },
     "prompt": {
       "one": "{name} 申请加入团队",

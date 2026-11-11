@@ -75,6 +75,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   if (allowed("settings.write")) {
     if (!r.published) alerts.push({ key: "unpublished", href: "/app/settings#publish", tone: "amber" });
     if (r.latitude == null) alerts.push({ key: "noLocation", href: "/app/settings#location", tone: "info" });
+    if (!r.coverUrl) alerts.push({ key: "noPhoto", href: "/app/settings#appearance", tone: "info" });
   }
   const shortcuts = (
     [
@@ -85,7 +86,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       { key: "seating", href: "/app/seating", icon: "🪑", need: "seats.write" },
       { key: "qr", href: "/app/seating/print?qr=main&layout=grid", icon: "🖨️", need: "seats.write" },
       { key: "staff", href: "/app/staff", icon: "👥", need: "staff.write" },
-      { key: "invite", href: "/app/staff/invite", icon: "📲", need: "staff.write" },
+      { key: "invite", href: "/app/staff#add", icon: "➕", need: "staff.write" },
       { key: "roles", href: "/app/staff/roles", icon: "🔑", need: "staff.write" },
       { key: "settings", href: "/app/settings", icon: "⚙️", need: "settings.write" },
       { key: "menuPage", href: `/r/${r.slug}`, icon: "📱", need: null },

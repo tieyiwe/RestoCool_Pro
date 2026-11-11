@@ -7,6 +7,9 @@ test("a new person scans the team QR, the owner is prompted, accepts, and the pe
   const name = `Mariam Sawadogo ${tag}`;
   // Owner shows « Inviter mon équipe ».
   await page.goto("/app/staff");
+  // « Ajouter du personnel » shows the onboarding QR right on the page.
+  await page.getByTestId("add-staff-button").click();
+  await expect(page.getByTestId("add-staff-qr").locator("svg")).toBeVisible();
   await page.getByTestId("invite-link").click();
   const url = await page.getByTestId("invite-qr").getAttribute("data-url");
   expect(url).toMatch(/\/rejoindre\/[A-Za-z0-9_-]{16,}$/);

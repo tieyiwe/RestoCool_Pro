@@ -32,6 +32,12 @@ export function BrandingEditor({ name, initial }: { name: string; initial: { log
             <p className="mt-1 text-xs text-muted-foreground">{t("logoHint")}</p>
           </div>
           <div>
+            {!cover && (
+              // Customers recognise the place before they read the name: ask for a real photo.
+              <p className="mb-2 rounded-xl border-2 border-or bg-or/10 p-3 text-sm" role="note" data-testid="cover-reminder">
+                <b>📸 {t("coverReminderTitle")}</b> {t("coverReminderText")}
+              </p>
+            )}
             <MediaInput name="coverUrl" kind="cover" label={t("cover")} initial={initial.coverUrl} onChange={setCover} />
             <p className="mt-1 text-xs text-muted-foreground">{t("coverHint")}</p>
           </div>
