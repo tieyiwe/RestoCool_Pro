@@ -2,7 +2,7 @@
   "brand": {
     "tagline": "RestoCool : votre menu, vos commandes, vos tables. Simple.",
     "local": "100 % local",
-    "designedIn": "Pensé au Burkina, pour les restaurants du Burkina",
+    "designedIn": "Pensé au Burkina, pour les établissements du Burkina",
     "proud": "Fièrement burkinabè",
     "payLocal": "Payez en FCFA, avec Orange Money et Moov Money",
     "support": "Support en français, par WhatsApp",
@@ -30,11 +30,11 @@
     "authLoadingSlow": "La connexion prend plus de temps que d’habitude… Vérifiez votre réseau, la page continue de charger."
   },
   "landing": {
-    "cta": "Créer mon restaurant gratuitement",
+    "cta": "Créer mon établissement gratuitement",
     "seeDemo": "Voir le menu de démonstration",
     "comingSoon": "Lancement bientôt à Ouagadougou et Bobo-Dioulasso.",
     "howItWorks": "Voir comment ça marche",
-    "title": "La solution 100 % locale pour les restaurants du Burkina",
+    "title": "La solution 100 % locale pour les restaurants, maquis, bars et commerces du Burkina",
     "subtitle": "Menu digital, commandes par QR code et gestion de salle, depuis votre téléphone.",
     "nav": {
       "features": "Fonctionnalités",
@@ -44,14 +44,14 @@
       "signIn": "Se connecter",
       "cta": "Essayer gratuitement",
       "menu": "Menu",
-      "restaurants": "Restaurants"
+      "restaurants": "Établissements"
     },
     "hero": {
-      "eyebrow": "Pour les restaurants, maquis et lounges du Burkina",
+      "eyebrow": "Pour les restaurants, maquis, bars, cafés, hôtels et commerces du Burkina",
       "title": "Fini les menus en papier.",
       "titleAccent": "Vos serveurs respirent.",
       "subtitle": "Vos clients scannent le QR code, choisissent et commandent depuis leur téléphone, en français, anglais ou chinois. La commande arrive au service et en cuisine, et tout est enregistré dans votre tableau de bord. Prix en FCFA, WhatsApp, Orange Money et Moov Money.",
-      "cta": "Créer mon restaurant gratuitement",
+      "cta": "Créer mon établissement gratuitement",
       "demo": "Voir un menu de démonstration",
       "chip1": "30 jours d’essai Pro offerts",
       "chip2": "Sans carte bancaire",
@@ -130,7 +130,7 @@
       }
     },
     "burkina": {
-      "title": "Pensé pour la réalité des restaurants ici",
+      "title": "Pensé pour la réalité des établissements d'ici",
       "subtitle": "Pas une application étrangère adaptée à la va-vite : RestoCool parle votre langue et votre monnaie.",
       "fcfa": "Prix en FCFA, sans centimes : 5 300 F",
       "mobile": "Orange Money et Moov Money affichés avec un bouton « Copier »",
@@ -138,7 +138,7 @@
       "network": "Pages légères, utilisables avec peu de réseau",
       "french": "En français d’abord, avec un « Laafi ! » pour accueillir vos clients",
       "phone": "Numéros +226, lien Google Maps, horaires « Ouvert / Fermé »",
-      "founder": "Fondé par un Burkinabè, pour les restaurants du Burkina."
+      "founder": "Fondé par un Burkinabè, pour les établissements du Burkina."
     },
     "who": {
       "title": "Pour tous les établissements",
@@ -147,7 +147,9 @@
       "lounge": "Lounges et bars",
       "fastfood": "Fast-food et à emporter",
       "hotel": "Hôtels",
-      "catering": "Traiteurs"
+      "catering": "Traiteurs",
+      "cafe": "Cafés, boulangeries et pâtisseries",
+      "shop": "Boutiques et commerces de quartier"
     },
     "pricing": {
       "title": "Des formules simples, en FCFA",
@@ -163,7 +165,7 @@
         "desc": "Pour mettre votre menu en ligne.",
         "f1": "Menu digital avec photos",
         "f2": "3 langues",
-        "f3": "Un QR code pour tout le restaurant",
+        "f3": "Un QR code pour tout l'établissement",
         "f4": "Jusqu’à 40 plats",
         "f5": "Commande à emporter par WhatsApp"
       },
@@ -180,7 +182,7 @@
         "name": "Business",
         "desc": "Pour les grandes salles et plusieurs adresses.",
         "f1": "Tout le Pro, personnel illimité",
-        "f2": "Plusieurs restaurants",
+        "f2": "Plusieurs établissements",
         "f3": "Statistiques par serveur",
         "f4": "Badge RestoCool masquable",
         "f5": "Accompagnement prioritaire"
@@ -193,18 +195,18 @@
       "q2": "Et si le réseau est faible ?",
       "a2": "Les pages sont très légères et les photos compressées. Après la première visite, le menu reste consultable hors connexion. Un mode « économie de données » masque les photos.",
       "q3": "Combien de temps pour démarrer ?",
-      "a3": "Quelques minutes : créez votre restaurant, ajoutez vos plats (le bouton « Suggérer » propose les traductions), puis imprimez vos QR codes.",
+      "a3": "Quelques minutes : créez votre établissement, ajoutez vos plats ou vos produits (le bouton « Suggérer » propose les traductions), puis imprimez vos QR codes.",
       "q4": "Comment se passe le paiement de l’abonnement ?",
       "a4": "En FCFA, par Orange Money, Moov Money ou en espèces. L’essai Pro de 30 jours ne demande aucun paiement.",
       "q5": "Puis-je modifier mes prix à tout moment ?",
       "a5": "Oui, et autant de fois que vous voulez. Vous pouvez aussi marquer un plat « épuisé aujourd’hui » : il revient automatiquement le lendemain.",
       "q6": "Mes données sont-elles protégées ?",
-      "a6": "Chaque restaurant ne voit que ses propres données, les connexions sont chiffrées et nous ne vendons aucune donnée. Voir notre politique de confidentialité."
+      "a6": "Chaque établissement ne voit que ses propres données, les connexions sont chiffrées et nous ne vendons aucune donnée. Voir notre politique de confidentialité."
     },
     "final": {
       "title": "Prêt à moderniser votre salle ?",
       "subtitle": "Créez votre menu aujourd’hui, imprimez vos QR codes ce soir.",
-      "cta": "Créer mon restaurant gratuitement"
+      "cta": "Créer mon établissement gratuitement"
     },
     "footer": {
       "product": "Un produit {publisher}",
@@ -267,15 +269,15 @@
     "shellNote": "Menu complet (panier, photos, langues) en cours de construction."
   },
   "app": {
-    "title": "Espace restaurant",
+    "title": "Espace établissement",
     "dashboard": "Tableau de bord",
     "menu": "Menu",
     "seating": "Tables et salles",
     "staff": "Personnel",
     "settings": "Paramètres",
     "about": "À propos",
-    "noRestaurant": "Vous n’avez pas encore de restaurant.",
-    "createRestaurant": "Créer mon restaurant",
+    "noRestaurant": "Vous n'avez pas encore d'établissement.",
+    "createRestaurant": "Créer mon établissement",
     "stats": {
       "categories": "Catégories",
       "items": "Plats",
@@ -299,26 +301,26 @@
       "kitchen": "Cuisine",
       "cashier": "Caisse"
     },
-    "devBypass": "Mode développement : connexion simulée (propriétaire du restaurant de démo).",
+    "devBypass": "Mode développement : connexion simulée (propriétaire de l'établissement de démo).",
     "recentActivity": "Activité récente",
     "noActivity": "Aucune activité pour le moment.",
     "newRestaurant": {
-      "title": "Créez votre restaurant",
-      "intro": "Laafi ! Restaurant, maquis, café ou bar : donnez-lui un nom, le reste se configure pas à pas.",
-      "name": "Nom du restaurant",
+      "title": "Créez votre établissement",
+      "intro": "Laafi ! Restaurant, maquis, bar, café, hôtel ou boutique : donnez-lui un nom, le reste se configure pas à pas.",
+      "name": "Nom de l'établissement",
       "namePlaceholder": "Ex. : Maquis Le Baobab",
       "city": "Ville",
-      "submit": "Créer mon restaurant",
+      "submit": "Créer mon établissement",
       "submitting": "Création…",
       "trial": "30 jours d’essai Pro offerts, sans engagement.",
       "errorName": "Indiquez un nom d’au moins 2 caractères.",
-      "errorLimit": "Vous avez atteint le nombre maximum de restaurants. Contactez-nous sur WhatsApp pour en ajouter.",
-      "addAnother": "Ajouter un restaurant",
+      "errorLimit": "Vous avez atteint le nombre maximum d'établissements. Contactez-nous sur WhatsApp pour en ajouter.",
+      "addAnother": "Ajouter un établissement",
       "eyebrow": "Étape 1 · Votre établissement",
       "eyebrowAnother": "Nouvel établissement",
       "nameHint": "Le nom tel que vos clients le connaissent. Vous pourrez le changer.",
       "urlPreview": "Adresse de votre menu (et de votre QR code)",
-      "urlPlaceholder": "votre-restaurant",
+      "urlPlaceholder": "votre-etablissement",
       "noCard": "Sans carte bancaire",
       "benefitsTitle": "Ce que vous obtenez",
       "benefits": {
@@ -340,7 +342,7 @@
         }
       }
     },
-    "switchRestaurant": "Changer de restaurant",
+    "switchRestaurant": "Changer d'établissement",
     "comingSoon": "Cette section arrive bientôt.",
     "nextSteps": {
       "title": "Prochaines étapes",
@@ -544,7 +546,7 @@
   },
   "settings": {
     "title": "Paramètres",
-    "intro": "Les informations de votre restaurant, telles que vos clients les voient.",
+    "intro": "Les informations de votre établissement, telles que vos clients les voient.",
     "ownerOnly": "Seul le propriétaire peut modifier ces paramètres.",
     "save": "Enregistrer",
     "saving": "Enregistrement…",
@@ -554,7 +556,7 @@
     "finish": "Terminer",
     "errors": {
       "invalid": "Certains champs sont incorrects. Vérifiez-les puis réessayez.",
-      "slug_taken": "Cette adresse est déjà utilisée par un autre restaurant. Choisissez-en une autre.",
+      "slug_taken": "Cette adresse est déjà utilisée par un autre établissement. Choisissez-en une autre.",
       "slug_reserved": "Cette adresse est réservée. Choisissez-en une autre.",
       "phone_invalid": "Numéro invalide. Utilisez un numéro du Burkina à 8 chiffres, par exemple 70 12 34 56.",
       "contrast": "Cette couleur n’est pas assez lisible avec ce thème. Choisissez une couleur plus foncée (ou plus claire pour le thème laque).",
@@ -565,7 +567,7 @@
     },
     "profile": {
       "title": "Profil",
-      "name": "Nom du restaurant",
+      "name": "Nom de l'établissement",
       "slug": "Adresse du menu",
       "slugHint": "Votre menu sera à l’adresse : {url}",
       "description": "Présentation courte (facultative)",
@@ -614,7 +616,7 @@
       },
       "qr": "QR codes",
       "qrPerSeat": "Un QR code par table ou salon (recommandé)",
-      "qrGeneric": "Un seul QR code pour tout le restaurant (le client choisit sa place)",
+      "qrGeneric": "Un seul QR code pour tout l'établissement (le client choisit sa place)",
       "validation": "Validation des commandes",
       "direct": "Directe : la commande part en cuisine",
       "serverConfirms": "Le serveur confirme d’abord",
@@ -672,11 +674,11 @@
       "open": "Ouvrir le menu"
     },
     "wizard": {
-      "title": "Configuration de votre restaurant",
+      "title": "Configuration de votre établissement",
       "step": "Étape {n} sur {total}",
-      "done": "Votre restaurant est prêt ! Ajoutez maintenant vos plats.",
+      "done": "Votre établissement est prêt ! Ajoutez maintenant vos plats ou vos produits.",
       "goMenu": "Ajouter mes plats",
-      "banner": "Terminez la configuration de votre restaurant.",
+      "banner": "Terminez la configuration de votre établissement.",
       "resume": "Reprendre",
       "back": "Retour",
       "finish": "Terminer la configuration"
@@ -905,10 +907,10 @@
     "moveUp": "Monter",
     "moveDown": "Descendre",
     "edit": "Modifier",
-    "genericTitle": "QR code unique du restaurant",
-    "genericHint": "Un seul QR pour tout le restaurant : le client choisit sa place sur son téléphone.",
+    "genericTitle": "QR code unique de l'établissement",
+    "genericHint": "Un seul QR pour tout l'établissement : le client choisit sa place sur son téléphone.",
     "perSeatHint": "Chaque table et chaque salon a son propre QR : en le scannant, le client est installé automatiquement.",
-    "planQr": "La formule Gratuit inclut un seul QR code pour tout le restaurant. Passez à Pro pour un QR par table.",
+    "planQr": "La formule Gratuit inclut un seul QR code pour tout l'établissement. Passez à Pro pour un QR par table.",
     "print": "Imprimer les cartes QR",
     "printTent": "Chevalets (1 par page, à plier)",
     "printGrid": "Cartes (6 par page)",
@@ -940,7 +942,7 @@
       "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → Numéro RC :"
     },
     "mainPrintHint": "6 autocollants par page A4. Découpez-les et placez-les à l’entrée, sur les tables, au comptoir ou sur la vitrine.",
-    "mainCode": "Numéro RC du restaurant (pour les clients qui ne scannent pas) :",
+    "mainCode": "Numéro RC de l'établissement (pour les clients qui ne scannent pas) :",
     "seatCode": "Code de la place"
   },
   "legal": {
@@ -962,16 +964,16 @@
   "codeEntry": {
     "pageTitle": "Ouvrir un menu avec un code",
     "title": "Vous avez un numéro RC ?",
-    "intro": "Le numéro RC (RC = RestoCool) est écrit sous le QR code du restaurant. Il ouvre le même menu que le scan.",
-    "hint": "Entrez le numéro RC écrit sous le QR code du restaurant (ex. : RC-K7M3P).",
-    "label": "Numéro RC du restaurant",
+    "intro": "Le numéro RC (RC = RestoCool) est écrit sous le QR code de l'établissement. Il ouvre la même page que le scan.",
+    "hint": "Entrez le numéro RC écrit sous le QR code de l'établissement (ex. : RC-K7M3P).",
+    "label": "Numéro RC de l'établissement",
     "placeholder": "RC-K7M3P",
     "submit": "Ouvrir le menu",
     "invalid": "Ce numéro n’a pas le bon format : RC suivi de 5 lettres ou chiffres, écrit sous le QR code.",
-    "notFound": "Aucun restaurant ne correspond à ce numéro RC. Vérifiez-le, ou scannez le QR code.",
+    "notFound": "Aucun établissement ne correspond à ce numéro RC. Vérifiez-le, ou scannez le QR code.",
     "tooMany": "Trop d’essais. Patientez une minute, puis réessayez.",
     "orScan": "Vous pouvez aussi scanner le QR code avec l’appareil photo de votre téléphone.",
-    "homeTitle": "Vous êtes au restaurant ?",
+    "homeTitle": "Vous êtes sur place ?",
     "homeText": "Tapez le numéro RC écrit sous le QR code pour ouvrir le menu.",
     "short": "Entrer un numéro RC"
   },
@@ -1071,7 +1073,7 @@
   },
   "personnel": {
     "title": "Personnel",
-    "intro": "Chaque personne a un matricule unique dans votre restaurant. Il est enregistré sur chaque commande qu’elle confirme, prépare, sert ou annule.",
+    "intro": "Chaque personne a un matricule unique dans votre établissement. Il est enregistré sur chaque commande qu'elle confirme, prépare, sert ou annule.",
     "staffNo": "Matricule",
     "name": "Nom",
     "role": "Rôle",
@@ -1081,7 +1083,7 @@
     "cancelled": "Annulées",
     "inactive": "Inactif",
     "period": "Chiffres des 7 derniers jours.",
-    "comingM5": "Bientôt : ajoutez vos serveurs, la cuisine et la caisse, avec une connexion par code PIN sur la tablette du restaurant (sans adresse e-mail)."
+    "comingM5": "Bientôt : ajoutez vos serveurs, la cuisine et la caisse, avec une connexion par code PIN sur la tablette de l'établissement (sans adresse e-mail)."
   },
   "analytics": {
     "title": "Activité et ventes",
@@ -1167,27 +1169,27 @@
     }
   },
   "directory": {
-    "title": "Restaurants sur RestoCool",
-    "intro": "Trouvez un restaurant, un maquis ou un café et ouvrez son menu. Cherchez par nom, par ville ou par numéro RC.",
+    "title": "Établissements sur RestoCool",
+    "intro": "Trouvez un restaurant, un maquis, un bar, un café ou une boutique et ouvrez sa carte. Cherchez par nom, par ville ou par numéro RC.",
     "featured": "À la une",
     "featuredBadge": "À la une",
-    "all": "Tous les restaurants",
-    "searchLabel": "Rechercher un restaurant",
+    "all": "Tous les établissements",
+    "searchLabel": "Rechercher un établissement",
     "placeholder": "Nom, ville ou numéro RC (ex. : RC-K7M3P)",
-    "empty": "Aucun restaurant ne correspond. Essayez un autre nom, une ville ou un numéro RC.",
+    "empty": "Aucun établissement ne correspond. Essayez un autre nom, une ville ou un numéro RC.",
     "open": "Voir le menu",
-    "count": "# restaurant(s)",
+    "count": "# établissement(s)",
     "searching": "Recherche…",
-    "addMine": "Ajouter mon restaurant",
+    "addMine": "Ajouter mon établissement",
     "homeTitle": "Ils sont sur RestoCool",
-    "homeText": "Ouvrez le menu d’un restaurant, ou cherchez par nom ou numéro RC.",
-    "browse": "Parcourir les restaurants"
+    "homeText": "Ouvrez la carte d'un établissement, ou cherchez par nom ou numéro RC.",
+    "browse": "Parcourir les établissements"
   },
   "pointage": {
     "title": "Pointage du personnel",
     "intro": "Entrez votre matricule et votre code PIN. Le même code enregistre l’arrivée, puis le départ.",
-    "introRc": "Entrez le numéro RC du restaurant, votre matricule et votre code PIN. Le même code enregistre l’arrivée, puis le départ.",
-    "rc": "Numéro RC du restaurant",
+    "introRc": "Entrez le numéro RC de l'établissement, votre matricule et votre code PIN. Le même code enregistre l'arrivée, puis le départ.",
+    "rc": "Numéro RC de l'établissement",
     "staffNo": "Matricule",
     "pin": "Code PIN",
     "submit": "Pointer",
@@ -1198,9 +1200,9 @@
     "outAt": "Départ enregistré à {time} · {hours} de présence.",
     "error": {
       "invalid": "Vérifiez le matricule (chiffres) et le code PIN (4 à 6 chiffres).",
-      "restaurant": "Restaurant introuvable. Vérifiez le numéro RC, ou scannez le QR code de pointage.",
-      "disabled": "Le pointage n’est pas activé dans ce restaurant.",
-      "unknown": "Ce matricule n’existe pas dans ce restaurant.",
+      "restaurant": "Établissement introuvable. Vérifiez le numéro RC, ou scannez le QR code de pointage.",
+      "disabled": "Le pointage n'est pas activé dans cet établissement.",
+      "unknown": "Ce matricule n'existe pas dans cet établissement.",
       "no_pin": "Aucun code PIN pour ce matricule. Demandez au responsable d’en créer un.",
       "wrong_pin": "Code PIN incorrect. Il vous reste encore {tries} essai(s).",
       "locked": "Trop d’essais : ce profil est bloqué pendant {minutes} min. Demandez au responsable de vous pointer.",
@@ -1488,7 +1490,7 @@
     "back": "Personnel",
     "title": "Rôles et accès",
     "intro": "Chaque personne a un rôle. Cochez ce que chaque rôle peut ouvrir dans l'application ; le changement s'applique tout de suite à tous ceux qui l'ont. Vous pouvez aussi créer vos propres rôles.",
-    "introReadOnly": "Les rôles du restaurant et ce qu'ils permettent. Seul le propriétaire peut les modifier.",
+    "introReadOnly": "Les rôles de l'établissement et ce qu'ils permettent. Seul le propriétaire peut les modifier.",
     "holders": "{n, plural, =0 {personne} one {# personne} other {# personnes}}",
     "accessFor": "Accès du rôle {role}",
     "noAccess": "Aucun accès à l'application : cette personne pointe seulement à l'arrivée et au départ.",

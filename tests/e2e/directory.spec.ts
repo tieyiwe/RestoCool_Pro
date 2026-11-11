@@ -9,9 +9,9 @@ test("the directory narrows results as you type, by name or by numéro RC; unpub
 
   const input = page.getByTestId("directory-input");
   await input.fill("dém");
-  await expect(page.getByTestId("directory-count")).toHaveText("1 restaurant(s)");
+  await expect(page.getByTestId("directory-count")).toHaveText("1 établissement(s)");
   await input.fill("zzzz");
-  await expect(page.getByText("Aucun restaurant ne correspond")).toBeVisible();
+  await expect(page.getByText("Aucun établissement ne correspond")).toBeVisible();
 
   const [row] = await sql<{ code: string }>(
     "select a.code from access_codes a join restaurants r on r.id = a.restaurant_id where r.slug = 'restaurant-demo' and a.seat_id is null",
@@ -22,7 +22,7 @@ test("the directory narrows results as you type, by name or by numéro RC; unpub
 
   // The test tenant is unpublished: not found by name.
   await input.fill("Témoin");
-  await expect(page.getByTestId("directory-count")).toHaveText("0 restaurant(s)");
+  await expect(page.getByTestId("directory-count")).toHaveText("0 établissement(s)");
   // Works without JavaScript too (server-rendered ?q=).
   await page.goto("/restaurants?q=demo");
   await expect(page.getByTestId("directory-card")).toContainText("Restaurant Démo");

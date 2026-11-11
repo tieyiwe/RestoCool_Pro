@@ -11,13 +11,13 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
 
   // 1. Create
   await page.goto("/app/new");
-  await page.getByLabel("Nom du restaurant").fill("x");
-  await page.getByRole("button", { name: "Créer mon restaurant" }).click();
+  await page.getByLabel("Nom de l'établissement").fill("x");
+  await page.getByRole("button", { name: "Créer mon établissement" }).click();
   await expect(page.getByRole("alert").filter({ hasText: "au moins 2 caractères" })).toBeVisible();
-  await page.getByLabel("Nom du restaurant").fill(name);
+  await page.getByLabel("Nom de l'établissement").fill(name);
   await expect(page.getByTestId("slug-preview")).toContainText("restocool.com/r/maquis-e2e-");
   await page.getByLabel("Ville").fill("Koudougou");
-  await page.getByRole("button", { name: "Créer mon restaurant" }).click();
+  await page.getByRole("button", { name: "Créer mon établissement" }).click();
 
   // 2. Wizard: profile → contacts → hours → service → appearance → done
   await expect(page).toHaveURL(/\/app\/onboarding\/1$/);
@@ -41,7 +41,7 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await expect(page).toHaveURL(/\/onboarding\/5$/);
   await expect(page.getByTestId("branding-preview")).toContainText(name);
   await page.getByRole("button", { name: "Terminer la configuration" }).click();
-  await expect(page.getByRole("heading", { name: /Votre restaurant est prêt/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Votre établissement est prêt/ })).toBeVisible();
   // The main QR code is ready at once, with print-and-place instructions.
   const mainQr = page.getByTestId("main-qr");
   await expect(mainQr.locator("svg")).toBeVisible();
@@ -106,7 +106,7 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
 
   // 5. Switch back to the demo restaurant with the header selector.
   await page.goto("/app");
-  await page.getByLabel("Changer de restaurant").selectOption({ label: "Restaurant Démo" });
+  await page.getByLabel("Changer d'établissement").selectOption({ label: "Restaurant Démo" });
   await page.getByRole("button", { name: "Valider" }).click();
   await expect(page.getByTestId("restaurant-name")).toHaveText("Restaurant Démo");
 });

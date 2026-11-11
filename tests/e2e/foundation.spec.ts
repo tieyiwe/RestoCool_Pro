@@ -19,7 +19,7 @@ test("home page: hero, demo menu link, pricing in FCFA, FAQ, confirmed local cla
   // Local claims confirmed by the founder (src/config/marketing.ts).
   await expect(page.getByText("100 % local").first()).toBeVisible();
   await expect(page.getByText("Fièrement burkinabè")).toBeVisible();
-  await expect(page.getByText("Fondé par un Burkinabè, pour les restaurants du Burkina.")).toBeVisible();
+  await expect(page.getByText("Fondé par un Burkinabè, pour les établissements du Burkina.")).toBeVisible();
   await page.getByRole("link", { name: "Voir un menu de démonstration" }).first().click();
   await expect(page).toHaveURL(/\/r\/restaurant-demo$/);
 });

@@ -54,13 +54,13 @@ test("5 wrong PINs lock the profile; the owner checks the person in by hand and 
   // Without the QR: restocool.com/pointage with the numéro RC.
   const k = await kiosk(browser, "/pointage");
   for (let i = 0; i < 5; i++) {
-    await k.getByLabel("Numéro RC du restaurant").fill(`RC-${code}`);
+    await k.getByLabel("Numéro RC de l'établissement").fill(`RC-${code}`);
     await k.getByLabel("Matricule").fill("003");
     await k.getByLabel("Code PIN").fill("0000");
     await k.getByTestId("kiosk-submit").click();
     await expect(k.getByTestId("kiosk-error")).toContainText(i < 4 ? `encore ${4 - i} essai` : "bloqué");
   }
-  await k.getByLabel("Numéro RC du restaurant").fill(`RC-${code}`);
+  await k.getByLabel("Numéro RC de l'établissement").fill(`RC-${code}`);
   await k.getByLabel("Matricule").fill("003");
   await k.getByLabel("Code PIN").fill("5678");
   await k.getByTestId("kiosk-submit").click();
@@ -77,7 +77,7 @@ test("5 wrong PINs lock the profile; the owner checks the person in by hand and 
   await expect(page.getByTestId("staff-ok")).toContainText("Code PIN enregistré");
 
   // Unlocked with the new PIN: this records the departure (checked in by the owner).
-  await k.getByLabel("Numéro RC du restaurant").fill(`rc ${code.toLowerCase()}`);
+  await k.getByLabel("Numéro RC de l'établissement").fill(`rc ${code.toLowerCase()}`);
   await k.getByLabel("Matricule").fill("3");
   await k.getByLabel("Code PIN").fill("4321");
   await k.getByTestId("kiosk-submit").click();

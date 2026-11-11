@@ -38,13 +38,17 @@ describe.skipIf(!hasDb)("back office figures (database)", () => {
     ]);
     // The neighbour's orders name Awa too: they must not count for her.
     await db.insert(orders).values({ ...base, restaurantId: other.id, number: 1, status: "served", servedBy: awa!.id });
-    await db.insert(attendance).values({ restaurantId: r.id, memberId: issa!.id, checkInAt: new Date(Date.now() - 3 * 3600_000), inMethod: "manager" });
+    // Checked in up to 3 h ago, but always today (the test may run just after midnight).
+    const midnight = new Date();
+    midnight.setUTCHours(0, 0, 0, 0);
+    const checkIn = new Date(Math.max(Date.now() - 3 * 3600_000, midnight.getTime() + 1000));
+    await db.insert(attendance).values({ restaurantId: r.id, memberId: issa!.id, checkInAt: checkIn, inMethod: "manager" });
 
     const ranking = await personnelRanking(db, r.id, "today");
     expect(ranking.map((p) => p.name)).toEqual(["Awa", "Issa"]);
     expect(ranking[0]).toMatchObject({ served: 2, confirmed: 1, score: 2 * 3 + 2, rank: 1 });
     expect(ranking[1]).toMatchObject({ prepared: 1, days: 1, rank: 2 });
-    expect(ranking[1]!.minutes).toBeGreaterThanOrEqual(179);
+    expect(ranking[1]!.minutes).toBeGreaterThanOrEqual(Math.floor((Date.now() - checkIn.getTime()) / 60_000) - 1);
 
     const live = await liveStatus(db, r.id);
     expect(live).toMatchObject({ openOrders: 1, ordersToday: 3, revenueToday: 4000, present: 1 });

@@ -2,7 +2,7 @@
   "brand": {
     "tagline": "RestoCool：您的菜单、您的订单、您的餐桌。简单。",
     "local": "100% 本地",
-    "designedIn": "为布基纳法索的餐厅而设计，源自布基纳法索",
+    "designedIn": "为布基纳法索的店铺而设计，源自布基纳法索",
     "proud": "布基纳法索自豪出品",
     "payLocal": "以西非法郎支付，支持 Orange Money 和 Moov Money",
     "support": "通过 WhatsApp 提供法语支持",
@@ -30,11 +30,11 @@
     "authLoadingSlow": "登录加载时间比平时长…请检查网络，页面仍在加载。"
   },
   "landing": {
-    "cta": "免费创建我的餐厅",
+    "cta": "免费创建我的店铺",
     "seeDemo": "查看演示菜单",
     "comingSoon": "即将在瓦加杜古和博博迪乌拉索上线。",
     "howItWorks": "查看使用流程",
-    "title": "为布基纳法索餐厅打造的 100% 本地解决方案",
+    "title": "为布基纳法索餐厅、小吃店、酒吧和商店打造的 100% 本地解决方案",
     "subtitle": "数字菜单、扫码点餐和餐厅管理，手机即可完成。",
     "nav": {
       "features": "功能",
@@ -44,14 +44,14 @@
       "signIn": "登录",
       "cta": "免费试用",
       "menu": "菜单",
-      "restaurants": "餐厅"
+      "restaurants": "店铺"
     },
     "hero": {
-      "eyebrow": "为布基纳法索的餐厅、小吃店和酒廊打造",
+      "eyebrow": "为布基纳法索的餐厅、小吃店、酒吧、咖啡馆、酒店和商店打造",
       "title": "告别纸质菜单。",
       "titleAccent": "让服务员更轻松。",
       "subtitle": "顾客扫描二维码，用手机以法语、英语或中文选菜下单。订单实时送达前台和厨房，一切都记录在您的控制台中。以西非法郎计价，支持 WhatsApp、Orange Money 和 Moov Money。",
-      "cta": "免费创建我的餐厅",
+      "cta": "免费创建我的店铺",
       "demo": "查看演示菜单",
       "chip1": "免费试用专业版 30 天",
       "chip2": "无需银行卡",
@@ -130,7 +130,7 @@
       }
     },
     "burkina": {
-      "title": "为本地餐厅的实际需求而设计",
+      "title": "为本地店铺的实际需求而设计",
       "subtitle": "不是仓促改编的外国应用：RestoCool 使用您的语言和货币。",
       "fcfa": "以西非法郎显示价格，没有小数：5 300 F",
       "mobile": "显示 Orange Money 和 Moov Money 号码，并带“复制”按钮",
@@ -138,7 +138,7 @@
       "network": "页面轻巧，网络差也能用",
       "french": "以法语为主，并用一句“Laafi！”欢迎顾客",
       "phone": "+226 号码、谷歌地图链接、“营业中 / 已打烊”",
-      "founder": "由布基纳法索人创立，服务布基纳法索的餐厅。"
+      "founder": "由布基纳法索人创立，服务布基纳法索的店铺。"
     },
     "who": {
       "title": "适合各类餐饮场所",
@@ -147,7 +147,9 @@
       "lounge": "酒廊和酒吧",
       "fastfood": "快餐和外带",
       "hotel": "酒店",
-      "catering": "餐饮外包"
+      "catering": "餐饮外包",
+      "cafe": "咖啡馆、面包店和甜品店",
+      "shop": "商店和社区小店"
     },
     "pricing": {
       "title": "简单的套餐，以西非法郎计价",
@@ -180,7 +182,7 @@
         "name": "商业版",
         "desc": "适合大型餐厅和多家门店。",
         "f1": "包含专业版全部功能，员工不限",
-        "f2": "多家餐厅",
+        "f2": "多家门店",
         "f3": "按服务员统计",
         "f4": "可隐藏 RestoCool 标志",
         "f5": "优先支持"
@@ -193,18 +195,18 @@
       "q2": "网络不好怎么办？",
       "a2": "页面非常轻巧，照片也经过压缩。首次访问后菜单可离线查看。“省流量”模式会隐藏照片。",
       "q3": "需要多长时间开始使用？",
-      "a3": "几分钟即可：创建餐厅，添加菜品（“建议翻译”按钮会提供翻译），然后打印二维码。",
+      "a3": "几分钟即可：创建店铺，添加菜品或商品（“建议翻译”按钮会提供翻译），然后打印二维码。",
       "q4": "如何支付订阅费用？",
       "a4": "以西非法郎支付，可用 Orange Money、Moov Money 或现金。30 天专业版试用无需付款。",
       "q5": "可以随时修改价格吗？",
       "a5": "可以，次数不限。您还可以把菜品标记为“今日售罄”，第二天会自动恢复。",
       "q6": "我的数据安全吗？",
-      "a6": "每家餐厅只能看到自己的数据，连接经过加密，我们不出售任何数据。请参阅我们的隐私政策。"
+      "a6": "每家店铺只能看到自己的数据，连接经过加密，我们不出售任何数据。请参阅我们的隐私政策。"
     },
     "final": {
       "title": "准备好让餐厅焕然一新了吗？",
       "subtitle": "今天创建菜单，今晚就能打印二维码。",
-      "cta": "免费创建我的餐厅"
+      "cta": "免费创建我的店铺"
     },
     "footer": {
       "product": "{publisher} 旗下产品",
@@ -267,15 +269,15 @@
     "shellNote": "完整菜单（购物车、照片、多语言）正在建设中。"
   },
   "app": {
-    "title": "餐厅管理",
+    "title": "店铺管理",
     "dashboard": "概览",
     "menu": "菜单",
     "seating": "餐桌和包间",
     "staff": "员工",
     "settings": "设置",
     "about": "关于",
-    "noRestaurant": "您还没有餐厅。",
-    "createRestaurant": "创建我的餐厅",
+    "noRestaurant": "您还没有店铺。",
+    "createRestaurant": "创建我的店铺",
     "stats": {
       "categories": "分类",
       "items": "菜品",
@@ -299,26 +301,26 @@
       "kitchen": "厨房",
       "cashier": "收银"
     },
-    "devBypass": "开发模式：模拟登录（演示餐厅店主）。",
+    "devBypass": "开发模式：模拟登录（演示店铺店主）。",
     "recentActivity": "最近活动",
     "noActivity": "暂无活动。",
     "newRestaurant": {
-      "title": "创建您的餐厅",
-      "intro": "Laafi！餐厅、maquis、咖啡馆或酒吧：起个名字，其余一步步设置。",
-      "name": "餐厅名称",
+      "title": "创建您的店铺",
+      "intro": "Laafi！餐厅、maquis、酒吧、咖啡馆、酒店或商店：起个名字，其余一步步设置。",
+      "name": "店铺名称",
       "namePlaceholder": "例如：Maquis Le Baobab",
       "city": "城市",
-      "submit": "创建我的餐厅",
+      "submit": "创建我的店铺",
       "submitting": "正在创建…",
       "trial": "免费试用专业版 30 天，无需承诺。",
       "errorName": "请输入至少 2 个字符的名称。",
-      "errorLimit": "您已达到餐厅数量上限。如需添加，请通过 WhatsApp 联系我们。",
-      "addAnother": "添加餐厅",
+      "errorLimit": "您已达到店铺数量上限。如需添加，请通过 WhatsApp 联系我们。",
+      "addAnother": "添加店铺",
       "eyebrow": "第 1 步 · 您的商家",
       "eyebrowAnother": "新商家",
       "nameHint": "顾客熟知的名称，之后可以修改。",
       "urlPreview": "菜单地址（也是二维码地址）",
-      "urlPlaceholder": "your-restaurant",
+      "urlPlaceholder": "your-business",
       "noCard": "无需银行卡",
       "benefitsTitle": "您将获得",
       "benefits": {
@@ -340,7 +342,7 @@
         }
       }
     },
-    "switchRestaurant": "切换餐厅",
+    "switchRestaurant": "切换店铺",
     "comingSoon": "此功能即将推出。",
     "nextSteps": {
       "title": "下一步",
@@ -544,7 +546,7 @@
   },
   "settings": {
     "title": "设置",
-    "intro": "顾客看到的餐厅信息。",
+    "intro": "顾客看到的店铺信息。",
     "ownerOnly": "只有店主可以修改这些设置。",
     "save": "保存",
     "saving": "正在保存…",
@@ -554,7 +556,7 @@
     "finish": "完成",
     "errors": {
       "invalid": "部分字段有误，请检查后重试。",
-      "slug_taken": "此地址已被其他餐厅使用，请换一个。",
+      "slug_taken": "此地址已被其他店铺使用，请换一个。",
       "slug_reserved": "此地址为保留地址，请换一个。",
       "phone_invalid": "号码无效。请使用 8 位布基纳法索号码，例如 70 12 34 56。",
       "contrast": "此颜色在该主题下不够清晰。请选择更深的颜色（漆面主题请选择更浅的颜色）。",
@@ -565,7 +567,7 @@
     },
     "profile": {
       "title": "资料",
-      "name": "餐厅名称",
+      "name": "店铺名称",
       "slug": "菜单地址",
       "slugHint": "您的菜单地址为：{url}",
       "description": "简短介绍（可选）",
@@ -672,11 +674,11 @@
       "open": "打开菜单"
     },
     "wizard": {
-      "title": "设置您的餐厅",
+      "title": "设置您的店铺",
       "step": "第 {n} 步，共 {total} 步",
-      "done": "餐厅已就绪！现在添加您的菜品吧。",
+      "done": "店铺已就绪！现在添加您的菜品或商品吧。",
       "goMenu": "添加菜品",
-      "banner": "请完成餐厅设置。",
+      "banner": "请完成店铺设置。",
       "resume": "继续",
       "back": "返回",
       "finish": "完成设置"
@@ -940,7 +942,7 @@
       "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → Numéro RC :"
     },
     "mainPrintHint": "每张 A4 纸 6 个贴纸。剪下后贴在门口、餐桌、柜台或橱窗上。",
-    "mainCode": "餐厅 RC 号（供不扫码的顾客使用）：",
+    "mainCode": "店铺 RC 号（供不扫码的顾客使用）：",
     "seatCode": "座位代码"
   },
   "legal": {
@@ -962,16 +964,16 @@
   "codeEntry": {
     "pageTitle": "用代码打开菜单",
     "title": "有 RC 号吗？",
-    "intro": "RC 号（RC = RestoCool）印在餐厅二维码下方，打开的菜单与扫码相同。",
-    "hint": "请输入餐厅二维码下方的 RC 号（例如 RC-K7M3P）。",
-    "label": "餐厅 RC 号",
+    "intro": "RC 号（RC = RestoCool）印在店铺二维码下方，打开的页面与扫码相同。",
+    "hint": "请输入店铺二维码下方的 RC 号（例如 RC-K7M3P）。",
+    "label": "店铺 RC 号",
     "placeholder": "RC-K7M3P",
     "submit": "打开菜单",
     "invalid": "号码格式不正确：RC 加 5 位字母或数字，印在二维码下方。",
-    "notFound": "没有与此 RC 号对应的餐厅。请检查，或扫描二维码。",
+    "notFound": "没有与此 RC 号对应的店铺。请检查，或扫描二维码。",
     "tooMany": "尝试次数过多，请等一分钟后再试。",
     "orScan": "您也可以用手机相机扫描二维码。",
-    "homeTitle": "在餐厅吗？",
+    "homeTitle": "在店里吗？",
     "homeText": "输入二维码下方的 RC 号即可打开菜单。",
     "short": "输入 RC 号"
   },
@@ -1071,7 +1073,7 @@
   },
   "personnel": {
     "title": "员工",
-    "intro": "每位员工在餐厅都有唯一的工号，确认、制作、上菜或取消的每个订单都会记录工号。",
+    "intro": "每位员工在店铺都有唯一的工号，确认、制作、上菜或取消的每个订单都会记录工号。",
     "staffNo": "工号",
     "name": "姓名",
     "role": "角色",
@@ -1081,7 +1083,7 @@
     "cancelled": "已取消",
     "inactive": "停用",
     "period": "最近 7 天的数据。",
-    "comingM5": "即将推出：添加服务员、厨房和收银员，在餐厅平板上用 PIN 码登录（无需邮箱）。"
+    "comingM5": "即将推出：添加服务员、厨房和收银员，在店铺平板上用 PIN 码登录（无需邮箱）。"
   },
   "analytics": {
     "title": "营业与销售",
@@ -1167,27 +1169,27 @@
     }
   },
   "directory": {
-    "title": "RestoCool 上的餐厅",
-    "intro": "查找餐厅、maquis 或咖啡馆并打开菜单。可按名称、城市或 RC 号搜索。",
+    "title": "RestoCool 上的店铺",
+    "intro": "查找餐厅、maquis、酒吧、咖啡馆或商店并打开菜单。可按名称、城市或 RC 号搜索。",
     "featured": "精选",
     "featuredBadge": "精选",
-    "all": "所有餐厅",
-    "searchLabel": "搜索餐厅",
+    "all": "所有店铺",
+    "searchLabel": "搜索店铺",
     "placeholder": "名称、城市或 RC 号（例如 RC-K7M3P）",
-    "empty": "没有匹配的餐厅。请尝试其他名称、城市或 RC 号。",
+    "empty": "没有匹配的店铺。请尝试其他名称、城市或 RC 号。",
     "open": "查看菜单",
-    "count": "# 家餐厅",
+    "count": "# 家店铺",
     "searching": "搜索中…",
-    "addMine": "添加我的餐厅",
+    "addMine": "添加我的店铺",
     "homeTitle": "他们在用 RestoCool",
-    "homeText": "打开餐厅菜单，或按名称、RC 号搜索。",
-    "browse": "浏览餐厅"
+    "homeText": "打开店铺菜单，或按名称、RC 号搜索。",
+    "browse": "浏览店铺"
   },
   "pointage": {
     "title": "员工打卡",
     "intro": "输入工号和 PIN 码。同一个码先记录到岗，再记录离岗。",
-    "introRc": "输入餐厅 RC 号、您的工号和 PIN 码。同一个码先记录到岗，再记录离岗。",
-    "rc": "餐厅 RC 号",
+    "introRc": "输入店铺 RC 号、您的工号和 PIN 码。同一个码先记录到岗，再记录离岗。",
+    "rc": "店铺 RC 号",
     "staffNo": "工号",
     "pin": "PIN 码",
     "submit": "打卡",
@@ -1198,9 +1200,9 @@
     "outAt": "已于 {time} 记录离岗 · 在岗 {hours}。",
     "error": {
       "invalid": "请检查工号（数字）和 PIN 码（4 到 6 位数字）。",
-      "restaurant": "找不到餐厅。请检查 RC 号，或扫描打卡二维码。",
-      "disabled": "此餐厅未开启打卡。",
-      "unknown": "此餐厅没有这个工号。",
+      "restaurant": "找不到店铺。请检查 RC 号，或扫描打卡二维码。",
+      "disabled": "此店铺未开启打卡。",
+      "unknown": "此店铺没有这个工号。",
       "no_pin": "此工号没有 PIN 码，请让负责人创建。",
       "wrong_pin": "PIN 码错误，还剩 {tries} 次机会。",
       "locked": "尝试次数过多：此账号锁定 {minutes} 分钟。请让负责人为您打卡。",
@@ -1488,7 +1490,7 @@
     "back": "员工",
     "title": "角色与权限",
     "intro": "每个人都有一个角色。勾选每个角色可以在应用中打开的功能；更改会立即应用到所有拥有该角色的人。您也可以创建自己的角色。",
-    "introReadOnly": "餐厅的角色及其权限。只有店主可以修改。",
+    "introReadOnly": "店铺的角色及其权限。只有店主可以修改。",
     "holders": "{n, plural, =0 {无人} other {# 人}}",
     "accessFor": "{role} 的权限",
     "noAccess": "无应用权限：此人只需上下班打卡。",

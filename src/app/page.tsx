@@ -86,9 +86,11 @@ export default async function HomePage() {
     ["🔥", "maquis"],
     ["🍽️", "restaurant"],
     ["🍹", "lounge"],
-    ["🛍️", "fastfood"],
+    ["🍔", "fastfood"],
+    ["☕", "cafe"],
     ["🏨", "hotel"],
     ["🥘", "catering"],
+    ["🛍️", "shop"],
   ] as const;
 
   return (
