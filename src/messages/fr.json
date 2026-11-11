@@ -1609,7 +1609,10 @@
       "bartender": "Barman / barmaid",
       "cleaner": "Agent·e d'entretien",
       "guard": "Gardien·ne",
-      "rider": "Livreur·se"
+      "rider": "Livreur·se",
+      "hostess": "Hôtesse / steward",
+      "chief_hostess": "Chef de cabine",
+      "driver": "Chauffeur"
     },
     "manage": "Rôles et accès",
     "change": "Changer",
@@ -1807,7 +1810,13 @@
       "nocamera": "Pas de caméra disponible sur cet appareil. Tapez le numéro RC ci-dessous.",
       "unknown": "QR code non reconnu. Réessayez.",
       "scanning": ""
-    }
+    },
+    "roundTitle": "Tournée",
+    "roundIntro": "{route} : passez de rangée en rangée et scannez le code « Montrer à l'hôtesse » de chaque voyageur. La caméra reste ouverte.",
+    "roundEmpty": "Scannez le premier voyageur.",
+    "roundAdded": "✓ Ajoutée : {n} dans la tournée. Passez au voyageur suivant.",
+    "roundNotOrder": "Ce QR code n'est pas une commande de voyageur.",
+    "roundFinish": "Terminer la tournée ({n})"
   },
   "join": {
     "title": "Rejoindre l'équipe",
@@ -2040,6 +2049,42 @@
         "forbidden": "Vous n'avez pas accès aux voyages.",
         "notFound": "Voyage introuvable."
       }
+    },
+    "round": {
+      "back": "Voyages",
+      "open": "en cours",
+      "closed": "terminé",
+      "toConfirm": "à confirmer",
+      "toServe": "à servir",
+      "total": "total",
+      "roundTitle": "Tournée : {n, plural, one {# commande scannée} other {# commandes scannées}}",
+      "roundSeats": "Sièges : {seats}",
+      "confirmRound": "Confirmer les {n} commande(s) de la tournée",
+      "roundDone": "Toutes les commandes de la tournée sont confirmées.",
+      "continueRound": "Ajouter à la tournée",
+      "doubles": "Sièges {seats} : commandes venant de plusieurs téléphones. Vérifiez les billets.",
+      "scanRound": "Scanner une tournée",
+      "confirmAll": "Tout confirmer ({n})",
+      "serveAll": "Tout servi",
+      "toPrepare": "À préparer",
+      "nothingToPrepare": "Rien à préparer pour le moment.",
+      "bySeat": "Commandes par siège",
+      "noOrders": "Aucune commande pour ce voyage.",
+      "seat": "Siège {n}",
+      "seatShort": "Siège",
+      "doubleTag": "même siège",
+      "onRequest": "Sur demande",
+      "confirm": "Confirmer",
+      "served": "Servie",
+      "okConfirmed": "{n, plural, =0 {Rien à confirmer} one {# commande confirmée} other {# commandes confirmées}}. Les voyageurs voient « Commande reçue ».",
+      "okServed": "{n, plural, =0 {Rien à servir} one {# commande servie} other {# commandes servies}}."
     }
+  },
+  "publicTransport": {
+    "showWaiterHint": "Montrez cette sélection à l'hôtesse pour commander.",
+    "invalidQr": "Ce QR code n'est plus valide. Demandez à l'hôtesse ou choisissez votre siège.",
+    "orderError": "La commande n'est pas partie. Réessayez, ou montrez votre sélection à l'hôtesse.",
+    "showToServer": "Montrer à l'hôtesse",
+    "orderQrHint": "L'hôtesse scanne ce code pour recevoir votre commande."
   }
 }

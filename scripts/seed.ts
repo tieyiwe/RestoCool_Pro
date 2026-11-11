@@ -9,6 +9,9 @@ import { ensureJobRoles } from "../src/lib/personnel/role-catalog";
 import {
   accessCodes,
   areas,
+  buses,
+  routeAssignments,
+  routes,
   fortunes,
   menuCategories,
   menuItemOptions,
@@ -23,9 +26,11 @@ import {
 import { writeAudit } from "../src/lib/audit";
 import { randomToken } from "../src/lib/tokens";
 import { DEMO_CATEGORIES, DEMO_FORTUNES } from "./seed-data";
+import { buildSeatMap } from "../src/lib/transport/layout";
 
 const DEMO_SLUG = "restaurant-demo";
 const TEST_SLUG = "maquis-temoin";
+const TRANSPORT_SLUG = "express-demo";
 const IMG_DIR = path.join(process.cwd(), "public", "demo");
 
 function escapeXml(s: string) {
@@ -212,9 +217,113 @@ async function seedTestTenant(db: DB) {
   console.log(`✓ ${r!.name} (isolation tests)`);
 }
 
+/**
+ * A fictional VIP bus company (« Express Démo ») to try the bus service: one bus with the Elitis
+ * layout (50 seats, door at row 7), three itineraries, a hostess with a PIN, a short menu.
+ * Not featured. Fictional names only.
+ */
+async function seedTransportDemo(db: DB) {
+  await resetRestaurant(db, TRANSPORT_SLUG);
+  const [r] = await db
+    .insert(restaurants)
+    .values({
+      slug: TRANSPORT_SLUG,
+      kind: "transport",
+      name: "Express Démo",
+      description: {
+        fr: "Compagnie de bus VIP fictive : commandez votre repas depuis votre siège, l'hôtesse vous le sert.",
+        en: "Fictional VIP bus company: order your meal from your seat, the hostess serves it to you.",
+        zh: "虚构的 VIP 巴士公司：在座位上点餐，乘务员为您送餐。",
+      },
+      theme: "light",
+      accentColor: "#C2410C",
+      city: "Ouagadougou",
+      whatsapp: "22670000010",
+      plan: "pro",
+      planStatus: "trial",
+      planExpiresAt: new Date(Date.now() + 30 * 86_400_000),
+      published: true,
+      settings: {
+        onboardedAt: new Date().toISOString(),
+        qrStrategy: "per_seat",
+        orderValidation: "server_confirms",
+        seatingModes: [],
+        enabledLocales: ["fr", "en", "zh"],
+      },
+    })
+    .returning();
+  const restaurantId = r!.id;
+  const layout = { rows: 12, left: 2, right: 2, doorRow: 7, doorSide: "right" as const, back: 4 };
+  const [bus] = await db.insert(buses).values({ restaurantId, name: "Bus 12", layout, qrToken: randomToken(), sort: 1 }).returning();
+  const seatRows = await db
+    .insert(seats)
+    .values(
+      buildSeatMap(layout).seats.map((s) => ({
+        restaurantId,
+        busId: bus!.id,
+        type: "seat" as const,
+        label: String(s.number),
+        capacity: 1,
+        mapRow: s.row,
+        mapCol: s.col,
+        position: s.position,
+        qrToken: randomToken(),
+        sort: s.number,
+      })),
+    )
+    .returning({ id: seats.id });
+  for (const target of [null, ...seatRows.map((x) => x.id)]) {
+    for (let i = 0; i < 5; i++) {
+      const done = await db.insert(accessCodes).values({ code: generateCode(), restaurantId, seatId: target }).onConflictDoNothing().returning();
+      if (done.length) break;
+    }
+  }
+  const lines = await db
+    .insert(routes)
+    .values([
+      { restaurantId, origin: "Ouagadougou", destination: "Bobo-Dioulasso", sort: 1 },
+      { restaurantId, origin: "Ouagadougou", destination: "Koudougou", sort: 2 },
+      { restaurantId, origin: "Bobo-Dioulasso", destination: "Ouahigouya", sort: 3 },
+    ])
+    .returning();
+  // Demo PIN: Fatim 002 → 2468 (fictional hostess).
+  const [fatim] = await db.insert(members).values({ restaurantId, name: "Fatim (hôtesse)", role: "server", staffNo: 2, pinHash: await hashPin("2468") }).returning();
+  await db.insert(routeAssignments).values({ restaurantId, routeId: lines[0]!.id, memberId: fatim!.id });
+  const [meals, drinks] = await db
+    .insert(menuCategories)
+    .values([
+      { restaurantId, name: { fr: "Repas à bord", en: "Meals on board", zh: "车上餐食" }, sort: 1 },
+      { restaurantId, name: { fr: "Boissons", en: "Drinks", zh: "饮料" }, sort: 2 },
+    ])
+    .returning();
+  const item = (categoryId: string, code: string, fr: string, en: string, zh: string, price: number, sort: number, station: "kitchen" | "drinks") => ({
+    restaurantId,
+    categoryId,
+    code,
+    name: { fr, en, zh },
+    price,
+    sort,
+    station,
+  });
+  await db.insert(menuItems).values([
+    item(meals!.id, "1", "Riz gras au poulet", "Jollof rice with chicken", "鸡肉饭", 2500, 1, "kitchen"),
+    item(meals!.id, "2", "Sandwich poulet", "Chicken sandwich", "鸡肉三明治", 1500, 2, "kitchen"),
+    item(meals!.id, "3", "Brochettes de bœuf (3)", "Beef skewers (3)", "牛肉串（3串）", 2000, 3, "kitchen"),
+    item(meals!.id, "4", "Beignets", "Fritters", "炸面团", 500, 4, "kitchen"),
+    item(drinks!.id, "10", "Eau minérale 50 cl", "Mineral water 50 cl", "矿泉水 50 毫升", 300, 1, "drinks"),
+    item(drinks!.id, "11", "Jus de bissap", "Bissap juice", "洛神花汁", 500, 2, "drinks"),
+    item(drinks!.id, "12", "Jus de gingembre", "Ginger juice", "姜汁", 500, 3, "drinks"),
+    item(drinks!.id, "13", "Café", "Coffee", "咖啡", 700, 4, "drinks"),
+  ]);
+  await ensureJobRoles(db, restaurantId);
+  await writeAudit(db, null, { restaurantId, action: "restaurant.seeded", entity: "restaurant", entityId: restaurantId });
+  console.log(`✓ ${r!.name}: 1 bus (${seatRows.length} seats), ${lines.length} itineraries, hostess 002`);
+}
+
 async function main() {
   const db = getDb();
   await seedDemo(db);
+  await seedTransportDemo(db);
   if (process.argv.includes("--with-test-tenant")) await seedTestTenant(db);
 }
 

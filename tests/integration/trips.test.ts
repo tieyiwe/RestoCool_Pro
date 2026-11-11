@@ -11,6 +11,7 @@ const routes = await import("@/lib/transport/routes");
 const trips = await import("@/lib/transport/trips");
 const sessions = await import("@/lib/seating/sessions");
 const svc = await import("@/lib/orders/service");
+const rounds = await import("@/lib/transport/rounds");
 
 const hasDb = Boolean(process.env.DATABASE_URL);
 const PHONE_A = "phone-trip-aaaaaaaaaaaa";
@@ -72,7 +73,32 @@ describe.skipIf(!hasDb)("transport: trips and bus seats (database)", () => {
     expect(map[0]!.seats.find((x) => x.id === seat!.id)!.occupied).toBe(true);
     expect(map[0]!.trip?.route).toBe("Ouagadougou → Bobo-Dioulasso");
     const [open] = (await trips.tripsOverview(getDb(), r.id)).buses;
-    await trips.endTrip(asHostess(hostess), open!.open!.trip.id);
+    const tripId = open!.open!.trip.id;
+
+    // Phone B orders on the same seat; another traveler orders from seat 4.
+    if (!b.ok) throw new Error("join b");
+    await svc.placeCustomerOrder(getDb(), r, PHONE_B, { sessionId: b.sessionId, lines: [{ itemId, variantId: null, optionIds: [], qty: 1 }] });
+    const seat4 = (await buses.busSeats(getDb(), r.id, busId)).find((x) => x.label === "4")!;
+    const c = await sessions.joinSession(getDb(), r, { seat: { id: seat4.id, type: "seat", label: "4" }, deviceId: "phone-trip-cccccccccccc", source: "qr" });
+    if (!c.ok) throw new Error("join c");
+    const o4 = await svc.placeCustomerOrder(getDb(), r, "phone-trip-cccccccccccc", { sessionId: c.sessionId, lines: [{ itemId, variantId: null, optionIds: [], qty: 3 }] });
+
+    // The hostess board: by seat number, the double flagged, totals to prepare.
+    const board = await rounds.tripBoard(getDb(), r.id, tripId);
+    expect(board.orders.map((o) => o.seatLabel)).toEqual([seat!.label, seat!.label, "4"]);
+    expect(board.doubles).toEqual([seat!.label]);
+    expect(board.toPrepare).toEqual([expect.objectContaining({ qty: 6 })]);
+    expect(board.counts.toConfirm).toBe(3);
+
+    // A round of one order, then all, then everything served.
+    expect(await rounds.moveTripOrders(asHostess(hostess), tripId, "confirmed", [o4.id])).toBe(1);
+    expect(await rounds.moveTripOrders(asHostess(hostess), tripId, "confirmed")).toBe(2);
+    expect(await rounds.moveTripOrders(asHostess(hostess), tripId, "served")).toBe(3);
+    const after = await rounds.tripBoard(getDb(), r.id, tripId);
+    expect(after.toPrepare).toEqual([]);
+    expect(after.orders.every((o) => o.servedBy === hostess)).toBe(true);
+
+    await trips.endTrip(asHostess(hostess), tripId);
     const still = await getDb().select().from(tableSessions).where(eq(tableSessions.seatId, seat!.id));
     expect(still.every((x) => x.status === "closed")).toBe(true);
     expect((await sessions.busPicker(getDb(), r, null))[0]!.trip).toBeNull();

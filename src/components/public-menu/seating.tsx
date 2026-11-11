@@ -230,7 +230,7 @@ export function useSeat({ slug, token, config, onToast, t, hold = false }: { slu
 export function SeatBadge({ seat, t, onChange }: { seat: MySeat; t: T; onChange: (() => void) | null }) {
   return (
     <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface py-1 pr-1 pl-3 text-sm font-bold" data-testid="seat-badge">
-      📍 {t(`seat_${seat.seat.type}`)} {["table", "room", "area"].includes(seat.seat.type) ? seat.seat.label : ""}
+      📍 {t(`seat_${seat.seat.type}`)} {["table", "room", "area", "seat"].includes(seat.seat.type) ? seat.seat.label : ""}
       {seat.name ? ` · ${seat.name}` : ""}
       {onChange && (
         <button type="button" onClick={onChange} className="min-h-9 rounded-full bg-muted px-3 text-xs font-semibold">

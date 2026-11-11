@@ -34,7 +34,11 @@ export async function PublicMenu({ slug, seatToken, busToken = null }: { slug: s
   const wa = data.whatsapp ? whatsappHref(data.whatsapp) : null;
   const whatsappQr = wa ? await QRCode.toString(wa, { type: "svg", margin: 1, color: { dark: "#17231C", light: "#FFFFFF" } }) : null;
   // Only the public-menu strings, in the three languages (the visitor switches client-side).
-  const messages = { fr: fr.public, en: en.public, zh: zh.public };
+  // On a bus, « serveur » becomes « hôtesse » (publicTransport overrides a few strings).
+  const bus = r.kind === "transport";
+  const messages = bus
+    ? { fr: { ...fr.public, ...fr.publicTransport }, en: { ...en.public, ...en.publicTransport }, zh: { ...zh.public, ...zh.publicTransport } }
+    : { fr: fr.public, en: en.public, zh: zh.public };
   // Seats exist to order: only on plans with ordering (Pro, Business, trial).
   const enabled = hasFeature(r, "ordering");
   const generic = (r.settings.qrStrategy ?? "per_seat") === "generic" || !hasFeature(r, "qrPerSeat");

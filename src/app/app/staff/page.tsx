@@ -158,7 +158,7 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
                 <div className="flex flex-wrap items-center gap-2">
                   <form action={acceptJoinAction} className="flex flex-1 flex-wrap items-center gap-2">
                     <input type="hidden" name="id" value={j.id} />
-                    <select name="roleId" required defaultValue={jobRoles.find((jr) => jr.key === "server")?.id} aria-label={tj("roleFor", { name: j.name })} className="min-h-11 min-w-0 flex-1 rounded-lg border border-border bg-surface px-2 text-base" data-testid="join-role">
+                    <select name="roleId" required defaultValue={(jobRoles.find((jr) => jr.key === "server") ?? jobRoles.find((jr) => jr.key === "hostess"))?.id} aria-label={tj("roleFor", { name: j.name })} className="min-h-11 min-w-0 flex-1 rounded-lg border border-border bg-surface px-2 text-base" data-testid="join-role">
                       {roleOptions.map(({ g, list }) => (
                         <optgroup key={g} label={tro(`groups.${g}`)}>
                           {list.map((jr) => (
@@ -341,7 +341,7 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
           </label>
           <label className="text-sm">
             <span className="mb-1 block font-semibold">{tp("role")}</span>
-            <select name="jobRoleId" className={input} defaultValue={jobRoles.find((jr) => jr.key === "server")?.id} data-testid="new-person-role">
+            <select name="jobRoleId" className={input} defaultValue={(jobRoles.find((jr) => jr.key === "server") ?? jobRoles.find((jr) => jr.key === "hostess"))?.id} data-testid="new-person-role">
               {roleOptions.map(({ g, list }) => (
                 <optgroup key={g} label={tro(`groups.${g}`)}>
                   {list.map((jr) => (

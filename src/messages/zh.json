@@ -1609,7 +1609,10 @@
       "bartender": "调酒师",
       "cleaner": "保洁员",
       "guard": "保安",
-      "rider": "送餐员"
+      "rider": "送餐员",
+      "hostess": "乘务员",
+      "chief_hostess": "乘务长",
+      "driver": "司机"
     },
     "manage": "角色与权限",
     "change": "更改",
@@ -1807,7 +1810,13 @@
       "nocamera": "此设备没有摄像头。请在下方输入 RC 编号。",
       "unknown": "无法识别二维码，请重试。",
       "scanning": ""
-    }
+    },
+    "roundTitle": "巡回",
+    "roundIntro": "{route}：逐排扫描每位旅客的“出示给乘务员”二维码。摄像头保持开启。",
+    "roundEmpty": "扫描第一位旅客。",
+    "roundAdded": "✓ 已添加：本轮 {n} 个。请扫描下一位旅客。",
+    "roundNotOrder": "这不是旅客的订单二维码。",
+    "roundFinish": "结束本轮（{n}）"
   },
   "join": {
     "title": "加入团队",
@@ -2040,6 +2049,42 @@
         "forbidden": "您无权管理行程。",
         "notFound": "找不到行程。"
       }
+    },
+    "round": {
+      "back": "行程",
+      "open": "进行中",
+      "closed": "已结束",
+      "toConfirm": "待确认",
+      "toServe": "待上餐",
+      "total": "合计",
+      "roundTitle": "巡回：已扫描 {n} 个订单",
+      "roundSeats": "座位：{seats}",
+      "confirmRound": "确认本轮 {n} 个订单",
+      "roundDone": "本轮订单已全部确认。",
+      "continueRound": "继续添加",
+      "doubles": "{seats} 号座：有来自多部手机的订单。请核对车票。",
+      "scanRound": "扫描一轮",
+      "confirmAll": "全部确认（{n}）",
+      "serveAll": "全部已上餐",
+      "toPrepare": "待准备",
+      "nothingToPrepare": "目前没有需要准备的。",
+      "bySeat": "按座位查看订单",
+      "noOrders": "此行程暂无订单。",
+      "seat": "{n} 号座",
+      "seatShort": "座位",
+      "doubleTag": "同一座位",
+      "onRequest": "面议",
+      "confirm": "确认",
+      "served": "已上餐",
+      "okConfirmed": "已确认 {n} 个订单。旅客会看到“订单已收到”。",
+      "okServed": "已上餐 {n} 个订单。"
     }
+  },
+  "publicTransport": {
+    "showWaiterHint": "向乘务员出示此选择即可点餐。",
+    "invalidQr": "此二维码已失效。请询问乘务员或选择您的座位。",
+    "orderError": "订单未发送。请重试，或向乘务员出示您的选择。",
+    "showToServer": "出示给乘务员",
+    "orderQrHint": "乘务员扫描此码即可收到您的订单。"
   }
 }

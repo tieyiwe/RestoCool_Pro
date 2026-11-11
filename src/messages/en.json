@@ -1609,7 +1609,10 @@
       "bartender": "Bartender",
       "cleaner": "Cleaner",
       "guard": "Security guard",
-      "rider": "Delivery rider"
+      "rider": "Delivery rider",
+      "hostess": "Hostess / steward",
+      "chief_hostess": "Chief hostess",
+      "driver": "Driver"
     },
     "manage": "Roles and access",
     "change": "Change",
@@ -1807,7 +1810,13 @@
       "nocamera": "No camera on this device. Type the RC number below.",
       "unknown": "QR code not recognised. Try again.",
       "scanning": ""
-    }
+    },
+    "roundTitle": "Round",
+    "roundIntro": "{route}: go row by row and scan each traveler's “Show the hostess” code. The camera stays open.",
+    "roundEmpty": "Scan the first traveler.",
+    "roundAdded": "✓ Added: {n} in the round. Go to the next traveler.",
+    "roundNotOrder": "This QR code is not a traveler's order.",
+    "roundFinish": "Finish the round ({n})"
   },
   "join": {
     "title": "Join the team",
@@ -2040,6 +2049,42 @@
         "forbidden": "You don't have access to trips.",
         "notFound": "Trip not found."
       }
+    },
+    "round": {
+      "back": "Trips",
+      "open": "in progress",
+      "closed": "ended",
+      "toConfirm": "to confirm",
+      "toServe": "to serve",
+      "total": "total",
+      "roundTitle": "Round: {n, plural, one {# order scanned} other {# orders scanned}}",
+      "roundSeats": "Seats: {seats}",
+      "confirmRound": "Confirm the round's {n} order(s)",
+      "roundDone": "All the round's orders are confirmed.",
+      "continueRound": "Add to the round",
+      "doubles": "Seats {seats}: orders from several phones. Check the tickets.",
+      "scanRound": "Scan a round",
+      "confirmAll": "Confirm all ({n})",
+      "serveAll": "All served",
+      "toPrepare": "To prepare",
+      "nothingToPrepare": "Nothing to prepare right now.",
+      "bySeat": "Orders by seat",
+      "noOrders": "No orders for this trip.",
+      "seat": "Seat {n}",
+      "seatShort": "Seat",
+      "doubleTag": "same seat",
+      "onRequest": "On request",
+      "confirm": "Confirm",
+      "served": "Served",
+      "okConfirmed": "{n, plural, =0 {Nothing to confirm} one {# order confirmed} other {# orders confirmed}}. Travelers see “Order received”.",
+      "okServed": "{n, plural, =0 {Nothing to serve} one {# order served} other {# orders served}}."
     }
+  },
+  "publicTransport": {
+    "showWaiterHint": "Show this selection to the hostess to order.",
+    "invalidQr": "This QR code is no longer valid. Ask the hostess or choose your seat.",
+    "orderError": "The order didn't go through. Try again, or show your selection to the hostess.",
+    "showToServer": "Show the hostess",
+    "orderQrHint": "The hostess scans this code to receive your order."
   }
 }

@@ -19,8 +19,16 @@ declare global {
  * check-in QR opens the check-in, table/menu QRs open the menu. Uses the phone's native detector
  * (fast, Android Chrome) and falls back to a small decoder loaded only here (iPhone).
  */
-export function Scanner() {
+export function Scanner({ round }: { round?: { tripId: string; initial: string[] } } = {}) {
   const t = useTranslations("scan");
+  // Hostess round (bus): every order QR scanned joins the round; the camera stays open.
+  const roundIds = useRef(new Set(round?.initial ?? []));
+  const [roundCount, setRoundCount] = useState(round?.initial.length ?? 0);
+  const [roundMsg, setRoundMsg] = useState<string | null>(null);
+  // Read through refs so the decoding loop (and the camera) never restarts on a re-render.
+  const roundRef = useRef(round);
+  const tRef = useRef(t);
+  tRef.current = t;
   const router = useRouter();
   const video = useRef<HTMLVideoElement>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
@@ -38,6 +46,21 @@ export function Scanner() {
   const open = useCallback(
     (text: string) => {
       const target = scanTarget(text);
+      if (roundRef.current) {
+        if (target?.kind !== "order") {
+          setRoundMsg(tRef.current("roundNotOrder"));
+          return false;
+        }
+        const id = target.path.split("/").pop()!;
+        if (roundIds.current.has(id)) return false;
+        roundIds.current.add(id);
+        setRoundCount(roundIds.current.size);
+        setRoundMsg(tRef.current("roundAdded", { n: roundIds.current.size }));
+        try {
+          navigator.vibrate?.(60);
+        } catch {}
+        return false;
+      }
       if (!target) {
         setLastText(text.slice(0, 120));
         setPhase("unknown");
@@ -181,6 +204,21 @@ export function Scanner() {
         </p>
       )}
 
+      {round && (
+        <div className="mx-auto flex w-full max-w-md flex-col gap-2 rounded-2xl border-2 border-primary bg-primary/5 p-3" data-testid="round-bar">
+          <p className="text-center font-bold" role="status" aria-live="polite" data-testid="round-count">
+            {roundMsg ?? t("roundEmpty")}
+          </p>
+          <a
+            href={`/app/trips/${round.tripId}?round=${[...roundIds.current].join(",")}`}
+            onClick={stop}
+            className={`flex min-h-12 items-center justify-center rounded-xl bg-primary px-4 font-bold text-primary-foreground ${roundCount ? "" : "pointer-events-none opacity-50"}`}
+            data-testid="round-finish"
+          >
+            {t("roundFinish", { n: roundCount })}
+          </a>
+        </div>
+      )}
       <form
         className="mx-auto flex w-full max-w-md gap-2"
         onSubmit={(e) => {

@@ -60,24 +60,38 @@ export function levelFor(access: readonly AccessArea[]): Exclude<MemberRole, "ow
   return "server";
 }
 
-export type CatalogRole = { key: string; group: RoleGroup; access: readonly AccessArea[] };
+export type CatalogRole = {
+  key: string;
+  group: RoleGroup;
+  access: readonly AccessArea[];
+  /** Only for this kind of business (bus hostesses, restaurant hosts…); both when absent. */
+  kind?: "restaurant" | "transport";
+};
 
 /** Ready-made roles every restaurant starts with (names are translated: `jobRoles.<key>`). */
 export const ROLE_CATALOG: readonly CatalogRole[] = [
   { key: "manager", group: "management", access: ACCESS_AREAS },
   { key: "assistant_manager", group: "management", access: ["service", "kitchen", "cashier", "cancel", "soldOut", "menu", "seats", "reservations", "reports"] },
-  { key: "server", group: "front", access: ["service", "cashier", "soldOut"] },
-  { key: "host", group: "front", access: ["service", "reservations"] },
+  { key: "server", group: "front", access: ["service", "cashier", "soldOut"], kind: "restaurant" },
+  { key: "host", group: "front", access: ["service", "reservations"], kind: "restaurant" },
+  // Bus companies: the hostess takes, confirms and serves orders on board and takes the money.
+  { key: "hostess", group: "front", access: ["service", "cashier", "soldOut"], kind: "transport" },
+  { key: "chief_hostess", group: "front", access: ["service", "cashier", "cancel", "soldOut", "reports"], kind: "transport" },
   { key: "cashier", group: "front", access: ["cashier"] },
   { key: "head_cook", group: "kitchen", access: ["kitchen", "soldOut", "menu"] },
   { key: "cook", group: "kitchen", access: ["kitchen", "soldOut"] },
   { key: "assistant_cook", group: "kitchen", access: ["kitchen"] },
-  { key: "dishwasher", group: "kitchen", access: [] },
-  { key: "bartender", group: "bar", access: ["kitchen", "soldOut", "service"] },
+  { key: "dishwasher", group: "kitchen", access: [], kind: "restaurant" },
+  { key: "bartender", group: "bar", access: ["kitchen", "soldOut", "service"], kind: "restaurant" },
   { key: "cleaner", group: "support", access: [] },
   { key: "guard", group: "support", access: [] },
-  { key: "rider", group: "support", access: [] },
+  { key: "rider", group: "support", access: [], kind: "restaurant" },
+  { key: "driver", group: "support", access: [], kind: "transport" },
 ];
+
+export function catalogFor(kind: "restaurant" | "transport"): readonly CatalogRole[] {
+  return ROLE_CATALOG.filter((c) => !c.kind || c.kind === kind);
+}
 
 /** The catalog role a member without a job role is moved to (legacy levels). */
 export const LEVEL_TO_CATALOG: Record<Exclude<MemberRole, "owner">, string> = {
