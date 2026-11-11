@@ -9,6 +9,8 @@ import { BottomTabs } from "@/components/app-shell/bottom-tabs";
 import { RegisterStaffSw } from "@/components/app-shell/register-sw";
 import { NavProgress } from "@/components/app-shell/nav-progress";
 import { JoinPrompt } from "@/components/app-shell/join-prompt";
+import { PinSessionBar } from "@/components/app-shell/pin-session-bar";
+import { formatStaffNo } from "@/lib/personnel";
 import { getDb } from "@/db";
 import { pendingJoinRequests } from "@/lib/personnel/join";
 import { Suspense } from "react";
@@ -58,9 +60,18 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
             <Logo />
           </Link>
           <div className="flex flex-wrap items-center justify-end gap-2">
-            <RestaurantSwitcher />
-            <LocaleSwitcher />
-            <UserMenu />
+            {ctx?.pin ? (
+              <>
+                <LocaleSwitcher />
+                <PinSessionBar name={ctx.pin.name} staffNo={formatStaffNo(ctx.pin.staffNo)} idleMinutes={ctx.pin.idleMinutes} />
+              </>
+            ) : (
+              <>
+                <RestaurantSwitcher />
+                <LocaleSwitcher />
+                <UserMenu />
+              </>
+            )}
           </div>
         </header>
         {!env.clerkConfigured() && env.devAuthBypass() && (

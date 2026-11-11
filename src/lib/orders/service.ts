@@ -296,6 +296,7 @@ function need(ctx: ServiceCtx, action: Action) {
 /** members.id of the person acting (their matricule goes on the order), or null (dev bypass, system). */
 async function memberIdOf(ctx: ServiceCtx): Promise<string | null> {
   if (ctx.actor.kind !== "member") return null;
+  if (ctx.actor.memberId) return ctx.actor.memberId;
   const [m] = await ctx.db
     .select({ id: members.id })
     .from(members)

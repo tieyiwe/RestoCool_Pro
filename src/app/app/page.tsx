@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getMemberContext } from "@/lib/auth/context";
 import { setupState } from "@/lib/auth/setup";
+import { redirectWithoutMember } from "@/lib/auth/page";
 import { can } from "@/lib/auth/can";
 import { effectiveStatus } from "@/lib/plan";
 import { MainQrCard } from "@/components/qr/main-qr-card";
@@ -26,7 +27,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   const ctx = await getMemberContext();
 
   // Signed in but no restaurant yet: start onboarding.
-  if (!ctx) redirect("/app/new");
+  if (!ctx) return redirectWithoutMember();
   // The setup comes first: the dashboard opens once it is finished.
   if ((await setupState()) === "setup") redirect("/app/onboarding/1");
 
@@ -88,6 +89,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       { key: "staff", href: "/app/staff", icon: "👥", need: "staff.write" },
       { key: "invite", href: "/app/staff#add", icon: "➕", need: "staff.write" },
       { key: "roles", href: "/app/staff/roles", icon: "🔑", need: "staff.write" },
+      { key: "devices", href: "/app/staff/devices", icon: "📟", need: "devices.write" },
       { key: "settings", href: "/app/settings", icon: "⚙️", need: "settings.write" },
       { key: "menuPage", href: `/r/${r.slug}`, icon: "📱", need: null },
       { key: "guide", href: "/app/guide", icon: "🎓", need: null },

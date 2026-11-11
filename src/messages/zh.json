@@ -1613,7 +1613,8 @@
       "settings": "设置",
       "menuPage": "查看我的菜单",
       "guide": "指南",
-      "invite": "添加员工"
+      "invite": "添加员工",
+      "devices": "设备（平板）"
     },
     "ranking": {
       "title": "员工排名",
@@ -1830,13 +1831,71 @@
       "addStep2": "填写全名、电话并设置 PIN 码。",
       "addStep3": "申请会显示在这里：选择角色并接受，对方立即获得工号。",
       "fullScreen": "全屏显示",
-      "manual": "手动添加"
+      "manual": "手动添加",
+      "devices": "设备"
     },
     "prompt": {
       "one": "{name} 申请加入团队",
       "many": "{name} 等 {n} 人申请加入团队",
       "open": "查看申请",
       "later": "稍后"
+    }
+  },
+  "devices": {
+    "back": "员工",
+    "title": "设备",
+    "intro": "店铺的平板和手机，员工用 PIN 码登录，无需账号或邮箱。每次登录最长 {shiftHours} 小时（一个班次），{idleMinutes} 分钟无操作自动锁定。",
+    "authorize": "授权此设备",
+    "authorizeHint": "请在留在店里的平板或手机上操作（前厅、厨房、收银台），并起个名字以便识别。",
+    "name": "设备名称",
+    "namePlaceholder": "厨房平板",
+    "authorizeSubmit": "授权此设备",
+    "thisAuthorized": "此设备已授权：“{name}”",
+    "switchHint": "切换到团队模式：您的账号将从此设备退出，每个人用自己的 PIN 码登录。",
+    "switch": "切换到团队模式",
+    "list": "已授权设备",
+    "empty": "暂无设备。",
+    "thisOne": "本设备",
+    "revoked": "已撤销",
+    "inUse": "使用中",
+    "since": "授权于 {date}",
+    "by": "由 {name}",
+    "lastSeen": "最近 {date}",
+    "revoke": "撤销",
+    "revokeConfirm": "撤销“{name}”？它将无法使用，登录在上面的人会被登出。",
+    "ok": {
+      "authorized": "此设备已授权。",
+      "revoked": "设备已撤销，无法再使用。"
+    },
+    "err": {
+      "invalid": "请为设备命名（2 到 40 个字符）。",
+      "forbidden": "您无权管理设备。",
+      "notFound": "找不到设备。",
+      "plan": "平板 PIN 登录包含在专业版和商业版中。"
+    }
+  },
+  "poste": {
+    "title": "员工终端",
+    "who": "您是谁？",
+    "notMe": "不是我",
+    "typePin": "输入您的 PIN 码",
+    "typed": "已输入 {n} 位",
+    "erase": "删除",
+    "lock": "锁定",
+    "personLocked": "暂时锁定几分钟",
+    "locked": "已锁定。下一位可以登录。",
+    "lockedIdle": "一段时间无操作，已自动锁定。",
+    "noTeam": "还没有人设置 PIN 码。负责人在“员工”中添加人员。",
+    "footer": "共用平板：离开时请务必锁定。",
+    "notAuthorizedTitle": "此设备未授权",
+    "notAuthorizedText": "店主或负责人在此设备上登录一次，然后进入 员工 → 设备 → “授权此设备”。",
+    "ownerSignIn": "我是负责人：授权",
+    "error": {
+      "unknown": "找不到资料或未设置 PIN 码。请询问负责人。",
+      "wrong_pin": "PIN 码错误，还可尝试 {n} 次。",
+      "locked": "错误次数过多：已锁定 {m} 分钟。",
+      "device": "此设备已不再授权。请询问负责人。",
+      "too_many": "尝试次数过多，请稍候。"
     }
   }
 }

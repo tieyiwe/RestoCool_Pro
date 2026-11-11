@@ -1613,7 +1613,8 @@
       "settings": "Settings",
       "menuPage": "View my menu",
       "guide": "Guide",
-      "invite": "Add personnel"
+      "invite": "Add personnel",
+      "devices": "Devices (tablets)"
     },
     "ranking": {
       "title": "Personnel ranking",
@@ -1830,13 +1831,71 @@
       "addStep2": "They enter their full name and phone and choose a PIN.",
       "addStep3": "Their request appears here: choose their role and accept. They get their staff number right away.",
       "fullScreen": "Show full screen",
-      "manual": "Add by hand"
+      "manual": "Add by hand",
+      "devices": "Devices"
     },
     "prompt": {
       "one": "{name} is asking to join the team",
       "many": "{name} and {n, plural, one {# other person} other {# other people}} are asking to join the team",
       "open": "See the request",
       "later": "Later"
+    }
+  },
+  "devices": {
+    "back": "Personnel",
+    "title": "Devices",
+    "intro": "The business's tablets and phones where personnel log in with their PIN, with no account or email. A login lasts at most {shiftHours} h (one shift) and locks after {idleMinutes} min without activity.",
+    "authorize": "Authorise this device",
+    "authorizeHint": "Do it on the tablet or phone that stays at the business (floor, kitchen, cash desk). Give it a name to recognise it.",
+    "name": "Device name",
+    "namePlaceholder": "Kitchen tablet",
+    "authorizeSubmit": "Authorise this device",
+    "thisAuthorized": "This device is authorised: “{name}”",
+    "switchHint": "Switch to team mode: your account signs out of this device, and each person logs in with their PIN.",
+    "switch": "Switch to team mode",
+    "list": "Authorised devices",
+    "empty": "No devices yet.",
+    "thisOne": "this device",
+    "revoked": "Revoked",
+    "inUse": "In use",
+    "since": "Authorised on {date}",
+    "by": "by {name}",
+    "lastSeen": "seen {date}",
+    "revoke": "Revoke",
+    "revokeConfirm": "Revoke “{name}”? It will stop working and whoever is logged in on it will be logged out.",
+    "ok": {
+      "authorized": "This device is authorised.",
+      "revoked": "Device revoked: it no longer works."
+    },
+    "err": {
+      "invalid": "Give the device a name (2 to 40 characters).",
+      "forbidden": "You don't have access to devices.",
+      "notFound": "Device not found.",
+      "plan": "PIN login on tablets is included in the Pro and Business plans."
+    }
+  },
+  "poste": {
+    "title": "Team device",
+    "who": "Who are you?",
+    "notMe": "Not me",
+    "typePin": "Type your PIN",
+    "typed": "{n} digits typed",
+    "erase": "Erase",
+    "lock": "Lock",
+    "personLocked": "locked for a few minutes",
+    "locked": "Session locked. The next person can log in.",
+    "lockedIdle": "Session locked after a while without activity.",
+    "noTeam": "Nobody has a PIN yet. The manager adds people in Personnel.",
+    "footer": "Shared tablet: always lock when you leave.",
+    "notAuthorizedTitle": "This device is not authorised",
+    "notAuthorizedText": "The owner or a manager signs in once on this device, then goes to Personnel → Devices → “Authorise this device”.",
+    "ownerSignIn": "I'm a manager: authorise",
+    "error": {
+      "unknown": "Profile not found or without a PIN. Ask the manager.",
+      "wrong_pin": "Wrong PIN. {n} tries left.",
+      "locked": "Too many errors: profile locked for {m} min.",
+      "device": "This device is no longer authorised. Ask the manager.",
+      "too_many": "Too many tries. Please wait a moment."
     }
   }
 }

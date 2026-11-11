@@ -20,6 +20,8 @@ export type RestaurantSettings = {
    * in with this verified email becomes its owner. Lower case; removed once claimed.
    */
   ownerEmail?: string;
+  /** PIN sessions on authorised devices: end of shift (hours) and auto-lock when idle (minutes). */
+  staffSessions?: { shiftHours: number; idleMinutes: number };
   /** Front desk timers: an open order turns orange, then red, after these many minutes. */
   serviceDelays?: { warnMin: number; lateMin: number };
 };

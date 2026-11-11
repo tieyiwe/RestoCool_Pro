@@ -1613,7 +1613,8 @@
       "settings": "Paramètres",
       "menuPage": "Voir mon menu",
       "guide": "Guide",
-      "invite": "Ajouter du personnel"
+      "invite": "Ajouter du personnel",
+      "devices": "Appareils (tablettes)"
     },
     "ranking": {
       "title": "Classement du personnel",
@@ -1830,13 +1831,71 @@
       "addStep2": "Elle entre son nom complet, son téléphone et choisit un code PIN.",
       "addStep3": "Vous recevez sa demande ici : choisissez son rôle et acceptez. Elle reçoit aussitôt son matricule.",
       "fullScreen": "Afficher en grand",
-      "manual": "Ajouter à la main"
+      "manual": "Ajouter à la main",
+      "devices": "Appareils"
     },
     "prompt": {
       "one": "{name} demande à rejoindre l'équipe",
       "many": "{name} et {n, plural, one {# autre personne} other {# autres personnes}} demandent à rejoindre l'équipe",
       "open": "Voir la demande",
       "later": "Plus tard"
+    }
+  },
+  "devices": {
+    "back": "Personnel",
+    "title": "Appareils",
+    "intro": "Les tablettes et téléphones de l'établissement où le personnel se connecte avec son code PIN, sans compte ni e-mail. Une connexion dure au plus {shiftHours} h (un service) et se verrouille après {idleMinutes} min sans activité.",
+    "authorize": "Autoriser cet appareil",
+    "authorizeHint": "Faites-le sur la tablette ou le téléphone qui restera à l'établissement (salle, cuisine, caisse). Donnez-lui un nom pour le reconnaître.",
+    "name": "Nom de l'appareil",
+    "namePlaceholder": "Tablette cuisine",
+    "authorizeSubmit": "Autoriser cet appareil",
+    "thisAuthorized": "Cet appareil est autorisé : « {name} »",
+    "switchHint": "Passez en mode poste : votre compte se déconnecte de cet appareil, et chaque personne se connecte avec son code PIN.",
+    "switch": "Passer en mode poste",
+    "list": "Appareils autorisés",
+    "empty": "Aucun appareil pour l'instant.",
+    "thisOne": "cet appareil",
+    "revoked": "Révoqué",
+    "inUse": "En service",
+    "since": "Autorisé le {date}",
+    "by": "par {name}",
+    "lastSeen": "vu {date}",
+    "revoke": "Révoquer",
+    "revokeConfirm": "Révoquer « {name} » ? Il ne pourra plus servir, et la personne connectée dessus sera déconnectée.",
+    "ok": {
+      "authorized": "Cet appareil est autorisé.",
+      "revoked": "Appareil révoqué : il ne fonctionne plus."
+    },
+    "err": {
+      "invalid": "Donnez un nom à l'appareil (2 à 40 caractères).",
+      "forbidden": "Vous n'avez pas accès aux appareils.",
+      "notFound": "Appareil introuvable.",
+      "plan": "La connexion par code PIN sur les tablettes est incluse dans les formules Pro et Business."
+    }
+  },
+  "poste": {
+    "title": "Poste du personnel",
+    "who": "Qui êtes-vous ?",
+    "notMe": "Ce n'est pas moi",
+    "typePin": "Tapez votre code PIN",
+    "typed": "{n} chiffres tapés",
+    "erase": "Effacer",
+    "lock": "Verrouiller",
+    "personLocked": "bloqué quelques minutes",
+    "locked": "Session verrouillée. La personne suivante peut se connecter.",
+    "lockedIdle": "Session verrouillée après un moment sans activité.",
+    "noTeam": "Personne n'a encore de code PIN. Le responsable ajoute le personnel dans Personnel.",
+    "footer": "Tablette partagée : verrouillez toujours en partant.",
+    "notAuthorizedTitle": "Cet appareil n'est pas autorisé",
+    "notAuthorizedText": "Le propriétaire ou un responsable se connecte une fois sur cet appareil, puis va dans Personnel → Appareils → « Autoriser cet appareil ».",
+    "ownerSignIn": "Je suis responsable : autoriser",
+    "error": {
+      "unknown": "Profil introuvable ou sans code PIN. Demandez au responsable.",
+      "wrong_pin": "Code PIN incorrect. Encore {n} essai(s).",
+      "locked": "Trop d'erreurs : profil bloqué pendant {m} min.",
+      "device": "Cet appareil n'est plus autorisé. Demandez au responsable.",
+      "too_many": "Trop d'essais. Patientez un instant."
     }
   }
 }

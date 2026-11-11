@@ -132,6 +132,7 @@ export async function pendingJoinCount(db: DB, restaurantId: string): Promise<nu
 async function actingMemberId(ctx: PersonnelCtx): Promise<string | null> {
   if (ctx.actor.kind !== "member") return null;
   const actor = ctx.actor;
+  if (actor.memberId) return actor.memberId;
   const [m] = await ctx.db.select({ id: members.id }).from(members).where(and(eq(members.restaurantId, ctx.repo.restaurantId), eq(members.clerkUserId, actor.userId))).limit(1);
   return m?.id ?? null;
 }

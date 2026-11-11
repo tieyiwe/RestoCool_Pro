@@ -3,6 +3,12 @@ import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server
 
 const PROTECTED = [/^\/app(\/|$)/, /^\/admin(\/|$)/, /^\/api\/app(\/|$)/, /^\/api\/admin(\/|$)/];
 const isProtected = (req: NextRequest) => PROTECTED.some((re) => re.test(req.nextUrl.pathname));
+/**
+ * A PIN session on an authorised device (cookie rc_staff) has no account: let it through the
+ * sign-in gate. This is not a check: every page and API validates the session in the database
+ * (src/lib/devices sessionFromToken), and without a valid one they refuse or send to /poste.
+ */
+const hasStaffSession = (req: NextRequest) => Boolean(req.cookies.get("rc_staff")?.value);
 
 const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY || "";
 const proxyUrl = process.env.NEXT_PUBLIC_CLERK_PROXY_URL || process.env.CLERK_PROXY_URL || "";
@@ -19,7 +25,7 @@ const CLERK_PROXY_PATH = proxyUrl ? (new URL(proxyUrl, "https://x.invalid").path
 const withClerk = clerkConfigured
   ? clerkMiddleware(
       async (auth, req) => {
-        if (isProtected(req)) await auth.protect();
+        if (isProtected(req) && !hasStaffSession(req)) await auth.protect();
       },
       {
         publishableKey,
@@ -38,7 +44,7 @@ const withClerk = clerkConfigured
 export default function middleware(req: NextRequest, event: NextFetchEvent) {
   if (withClerk) return withClerk(req, event);
   const localhost = ["localhost", "127.0.0.1", "::1", "[::1]"].includes(req.nextUrl.hostname);
-  if (isProtected(req) && !(devBypass && localhost)) {
+  if (isProtected(req) && !(devBypass && localhost) && !hasStaffSession(req)) {
     if (req.nextUrl.pathname.startsWith("/api/")) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }

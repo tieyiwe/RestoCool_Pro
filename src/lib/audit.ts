@@ -17,7 +17,8 @@ export function actorRef(actor: Actor | null): ActorRef {
   if (!actor) return { type: "system", id: null };
   switch (actor.kind) {
     case "member":
-      return { type: "member", id: actor.userId };
+      // PIN sessions are recorded under the person's member id (no account behind them).
+      return actor.via === "pin" && actor.memberId ? { type: "staff", id: actor.memberId } : { type: "member", id: actor.userId };
     case "staff":
       return { type: "staff", id: actor.staffId };
     case "superadmin":

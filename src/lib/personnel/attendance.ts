@@ -27,6 +27,7 @@ function need(ctx: PersonnelCtx) {
 
 async function actingMemberId(ctx: PersonnelCtx): Promise<string | null> {
   if (ctx.actor.kind !== "member") return null;
+  if (ctx.actor.memberId) return ctx.actor.memberId;
   const [m] = await ctx.db.select({ id: members.id }).from(members).where(and(eq(members.restaurantId, ctx.repo.restaurantId), eq(members.clerkUserId, ctx.actor.userId))).limit(1);
   return m?.id ?? null;
 }
@@ -108,7 +109,7 @@ export async function punch(db: DB, r: Restaurant, staffNo: number, pin: string,
  * Takes one PIN try for this person, or null when they are locked. An expired lock starts a
  * fresh count. Reaching MAX_PIN_FAILURES sets the lock in the same statement.
  */
-async function reservePinAttempt(db: DB, memberId: string, now: Date): Promise<{ failures: number } | null> {
+export async function reservePinAttempt(db: DB, memberId: string, now: Date): Promise<{ failures: number } | null> {
   const lockUntil = new Date(now.getTime() + LOCK_MINUTES * 60_000);
   const count = sql`(case when ${members.lockedUntil} is not null and ${members.lockedUntil} <= ${now} then 0 else ${members.pinFailures} end) + 1`;
   const [row] = await db
@@ -184,7 +185,7 @@ export async function addPerson(ctx: PersonnelCtx, input: z.input<typeof NewPers
 async function managedMember(ctx: PersonnelCtx, memberId: string, opts: { allowSelf?: boolean } = {}) {
   const m = await ctx.db.query.members.findFirst({ where: and(eq(members.restaurantId, ctx.repo.restaurantId), eq(members.id, memberId)) });
   if (!m) throw new NotFoundError();
-  const self = ctx.actor.kind === "member" && m.clerkUserId === ctx.actor.userId;
+  const self = ctx.actor.kind === "member" && (m.id === ctx.actor.memberId || (m.clerkUserId !== null && m.clerkUserId === ctx.actor.userId));
   const lead = m.role === "owner" || m.role === "manager";
   if (lead && !(opts.allowSelf && self) && !can(ctx.actor, "managers.write", { restaurantId: ctx.repo.restaurantId })) throw new ForbiddenError();
   return m;

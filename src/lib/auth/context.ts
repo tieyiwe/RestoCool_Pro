@@ -6,6 +6,7 @@ import { getDb } from "@/db";
 import { findRestaurantBySlug, membershipsForUser, tenantRepo, type Membership, type TenantRepo } from "@/db/repos/tenant";
 import { env } from "@/lib/env";
 import { ForbiddenError, UnauthorizedError } from "@/lib/errors";
+import { sessionFromToken, STAFF_COOKIE } from "@/lib/devices";
 import { cleanAccess } from "./access";
 import { can, type Action, type Actor } from "./can";
 
@@ -13,7 +14,40 @@ type MemberActor = Extract<Actor, { kind: "member" }>;
 type SuperadminActor = Extract<Actor, { kind: "superadmin" }>;
 
 export type Identity = { userId: string; email: string | null; name: string | null };
-export type MemberContext = { actor: MemberActor; repo: TenantRepo; memberships: Membership[] };
+export type MemberContext = {
+  actor: MemberActor;
+  repo: TenantRepo;
+  memberships: Membership[];
+  /** Set when the person logged in with their PIN on an authorised device. */
+  pin?: { memberId: string; name: string; staffNo: number | null; idleMinutes: number; deviceName: string };
+};
+
+/**
+ * The person logged in with their PIN on this authorised device, if any. It comes first: on a
+ * shared tablet, whoever unlocked it with their PIN is the one acting.
+ */
+export const getStaffSessionContext = cache(async (): Promise<MemberContext | null> => {
+  const token = (await cookies()).get(STAFF_COOKIE)?.value;
+  if (!token) return null;
+  const s = await sessionFromToken(getDb(), token);
+  if (!s) return null;
+  const m = s.member;
+  void touchLastSeen(m.id);
+  return {
+    actor: {
+      kind: "member",
+      userId: `pin:${m.id}`,
+      restaurantId: s.restaurant.id,
+      role: m.role,
+      memberId: m.id,
+      via: "pin",
+      ...(s.access ? { access: s.access } : {}),
+    },
+    repo: tenantRepo(getDb(), s.restaurant.id),
+    memberships: [{ memberId: m.id, role: m.role, access: s.access, restaurantId: s.restaurant.id, restaurantName: s.restaurant.name, restaurantSlug: s.restaurant.slug }],
+    pin: { memberId: m.id, name: m.name ?? "—", staffNo: m.staffNo, idleMinutes: s.idleMinutes, deviceName: s.device.name },
+  };
+});
 
 /** Cookie holding the restaurant the user is currently working in (validated against memberships). */
 export const ACTIVE_RESTAURANT_COOKIE = "rc_restaurant";
@@ -84,6 +118,8 @@ export const getMemberships = cache(async (): Promise<Membership[]> => {
  * Returns null when signed out or when the user has no restaurant yet.
  */
 export const getMemberContext = cache(async (): Promise<MemberContext | null> => {
+  const staff = await getStaffSessionContext();
+  if (staff) return staff;
   const id = await getIdentity();
   if (!id) return null;
   const memberships = await getMemberships();
@@ -92,7 +128,14 @@ export const getMemberContext = cache(async (): Promise<MemberContext | null> =>
   const active = memberships.find((m) => m.restaurantId === wanted) ?? memberships[0]!;
   if (active.memberId !== "dev") void touchLastSeen(active.memberId);
   return {
-    actor: { kind: "member", userId: id.userId, restaurantId: active.restaurantId, role: active.role, ...(active.access ? { access: cleanAccess(active.access) } : {}) },
+    actor: {
+      kind: "member",
+      userId: id.userId,
+      restaurantId: active.restaurantId,
+      role: active.role,
+      ...(active.memberId !== "dev" ? { memberId: active.memberId } : {}),
+      ...(active.access ? { access: cleanAccess(active.access) } : {}),
+    },
     repo: tenantRepo(getDb(), active.restaurantId),
     memberships,
   };

@@ -9,7 +9,18 @@ export type MemberRole = "owner" | "manager" | StaffRole;
 
 export type Actor =
   /** `access`: the member's job role access (owner-editable); absent = the level's defaults. */
-  | { kind: "member"; userId: string; restaurantId: string; role: MemberRole; access?: readonly AccessArea[] }
+  | {
+      kind: "member";
+      /** Clerk user id, or `pin:<member id>` for a PIN session on an authorised device. */
+      userId: string;
+      restaurantId: string;
+      role: MemberRole;
+      access?: readonly AccessArea[];
+      /** members.id of the person acting (for « confirmée par … »), when known. */
+      memberId?: string;
+      /** « pin »: logged in with their PIN on an authorised device (no personal account). */
+      via?: "pin";
+    }
   | { kind: "staff"; staffId: string; restaurantId: string; role: StaffRole }
   | { kind: "superadmin"; userId: string; email: string }
   | { kind: "customer"; deviceId: string; restaurantId: string };

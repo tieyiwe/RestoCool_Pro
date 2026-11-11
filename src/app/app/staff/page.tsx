@@ -89,6 +89,13 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
               ➕ {tj("addButton")}
             </a>
           </Button>
+          {can(ctx.actor, "devices.write", { restaurantId: rid }) && (
+            <Button asChild variant="outline">
+              <Link href="/app/staff/devices" data-testid="devices-link">
+                📟 {tj("devices")}
+              </Link>
+            </Button>
+          )}
           <Button asChild variant="outline">
             <Link href="/app/staff/roles" data-testid="roles-link">
               🔑 {tro("manage")}
