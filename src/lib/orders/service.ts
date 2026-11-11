@@ -38,8 +38,8 @@ export class OrderError extends Error {
   }
 }
 
-/** Seats where several phones share one table bill (group ordering). */
-export const GROUP_SEATS = new Set(["table", "room", "area"]);
+import { GROUP_SEATS } from "@/lib/seating/group-seats";
+export { GROUP_SEATS };
 /** Orders still being handled (the front desk and kitchen show these). */
 export const ACTIVE_STATUSES = ["sent", "confirmed", "preparing", "ready"] as const satisfies readonly OrderStatus[];
 

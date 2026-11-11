@@ -324,12 +324,13 @@ export function SeatPicker({ slug, lang, t, onChoose, onClose }: { slug: string;
         </div>
 
         {occupied ? (
-          <div className="flex flex-col gap-3 text-center" role="alertdialog" aria-label={t("occupiedTitle")} data-testid="occupied-dialog">
+          <div className="flex flex-col gap-3 text-center" role="alertdialog" aria-label={t(`occupiedTitle_${occupied.type === "room" ? "room" : "table"}`, { label: occupied.label })} data-testid="occupied-dialog">
             <p className="text-4xl" aria-hidden>
-              ⚠️
+              🤝
             </p>
-            <p className="font-display text-lg font-extrabold">{t("occupiedTitle")}</p>
-            <p className="text-muted-foreground">{t("occupiedText")}</p>
+            <p className="font-display text-lg font-extrabold">{t(`occupiedTitle_${occupied.type === "room" ? "room" : "table"}`, { label: occupied.label })}</p>
+            <p className="font-semibold">{t(`occupiedQuestion_${occupied.type === "room" ? "room" : "table"}`)}</p>
+            <p className="text-sm text-muted-foreground">{t("occupiedText")}</p>
             <button type="button" disabled={busy} onClick={() => pick(occupied, { confirmJoin: true })} className="min-h-12 rounded-xl font-bold" style={{ background: "var(--accent)", color: "var(--on-accent)" }}>
               {t("join")}
             </button>

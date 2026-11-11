@@ -60,7 +60,7 @@ test("scanning a table QR seats the phone; a second phone joins the same table",
   await b.addInitScript(skipWelcome);
   const pb = await b.newPage();
   await pb.goto(`/r/restaurant-demo/t/${token}`);
-  await expect(pb.getByText("Vous avez rejoint la table.")).toBeVisible();
+  await expect(pb.getByText("vos plats s'ajoutent à la même note", { exact: false })).toBeVisible();
   await expect(pb.getByTestId("seat-badge")).toContainText("Table 7");
 
   // The owner sees one occupied table with two phones.
@@ -72,7 +72,7 @@ test("scanning a table QR seats the phone; a second phone joins the same table",
   await owner.close();
 });
 
-test("generic QR: the picker warns when a table is taken; « Rejoindre » or « Choisir une autre »", async ({ browser }) => {
+test("generic QR: a taken table asks « Êtes-vous assis avec lui ? »; yes joins, no picks another", async ({ browser }) => {
   await patchDemoSettings({ qrStrategy: "generic" });
   const a = await browser.newContext();
   await a.addInitScript(skipWelcome);
@@ -89,15 +89,16 @@ test("generic QR: the picker warns when a table is taken; « Rejoindre » or « 
   await pb.getByTestId("choose-seat").click();
   await pb.getByTestId("seat-picker").getByRole("button", { name: "Table 3 (Occupée)" }).click();
   const dialog = pb.getByTestId("occupied-dialog");
-  await expect(dialog).toContainText("Cette table est déjà occupée");
-  await dialog.getByRole("button", { name: "Choisir une autre" }).click();
+  await expect(dialog).toContainText("La table 3 est déjà prise");
+  await expect(dialog).toContainText("Êtes-vous assis avec lui");
+  await dialog.getByRole("button", { name: "Non, choisir une autre place" }).click();
   await pb.getByTestId("seat-picker").getByRole("button", { name: "Table 4", exact: true }).click();
   await expect(pb.getByTestId("seat-badge")).toContainText("Table 4");
 
   // Changing to table 3 again, this time joining.
   await pb.getByTestId("seat-badge").getByRole("button", { name: "Changer" }).click();
   await pb.getByTestId("seat-picker").getByRole("button", { name: "Table 3 (Occupée)" }).click();
-  await pb.getByTestId("occupied-dialog").getByRole("button", { name: "Rejoindre" }).click();
+  await pb.getByTestId("occupied-dialog").getByRole("button", { name: "Oui, nous sommes ensemble" }).click();
   await expect(pb.getByTestId("seat-badge")).toContainText("Table 3");
   await a.close();
   await b.close();

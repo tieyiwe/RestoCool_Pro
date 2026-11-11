@@ -1,4 +1,5 @@
 import "server-only";
+import { GROUP_SEATS } from "./group-seats";
 import { and, eq, inArray, isNull, lt, or, sql } from "drizzle-orm";
 import type { DB } from "@/db";
 import { areas, orders, restaurants, seats, sessionDevices, tableSessions } from "@/db/schema";
@@ -9,10 +10,11 @@ export const QR_SESSION_IDLE_MS = 4 * 60 * 60 * 1000;
 /** Extra margin before the server frees a picker seat whose phone went silent. */
 const PICKER_GRACE_MS = 2 * 60 * 1000;
 /**
- * Seats one group of people occupies (and shares a bill at). Counter, takeaway and delivery are
- * one seat shared by unrelated customers: never « occupied », never « joined ».
+ * Seats one group of people occupies (and shares a bill at): tables and private rooms. Areas,
+ * counter, takeaway and delivery are shared by unrelated customers: never « occupied », never
+ * « joined ». Same set as the shared bill (GROUP_SEATS).
  */
-const OCCUPIABLE = new Set(["table", "room", "area"]);
+const OCCUPIABLE = GROUP_SEATS;
 
 export type JoinResult =
   | { ok: true; sessionId: string; seat: { id: string; type: string; label: string }; joined: boolean }
