@@ -8,7 +8,7 @@ test("the directory narrows results as you type, by name or by numéro RC; unpub
   await expect(page.getByTestId("directory-featured")).toContainText("Restaurant Démo");
 
   const input = page.getByTestId("directory-input");
-  await input.fill("dém");
+  await input.fill("restaurant dém");
   await expect(page.getByTestId("directory-count")).toHaveText("1 établissement(s)");
   await input.fill("zzzz");
   await expect(page.getByText("Aucun établissement ne correspond")).toBeVisible();
@@ -24,7 +24,7 @@ test("the directory narrows results as you type, by name or by numéro RC; unpub
   await input.fill("Témoin");
   await expect(page.getByTestId("directory-count")).toHaveText("0 établissement(s)");
   // Works without JavaScript too (server-rendered ?q=).
-  await page.goto("/restaurants?q=demo");
+  await page.goto("/restaurants?q=restaurant%20demo");
   await expect(page.getByTestId("directory-card")).toContainText("Restaurant Démo");
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
 });
