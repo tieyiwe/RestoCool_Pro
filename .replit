@@ -17,7 +17,7 @@ channel = "stable-24_05"
 [deployment]
 deploymentTarget = "gce"
 build = ["sh", "-c", "npm ci && npm run build"]
-run = ["sh", "-c", "npm run db:migrate && npm run start"]
+run = ["sh", "-c", "npm run db:migrate && (npm run import:shangri-la -- --if-missing || true) && npm run start"]
 
 [[ports]]
 localPort = 5000

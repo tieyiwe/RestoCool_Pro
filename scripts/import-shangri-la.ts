@@ -4,7 +4,9 @@
  * and drinks in FR/EN/ZH with prices, spice levels, « nouveau » tags, the Champagne's two prices,
  * 78 photos, contacts, 19 tables and 12 private rooms.
  *
- *   npm run import:shangri-la -- --owner-email=owner@example.com [--draft] [--replace]
+ *   npm run import:shangri-la [-- --owner-email=owner@example.com] [--draft] [--replace] [--if-missing]
+ *
+ * Runs by itself on every deploy start with --if-missing (see .replit): it is created once.
  *
  * Published and featured « À la une » (first) by default; --draft keeps it hidden.
  *
@@ -16,9 +18,9 @@ import "./_env";
 import { randomBytes } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { closeDb, getDb } from "../src/db";
-import { accessCodes, areas, media, menuCategories, menuItems, menuItemVariants, planEvents, restaurants, seats } from "../src/db/schema";
+import { accessCodes, areas, media, members, menuCategories, menuItems, menuItemVariants, planEvents, restaurants, seats } from "../src/db/schema";
 import { generateCode } from "../src/lib/access-code-format";
 import { writeAudit } from "../src/lib/audit";
 import { ensureJobRoles } from "../src/lib/personnel/role-catalog";
@@ -71,21 +73,40 @@ function imageSize(b: Buffer): { width: number; height: number } {
   return { width: 0, height: 0 };
 }
 
+const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
 async function main() {
-  const ownerEmail = arg("owner-email")?.trim().toLowerCase();
-  if (!ownerEmail || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ownerEmail)) {
-    console.error("Usage: npm run import:shangri-la -- --owner-email=owner@example.com [--draft] [--replace]");
+  // The owner's email: --owner-email, or the SHANGRILA_OWNER_EMAIL secret. Optional: without it the
+  // restaurant is created anyway, and the email can be added later (set the secret and restart).
+  const rawEmail = (arg("owner-email") ?? process.env.SHANGRILA_OWNER_EMAIL ?? "").trim().toLowerCase();
+  if (rawEmail && !EMAIL.test(rawEmail)) {
+    console.error(`Invalid owner email: ${rawEmail}`);
     process.exitCode = 1;
     return;
   }
+  const ownerEmail = rawEmail || null;
   const publish = !process.argv.includes("--draft");
   const replace = process.argv.includes("--replace");
+  /** Used on every deploy start: create it only if it isn't there, never fail the start. */
+  const ifMissing = process.argv.includes("--if-missing");
   const db = getDb();
   const store = getStore();
   const data = JSON.parse(readFileSync(path.join(DIR, "data.json"), "utf8")) as Data;
 
   const existing = await db.query.restaurants.findFirst({ where: eq(restaurants.slug, SLUG) });
   if (existing && !replace) {
+    // Already there. If an owner email arrived since and nobody owns it yet, record it for the claim.
+    if (ownerEmail && !existing.settings.ownerEmail) {
+      const [owner] = await db.select({ id: members.id }).from(members).where(and(eq(members.restaurantId, existing.id), eq(members.role, "owner"))).limit(1);
+      if (!owner) {
+        await db.update(restaurants).set({ settings: { ...existing.settings, ownerEmail } }).where(eq(restaurants.id, existing.id));
+        console.log(`✓ Shangri-La: owner email recorded (${ownerEmail}).`);
+      }
+    }
+    if (ifMissing) {
+      console.log("✓ Shangri-La already exists.");
+      return;
+    }
     console.error(`« ${existing.name} » already exists (/r/${SLUG}). Run again with --replace to recreate it (its orders and personnel are deleted).`);
     process.exitCode = 1;
     return;
@@ -128,7 +149,7 @@ async function main() {
         orderValidation: "server_confirms",
         enabledLocales: ["fr", "en", "zh"],
         features: { welcomeScreen: true, fortuneCookie: true, takeawayWhatsapp: true, share: true, localBadge: false },
-        ownerEmail,
+        ...(ownerEmail ? { ownerEmail } : {}),
       },
     })
     .returning();
@@ -236,7 +257,7 @@ async function main() {
   const [rc] = await db.select({ code: accessCodes.code }).from(accessCodes).where(eq(accessCodes.restaurantId, rid)).limit(1);
   console.log(`✓ Shangri-La: ${visible.length} categories, ${items} items, ${photos} photos, ${tableRows.length} tables, ${roomRows.length} rooms`);
   console.log(`  Menu: /r/${SLUG} (${publish ? "published, featured first « À la une »" : "draft: the owner publishes it"})`);
-  console.log(`  Owner: the first sign-in with ${ownerEmail} (verified) becomes the owner.`);
+  console.log(ownerEmail ? `  Owner: the first sign-in with ${ownerEmail} (verified) becomes the owner.` : "  Owner: not set yet (add the SHANGRILA_OWNER_EMAIL secret, then restart).");
   if (rc) console.log(`  Numéro RC: RC-${rc.code}`);
   console.log(`  Photos stored with: ${store.kind}`);
 }
@@ -244,6 +265,7 @@ async function main() {
 main()
   .catch((err) => {
     console.error(err);
-    process.exitCode = 1;
+    // On a deploy start the site must come up even if the import has a problem.
+    process.exitCode = process.argv.includes("--if-missing") ? 0 : 1;
   })
   .finally(() => closeDb());
