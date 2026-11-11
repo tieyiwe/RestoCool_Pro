@@ -949,7 +949,11 @@
       "step2": "Visez le code, puis touchez le lien qui s’affiche",
       "step2En": "Point at the code, tap the link",
       "step2Zh": "对准二维码，点击链接",
-      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → Numéro RC :"
+      "noScan": "无法扫码？ · No scan? · Pas de scan ? 打开 {site} 并输入 RC 号。",
+      "scanMe": "扫一扫",
+      "scanMeEn": "Scan me",
+      "scanMeZh": "Scannez-moi",
+      "rcLabel": "RC 号"
     },
     "mainPrintHint": "每张 A4 纸 6 个贴纸。剪下后贴在门口、餐桌、柜台或橱窗上。",
     "mainCode": "店铺 RC 号（供不扫码的顾客使用）：",

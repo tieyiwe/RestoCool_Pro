@@ -95,7 +95,8 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await expect(page.getByTestId("print-card")).toHaveCount(6);
   await expect(page.getByTestId("scan-steps").first()).toContainText("Ouvrez l’appareil photo");
   await expect(page.getByTestId("scan-steps").first()).toContainText("touchez le lien");
-  await expect(page.getByTestId("card-code").first()).toContainText(mainCode);
+  await expect(page.getByTestId("card-rc").first()).toContainText(mainCode);
+  await expect(page.getByTestId("card-scan-me").first()).toContainText("Scannez-moi");
 
   // 4. Publish from Settings, then the public menu shows the dish and its photo
   await page.goto("/app/settings#publish");

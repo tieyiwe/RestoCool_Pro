@@ -11,7 +11,9 @@ import { pickText } from "@/i18n/config";
 import { requireMemberPage } from "@/lib/auth/page";
 import { hasFeature } from "@/lib/plan";
 import { openSessions, SEAT_TYPES } from "@/lib/seating/admin";
-import { menuUrl, publicBaseUrl, seatUrl } from "@/lib/urls";
+import { codeEntryHost, menuUrl, publicBaseUrl, seatUrl } from "@/lib/urls";
+import { StickerDownload } from "@/components/qr/sticker-download";
+import { slugify } from "@/lib/slug";
 import {
   addSeatAction,
   addTablesAction,
@@ -46,6 +48,13 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
     perSeat ? ensureSeatCodes(getDb(), r.id, seatRows.filter((s) => s.type === "table" || s.type === "room" || s.type === "area").map((s) => s.id)) : Promise.resolve(new Map<string, string>()),
   ]);
   const genericQr = brandedQrSvg(menuUrl(base, r.slug));
+  const sticker = {
+    scanMe: t("card.scanMe"),
+    scanMeAlt: `${t("card.scanMeEn")} · ${t("card.scanMeZh")}`,
+    rcLabel: t("card.rcLabel"),
+    noScan: t("card.noScan", { site: codeEntryHost(base) }),
+    powered: t("card.poweredBy"),
+  };
   const areaName = (id: string | null) => (id ? pickText(areaRows.find((a) => a.id === id)?.name, locale) : "");
 
   let okMessage: string | null = null;
@@ -86,9 +95,15 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
           {!perSeatAllowed && <p className="rounded-lg bg-amber-50 p-2 text-sm text-amber-900">{t("planQr")}</p>}
           <div className="flex flex-wrap gap-2">
             {!perSeat && (
-              <Button asChild variant="outline">
-                <a href="/api/app/qr?seat=generic">{t("download")}</a>
-              </Button>
+              <StickerDownload
+                qrSrc="/api/app/qr?seat=generic"
+                rc={formatRc(mainCode)}
+                name={r.name}
+                filename={`${r.slug}-qr-rc`}
+                text={sticker}
+                label={t("download")}
+                className="min-h-11 rounded-lg border border-border bg-surface px-4 text-sm font-semibold hover:bg-muted"
+              />
             )}
           </div>
           <form action="/app/seating/print" className="flex flex-wrap items-end gap-2">
@@ -231,9 +246,17 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
                   <span className="flex flex-wrap items-center gap-1">
                     {perSeat && printable && (
                       <>
-                        <a href={`/api/app/qr?seat=${s.id}`} className={btn + " flex items-center text-primary"}>
-                          {t("download")}
-                        </a>
+                        <StickerDownload
+                          qrSrc={`/api/app/qr?seat=${s.id}`}
+                          rc={seatCodes.get(s.id) ? formatRc(seatCodes.get(s.id)!) : formatRc(mainCode)}
+                          name={r.name}
+                          seat={`${t(`typeOne.${s.type}`)} ${s.label}`}
+                          filename={`${r.slug}-${slugify(`${s.type}-${s.label}`)}`}
+                          text={sticker}
+                          label={t("download")}
+                          className={btn + " flex items-center text-primary"}
+                          testId="seat-sticker-download"
+                        />
                         <a href={seatUrl(base, r.slug, s.qrToken)} target="_blank" rel="noopener" className={btn + " flex items-center"} aria-label={`${t("qr")} ${s.label}`}>
                           ↗
                         </a>

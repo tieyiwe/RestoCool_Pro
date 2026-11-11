@@ -1,4 +1,5 @@
 import { brandedQrSvg } from "@/lib/qr-branded";
+import { StickerDownload } from "./sticker-download";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
@@ -17,9 +18,23 @@ export async function MainQrCard({ restaurantId, slug, published }: { restaurant
   const url = menuUrl(base, slug);
   const code = await ensureMainCode(getDb(), restaurantId);
   const svg = brandedQrSvg(url);
+  const tc = await getTranslations("seating.card");
+  const r = await getDb().query.restaurants.findFirst({ where: (x, { eq }) => eq(x.id, restaurantId), columns: { name: true } });
+  const sticker = {
+    scanMe: tc("scanMe"),
+    scanMeAlt: `${tc("scanMeEn")} · ${tc("scanMeZh")}`,
+    rcLabel: tc("rcLabel"),
+    noScan: tc("noScan", { site: codeEntryHost(base) }),
+    powered: tc("poweredBy"),
+  };
   return (
     <Card className="flex flex-col gap-4 text-left sm:flex-row sm:items-start" data-testid="main-qr">
-      <div className="mx-auto w-40 shrink-0 rounded-lg border border-border bg-white p-2 sm:mx-0" aria-hidden dangerouslySetInnerHTML={{ __html: svg }} />
+      {/* As printed: « Scannez-moi » above, the numéro RC right below. */}
+      <div className="mx-auto flex w-44 shrink-0 flex-col items-center gap-1.5 rounded-xl border border-border bg-white p-2 text-[#17231c] sm:mx-0" data-testid="main-qr-sticker">
+        <span className="rounded-full bg-[#17231c] px-3 py-0.5 text-sm font-extrabold text-white">📷 {sticker.scanMe}</span>
+        <div className="w-full" aria-hidden dangerouslySetInnerHTML={{ __html: svg }} />
+        <span className="font-mono text-base font-extrabold tracking-widest">{formatRc(code)}</span>
+      </div>
       <div className="flex min-w-0 flex-col gap-2">
         <h2 className="text-lg font-bold">{t("title")}</h2>
         <p className="text-sm">{t("ready")}</p>
@@ -46,9 +61,15 @@ export async function MainQrCard({ restaurantId, slug, published }: { restaurant
           <Button asChild>
             <Link href="/app/seating/print?qr=main&layout=grid">🖨️ {t("print")}</Link>
           </Button>
-          <Button asChild variant="outline">
-            <a href="/api/app/qr?seat=generic">{t("download")}</a>
-          </Button>
+          <StickerDownload
+            qrSrc="/api/app/qr?seat=generic"
+            rc={formatRc(code)}
+            name={r?.name ?? ""}
+            filename={`${slug}-qr-rc`}
+            text={sticker}
+            label={`⬇️ ${t("download")}`}
+            className="min-h-11 rounded-lg border border-border bg-surface px-4 text-sm font-semibold hover:bg-muted"
+          />
         </div>
       </div>
     </Card>

@@ -949,7 +949,11 @@
       "step2": "Visez le code, puis touchez le lien qui s’affiche",
       "step2En": "Point at the code, tap the link",
       "step2Zh": "对准二维码，点击链接",
-      "noScan": "Pas de scan ? · No scan? · 无法扫码？ {site} → Numéro RC :"
+      "noScan": "Pas de scan ? · No scan? · 无法扫码？ Allez sur {site} et tapez le numéro RC.",
+      "scanMe": "Scannez-moi",
+      "scanMeEn": "Scan me",
+      "scanMeZh": "扫一扫",
+      "rcLabel": "Numéro RC"
     },
     "mainPrintHint": "6 autocollants par page A4. Découpez-les et placez-les à l’entrée, sur les tables, au comptoir ou sur la vitrine.",
     "mainCode": "Numéro RC de l'établissement (pour les clients qui ne scannent pas) :",

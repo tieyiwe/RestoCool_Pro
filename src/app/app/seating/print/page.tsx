@@ -52,8 +52,17 @@ export default async function PrintCardsPage({ searchParams }: { searchParams: P
         </p>
       </div>
       {c.title && <p className="font-display text-[9mm] leading-none font-extrabold">{c.title}</p>}
-      <p className="text-[4mm] font-bold leading-none">{t("card.scan")}</p>
-      <div className={layout === "grid" ? "w-[34mm]" : "w-[46mm]"} dangerouslySetInnerHTML={{ __html: c.svg }} />
+      {/* « Scannez-moi » above the QR, the numéro RC right below it: they always travel together. */}
+      <div className="flex flex-col items-center gap-[1.2mm]">
+        <p className="rounded-full bg-black px-[3mm] py-[0.8mm] text-[4.2mm] font-extrabold leading-tight text-white" data-testid="card-scan-me">
+          📷 {t("card.scanMe")} <span className="text-[3mm] font-semibold opacity-80">· {t("card.scanMeEn")} · <span lang="zh-Hans">{t("card.scanMeZh")}</span></span>
+        </p>
+        <div className={layout === "grid" ? "w-[34mm]" : "w-[46mm]"} dangerouslySetInnerHTML={{ __html: c.svg }} />
+        <p className="flex items-baseline gap-[1.5mm] leading-none" data-testid="card-rc">
+          <span className="text-[2.8mm] font-bold uppercase tracking-wide text-neutral-600">{t("card.rcLabel")}</span>
+          <b className="font-mono text-[5.2mm] tracking-[0.6mm] text-black">{formatRc(c.code)}</b>
+        </p>
+      </div>
       {/* Two steps for customers who have never scanned a QR code. */}
       <ol className="flex w-full flex-col gap-[1mm] text-left text-[3.1mm] leading-tight" data-testid="scan-steps">
         <li className="flex items-start gap-[1.5mm]">
@@ -71,7 +80,7 @@ export default async function PrintCardsPage({ searchParams }: { searchParams: P
       </ol>
       {/* No scan? Type the code on the website: opens the same page as the QR. */}
       <p className="w-full rounded-[1.5mm] border border-neutral-300 px-[2mm] py-[1mm] text-[2.8mm] leading-tight" data-testid="card-code">
-        {t("card.noScan", { site })} <b className="font-mono text-[4.4mm] tracking-[0.6mm] text-black">{formatRc(c.code)}</b>
+        {t("card.noScan", { site })}
       </p>
       {r.poweredBadge && (
         <p className="flex items-center gap-1 text-[2.6mm] text-neutral-500">
