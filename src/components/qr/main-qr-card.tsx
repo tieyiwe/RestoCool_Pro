@@ -22,7 +22,7 @@ export async function MainQrCard({ restaurantId, slug, published }: { restaurant
   const r = await getDb().query.restaurants.findFirst({ where: (x, { eq }) => eq(x.id, restaurantId), columns: { name: true } });
   const sticker = {
     scanMe: tc("scanMe"),
-    scanMeAlt: `${tc("scanMeEn")} · ${tc("scanMeZh")}`,
+    scanMeAlt: tc("scanMeEn"),
     rcLabel: tc("rcLabel"),
     noScan: tc("noScan", { site: codeEntryHost(base) }),
     powered: tc("poweredBy"),

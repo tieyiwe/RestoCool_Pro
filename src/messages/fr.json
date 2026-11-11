@@ -942,20 +942,16 @@
     "card": {
       "scan": "Scannez pour voir le menu",
       "scanEn": "Scan to see the menu",
-      "scanZh": "扫码查看菜单",
       "poweredBy": "Menu par RestoCool",
       "fold": "Plier ici",
       "step1": "Ouvrez l’appareil photo de votre téléphone",
       "step1En": "Open your phone camera",
-      "step1Zh": "打开手机相机",
       "step2": "Visez le code, puis touchez le lien qui s’affiche",
       "step2En": "Point at the code, tap the link",
-      "step2Zh": "对准二维码，点击链接",
-      "noScan": "Pas de scan ? · No scan? · 无法扫码？ Allez sur {site} et tapez le numéro RC.",
+      "noScan": "Pas de scan ? Allez sur {site} et tapez le numéro RC. · No scan? Go to {site} and type the RC number.",
       "scanMe": "Scannez-moi",
       "scanMeEn": "Scan me",
-      "scanMeZh": "扫一扫",
-      "rcLabel": "Numéro RC"
+      "rcLabel": "Numéro RC · RC number"
     },
     "mainPrintHint": "6 autocollants par page A4. Découpez-les et placez-les à l’entrée, sur les tables, au comptoir ou sur la vitrine.",
     "mainCode": "Numéro RC de l'établissement (pour les clients qui ne scannent pas) :",

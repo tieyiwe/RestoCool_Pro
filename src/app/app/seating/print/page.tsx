@@ -55,7 +55,7 @@ export default async function PrintCardsPage({ searchParams }: { searchParams: P
       {/* « Scannez-moi » above the QR, the numéro RC right below it: they always travel together. */}
       <div className="flex flex-col items-center gap-[1.2mm]">
         <p className="rounded-full bg-black px-[3mm] py-[0.8mm] text-[4.2mm] font-extrabold leading-tight text-white" data-testid="card-scan-me">
-          📷 {t("card.scanMe")} <span className="text-[3mm] font-semibold opacity-80">· {t("card.scanMeEn")} · <span lang="zh-Hans">{t("card.scanMeZh")}</span></span>
+          📷 {t("card.scanMe")} <span className="text-[3mm] font-semibold opacity-80">· {t("card.scanMeEn")}</span>
         </p>
         <div className={layout === "grid" ? "w-[34mm]" : "w-[46mm]"} dangerouslySetInnerHTML={{ __html: c.svg }} />
         <p className="flex items-baseline gap-[1.5mm] leading-none" data-testid="card-rc">
@@ -68,13 +68,13 @@ export default async function PrintCardsPage({ searchParams }: { searchParams: P
         <li className="flex items-start gap-[1.5mm]">
           <span className="flex h-[4.5mm] w-[4.5mm] shrink-0 items-center justify-center rounded-full bg-black text-[2.8mm] font-bold text-white">1</span>
           <span>
-            <b>{t("card.step1")}</b> <span className="text-neutral-600">· {t("card.step1En")} · <span lang="zh-Hans">{t("card.step1Zh")}</span></span>
+            <b>{t("card.step1")}</b> <span className="text-neutral-600">· {t("card.step1En")}</span>
           </span>
         </li>
         <li className="flex items-start gap-[1.5mm]">
           <span className="flex h-[4.5mm] w-[4.5mm] shrink-0 items-center justify-center rounded-full bg-black text-[2.8mm] font-bold text-white">2</span>
           <span>
-            <b>{t("card.step2")}</b> <span className="text-neutral-600">· {t("card.step2En")} · <span lang="zh-Hans">{t("card.step2Zh")}</span></span>
+            <b>{t("card.step2")}</b> <span className="text-neutral-600">· {t("card.step2En")}</span>
           </span>
         </li>
       </ol>

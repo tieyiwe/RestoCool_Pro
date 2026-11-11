@@ -50,7 +50,7 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
   const genericQr = brandedQrSvg(menuUrl(base, r.slug));
   const sticker = {
     scanMe: t("card.scanMe"),
-    scanMeAlt: `${t("card.scanMeEn")} · ${t("card.scanMeZh")}`,
+    scanMeAlt: t("card.scanMeEn"),
     rcLabel: t("card.rcLabel"),
     noScan: t("card.noScan", { site: codeEntryHost(base) }),
     powered: t("card.poweredBy"),

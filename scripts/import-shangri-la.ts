@@ -4,7 +4,9 @@
  * and drinks in FR/EN/ZH with prices, spice levels, « nouveau » tags, the Champagne's two prices,
  * 78 photos, contacts, 19 tables and 12 private rooms.
  *
- *   npm run import:shangri-la -- --owner-email=owner@example.com [--publish] [--replace]
+ *   npm run import:shangri-la -- --owner-email=owner@example.com [--draft] [--replace]
+ *
+ * Published and featured « À la une » (first) by default; --draft keeps it hidden.
  *
  * The owner becomes the owner the first time they sign in with that (verified) email.
  * Photos go to the same storage as normal uploads (Replit Object Storage on Replit).
@@ -14,7 +16,7 @@ import "./_env";
 import { randomBytes } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { closeDb, getDb } from "../src/db";
 import { accessCodes, areas, media, menuCategories, menuItems, menuItemVariants, planEvents, restaurants, seats } from "../src/db/schema";
 import { generateCode } from "../src/lib/access-code-format";
@@ -72,11 +74,11 @@ function imageSize(b: Buffer): { width: number; height: number } {
 async function main() {
   const ownerEmail = arg("owner-email")?.trim().toLowerCase();
   if (!ownerEmail || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ownerEmail)) {
-    console.error("Usage: npm run import:shangri-la -- --owner-email=owner@example.com [--publish] [--replace]");
+    console.error("Usage: npm run import:shangri-la -- --owner-email=owner@example.com [--draft] [--replace]");
     process.exitCode = 1;
     return;
   }
-  const publish = process.argv.includes("--publish");
+  const publish = !process.argv.includes("--draft");
   const replace = process.argv.includes("--replace");
   const db = getDb();
   const store = getStore();
@@ -89,6 +91,10 @@ async function main() {
     return;
   }
   if (existing) await db.delete(restaurants).where(eq(restaurants.id, existing.id));
+  if (publish && existing?.featuredRank !== 1) {
+    // Shangri-La goes first « À la une »: the others move down one place (only 3 are shown).
+    await db.execute(sql`update restaurants set featured_rank = case when featured_rank >= 3 then null else featured_rank + 1 end where featured_rank is not null`);
+  }
 
   const tr = (dict: Record<string, [string, string?]>, name: string) => dict[name] ?? [name];
   const phones = data.PHONES.map((p) => `226${p}`);
@@ -114,6 +120,7 @@ async function main() {
       planStatus: "trial",
       planExpiresAt: new Date(Date.now() + 30 * 86_400_000),
       published: publish,
+      featuredRank: publish ? 1 : null,
       settings: {
         onboardedAt: new Date().toISOString(),
         seatingModes: ["table", "room", "takeaway"],
@@ -228,7 +235,7 @@ async function main() {
 
   const [rc] = await db.select({ code: accessCodes.code }).from(accessCodes).where(eq(accessCodes.restaurantId, rid)).limit(1);
   console.log(`✓ Shangri-La: ${visible.length} categories, ${items} items, ${photos} photos, ${tableRows.length} tables, ${roomRows.length} rooms`);
-  console.log(`  Menu: /r/${SLUG} (${publish ? "published" : "not published yet: add --publish, or the owner publishes it"})`);
+  console.log(`  Menu: /r/${SLUG} (${publish ? "published, featured first « À la une »" : "draft: the owner publishes it"})`);
   console.log(`  Owner: the first sign-in with ${ownerEmail} (verified) becomes the owner.`);
   if (rc) console.log(`  Numéro RC: RC-${rc.code}`);
   console.log(`  Photos stored with: ${store.kind}`);
