@@ -1,4 +1,4 @@
-import QRCode from "qrcode";
+import { brandedQrSvg } from "@/lib/qr-branded";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
@@ -65,7 +65,7 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   let rc = "";
   if (enabled) {
     const [token, code] = await Promise.all([ensureAttendanceToken(db, r), ensureMainCode(db, rid)]);
-    qrSvg = await QRCode.toString(`${await publicBaseUrl()}/pointage/${token}`, { type: "svg", margin: 1, color: { dark: "#17231C", light: "#FFFFFF" } });
+    qrSvg = brandedQrSvg(`${await publicBaseUrl()}/pointage/${token}`);
     rc = formatRc(code);
   }
   const now = Date.now();

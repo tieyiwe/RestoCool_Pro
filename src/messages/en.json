@@ -27,7 +27,14 @@
     "notFoundTitle": "Page not found",
     "notFoundText": "This page does not exist, or the menu is not published yet.",
     "backHome": "Back to home",
-    "authLoadingSlow": "Sign-in is taking longer than usual… Check your network; the page is still loading."
+    "authLoadingSlow": "Sign-in is taking longer than usual… Check your network; the page is still loading.",
+    "city": {
+      "main": "Main cities",
+      "others": "Other towns (A to Z)",
+      "other": "Other town…",
+      "typeLabel": "Name of your town or locality",
+      "placeholder": "Type the name of your town"
+    }
   },
   "landing": {
     "cta": "Create my business for free",

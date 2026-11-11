@@ -16,11 +16,17 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await expect(page.getByRole("alert").filter({ hasText: "au moins 2 caractères" })).toBeVisible();
   await page.getByLabel("Nom de l'établissement").fill(name);
   await expect(page.getByTestId("slug-preview")).toContainText("restocool.com/r/maquis-e2e-");
-  await page.getByLabel("Ville").fill("Koudougou");
+  // City: Burkina's towns in a list, or « Autre ville… » to type one that isn't there.
+  await expect(page.getByTestId("city-select")).toHaveValue("Ouagadougou");
+  await page.getByTestId("city-select").selectOption("Koudougou");
+  await page.getByTestId("city-select").selectOption({ label: "Autre ville…" });
+  await page.getByTestId("city-other").fill("Kokologho");
   await page.getByRole("button", { name: "Créer mon établissement" }).click();
 
   // 2. Wizard: profile → contacts → hours → service → appearance → done
   await expect(page).toHaveURL(/\/app\/onboarding\/1$/);
+  // The typed town is kept (shown as « Autre ville » + the name).
+  await expect(page.getByTestId("city-other")).toHaveValue("Kokologho");
   // Business first: other sections stay locked (no navigation, pages lead back to the setup).
   await expect(page.getByRole("link", { name: "Personnel" })).toHaveCount(0);
   await page.goto("/app/staff");

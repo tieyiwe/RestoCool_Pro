@@ -1,4 +1,4 @@
-import QRCode from "qrcode";
+import { brandedQrSvg } from "@/lib/qr-branded";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ export async function MainQrCard({ restaurantId, slug, published }: { restaurant
   const base = await publicBaseUrl();
   const url = menuUrl(base, slug);
   const code = await ensureMainCode(getDb(), restaurantId);
-  const svg = await QRCode.toString(url, { type: "svg", margin: 1, errorCorrectionLevel: "M", color: { dark: "#17231C", light: "#FFFFFF" } });
+  const svg = brandedQrSvg(url);
   return (
     <Card className="flex flex-col gap-4 text-left sm:flex-row sm:items-start" data-testid="main-qr">
       <div className="mx-auto w-40 shrink-0 rounded-lg border border-border bg-white p-2 sm:mx-0" aria-hidden dangerouslySetInnerHTML={{ __html: svg }} />

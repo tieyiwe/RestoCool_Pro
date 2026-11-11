@@ -4,16 +4,14 @@ import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { slugify } from "@/lib/slug";
+import { CityField } from "@/components/forms/city-field";
 import { createRestaurantAction, type CreateRestaurantState } from "../actions";
-
-const CITIES = ["Ouagadougou", "Bobo-Dioulasso", "Koudougou", "Ouahigouya", "Banfora", "Kaya", "Tenkodogo", "Fada N’Gourma", "Dédougou", "Dori", "Ziniaré", "Gaoua"];
 
 export function CreateRestaurantForm() {
   const t = useTranslations("app.newRestaurant");
   const tc = useTranslations("common");
   const [state, action, pending] = useActionState<CreateRestaurantState, FormData>(createRestaurantAction, undefined);
   const [name, setName] = useState("");
-  const [city, setCity] = useState("Ouagadougou");
   const error = state?.error === "name" ? t("errorName") : state?.error === "limit" ? t("errorLimit") : state?.error ? tc("error") : null;
   const slug = name.trim().length >= 2 ? slugify(name) : null;
   const input = "min-h-12 w-full rounded-xl border border-border bg-background px-4 text-base outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15";
@@ -40,15 +38,7 @@ export function CreateRestaurantForm() {
           {t("nameHint")}
         </span>
       </label>
-      <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-bold">{t("city")}</span>
-        <input name="city" value={city} onChange={(e) => setCity(e.target.value)} list="bf-cities" maxLength={60} autoComplete="address-level2" className={input} />
-        <datalist id="bf-cities">
-          {CITIES.map((c) => (
-            <option key={c} value={c} />
-          ))}
-        </datalist>
-      </label>
+      <CityField label={t("city")} className={input} />
 
       {/* Live preview of the menu address and the QR it will be printed on. */}
       <div className="flex items-center gap-3 rounded-2xl border border-dashed border-primary/40 bg-primary/5 p-4" data-testid="slug-preview" aria-live="polite">

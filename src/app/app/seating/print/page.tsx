@@ -1,4 +1,4 @@
-import QRCode from "qrcode";
+import { brandedQrSvg } from "@/lib/qr-branded";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { PrintButton } from "@/components/print-button";
@@ -25,7 +25,7 @@ export default async function PrintCardsPage({ searchParams }: { searchParams: P
   if (!r) return null;
   const base = await publicBaseUrl();
   const perSeat = !mainOnly && (r.settings.qrStrategy ?? "per_seat") === "per_seat" && hasFeature(r, "qrPerSeat");
-  const svg = (text: string) => QRCode.toString(text, { type: "svg", margin: 1, errorCorrectionLevel: "M", color: { dark: "#17231C", light: "#FFFFFF" } });
+  const svg = (text: string) => brandedQrSvg(text);
 
   let cards: Card[];
   if (perSeat) {

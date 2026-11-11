@@ -15,6 +15,7 @@ import { env } from "@/lib/env";
 import { formatBfPhone } from "@/lib/format";
 import { SEATING_MODES } from "@/lib/restaurants/settings";
 import { BrandingEditor } from "./branding-editor";
+import { CityField } from "@/components/forms/city-field";
 import { LocationField } from "./location-field";
 import { SettingsForm } from "./settings-form";
 
@@ -47,15 +48,7 @@ export async function ProfileSection({ r, next, submitLabel }: SectionProps) {
         <input name="description_zh" defaultValue={r.description?.zh ?? ""} maxLength={240} placeholder="中文" aria-label={`${t("description")} ZH`} className={input} />
       </fieldset>
       <div className="grid gap-3 sm:grid-cols-2">
-        <label>
-          <span className={label}>{t("city")}</span>
-          <input name="city" defaultValue={r.city} required maxLength={60} list="bf-cities" className={input} />
-          <datalist id="bf-cities">
-            {["Ouagadougou", "Bobo-Dioulasso", "Koudougou", "Ouahigouya", "Banfora", "Kaya", "Tenkodogo", "Fada N’Gourma"].map((c) => (
-              <option key={c} value={c} />
-            ))}
-          </datalist>
-        </label>
+        <CityField defaultValue={r.city ?? ""} label={t("city")} className={input} required />
         <label>
           <span className={label}>{t("address")}</span>
           <input name="address" defaultValue={r.address ?? ""} maxLength={200} placeholder={t("addressPlaceholder")} className={input} />

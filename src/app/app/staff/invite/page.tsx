@@ -1,4 +1,4 @@
-import QRCode from "qrcode";
+import { brandedQrSvg } from "@/lib/qr-branded";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ConfirmButton } from "@/components/ui/confirm-button";
@@ -19,7 +19,7 @@ export default async function InvitePage() {
   const t = await getTranslations("join.invite");
   const r = (await ctx.repo.restaurant.get())!;
   const url = `${await publicBaseUrl()}/rejoindre/${await ensureJoinToken(getDb(), r)}`;
-  const svg = await QRCode.toString(url, { type: "svg", margin: 1, errorCorrectionLevel: "M", color: { dark: "#17231C", light: "#FFFFFF" } });
+  const svg = brandedQrSvg(url);
   return (
     <div className="mx-auto flex max-w-md flex-col items-center gap-5 text-center" data-testid="invite">
       <div className="print:hidden">

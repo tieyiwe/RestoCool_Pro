@@ -1,4 +1,4 @@
-import QRCode from "qrcode";
+import { brandedQrSvg } from "@/lib/qr-branded";
 import { ensureMainCode, ensureSeatCodes, formatRc } from "@/lib/access-codes";
 import Link from "next/link";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
@@ -45,7 +45,7 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
     ensureMainCode(getDb(), r.id),
     perSeat ? ensureSeatCodes(getDb(), r.id, seatRows.filter((s) => s.type === "table" || s.type === "room" || s.type === "area").map((s) => s.id)) : Promise.resolve(new Map<string, string>()),
   ]);
-  const genericQr = await QRCode.toString(menuUrl(base, r.slug), { type: "svg", margin: 1, color: { dark: "#17231C", light: "#FFFFFF" } });
+  const genericQr = brandedQrSvg(menuUrl(base, r.slug));
   const areaName = (id: string | null) => (id ? pickText(areaRows.find((a) => a.id === id)?.name, locale) : "");
 
   let okMessage: string | null = null;

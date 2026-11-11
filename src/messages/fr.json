@@ -27,7 +27,14 @@
     "notFoundTitle": "Page introuvable",
     "notFoundText": "Cette page n’existe pas, ou le menu n’est pas encore publié.",
     "backHome": "Retour à l’accueil",
-    "authLoadingSlow": "La connexion prend plus de temps que d’habitude… Vérifiez votre réseau, la page continue de charger."
+    "authLoadingSlow": "La connexion prend plus de temps que d’habitude… Vérifiez votre réseau, la page continue de charger.",
+    "city": {
+      "main": "Grandes villes",
+      "others": "Autres villes (A à Z)",
+      "other": "Autre ville…",
+      "typeLabel": "Nom de votre ville ou localité",
+      "placeholder": "Tapez le nom de votre ville"
+    }
   },
   "landing": {
     "cta": "Créer mon établissement gratuitement",

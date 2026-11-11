@@ -1,4 +1,4 @@
-import QRCode from "qrcode";
+import { brandedQrSvg } from "@/lib/qr-branded";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -21,7 +21,7 @@ export default async function AttendanceQrPage() {
   const db = getDb();
   const base = await publicBaseUrl();
   const [token, code] = await Promise.all([ensureAttendanceToken(db, r), ensureMainCode(db, r.id)]);
-  const svg = await QRCode.toString(`${base}/pointage/${token}`, { type: "svg", margin: 1, errorCorrectionLevel: "M", color: { dark: "#17231C", light: "#FFFFFF" } });
+  const svg = brandedQrSvg(`${base}/pointage/${token}`);
   return (
     <div>
       <style>{`@page { size: A4 portrait; margin: 12mm; } @media print { html, body { background: #fff !important; } }`}</style>

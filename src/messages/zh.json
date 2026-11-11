@@ -27,7 +27,14 @@
     "notFoundTitle": "页面未找到",
     "notFoundText": "此页面不存在，或菜单尚未发布。",
     "backHome": "返回首页",
-    "authLoadingSlow": "登录加载时间比平时长…请检查网络，页面仍在加载。"
+    "authLoadingSlow": "登录加载时间比平时长…请检查网络，页面仍在加载。",
+    "city": {
+      "main": "主要城市",
+      "others": "其他城镇（A–Z）",
+      "other": "其他城镇…",
+      "typeLabel": "您所在城镇的名称",
+      "placeholder": "输入您的城镇名称"
+    }
   },
   "landing": {
     "cta": "免费创建我的店铺",

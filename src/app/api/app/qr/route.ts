@@ -1,4 +1,4 @@
-import QRCode from "qrcode";
+import { brandedQrPng } from "@/lib/qr-branded";
 import { z } from "zod";
 import { requireMember } from "@/lib/auth/context";
 import { NotFoundError, PlanLimitError } from "@/lib/errors";
@@ -33,7 +33,7 @@ export const GET = handle(async (req: Request) => {
     text = seatUrl(base, r.slug, seat.qrToken);
     name = `${r.slug}-${slugify(`${seat.type}-${seat.label}`)}`;
   }
-  const png = await QRCode.toBuffer(text, { type: "png", width: 1024, margin: 2, errorCorrectionLevel: "M", color: { dark: "#17231C", light: "#FFFFFF" } });
+  const png = brandedQrPng(text, { width: 1024 });
   return new Response(new Uint8Array(png), {
     headers: {
       "Content-Type": "image/png",
