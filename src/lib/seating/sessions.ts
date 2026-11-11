@@ -1,8 +1,8 @@
 import "server-only";
 import { GROUP_SEATS } from "./group-seats";
-import { and, eq, inArray, isNull, lt, or, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull, lt, or, sql } from "drizzle-orm";
 import type { DB } from "@/db";
-import { areas, orders, restaurants, seats, sessionDevices, tableSessions } from "@/db/schema";
+import { areas, buses, orders, restaurants, seats, sessionDevices, tableSessions, trips } from "@/db/schema";
 import { DEFAULT_INACTIVITY } from "./tables";
 
 /** Sessions opened from a printed QR close after this long with no activity (never while orders are in progress). */
@@ -93,10 +93,12 @@ export async function joinSession(
             .from(sessionDevices)
             .where(and(eq(sessionDevices.sessionId, open.id), isNull(sessionDevices.leftAt)));
           const mine = others.some((o) => o.deviceId === input.deviceId);
-          const taken = OCCUPIABLE.has(input.seat.type) && others.some((o) => o.deviceId !== input.deviceId);
+          // Bus seats: one traveler each, so another phone there means « C'est bien mon siège ? » too
+          // (confirmed, both are kept and the hostess sees the double), but never a shared bill.
+          const taken = (OCCUPIABLE.has(input.seat.type) || input.seat.type === "seat") && others.some((o) => o.deviceId !== input.deviceId);
           if (input.source === "picker" && taken && !mine && !input.confirmJoin) return { ok: false as const, reason: "occupied" as const };
           sessionId = open.id;
-          joined = taken;
+          joined = taken && OCCUPIABLE.has(input.seat.type);
           await tx.update(tableSessions).set({ lastActivityAt: now }).where(eq(tableSessions.id, open.id));
         } else {
           const [created] = await tx
@@ -181,6 +183,8 @@ const PRINTED_SEATS = new Set(["table", "room", "area"]);
  * join) must not let a phone rejoin that table later from anywhere.
  */
 export function pickable(r: Pick<Restaurant, "settings">, seat: { type: string }): boolean {
+  // Bus seats are chosen on the bus map (the traveler may have scanned the bus QR, not the seat's).
+  if (seat.type === "seat") return true;
   const perSeat = (r.settings.qrStrategy ?? "per_seat") === "per_seat";
   const modes = new Set<string>(r.settings.seatingModes ?? ["table", "takeaway"]);
   return modes.has(seat.type) && (!perSeat || !PRINTED_SEATS.has(seat.type));
@@ -206,3 +210,38 @@ export async function pickerSeats(db: DB, r: Restaurant) {
       occupied: OCCUPIABLE.has(s.type) && occupied.has(s.id),
     }));
 }
+
+/**
+ * The seat map(s) offered to a traveler: one bus (from its QR) or every active bus, each with its
+ * running trip (orders open only during one) and which seats another phone already chose.
+ * Never returns QR tokens.
+ */
+export async function busPicker(db: DB, r: Restaurant, busToken: string | null) {
+  await sweepStale(db, r);
+  const list = await db
+    .select()
+    .from(buses)
+    .where(and(eq(buses.restaurantId, r.id), eq(buses.active, true), ...(busToken ? [eq(buses.qrToken, busToken)] : [])))
+    .orderBy(asc(buses.sort), asc(buses.name));
+  if (!list.length) return [];
+  const ids = list.map((b) => b.id);
+  const [seatRows, open, running] = await Promise.all([
+    db.select().from(seats).where(and(eq(seats.restaurantId, r.id), inArray(seats.busId, ids), eq(seats.active, true))).orderBy(asc(seats.sort)),
+    db.select({ seatId: tableSessions.seatId }).from(tableSessions).where(and(eq(tableSessions.restaurantId, r.id), eq(tableSessions.status, "open"))),
+    db.select().from(trips).where(and(eq(trips.restaurantId, r.id), inArray(trips.busId, ids), eq(trips.status, "open"))),
+  ]);
+  const occupied = new Set(open.map((o) => o.seatId));
+  return list.map((b) => {
+    const trip = running.find((t) => t.busId === b.id);
+    return {
+      id: b.id,
+      name: b.name,
+      layout: b.layout,
+      trip: trip ? { route: trip.route, departureAt: trip.departureAt.toISOString() } : null,
+      seats: seatRows
+        .filter((s) => s.busId === b.id)
+        .map((s) => ({ id: s.id, label: s.label, row: s.mapRow ?? 0, col: s.mapCol ?? 0, position: s.position, occupied: occupied.has(s.id) })),
+    };
+  });
+}
+export type BusPicker = Awaited<ReturnType<typeof busPicker>>;

@@ -384,9 +384,11 @@
       "service": "服务",
       "kitchen": "厨房",
       "history": "记录",
-      "scan": "扫码"
+      "scan": "扫码",
+      "trips": "行程"
     },
-    "buses": "巴士与线路"
+    "buses": "巴士与线路",
+    "trips": "行程"
   },
   "admin": {
     "title": "RestoCool 管理后台",
@@ -879,7 +881,23 @@
     "occupiedTitle_room": "包间“{label}”已有人选择",
     "occupiedQuestion_table": "另一位顾客已选择这张桌子。您和他们坐在一起吗？",
     "occupiedQuestion_room": "另一位顾客已选择这个包间。您们是一起的吗？",
-    "seat_seat": "座位"
+    "seat_seat": "座位",
+    "busSeatTitle": "选择您的座位",
+    "busSeatHint": "点击车票上的座位号。",
+    "busLegend": "橙色座位已被其他手机选择。",
+    "busFront": "车头",
+    "busBack": "车尾",
+    "busDoor": "车门",
+    "busWindow": "靠窗",
+    "busAisle": "靠过道",
+    "busNone": "还没有巴士。",
+    "busNoTrip": "暂无行程",
+    "busNotStarted": "车上服务尚未开始。您可以先浏览菜单，乘务员开始行程后即可点餐。",
+    "busOther": "其他巴士",
+    "busTakenTitle": "{label} 号座已被选择",
+    "busTakenText": "另一部手机已选择此座位。请核对车票上的座位号。",
+    "busTakenYes": "这就是我的座位",
+    "busTakenNo": "选择其他座位"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -1991,6 +2009,37 @@
       "hint": "{bus}：{n} 张座椅背卡片，另加巴士二维码。",
       "seat": "{n} 号座",
       "busCard": "贴在车门或车票上：打开座位图和菜单。"
+    },
+    "trips": {
+      "title": "行程",
+      "intro": "开始您巴士的行程后，旅客即可在座位上点餐。到达后结束行程，释放所有座位。",
+      "noBus": "还没有巴士。负责人在“巴士与线路”中添加。",
+      "onTrip": "行程中",
+      "parked": "停靠中",
+      "departure": "出发：{time}",
+      "orders": "订单",
+      "toConfirm": "待确认",
+      "total": "合计",
+      "seeOrders": "按座位查看订单",
+      "scan": "扫码",
+      "end": "结束行程",
+      "endConfirm": "结束行程？所有座位将为下一班释放。",
+      "noRoute": "您没有被指派线路。请询问负责人。",
+      "route": "线路",
+      "departureLabel": "出发",
+      "start": "开始行程",
+      "recent": "最近行程",
+      "ok": {
+        "started": "行程已开始：旅客可以点餐。",
+        "ended": "行程已结束：座位已释放。"
+      },
+      "err": {
+        "busBusy": "此巴士已在行程中。",
+        "notAssigned": "您未被指派到此线路。",
+        "invalid": "请检查线路和出发时间。",
+        "forbidden": "您无权管理行程。",
+        "notFound": "找不到行程。"
+      }
     }
   }
 }

@@ -31,7 +31,7 @@ export type ItemStatus = OrderItem["status"];
 
 export class OrderError extends Error {
   constructor(
-    public readonly code: "no_seat" | "name_required" | "delivery_required" | "unavailable" | "empty" | "conflict" | "invalid" | "reason_required",
+    public readonly code: "no_seat" | "name_required" | "delivery_required" | "unavailable" | "empty" | "conflict" | "invalid" | "reason_required" | "no_trip",
     public readonly itemIds: string[] = [],
   ) {
     super(code);
@@ -39,6 +39,7 @@ export class OrderError extends Error {
 }
 
 import { GROUP_SEATS } from "@/lib/seating/group-seats";
+import { openTripOfBus } from "@/lib/transport/trips";
 export { GROUP_SEATS };
 /** Orders still being handled (the front desk and kitchen show these). */
 export const ACTIVE_STATUSES = ["sent", "confirmed", "preparing", "ready"] as const satisfies readonly OrderStatus[];
@@ -196,6 +197,13 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
   const name = input.customerName ?? s.device.customerName ?? null;
   if ((type === "counter" || type === "takeaway") && !name) throw new OrderError("name_required");
   if (type === "delivery" && (!name || !input.customerPhone || !input.deliveryAddress)) throw new OrderError("delivery_required");
+  // On a bus, orders are taken during a trip only (the hostess starts it), and belong to it.
+  let tripId: string | null = null;
+  if (type === "seat") {
+    const trip = s.seat.busId ? await openTripOfBus(db, s.seat.busId) : null;
+    if (!trip) throw new OrderError("no_trip");
+    tripId = trip.id;
+  }
 
   const priced = await priceLines(db, r.id, input.lines, now);
   const mode = r.settings.orderValidation ?? "server_confirms";
@@ -212,6 +220,7 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
         seatId: s.seat.id,
         seatType: type,
         seatLabel: s.seat.label,
+        tripId,
         businessDate: day,
         number,
         source: "customer",

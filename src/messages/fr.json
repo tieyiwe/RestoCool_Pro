@@ -384,9 +384,11 @@
       "service": "Service",
       "kitchen": "Cuisine",
       "history": "Historique",
-      "scan": "Scanner"
+      "scan": "Scanner",
+      "trips": "Voyages"
     },
-    "buses": "Bus et itinéraires"
+    "buses": "Bus et itinéraires",
+    "trips": "Voyages"
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -879,7 +881,23 @@
     "occupiedTitle_room": "Le salon « {label} » est déjà pris",
     "occupiedQuestion_table": "Un autre client a déjà choisi cette table. Êtes-vous assis avec lui ?",
     "occupiedQuestion_room": "Un autre client a déjà choisi ce salon. Êtes-vous ensemble ?",
-    "seat_seat": "Siège"
+    "seat_seat": "Siège",
+    "busSeatTitle": "Choisissez votre siège",
+    "busSeatHint": "Touchez le siège indiqué sur votre billet.",
+    "busLegend": "Les sièges en orange sont déjà choisis sur un autre téléphone.",
+    "busFront": "Avant du bus",
+    "busBack": "Arrière",
+    "busDoor": "Porte",
+    "busWindow": "fenêtre",
+    "busAisle": "couloir",
+    "busNone": "Aucun bus pour l'instant.",
+    "busNoTrip": "pas de voyage en cours",
+    "busNotStarted": "Le service à bord n'a pas encore commencé. Vous pouvez déjà regarder le menu ; vous pourrez commander quand l'hôtesse aura démarré le voyage.",
+    "busOther": "Un autre bus",
+    "busTakenTitle": "Le siège {label} est déjà choisi",
+    "busTakenText": "Un autre téléphone a déjà choisi ce siège. Vérifiez le numéro sur votre billet.",
+    "busTakenYes": "C'est bien mon siège",
+    "busTakenNo": "Choisir un autre siège"
   },
   "seating": {
     "title": "Tables et salles",
@@ -1991,6 +2009,37 @@
       "hint": "{bus} : {n} cartes à coller au dos des sièges, plus le QR du bus.",
       "seat": "Siège {n}",
       "busCard": "À afficher à la porte ou sur le billet : il ouvre le plan des sièges et le menu."
+    },
+    "trips": {
+      "title": "Voyages",
+      "intro": "Démarrez le voyage de votre bus : les voyageurs peuvent alors commander depuis leur siège. À l'arrivée, terminez le voyage pour libérer tous les sièges.",
+      "noBus": "Aucun bus pour l'instant. Le responsable ajoute les bus dans « Bus et itinéraires ».",
+      "onTrip": "En voyage",
+      "parked": "Au garage",
+      "departure": "Départ : {time}",
+      "orders": "commandes",
+      "toConfirm": "à confirmer",
+      "total": "total",
+      "seeOrders": "Commandes par siège",
+      "scan": "Scanner",
+      "end": "Terminer le voyage",
+      "endConfirm": "Terminer le voyage ? Tous les sièges seront libérés pour le prochain départ.",
+      "noRoute": "Aucun itinéraire ne vous est affecté. Demandez au responsable.",
+      "route": "Itinéraire",
+      "departureLabel": "Départ",
+      "start": "Démarrer le voyage",
+      "recent": "Derniers voyages",
+      "ok": {
+        "started": "Voyage démarré : les voyageurs peuvent commander.",
+        "ended": "Voyage terminé : les sièges sont libérés."
+      },
+      "err": {
+        "busBusy": "Ce bus est déjà en voyage.",
+        "notAssigned": "Vous n'êtes pas affectée à cet itinéraire.",
+        "invalid": "Vérifiez l'itinéraire et l'heure de départ.",
+        "forbidden": "Vous n'avez pas accès aux voyages.",
+        "notFound": "Voyage introuvable."
+      }
     }
   }
 }

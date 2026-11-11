@@ -11,6 +11,8 @@ const STATUS: Record<OrderError["code"], number> = {
   conflict: 409,
   invalid: 400,
   reason_required: 400,
+  // On a bus: the hostess hasn't started the trip yet.
+  no_trip: 409,
 };
 
 /** OrderErrors become JSON answers the screens can explain; anything else is rethrown. */

@@ -26,7 +26,7 @@ export const loadRestaurant = cache(async (slug: string) => {
   return null;
 });
 
-export async function PublicMenu({ slug, seatToken }: { slug: string; seatToken: string | null }) {
+export async function PublicMenu({ slug, seatToken, busToken = null }: { slug: string; seatToken: string | null; busToken?: string | null }) {
   const found = await loadRestaurant(slug);
   if (!found) notFound();
   const r = found.restaurant;
@@ -39,14 +39,16 @@ export async function PublicMenu({ slug, seatToken }: { slug: string; seatToken:
   const enabled = hasFeature(r, "ordering");
   const generic = (r.settings.qrStrategy ?? "per_seat") === "generic" || !hasFeature(r, "qrPerSeat");
   const modes = r.settings.seatingModes ?? ["table", "takeaway"];
-  const pickerAvailable = enabled && (generic || modes.some((m) => m === "counter" || m === "takeaway" || m === "delivery"));
+  // A bus company: travelers always pick their seat on the bus map (or scan the seat-back QR).
+  const transport = r.kind === "transport";
+  const pickerAvailable = enabled && (transport || generic || modes.some((m) => m === "counter" || m === "takeaway" || m === "delivery"));
   return (
     <MenuApp
       data={data}
       messages={messages}
       whatsappQr={whatsappQr}
       seatToken={seatToken}
-      seating={{ enabled, pickerAvailable, inactivity: r.settings.inactivity ?? DEFAULT_INACTIVITY }}
+      seating={{ enabled, pickerAvailable, inactivity: r.settings.inactivity ?? DEFAULT_INACTIVITY, ...(transport ? { transport: { busToken } } : {}) }}
     />
   );
 }

@@ -27,7 +27,16 @@ export async function pinLoginAction(_prev: PinState, fd: FormData): Promise<Pin
   const role = m?.jobRoleId ? await db.query.jobRoles.findFirst({ where: (x, { eq }) => eq(x.id, m.jobRoleId!) }) : null;
   const actor: Actor = { kind: "member", userId: `pin:${res.memberId}`, restaurantId: dev.restaurant.id, role: m?.role ?? "server", memberId: res.memberId, via: "pin", ...(role ? { access: cleanAccess(role.access) } : {}) };
   const allowed = (a: Parameters<typeof can>[1]) => can(actor, a, { restaurantId: dev.restaurant.id });
-  redirect(allowed("orders.prepare") && !allowed("orders.confirm") ? "/app/kitchen" : allowed("orders.read") ? "/app/service" : "/app");
+  const transport = dev.restaurant.kind === "transport";
+  redirect(
+    allowed("orders.prepare") && !allowed("orders.confirm")
+      ? "/app/kitchen"
+      : transport && allowed("orders.confirm")
+        ? "/app/trips"
+        : allowed("orders.read")
+          ? "/app/service"
+          : "/app",
+  );
 }
 
 /** « Verrouiller »: ends the session; the tablet goes back to the PIN pad for the next person. */

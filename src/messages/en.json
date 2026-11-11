@@ -384,9 +384,11 @@
       "service": "Service",
       "kitchen": "Kitchen",
       "history": "History",
-      "scan": "Scan"
+      "scan": "Scan",
+      "trips": "Trips"
     },
-    "buses": "Buses & itineraries"
+    "buses": "Buses & itineraries",
+    "trips": "Trips"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -879,7 +881,23 @@
     "occupiedTitle_room": "Room “{label}” is already taken",
     "occupiedQuestion_table": "Another customer already chose this table. Are you sitting with them?",
     "occupiedQuestion_room": "Another customer already chose this room. Are you together?",
-    "seat_seat": "Seat"
+    "seat_seat": "Seat",
+    "busSeatTitle": "Choose your seat",
+    "busSeatHint": "Tap the seat printed on your ticket.",
+    "busLegend": "Orange seats are already chosen on another phone.",
+    "busFront": "Front of the bus",
+    "busBack": "Back",
+    "busDoor": "Door",
+    "busWindow": "window",
+    "busAisle": "aisle",
+    "busNone": "No buses yet.",
+    "busNoTrip": "no trip in progress",
+    "busNotStarted": "Service on board hasn't started yet. You can already look at the menu; you can order once the hostess has started the trip.",
+    "busOther": "Another bus",
+    "busTakenTitle": "Seat {label} is already chosen",
+    "busTakenText": "Another phone already chose this seat. Check the number on your ticket.",
+    "busTakenYes": "This is my seat",
+    "busTakenNo": "Choose another seat"
   },
   "seating": {
     "title": "Tables and rooms",
@@ -1991,6 +2009,37 @@
       "hint": "{bus}: {n} cards for the seat backs, plus the bus QR.",
       "seat": "Seat {n}",
       "busCard": "For the door or the ticket: it opens the seat map and the menu."
+    },
+    "trips": {
+      "title": "Trips",
+      "intro": "Start your bus's trip: travelers can then order from their seat. On arrival, end the trip to free all the seats.",
+      "noBus": "No buses yet. The manager adds buses in “Buses & itineraries”.",
+      "onTrip": "On a trip",
+      "parked": "Parked",
+      "departure": "Departure: {time}",
+      "orders": "orders",
+      "toConfirm": "to confirm",
+      "total": "total",
+      "seeOrders": "Orders by seat",
+      "scan": "Scan",
+      "end": "End the trip",
+      "endConfirm": "End the trip? All seats will be freed for the next departure.",
+      "noRoute": "No itinerary is assigned to you. Ask the manager.",
+      "route": "Itinerary",
+      "departureLabel": "Departure",
+      "start": "Start the trip",
+      "recent": "Latest trips",
+      "ok": {
+        "started": "Trip started: travelers can order.",
+        "ended": "Trip ended: seats are free."
+      },
+      "err": {
+        "busBusy": "This bus is already on a trip.",
+        "notAssigned": "You are not assigned to this itinerary.",
+        "invalid": "Check the itinerary and departure time.",
+        "forbidden": "You don't have access to trips.",
+        "notFound": "Trip not found."
+      }
     }
   }
 }

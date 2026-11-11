@@ -10,7 +10,13 @@ export type SeatType = "table" | "room" | "area" | "counter" | "takeaway" | "del
 export type MySeat = { sessionId: string; seat: { id: string; type: SeatType; label: string }; source: "qr" | "picker"; name?: string };
 type PickerSeat = { id: string; type: SeatType; label: string; capacity: number | null; area: ({ fr: string } & Partial<Record<string, string>>) | null; occupied: boolean };
 
-export type SeatingConfig = { enabled: boolean; pickerAvailable: boolean; inactivity: InactivityTimings };
+export type SeatingConfig = {
+  enabled: boolean;
+  pickerAvailable: boolean;
+  inactivity: InactivityTimings;
+  /** Bus companies: the picker is the bus seat map (`busToken`: opened from that bus's QR). */
+  transport?: { busToken: string | null };
+};
 
 function storeGet(kind: "local" | "session", key: string) {
   try {

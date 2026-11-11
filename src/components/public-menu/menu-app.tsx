@@ -11,6 +11,7 @@ import type { CartLine, PublicItem, PublicMenuData } from "@/lib/public-menu/typ
 import { cn } from "@/lib/utils";
 import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
 import { deviceId, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
+import { BusPicker } from "./bus-picker";
 
 type Lang = "fr" | "en" | "zh";
 type Panel =
@@ -324,7 +325,8 @@ export function MenuApp({
     } else if (res.error === "no_seat") {
       forget();
       flash(t(seating.pickerAvailable ? "chooseSeatFirst" : "scanTableFirst"));
-    } else if (res.error === "name_required" || res.error === "delivery_required") flash(t("orderDetailsMissing"));
+    } else if (res.error === "no_trip") flash(t("busNotStarted"));
+    else if (res.error === "name_required" || res.error === "delivery_required") flash(t("orderDetailsMissing"));
     else if (res.error === "network") flash(t("orderOffline"));
     else flash(t("orderError"));
   }
@@ -877,7 +879,12 @@ export function MenuApp({
         />
       )}
 
-      {picker && <SeatPicker slug={data.slug} lang={lang} t={t} onChoose={choose} onClose={() => setPicker(false)} />}
+      {picker &&
+        (seating.transport ? (
+          <BusPicker slug={data.slug} busToken={seating.transport.busToken} t={t} onChoose={choose} onClose={() => setPicker(false)} />
+        ) : (
+          <SeatPicker slug={data.slug} lang={lang} t={t} onChoose={choose} onClose={() => setPicker(false)} />
+        ))}
       {warning !== null && <StillThere seconds={warning} t={t} onStay={stillHere} />}
       {welcome && <Welcome name={data.name} t={t} onClose={() => setWelcome(false)} />}
     </div>

@@ -34,6 +34,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     [
       { href: "/app", label: t("dashboard"), icon: "🏠", need: null },
       { href: "/app/service", label: t("frontDesk"), icon: "🛎️", need: "orders.read" },
+      ...(transport ? ([{ href: "/app/trips", label: t("trips"), icon: "🛣️", need: "orders.confirm" }] as const) : []),
       { href: "/app/kitchen", label: t("kitchen"), icon: "👩‍🍳", need: "orders.read" },
       { href: "/app/scan", label: t("scan"), icon: "📷", need: null },
       { href: "/app/orders", label: t("history"), icon: "🧾", need: "reports.read" },
@@ -48,11 +49,22 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   ).filter((n) => allowed(n.need));
   // Phones: the 4 most used screens for this role as tabs, the rest under « Plus ».
   const kitchenOnly = allowed("orders.prepare") && !allowed("orders.confirm");
-  const order = kitchenOnly ? ["/app/kitchen", "/app/scan", "/app"] : ["/app", "/app/service", "/app/scan", allowed("orders.prepare") && !allowed("reports.read") ? "/app/kitchen" : "/app/orders"];
+  const order = transport
+    ? ["/app", "/app/trips", "/app/scan", "/app/service"]
+    : kitchenOnly
+      ? ["/app/kitchen", "/app/scan", "/app"]
+      : ["/app", "/app/service", "/app/scan", allowed("orders.prepare") && !allowed("reports.read") ? "/app/kitchen" : "/app/orders"];
   const tabs = order.map((h) => nav.find((n) => n.href === h)).filter((n): n is (typeof nav)[number] => Boolean(n)).slice(0, 4);
   const more = nav.filter((n) => !tabs.includes(n));
   const toTab = (n: (typeof nav)[number]) => ({ href: n.href, label: n.label, icon: n.icon });
-  const SHORT: Record<string, "home" | "service" | "kitchen" | "history" | "scan"> = { "/app": "home", "/app/service": "service", "/app/kitchen": "kitchen", "/app/orders": "history", "/app/scan": "scan" };
+  const SHORT: Record<string, "home" | "service" | "kitchen" | "history" | "scan" | "trips"> = {
+    "/app": "home",
+    "/app/service": "service",
+    "/app/kitchen": "kitchen",
+    "/app/orders": "history",
+    "/app/scan": "scan",
+    "/app/trips": "trips",
+  };
   const toShortTab = (n: (typeof nav)[number]) => ({ ...toTab(n), label: SHORT[n.href] ? t(`tabs.${SHORT[n.href]}`) : n.label });
   // Personnel managers are prompted live when someone asks to join the team.
   const joinPending = !focus && ctx && allowed("staff.write") ? await pendingJoinRequests(getDb(), ctx.repo.restaurantId).catch(() => []) : null;
