@@ -47,6 +47,21 @@ export async function getIdentityProfile(): Promise<Identity | null> {
   };
 }
 
+/**
+ * The signed-in user's primary email, only if the identity provider verified it (Google sign-in
+ * or a confirmed code). Used to hand over businesses prepared for this email.
+ */
+export async function getVerifiedEmail(): Promise<{ userId: string; email: string; name: string | null } | null> {
+  const id = await getIdentity();
+  if (!id) return null;
+  if (!env.clerkConfigured()) return id.email ? { userId: id.userId, email: id.email, name: id.name } : null;
+  const { currentUser } = await import("@clerk/nextjs/server");
+  const user = await currentUser();
+  const primary = user?.primaryEmailAddress;
+  if (!user || !primary || primary.verification?.status !== "verified") return null;
+  return { userId: user.id, email: primary.emailAddress, name: [user.firstName, user.lastName].filter(Boolean).join(" ") || null };
+}
+
 /** All restaurants the signed-in user can work in. */
 export const getMemberships = cache(async (): Promise<Membership[]> => {
   const id = await getIdentity();

@@ -10,7 +10,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ key: st
   if (!bytes) return new Response("Not found", { status: 404 });
   return new Response(new Uint8Array(bytes), {
     headers: {
-      "Content-Type": key.endsWith(".jpg") ? "image/jpeg" : "image/webp",
+      "Content-Type": key.endsWith(".jpg") ? "image/jpeg" : key.endsWith(".png") ? "image/png" : "image/webp",
       "Content-Length": String(bytes.length),
       "Cache-Control": "public, max-age=31536000, immutable",
       "X-Content-Type-Options": "nosniff",

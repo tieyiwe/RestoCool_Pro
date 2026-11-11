@@ -15,6 +15,11 @@ export type RestaurantSettings = {
   attendanceToken?: string;
   /** Secret of the « Rejoindre l'équipe » QR (regenerable). */
   joinToken?: string;
+  /**
+   * A business created for someone (e.g. imported by the platform): the first person who signs
+   * in with this verified email becomes its owner. Lower case; removed once claimed.
+   */
+  ownerEmail?: string;
   /** Front desk timers: an open order turns orange, then red, after these many minutes. */
   serviceDelays?: { warnMin: number; lateMin: number };
 };

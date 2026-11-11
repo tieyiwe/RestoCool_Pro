@@ -351,7 +351,8 @@ export function MenuApp({
   );
   const photos = useMemo(() => (lowData ? [] : categories.flatMap((c) => c.items).filter((i) => i.photoUrl)), [categories, lowData]);
   const totals = cartTotals(items, lines);
-  const status = now ? openStatus(data.hours, now) : null;
+  // No opening hours entered: say nothing rather than « Fermé ».
+  const status = now && data.hours.length ? openStatus(data.hours, now) : null;
   const accentStyle = { ["--accent" as string]: data.accent, ["--on-accent" as string]: data.onAccent } as React.CSSProperties;
 
   function add(item: PublicItem) {

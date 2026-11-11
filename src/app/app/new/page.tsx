@@ -1,11 +1,17 @@
 import { getTranslations } from "next-intl/server";
 import { SetupShell } from "@/components/setup/setup-shell";
-import { getMemberContext } from "@/lib/auth/context";
+import { redirect } from "next/navigation";
+import { getDb } from "@/db";
+import { getMemberContext, getVerifiedEmail } from "@/lib/auth/context";
+import { claimBusinessesByEmail } from "@/lib/restaurants/claim";
 import { CreateRestaurantForm } from "./create-restaurant-form";
 
 /** Step 1 of getting started: create the business. Everything else unlocks after the setup. */
 export default async function NewRestaurantPage() {
   const t = await getTranslations("app.newRestaurant");
+  // A business prepared for this person (same verified email): hand it over, open it.
+  const me = await getVerifiedEmail();
+  if (me && (await claimBusinessesByEmail(getDb(), { clerkUserId: me.userId, verifiedEmail: me.email, name: me.name })).length) redirect("/app");
   const existing = await getMemberContext();
   return (
     <SetupShell current="create">

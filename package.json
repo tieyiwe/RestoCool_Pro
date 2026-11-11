@@ -16,7 +16,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed.ts",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "import:shangri-la": "tsx --conditions=react-server scripts/import-shangri-la.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

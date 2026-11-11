@@ -1,0 +1,3527 @@
+{
+ "MENU": [
+  {
+   "id": "specialites",
+   "t": "Spécialités chinoises",
+   "items": [
+    {
+     "g": "Fondue chinoise"
+    },
+    {
+     "name": "Fondue chinoise (petite portion)",
+     "p": 38000
+    },
+    {
+     "name": "Fondue chinoise (grande portion)",
+     "p": 68000
+    },
+    {
+     "g": "Plats du chef"
+    },
+    {
+     "name": "Poulet sauté piment rouge",
+     "p": 7500,
+     "s": 1
+    },
+    {
+     "name": "Filet de poulet frit",
+     "p": 6000
+    },
+    {
+     "name": "Soupe de poulet aux vermicelles",
+     "p": 7500
+    },
+    {
+     "name": "Cuisse de porc à la vapeur",
+     "p": 9800
+    },
+    {
+     "name": "Boulettes de porc sauce soja",
+     "p": 6000
+    },
+    {
+     "name": "Porc au meicai",
+     "p": 7000
+    },
+    {
+     "name": "Crevettes à la vapeur",
+     "p": 8800
+    },
+    {
+     "name": "Crevettes à la moutarde",
+     "p": 8800,
+     "s": 1
+    },
+    {
+     "name": "Petites crevettes frites",
+     "p": 8800
+    },
+    {
+     "name": "Crevettes au pain frit",
+     "p": 12800
+    },
+    {
+     "name": "Crabe sauté au piment",
+     "p": 13800,
+     "s": 1
+    },
+    {
+     "name": "Marmite au poisson",
+     "p": 13800,
+     "s": 1
+    },
+    {
+     "name": "Salade au champignon noir",
+     "p": 5500,
+     "s": 1
+    },
+    {
+     "name": "Salade de pattes de poulet",
+     "p": 6500,
+     "s": 1
+    },
+    {
+     "name": "Suancaiyu",
+     "d": "Poisson aigre et pimenté",
+     "p": 9800
+    },
+    {
+     "name": "Suancai bœuf",
+     "p": 8800,
+     "s": 1
+    },
+    {
+     "name": "Filet de bœuf dans l'huile pimentée",
+     "p": 8800,
+     "s": 1
+    },
+    {
+     "name": "Filet de capitaine dans l'huile pimentée",
+     "p": 10800,
+     "s": 2
+    },
+    {
+     "name": "Salade au journal (sautée)",
+     "p": 6800,
+     "s": 1
+    },
+    {
+     "name": "Mouton sauté au piment",
+     "p": 7500,
+     "s": 1
+    },
+    {
+     "name": "Bœuf aux pommes de terre et tomates",
+     "p": 7000
+    },
+    {
+     "name": "Golden soupe au bœuf",
+     "p": 8800,
+     "s": 1
+    },
+    {
+     "name": "Tête de poisson à la vapeur",
+     "p": 10800,
+     "s": 2
+    }
+   ]
+  },
+  {
+   "id": "legumes",
+   "t": "Légumes",
+   "items": [
+    {
+     "n": "30",
+     "name": "Champignons noirs sautés",
+     "p": 5500
+    },
+    {
+     "n": "31",
+     "name": "Tomates sautées aux œufs",
+     "p": 4000
+    },
+    {
+     "n": "32",
+     "name": "Pommes de terre sautées",
+     "d": "Aigres et pimentées",
+     "p": 4000,
+     "s": 1
+    },
+    {
+     "name": "Pommes de terre grillées",
+     "p": 4000
+    },
+    {
+     "n": "33",
+     "name": "Marmite aux aubergines",
+     "p": 4000
+    },
+    {
+     "n": "34",
+     "name": "Chou sauté",
+     "p": 4000
+    },
+    {
+     "n": "P3",
+     "name": "Marmite au chou",
+     "p": 4500,
+     "s": 1
+    },
+    {
+     "n": "35",
+     "name": "Pousses de bambou sautées",
+     "p": 6000
+    },
+    {
+     "n": "P4",
+     "name": "Mapo tofu",
+     "p": 4000,
+     "s": 1
+    },
+    {
+     "n": "P5",
+     "name": "Tofu sauce soja",
+     "p": 4000
+    },
+    {
+     "n": "P6",
+     "name": "Chou chinois sauté",
+     "p": 4000
+    },
+    {
+     "n": "P7",
+     "name": "Salade d'algues vertes",
+     "p": 4500
+    },
+    {
+     "name": "Ciboulette chinoise sautée aux œufs",
+     "p": 5000
+    },
+    {
+     "name": "Salade de concombres",
+     "p": 2500
+    },
+    {
+     "name": "Tofu grillé",
+     "p": 4800,
+     "s": 1
+    },
+    {
+     "name": "Tofu aux œufs de cent ans",
+     "p": 4800
+    },
+    {
+     "name": "Salade de tofu bambou",
+     "p": 6000
+    },
+    {
+     "name": "Salade de pousses de bambou",
+     "p": 6000
+    },
+    {
+     "name": "Germes de soja sautés",
+     "p": 5000
+    },
+    {
+     "name": "Champignons blancs frits",
+     "p": 8800
+    }
+   ]
+  },
+  {
+   "id": "boeuf",
+   "t": "Bœuf",
+   "items": [
+    {
+     "n": "36",
+     "name": "Filet de bœuf sauce piquante",
+     "p": 5300,
+     "s": 1
+    },
+    {
+     "n": "37",
+     "name": "Filet de bœuf à l'ananas",
+     "p": 5300
+    },
+    {
+     "n": "38",
+     "name": "Filet de bœuf au gingembre",
+     "p": 5300
+    },
+    {
+     "n": "39",
+     "name": "Filet de bœuf aux pousses de bambou",
+     "p": 6000
+    },
+    {
+     "n": "40",
+     "name": "Filet de bœuf aux champignons noirs",
+     "p": 6000
+    },
+    {
+     "n": "41",
+     "name": "Filet de bœuf aux oignons",
+     "p": 5300
+    },
+    {
+     "n": "42",
+     "name": "Filet de bœuf aux poivrons verts",
+     "p": 5300
+    },
+    {
+     "n": "43",
+     "name": "Filet de bœuf au curry",
+     "p": 5300
+    },
+    {
+     "n": "44",
+     "name": "Filet de bœuf aux légumes",
+     "p": 5300
+    },
+    {
+     "n": "45",
+     "name": "Filet de bœuf aux champignons de Paris",
+     "p": 6000
+    },
+    {
+     "n": "46",
+     "name": "Filet de bœuf aux champignons et bambou",
+     "p": 6000
+    },
+    {
+     "n": "47",
+     "name": "Bœuf braisé aux épices",
+     "p": 6000
+    },
+    {
+     "n": "P13",
+     "name": "Salade de bœuf braisé aux épices",
+     "p": 6500,
+     "s": 1
+    },
+    {
+     "n": "P14",
+     "name": "Bœuf sauté au piment vert",
+     "d": "Sans sauce",
+     "p": 6500,
+     "s": 1
+    },
+    {
+     "n": "P15",
+     "name": "Bœuf dans l'huile pimentée",
+     "p": 8800,
+     "s": 2
+    }
+   ]
+  },
+  {
+   "id": "poulet",
+   "t": "Poulet",
+   "items": [
+    {
+     "n": "48",
+     "name": "Poulet sauce piquante",
+     "p": 5300,
+     "s": 1
+    },
+    {
+     "n": "49",
+     "name": "Poulet sauce aigre-douce",
+     "p": 6000
+    },
+    {
+     "n": "50",
+     "name": "Poulet aux noix de cajou",
+     "p": 6000
+    },
+    {
+     "n": "51",
+     "name": "Poulet aux poivrons verts",
+     "p": 5300
+    },
+    {
+     "n": "52",
+     "name": "Poulet aux champignons noirs",
+     "p": 6000
+    },
+    {
+     "n": "53",
+     "name": "Poulet au curry",
+     "p": 5300
+    },
+    {
+     "n": "54",
+     "name": "Poulet au gingembre",
+     "p": 5300
+    },
+    {
+     "n": "55",
+     "name": "Poulet aux pousses de bambou",
+     "p": 6000
+    },
+    {
+     "n": "56",
+     "name": "Poulet au citron",
+     "p": 6000
+    },
+    {
+     "n": "57",
+     "name": "Poulet à l'ananas",
+     "p": 5300
+    },
+    {
+     "n": "58",
+     "name": "Poulet aux champignons de Paris",
+     "p": 6000
+    },
+    {
+     "n": "59",
+     "name": "Poulet aux légumes",
+     "p": 5300
+    },
+    {
+     "n": "60",
+     "name": "Poulet du chef sauce piquante",
+     "p": 6000,
+     "s": 1
+    },
+    {
+     "n": "P9",
+     "name": "Poulet sauce tomate",
+     "p": 6000
+    },
+    {
+     "n": "P10",
+     "name": "Poulet pané frit",
+     "p": 6000
+    },
+    {
+     "n": "P11",
+     "name": "Ailes de poulet grillées",
+     "p": 6000
+    },
+    {
+     "n": "P12",
+     "name": "Poulet sauté au piment vert",
+     "d": "Sans sauce",
+     "p": 6000,
+     "s": 1
+    },
+    {
+     "name": "Poulet local sauté",
+     "p": 7000
+    }
+   ]
+  },
+  {
+   "id": "canard",
+   "t": "Canard",
+   "items": [
+    {
+     "n": "61",
+     "name": "Canard sauce piquante",
+     "p": 7000,
+     "s": 1
+    },
+    {
+     "n": "62",
+     "name": "Canard aux légumes",
+     "p": 7000
+    },
+    {
+     "n": "63",
+     "name": "Canard au gingembre",
+     "p": 7000
+    },
+    {
+     "n": "64",
+     "name": "Canard au curry",
+     "p": 7000
+    },
+    {
+     "n": "65",
+     "name": "Canard à l'ananas",
+     "p": 7000
+    },
+    {
+     "n": "66",
+     "name": "Canard aux champignons et bambou",
+     "p": 7000
+    },
+    {
+     "n": "67",
+     "name": "Canard aux champignons noirs",
+     "p": 7000
+    },
+    {
+     "n": "P16",
+     "name": "Canard frit aux épices",
+     "p": 7500
+    },
+    {
+     "n": "P17",
+     "name": "Pigeon frit aux épices",
+     "p": 5600
+    }
+   ]
+  },
+  {
+   "id": "porc",
+   "t": "Porc",
+   "items": [
+    {
+     "n": "68",
+     "name": "Porc aux oignons",
+     "p": 5300
+    },
+    {
+     "n": "69",
+     "name": "Porc sauce piquante",
+     "p": 5300,
+     "s": 1
+    },
+    {
+     "n": "70",
+     "name": "Porc aux poivrons verts",
+     "p": 5300
+    },
+    {
+     "n": "71",
+     "name": "Porc au gingembre",
+     "p": 5300
+    },
+    {
+     "n": "72",
+     "name": "Porc aux champignons de Paris",
+     "p": 6000
+    },
+    {
+     "n": "73",
+     "name": "Porc à l'ananas",
+     "p": 6000
+    },
+    {
+     "n": "74",
+     "name": "Porc sauce aigre-douce",
+     "p": 6000
+    },
+    {
+     "n": "75",
+     "name": "Porc aux champignons noirs",
+     "p": 6000
+    },
+    {
+     "n": "76",
+     "name": "Porc au caramel",
+     "p": 6000
+    },
+    {
+     "n": "77",
+     "name": "Porc aux légumes",
+     "p": 5300
+    },
+    {
+     "n": "78",
+     "name": "Porc aux champignons et bambou",
+     "p": 6000
+    },
+    {
+     "name": "Pieds de porc sauce soja",
+     "p": 6000
+    }
+   ]
+  },
+  {
+   "id": "fruits-de-mer",
+   "t": "Fruits de mer",
+   "items": [
+    {
+     "g": "Crevettes et seiches"
+    },
+    {
+     "n": "79",
+     "name": "Crevettes au gingembre",
+     "p": 8800
+    },
+    {
+     "n": "80",
+     "name": "Crevettes aux légumes",
+     "p": 8800
+    },
+    {
+     "n": "81",
+     "name": "Crevettes aux tomates",
+     "p": 8800
+    },
+    {
+     "n": "82",
+     "name": "Crevettes à l'ail",
+     "p": 8800
+    },
+    {
+     "n": "83",
+     "name": "Crevettes sauce piquante",
+     "p": 8800,
+     "s": 1
+    },
+    {
+     "n": "84",
+     "name": "Crevettes au curry",
+     "p": 8800
+    },
+    {
+     "n": "85",
+     "name": "Crevettes aux noix de cajou",
+     "p": 8800
+    },
+    {
+     "n": "86",
+     "name": "Crevettes aux champignons noirs",
+     "p": 8800
+    },
+    {
+     "n": "87",
+     "name": "Crevettes sauce aigre-douce",
+     "p": 8800
+    },
+    {
+     "n": "88",
+     "name": "Seiches sauce piquante",
+     "p": 8800,
+     "s": 1
+    },
+    {
+     "n": "89",
+     "name": "Seiches sautées",
+     "p": 8800
+    },
+    {
+     "n": "P23",
+     "name": "Crevettes frites",
+     "p": 8800
+    },
+    {
+     "g": "Gambas et langouste"
+    },
+    {
+     "n": "94",
+     "name": "Gambas au caramel",
+     "p": 12800
+    },
+    {
+     "n": "95",
+     "name": "Gambas à la vapeur",
+     "p": 12800
+    },
+    {
+     "n": "P18",
+     "name": "Gambas sauce piquante",
+     "p": 12800,
+     "s": 1
+    },
+    {
+     "n": "P19",
+     "name": "Gambas sauce légumes",
+     "p": 12800
+    },
+    {
+     "n": "P20",
+     "name": "Gambas sauce tomate",
+     "p": 12800
+    },
+    {
+     "n": "P22",
+     "name": "Gambas grillées",
+     "p": 12800
+    },
+    {
+     "n": "96",
+     "name": "Langouste à la vapeur",
+     "p": 16800
+    },
+    {
+     "n": "P21",
+     "name": "Langouste sauce tomate",
+     "p": 16800
+    },
+    {
+     "g": "Poisson"
+    },
+    {
+     "n": "90",
+     "name": "Filet de capitaine sauce piquante",
+     "p": 7500,
+     "s": 1
+    },
+    {
+     "n": "91",
+     "name": "Filet de capitaine sauce aigre-douce",
+     "p": 7500
+    },
+    {
+     "n": "92",
+     "name": "Filet de capitaine sauté",
+     "p": 7500
+    },
+    {
+     "n": "93",
+     "name": "Filet de capitaine aux tomates",
+     "p": 7500
+    },
+    {
+     "name": "Poisson entier à la vapeur",
+     "p": 9800
+    },
+    {
+     "name": "Poisson entier sauce légumes",
+     "p": 9800
+    },
+    {
+     "name": "Poisson entier sauce aigre-douce",
+     "p": 13800
+    },
+    {
+     "name": "Saumon nature",
+     "p": 29800
+    }
+   ]
+  },
+  {
+   "id": "chauffants",
+   "t": "Marmites et plaques chauffantes",
+   "items": [
+    {
+     "g": "Marmites"
+    },
+    {
+     "n": "97",
+     "name": "Marmite aux fruits de mer",
+     "p": 8800
+    },
+    {
+     "n": "98",
+     "name": "Marmite aux crevettes",
+     "p": 8800
+    },
+    {
+     "n": "99",
+     "name": "Marmite aux trois trésors",
+     "p": 7800
+    },
+    {
+     "n": "100",
+     "name": "Marmite aux vermicelles et crevettes",
+     "p": 8800
+    },
+    {
+     "g": "Plaques chauffantes"
+    },
+    {
+     "n": "101",
+     "name": "Poulet saté",
+     "p": 7500
+    },
+    {
+     "n": "102",
+     "name": "Crevettes saté",
+     "p": 9500
+    },
+    {
+     "n": "103",
+     "name": "Bœuf saté",
+     "p": 7500
+    },
+    {
+     "n": "104",
+     "name": "Seiches",
+     "p": 8800
+    },
+    {
+     "n": "105",
+     "name": "Gambas sucrées et pimentées",
+     "p": 12800,
+     "s": 1
+    },
+    {
+     "n": "106",
+     "name": "Gambas à l'ail",
+     "p": 12800
+    },
+    {
+     "n": "107",
+     "name": "Mouton",
+     "p": 7500
+    },
+    {
+     "n": "108",
+     "name": "Chap shoue",
+     "p": 8000
+    },
+    {
+     "n": "109",
+     "name": "Crevettes à la tomate",
+     "p": 9500
+    },
+    {
+     "n": "110",
+     "name": "Poisson saté",
+     "p": 8800
+    },
+    {
+     "name": "Tofu saté",
+     "p": 6000
+    }
+   ]
+  },
+  {
+   "id": "brochettes",
+   "t": "Brochettes",
+   "late": true,
+   "items": [
+    {
+     "g": "Prix par portion"
+    },
+    {
+     "name": "Brochettes de crevettes grillées",
+     "zh": "烤虾",
+     "p": 7000
+    },
+    {
+     "name": "Brochettes de calamar grillé",
+     "zh": "烤鱿鱼",
+     "p": 7000
+    },
+    {
+     "name": "Brochettes de bœuf",
+     "zh": "牛肉串",
+     "p": 6000
+    },
+    {
+     "name": "Rognons d'agneau grillés",
+     "zh": "烤羊腰",
+     "p": 8000
+    },
+    {
+     "name": "Pattes de poulet grillées",
+     "zh": "生烤鸡爪",
+     "p": 6000
+    },
+    {
+     "name": "Gésiers de poulet grillés",
+     "zh": "烤鸡胗",
+     "p": 6000
+    },
+    {
+     "name": "Poitrine de porc grillée",
+     "zh": "烤五花肉",
+     "p": 6000
+    },
+    {
+     "name": "Pommes de terre grillées en brochette",
+     "zh": "烤土豆片",
+     "p": 4000
+    },
+    {
+     "name": "Tofu grillé en brochette",
+     "zh": "烤豆腐",
+     "p": 5000
+    },
+    {
+     "name": "Lotus grillé en brochette",
+     "zh": "烤藕片",
+     "p": 8000
+    }
+   ]
+  },
+  {
+   "id": "variantes",
+   "t": "",
+   "late": true,
+   "hidden": true,
+   "items": [
+    {
+     "name": "Champagne · 48 000 F",
+     "p": 48000,
+     "parent": "Champagne"
+    },
+    {
+     "name": "Champagne · 78 000 F",
+     "p": 78000,
+     "parent": "Champagne"
+    }
+   ]
+  },
+  {
+   "id": "riz-nouilles",
+   "t": "Riz et nouilles",
+   "items": [
+    {
+     "g": "Riz"
+    },
+    {
+     "n": "111",
+     "name": "Riz nature",
+     "p": 1000
+    },
+    {
+     "n": "112",
+     "name": "Riz cantonais au jambon",
+     "p": 3800
+    },
+    {
+     "n": "113",
+     "name": "Riz cantonais au bœuf",
+     "p": 3800
+    },
+    {
+     "n": "114",
+     "name": "Riz cantonais aux crevettes",
+     "p": 4800
+    },
+    {
+     "n": "115",
+     "name": "Riz sauté au curry",
+     "d": "Poulet",
+     "p": 3800
+    },
+    {
+     "n": "116",
+     "name": "Riz sauté à l'ananas",
+     "d": "Poulet et crevettes",
+     "p": 4800
+    },
+    {
+     "n": "117",
+     "name": "Riz sauté à l'ail",
+     "p": 3000
+    },
+    {
+     "n": "118",
+     "name": "Riz sauté aux légumes",
+     "p": 3000
+    },
+    {
+     "g": "Nouilles et vermicelles"
+    },
+    {
+     "n": "119",
+     "name": "Nouilles sautées aux crevettes",
+     "p": 5500
+    },
+    {
+     "n": "120",
+     "name": "Nouilles sautées au bœuf",
+     "p": 5000
+    },
+    {
+     "n": "P25",
+     "name": "Nouilles sautées au poulet",
+     "p": 5000
+    },
+    {
+     "n": "P26",
+     "name": "Nouilles sautées au porc",
+     "p": 5000
+    },
+    {
+     "n": "121",
+     "name": "Nouilles sautées aux trois trésors",
+     "p": 5000
+    },
+    {
+     "n": "122",
+     "name": "Nouilles sautées aux légumes",
+     "p": 4500
+    },
+    {
+     "n": "123",
+     "name": "Vermicelles sautés au porc",
+     "p": 5000
+    },
+    {
+     "n": "124",
+     "name": "Vermicelles sautés aux crevettes",
+     "p": 5800
+    },
+    {
+     "n": "125",
+     "name": "Vermicelles sautés aux trois trésors",
+     "p": 5500
+    },
+    {
+     "n": "126",
+     "name": "Vermicelles sautés aux légumes",
+     "p": 4500
+    },
+    {
+     "name": "Soupe de nouilles au bœuf",
+     "p": 5000
+    },
+    {
+     "name": "Soupe de vermicelles blancs au bœuf",
+     "p": 5000,
+     "s": 1
+    },
+    {
+     "g": "Accompagnements"
+    },
+    {
+     "n": "127",
+     "name": "Niangao sauté",
+     "d": "Galettes de riz gluant",
+     "p": 5500
+    },
+    {
+     "n": "128",
+     "name": "Petits pains farcis à la vapeur",
+     "d": "Porc ou bœuf",
+     "p": 4500
+    },
+    {
+     "n": "129",
+     "name": "Frites",
+     "p": 1500
+    },
+    {
+     "name": "Tarte à la citrouille",
+     "p": 4500
+    },
+    {
+     "name": "Golden pain grillé",
+     "p": 4500
+    }
+   ]
+  },
+  {
+   "id": "desserts",
+   "t": "Desserts",
+   "items": [
+    {
+     "name": "Litchis",
+     "p": 3000
+    },
+    {
+     "name": "Gingembre confit",
+     "p": 3000
+    },
+    {
+     "name": "Glace (1 boule)",
+     "d": "Vanille, chocolat ou fraise",
+     "p": 1500
+    },
+    {
+     "name": "Sorbet (1 boule)",
+     "d": "Café, citron, pomme ou mangue",
+     "p": 1800
+    },
+    {
+     "name": "Colonel",
+     "d": "2 boules sorbet citron, vodka",
+     "p": 4500
+    },
+    {
+     "name": "Dame blanche",
+     "d": "2 boules vanille, sauce chocolat, Get 27, chantilly",
+     "p": 4500
+    },
+    {
+     "name": "Pêche Melba",
+     "d": "2 boules vanille, pêche, sauce chocolat, chantilly",
+     "p": 4500
+    },
+    {
+     "name": "Poire Belle-Hélène",
+     "d": "2 boules vanille, poire, sauce chocolat, chantilly",
+     "p": 4500
+    },
+    {
+     "name": "Banana split",
+     "d": "Banane, vanille, chocolat, fraise, sauce chocolat, chantilly",
+     "p": 4500
+    },
+    {
+     "name": "Salade de fruits",
+     "p": 1500
+    },
+    {
+     "name": "Ananas nature",
+     "p": 1500
+    },
+    {
+     "name": "Beignet de fruit",
+     "d": "Pomme, banane ou ananas",
+     "p": 2500
+    },
+    {
+     "name": "Beignet de fruit flambé",
+     "d": "Pomme, banane ou ananas",
+     "p": 3800
+    },
+    {
+     "name": "Champignon blanc",
+     "p": 2500,
+     "nw": 1
+    }
+   ]
+  },
+  {
+   "id": "boissons-chaudes",
+   "t": "Boissons chaudes",
+   "items": [
+    {
+     "name": "Lait chaud",
+     "p": 1800
+    },
+    {
+     "name": "Café espresso",
+     "p": 1800
+    },
+    {
+     "name": "Irish coffee (cognac)",
+     "p": 4800
+    },
+    {
+     "name": "Irish coffee (whisky)",
+     "p": 3800
+    },
+    {
+     "name": "Thé menthe, thé citron, thé Lipton",
+     "p": 1500
+    },
+    {
+     "name": "Thé chinois (thé vert)",
+     "p": 3500
+    },
+    {
+     "name": "Thé au jasmin",
+     "p": 3500
+    },
+    {
+     "name": "Thé rouge",
+     "p": 3500
+    },
+    {
+     "name": "Thé au chrysanthème",
+     "p": 4500
+    },
+    {
+     "name": "Thé à la rose",
+     "p": 4500
+    },
+    {
+     "name": "Thé oolong, thé Pu'er",
+     "p": 3500
+    },
+    {
+     "name": "Thé au ginseng",
+     "p": 6800
+    },
+    {
+     "name": "Thé aux fleurs",
+     "p": 6800
+    }
+   ]
+  },
+  {
+   "id": "boissons-fraiches",
+   "t": "Boissons fraîches",
+   "items": [
+    {
+     "g": "Thés glacés et bubble tea"
+    },
+    {
+     "name": "Bubble tea",
+     "p": 2800,
+     "nw": 1
+    },
+    {
+     "name": "Bubble tea goyave au thé jasmin",
+     "p": 3800,
+     "nw": 1
+    },
+    {
+     "name": "Bubble tea avocat au thé jasmin",
+     "p": 3800,
+     "nw": 1
+    },
+    {
+     "name": "Bubble tea café au thé",
+     "p": 3800,
+     "nw": 1
+    },
+    {
+     "name": "Thé jasmin passion",
+     "p": 3800,
+     "nw": 1
+    },
+    {
+     "name": "Thé jasmin litchi",
+     "p": 3800,
+     "nw": 1
+    },
+    {
+     "name": "Thé jasmin pamplemousse",
+     "p": 3800,
+     "nw": 1
+    },
+    {
+     "name": "Thé noir citron glacé",
+     "p": 1800,
+     "nw": 1
+    },
+    {
+     "name": "Thé glacé",
+     "p": 1500
+    },
+    {
+     "g": "Sodas, jus et eaux"
+    },
+    {
+     "name": "Coca, Fanta, Sprite",
+     "p": 1500
+    },
+    {
+     "name": "Coca Zéro",
+     "p": 1800
+    },
+    {
+     "name": "Tonic (eau gazeuse)",
+     "p": 1800
+    },
+    {
+     "name": "Diabolo menthe",
+     "p": 2000,
+     "nw": 1
+    },
+    {
+     "name": "Sirop à l'eau minérale 0,5 L",
+     "d": "Menthe, cassis, grenadine ou citron",
+     "p": 1800
+    },
+    {
+     "name": "Eau minérale 0,5 L",
+     "p": 500
+    },
+    {
+     "name": "Eau minérale 1,5 L",
+     "p": 1500
+    },
+    {
+     "name": "Jus de fruits (verre)",
+     "d": "Orange, pomme, ananas ou mangue",
+     "p": 1800
+    },
+    {
+     "name": "Jus de fruits (boîte 1 L)",
+     "d": "Orange, pomme, ananas ou mangue",
+     "p": 4500
+    },
+    {
+     "name": "Jus de fruits pressé",
+     "p": 3000
+    },
+    {
+     "name": "Jus de gingembre (canette)",
+     "p": 1800
+    },
+    {
+     "name": "Jus de tomate",
+     "p": 2000
+    },
+    {
+     "name": "Malta",
+     "p": 1800
+    },
+    {
+     "name": "Red Bull",
+     "p": 1800
+    },
+    {
+     "name": "Yaourt nutritif",
+     "p": 1800
+    },
+    {
+     "name": "Vita milk",
+     "p": 1500
+    },
+    {
+     "g": "Bières"
+    },
+    {
+     "name": "Bière 33 cl",
+     "d": "Flag, Beaufort, Castel, Brakina, Chill",
+     "p": 1500
+    },
+    {
+     "name": "Bière 66 cl",
+     "d": "Brakina, Sobbra, Flag, Castel, Beaufort, Chill, Tequila",
+     "p": 2000
+    },
+    {
+     "name": "Guinness ou Heineken 33 cl",
+     "p": 2000
+    },
+    {
+     "name": "Tsingtao 500 ml",
+     "p": 2000
+    },
+    {
+     "name": "Bière pression (verre)",
+     "p": 1500
+    },
+    {
+     "name": "Bière pression (1 L)",
+     "p": 3000
+    }
+   ]
+  },
+  {
+   "id": "aperitifs",
+   "t": "Apéritifs et cocktails",
+   "items": [
+    {
+     "name": "Johnnie Walker Red, J&B",
+     "p": 3800
+    },
+    {
+     "name": "Ricard, pastis, vodka",
+     "p": 3200
+    },
+    {
+     "name": "Campari, gin, rhum",
+     "p": 3200
+    },
+    {
+     "name": "Campari orange",
+     "p": 4500
+    },
+    {
+     "name": "Martini",
+     "d": "Rouge, rosé ou blanc",
+     "p": 3200
+    },
+    {
+     "name": "Porto rouge",
+     "p": 3500
+    },
+    {
+     "name": "Malibu",
+     "p": 3800
+    },
+    {
+     "name": "Vodka orange",
+     "p": 4500
+    },
+    {
+     "name": "Malibu ananas",
+     "p": 4500
+    },
+    {
+     "name": "Cocktail de jus (sans alcool)",
+     "d": "Sirop menthe, jus d'orange, ananas, pomme, mangue",
+     "p": 2800
+    },
+    {
+     "name": "Cocktail maison",
+     "d": "Rhum, grenadine, jus d'orange, ananas, pomme, mangue",
+     "p": 4500
+    },
+    {
+     "name": "Kir",
+     "d": "Vin blanc, crème de cassis",
+     "p": 3500
+    },
+    {
+     "name": "Kir royal",
+     "d": "Champagne, crème de cassis",
+     "p": 5500
+    },
+    {
+     "name": "Perroquet",
+     "d": "Pastis, sirop de menthe",
+     "p": 3800
+    },
+    {
+     "name": "Tomate",
+     "d": "Pastis, sirop de grenadine",
+     "p": 3800
+    },
+    {
+     "name": "Mauresque",
+     "d": "Pastis, sirop d'orgeat",
+     "p": 3800
+    },
+    {
+     "name": "Americano",
+     "d": "Martini rouge, rosé, blanc, Campari",
+     "p": 3800
+    },
+    {
+     "name": "Bloody Mary",
+     "d": "Vodka, jus de tomate",
+     "p": 4500
+    },
+    {
+     "name": "Mojito",
+     "d": "Rhum blanc, Sprite, menthe, citron",
+     "p": 4500
+    },
+    {
+     "name": "Mojito sans alcool",
+     "d": "Sprite, menthe, citron",
+     "p": 2500
+    }
+   ]
+  },
+  {
+   "id": "digestifs",
+   "t": "Digestifs",
+   "items": [
+    {
+     "name": "Saké (alcool chinois)",
+     "p": null
+    },
+    {
+     "name": "Marie Brizard",
+     "p": 3800
+    },
+    {
+     "name": "Get 27",
+     "p": 3800
+    },
+    {
+     "name": "Armagnac",
+     "p": 3800
+    },
+    {
+     "name": "Grand Marnier, Cointreau",
+     "p": 4800
+    },
+    {
+     "name": "Chivas Regal, Johnnie Walker Black Label",
+     "p": 4800
+    },
+    {
+     "name": "Cognac",
+     "p": null
+    }
+   ]
+  },
+  {
+   "id": "vins",
+   "t": "Vins",
+   "items": [
+    {
+     "g": "Vin rosé"
+    },
+    {
+     "name": "Listel Gris (1/2 bouteille)",
+     "p": 8000
+    },
+    {
+     "name": "Listel Gris",
+     "p": 14000
+    },
+    {
+     "name": "Côtes de Provence (1/2 bouteille)",
+     "p": 8500
+    },
+    {
+     "name": "Côtes de Provence",
+     "p": 16000
+    },
+    {
+     "g": "Vin rouge"
+    },
+    {
+     "name": "Vin rouge sucré",
+     "p": 10500,
+     "nw": 1
+    },
+    {
+     "name": "J.P. Chenet",
+     "p": 12000
+    },
+    {
+     "name": "Chianti",
+     "p": 17000
+    },
+    {
+     "name": "Beaujolais",
+     "p": 16000
+    },
+    {
+     "name": "Côtes du Rhône",
+     "p": 17000
+    },
+    {
+     "name": "Côtes du Rhône (1/2 bouteille)",
+     "p": 8500
+    },
+    {
+     "name": "Baron de Lestac Bordeaux",
+     "p": 18000
+    },
+    {
+     "name": "Saint-Émilion Château",
+     "p": 26000
+    },
+    {
+     "name": "Haut-Médoc Château d'Arcins",
+     "p": 39500
+    },
+    {
+     "name": "Haut-Médoc Château Barreyre",
+     "p": 36000
+    },
+    {
+     "name": "Mouton Cadet Baron Philippe de Rothschild",
+     "p": 19000
+    },
+    {
+     "name": "Châteauneuf-du-Pape",
+     "p": 39500
+    },
+    {
+     "name": "Maison Castel Pinot Noir",
+     "p": 17000
+    },
+    {
+     "g": "Vin blanc et champagne"
+    },
+    {
+     "name": "Sauvignon",
+     "p": 14000
+    },
+    {
+     "name": "Baron d'Orcel",
+     "p": 12000
+    },
+    {
+     "name": "Muscadet",
+     "p": 16000
+    },
+    {
+     "name": "Champagne",
+     "p": 48000,
+     "p2": 78000,
+     "variants": [
+      "Champagne · 48 000 F",
+      "Champagne · 78 000 F"
+     ]
+    },
+    {
+     "g": "Vin en pichet (rouge, rosé, blanc)"
+    },
+    {
+     "name": "Verre de vin",
+     "p": 2800
+    },
+    {
+     "name": "1/4 pichet",
+     "p": 3800
+    },
+    {
+     "name": "1/2 pichet",
+     "p": 6500
+    }
+   ]
+  }
+ ],
+ "ZH_SECTIONS": {
+  "brochettes": "烧烤串",
+  "specialites": "招牌特色菜",
+  "legumes": "蔬菜",
+  "boeuf": "牛肉",
+  "poulet": "鸡肉",
+  "canard": "鸭肉",
+  "porc": "猪肉",
+  "fruits-de-mer": "海鲜",
+  "chauffants": "砂锅与铁板",
+  "riz-nouilles": "米饭与面食",
+  "desserts": "甜品",
+  "boissons-chaudes": "热饮",
+  "boissons-fraiches": "冷饮",
+  "aperitifs": "开胃酒与鸡尾酒",
+  "digestifs": "餐后酒",
+  "vins": "葡萄酒"
+ },
+ "ZH_GROUPS": {
+  "Prix par portion": "价格按份计",
+  "Fondue chinoise": "火锅",
+  "Plats du chef": "厨师推荐",
+  "Crevettes et seiches": "虾与墨鱼",
+  "Gambas et langouste": "大虾与龙虾",
+  "Poisson": "鱼",
+  "Marmites": "砂锅",
+  "Plaques chauffantes": "铁板",
+  "Riz": "米饭",
+  "Nouilles et vermicelles": "面条与米粉",
+  "Accompagnements": "点心小吃",
+  "Thés glacés et bubble tea": "冰茶与珍珠奶茶",
+  "Sodas, jus et eaux": "汽水、果汁与矿泉水",
+  "Bières": "啤酒",
+  "Vin rosé": "桃红葡萄酒",
+  "Vin rouge": "红葡萄酒",
+  "Vin blanc et champagne": "白葡萄酒与香槟",
+  "Vin en pichet (rouge, rosé, blanc)": "壶装葡萄酒（红、桃红、白）"
+ },
+ "ZH": {
+  "Champagne · 48 000 F": [
+   "香槟 · 48 000 F"
+  ],
+  "Champagne · 78 000 F": [
+   "香槟 · 78 000 F"
+  ],
+  "Brochettes de crevettes grillées": [
+   "烤虾"
+  ],
+  "Brochettes de calamar grillé": [
+   "烤鱿鱼"
+  ],
+  "Brochettes de bœuf": [
+   "牛肉串"
+  ],
+  "Rognons d'agneau grillés": [
+   "烤羊腰"
+  ],
+  "Pattes de poulet grillées": [
+   "生烤鸡爪"
+  ],
+  "Gésiers de poulet grillés": [
+   "烤鸡胗"
+  ],
+  "Poitrine de porc grillée": [
+   "烤五花肉"
+  ],
+  "Pommes de terre grillées en brochette": [
+   "烤土豆片"
+  ],
+  "Tofu grillé en brochette": [
+   "烤豆腐"
+  ],
+  "Lotus grillé en brochette": [
+   "烤藕片"
+  ],
+  "Fondue chinoise (petite portion)": [
+   "鸳鸯火锅（小份）"
+  ],
+  "Fondue chinoise (grande portion)": [
+   "鸳鸯火锅（大份）"
+  ],
+  "Poulet sauté piment rouge": [
+   "辣子鸡"
+  ],
+  "Filet de poulet frit": [
+   "香酥鸡柳"
+  ],
+  "Soupe de poulet aux vermicelles": [
+   "鸡汤粉丝煲"
+  ],
+  "Cuisse de porc à la vapeur": [
+   "东坡肘子"
+  ],
+  "Boulettes de porc sauce soja": [
+   "红烧狮子头"
+  ],
+  "Porc au meicai": [
+   "梅菜扣肉"
+  ],
+  "Crevettes à la vapeur": [
+   "蒜蓉蒸虾"
+  ],
+  "Crevettes à la moutarde": [
+   "芥末虾球"
+  ],
+  "Petites crevettes frites": [
+   "椒盐小虾"
+  ],
+  "Crevettes au pain frit": [
+   "香酥面包虾"
+  ],
+  "Crabe sauté au piment": [
+   "香辣蟹"
+  ],
+  "Marmite au poisson": [
+   "香辣烤鱼"
+  ],
+  "Salade au champignon noir": [
+   "老醋木耳"
+  ],
+  "Salade de pattes de poulet": [
+   "凉拌无骨凤爪"
+  ],
+  "Suancaiyu": [
+   "酸菜鱼",
+   "酸辣"
+  ],
+  "Suancai bœuf": [
+   "酸菜肥牛"
+  ],
+  "Filet de bœuf dans l'huile pimentée": [
+   "水煮牛肉"
+  ],
+  "Filet de capitaine dans l'huile pimentée": [
+   "水煮鱼"
+  ],
+  "Salade au journal (sautée)": [
+   "香辣牛百叶"
+  ],
+  "Mouton sauté au piment": [
+   "香辣羊排"
+  ],
+  "Bœuf aux pommes de terre et tomates": [
+   "番茄土豆炖牛腩"
+  ],
+  "Golden soupe au bœuf": [
+   "金汤肥牛"
+  ],
+  "Tête de poisson à la vapeur": [
+   "剁椒鱼头"
+  ],
+  "Champignons noirs sautés": [
+   "小炒木耳"
+  ],
+  "Tomates sautées aux œufs": [
+   "西红柿炒鸡蛋"
+  ],
+  "Pommes de terre sautées": [
+   "酸辣土豆丝",
+   "酸辣"
+  ],
+  "Pommes de terre grillées": [
+   "香煎土豆片"
+  ],
+  "Marmite aux aubergines": [
+   "茄子煲"
+  ],
+  "Chou sauté": [
+   "手撕包菜"
+  ],
+  "Marmite au chou": [
+   "干锅包菜"
+  ],
+  "Pousses de bambou sautées": [
+   "油焖竹笋"
+  ],
+  "Mapo tofu": [
+   "麻婆豆腐"
+  ],
+  "Tofu sauce soja": [
+   "红烧豆腐"
+  ],
+  "Chou chinois sauté": [
+   "炝炒白菜"
+  ],
+  "Salade d'algues vertes": [
+   "凉拌海带丝"
+  ],
+  "Ciboulette chinoise sautée aux œufs": [
+   "韭菜炒鸡蛋"
+  ],
+  "Salade de concombres": [
+   "拍黄瓜"
+  ],
+  "Tofu grillé": [
+   "香煎豆腐"
+  ],
+  "Tofu aux œufs de cent ans": [
+   "皮蛋豆腐"
+  ],
+  "Salade de tofu bambou": [
+   "凉拌腐竹"
+  ],
+  "Salade de pousses de bambou": [
+   "凉拌竹笋"
+  ],
+  "Germes de soja sautés": [
+   "清炒豆芽"
+  ],
+  "Champignons blancs frits": [
+   "椒盐蘑菇"
+  ],
+  "Filet de bœuf sauce piquante": [
+   "香辣牛柳"
+  ],
+  "Filet de bœuf à l'ananas": [
+   "菠萝牛柳"
+  ],
+  "Filet de bœuf au gingembre": [
+   "姜葱牛柳"
+  ],
+  "Filet de bœuf aux pousses de bambou": [
+   "笋片炒牛柳"
+  ],
+  "Filet de bœuf aux champignons noirs": [
+   "木耳炒牛柳"
+  ],
+  "Filet de bœuf aux oignons": [
+   "洋葱炒牛柳"
+  ],
+  "Filet de bœuf aux poivrons verts": [
+   "青椒炒牛柳"
+  ],
+  "Filet de bœuf au curry": [
+   "咖喱牛肉"
+  ],
+  "Filet de bœuf aux légumes": [
+   "杂菜炒牛柳"
+  ],
+  "Filet de bœuf aux champignons de Paris": [
+   "蘑菇炒牛柳"
+  ],
+  "Filet de bœuf aux champignons et bambou": [
+   "双冬牛柳"
+  ],
+  "Bœuf braisé aux épices": [
+   "五香酱牛肉"
+  ],
+  "Salade de bœuf braisé aux épices": [
+   "红油酱牛肉"
+  ],
+  "Bœuf sauté au piment vert": [
+   "小炒黄牛肉",
+   "湘味干炒，无汤汁"
+  ],
+  "Bœuf dans l'huile pimentée": [
+   "水煮牛肉"
+  ],
+  "Poulet sauce piquante": [
+   "香辣鸡丁"
+  ],
+  "Poulet sauce aigre-douce": [
+   "糖醋鸡块"
+  ],
+  "Poulet aux noix de cajou": [
+   "腰果鸡丁"
+  ],
+  "Poulet aux poivrons verts": [
+   "青椒鸡丁"
+  ],
+  "Poulet aux champignons noirs": [
+   "木耳炒鸡片"
+  ],
+  "Poulet au curry": [
+   "咖喱鸡"
+  ],
+  "Poulet au gingembre": [
+   "姜葱鸡"
+  ],
+  "Poulet aux pousses de bambou": [
+   "笋片炒鸡丁"
+  ],
+  "Poulet au citron": [
+   "港式柠檬鸡"
+  ],
+  "Poulet à l'ananas": [
+   "菠萝鸡球"
+  ],
+  "Poulet aux champignons de Paris": [
+   "蘑菇炒鸡片"
+  ],
+  "Poulet aux légumes": [
+   "杂菜炒鸡丁"
+  ],
+  "Poulet du chef sauce piquante": [
+   "厨师招牌香辣鸡"
+  ],
+  "Poulet sauce tomate": [
+   "茄汁鸡块"
+  ],
+  "Poulet pané frit": [
+   "香酥炸鸡"
+  ],
+  "Ailes de poulet grillées": [
+   "奥尔良烤鸡翅"
+  ],
+  "Poulet sauté au piment vert": [
+   "青椒小炒鸡",
+   "干炒，无汤汁"
+  ],
+  "Poulet local sauté": [
+   "小炒土鸡"
+  ],
+  "Canard sauce piquante": [
+   "香辣鸭"
+  ],
+  "Canard aux légumes": [
+   "杂菜炒鸭片"
+  ],
+  "Canard au gingembre": [
+   "子姜炒鸭"
+  ],
+  "Canard au curry": [
+   "咖喱鸭"
+  ],
+  "Canard à l'ananas": [
+   "菠萝鸭片"
+  ],
+  "Canard aux champignons et bambou": [
+   "双冬焖鸭"
+  ],
+  "Canard aux champignons noirs": [
+   "木耳炒鸭片"
+  ],
+  "Canard frit aux épices": [
+   "香酥鸭"
+  ],
+  "Pigeon frit aux épices": [
+   "香酥乳鸽"
+  ],
+  "Porc aux oignons": [
+   "洋葱炒肉片"
+  ],
+  "Porc sauce piquante": [
+   "香辣肉片"
+  ],
+  "Porc aux poivrons verts": [
+   "青椒炒肉"
+  ],
+  "Porc au gingembre": [
+   "姜丝炒肉"
+  ],
+  "Porc aux champignons de Paris": [
+   "蘑菇炒肉片"
+  ],
+  "Porc à l'ananas": [
+   "菠萝咕噜肉"
+  ],
+  "Porc sauce aigre-douce": [
+   "糖醋里脊"
+  ],
+  "Porc aux champignons noirs": [
+   "木耳炒肉片"
+  ],
+  "Porc au caramel": [
+   "红烧肉"
+  ],
+  "Porc aux légumes": [
+   "杂菜炒肉片"
+  ],
+  "Porc aux champignons et bambou": [
+   "双冬炒肉片"
+  ],
+  "Pieds de porc sauce soja": [
+   "红烧猪蹄"
+  ],
+  "Crevettes au gingembre": [
+   "姜葱虾仁"
+  ],
+  "Crevettes aux légumes": [
+   "杂菜虾仁"
+  ],
+  "Crevettes aux tomates": [
+   "茄汁虾仁"
+  ],
+  "Crevettes à l'ail": [
+   "蒜香虾仁"
+  ],
+  "Crevettes sauce piquante": [
+   "香辣虾仁"
+  ],
+  "Crevettes au curry": [
+   "咖喱虾仁"
+  ],
+  "Crevettes aux noix de cajou": [
+   "腰果虾仁"
+  ],
+  "Crevettes aux champignons noirs": [
+   "木耳虾仁"
+  ],
+  "Crevettes sauce aigre-douce": [
+   "糖醋虾仁"
+  ],
+  "Seiches sauce piquante": [
+   "香辣墨鱼"
+  ],
+  "Seiches sautées": [
+   "爆炒墨鱼"
+  ],
+  "Crevettes frites": [
+   "干炸虾"
+  ],
+  "Gambas au caramel": [
+   "油焖大虾"
+  ],
+  "Gambas à la vapeur": [
+   "清蒸大虾"
+  ],
+  "Gambas sauce piquante": [
+   "香辣大虾"
+  ],
+  "Gambas sauce légumes": [
+   "杂菜大虾"
+  ],
+  "Gambas sauce tomate": [
+   "茄汁大虾"
+  ],
+  "Gambas grillées": [
+   "香烤大虾"
+  ],
+  "Langouste à la vapeur": [
+   "蒜蓉粉丝蒸龙虾"
+  ],
+  "Langouste sauce tomate": [
+   "茄汁龙虾"
+  ],
+  "Filet de capitaine sauce piquante": [
+   "香辣鱼片"
+  ],
+  "Filet de capitaine sauce aigre-douce": [
+   "糖醋鱼片"
+  ],
+  "Filet de capitaine sauté": [
+   "滑炒鱼片"
+  ],
+  "Filet de capitaine aux tomates": [
+   "茄汁鱼片"
+  ],
+  "Poisson entier à la vapeur": [
+   "清蒸全鱼"
+  ],
+  "Poisson entier sauce légumes": [
+   "杂菜烩全鱼"
+  ],
+  "Poisson entier sauce aigre-douce": [
+   "糖醋全鱼"
+  ],
+  "Saumon nature": [
+   "三文鱼刺身"
+  ],
+  "Marmite aux fruits de mer": [
+   "海鲜煲"
+  ],
+  "Marmite aux crevettes": [
+   "鲜虾煲"
+  ],
+  "Marmite aux trois trésors": [
+   "三鲜煲"
+  ],
+  "Marmite aux vermicelles et crevettes": [
+   "粉丝虾煲"
+  ],
+  "Poulet saté": [
+   "铁板沙爹鸡"
+  ],
+  "Crevettes saté": [
+   "铁板沙爹虾"
+  ],
+  "Bœuf saté": [
+   "铁板沙爹牛肉"
+  ],
+  "Seiches": [
+   "铁板墨鱼"
+  ],
+  "Gambas sucrées et pimentées": [
+   "铁板甜辣大虾"
+  ],
+  "Gambas à l'ail": [
+   "铁板蒜蓉大虾"
+  ],
+  "Mouton": [
+   "铁板羊肉"
+  ],
+  "Chap shoue": [
+   "铁板杂烩"
+  ],
+  "Crevettes à la tomate": [
+   "铁板茄汁虾"
+  ],
+  "Poisson saté": [
+   "铁板沙爹鱼"
+  ],
+  "Tofu saté": [
+   "铁板沙爹豆腐"
+  ],
+  "Riz nature": [
+   "白米饭"
+  ],
+  "Riz cantonais au jambon": [
+   "扬州炒饭（火腿）"
+  ],
+  "Riz cantonais au bœuf": [
+   "扬州炒饭（牛肉）"
+  ],
+  "Riz cantonais aux crevettes": [
+   "扬州炒饭（虾仁）"
+  ],
+  "Riz sauté au curry": [
+   "咖喱鸡肉炒饭"
+  ],
+  "Riz sauté à l'ananas": [
+   "菠萝炒饭",
+   "鸡肉和虾"
+  ],
+  "Riz sauté à l'ail": [
+   "蒜香炒饭"
+  ],
+  "Riz sauté aux légumes": [
+   "素炒饭"
+  ],
+  "Nouilles sautées aux crevettes": [
+   "虾仁炒面"
+  ],
+  "Nouilles sautées au bœuf": [
+   "牛肉炒面"
+  ],
+  "Nouilles sautées au poulet": [
+   "鸡丝炒面"
+  ],
+  "Nouilles sautées au porc": [
+   "肉丝炒面"
+  ],
+  "Nouilles sautées aux trois trésors": [
+   "三鲜炒面"
+  ],
+  "Nouilles sautées aux légumes": [
+   "素炒面"
+  ],
+  "Vermicelles sautés au porc": [
+   "肉丝炒米粉"
+  ],
+  "Vermicelles sautés aux crevettes": [
+   "虾仁炒米粉"
+  ],
+  "Vermicelles sautés aux trois trésors": [
+   "三鲜炒米粉"
+  ],
+  "Vermicelles sautés aux légumes": [
+   "素炒米粉"
+  ],
+  "Soupe de nouilles au bœuf": [
+   "红烧牛肉面"
+  ],
+  "Soupe de vermicelles blancs au bœuf": [
+   "香辣牛肉米线"
+  ],
+  "Niangao sauté": [
+   "炒年糕",
+   "糯米年糕"
+  ],
+  "Petits pains farcis à la vapeur": [
+   "鲜肉包子",
+   "猪肉或牛肉馅"
+  ],
+  "Frites": [
+   "薯条"
+  ],
+  "Tarte à la citrouille": [
+   "南瓜饼"
+  ],
+  "Golden pain grillé": [
+   "黄金烤饼"
+  ],
+  "Litchis": [
+   "荔枝"
+  ],
+  "Gingembre confit": [
+   "蜜饯糖姜"
+  ],
+  "Glace (1 boule)": [
+   "冰淇淋（1球）",
+   "香草、巧克力或草莓味"
+  ],
+  "Sorbet (1 boule)": [
+   "雪芭（1球）",
+   "咖啡、柠檬、苹果或芒果味"
+  ],
+  "Colonel": [
+   "上校冰品（柠檬雪芭配伏特加）",
+   "两球柠檬雪芭，淋伏特加"
+  ],
+  "Dame blanche": [
+   "白夫人圣代",
+   "两球香草冰淇淋、巧克力酱、Get 27 薄荷酒、鲜奶油"
+  ],
+  "Pêche Melba": [
+   "蜜桃梅尔巴",
+   "两球香草冰淇淋、桃子、巧克力酱、鲜奶油"
+  ],
+  "Poire Belle-Hélène": [
+   "美丽海伦梨",
+   "两球香草冰淇淋、梨、巧克力酱、鲜奶油"
+  ],
+  "Banana split": [
+   "香蕉船",
+   "香蕉、香草、巧克力、草莓冰淇淋、巧克力酱、鲜奶油"
+  ],
+  "Salade de fruits": [
+   "水果沙拉"
+  ],
+  "Ananas nature": [
+   "原味菠萝"
+  ],
+  "Beignet de fruit": [
+   "脆炸水果",
+   "苹果、香蕉或菠萝"
+  ],
+  "Beignet de fruit flambé": [
+   "火焰脆炸水果",
+   "苹果、香蕉或菠萝"
+  ],
+  "Champignon blanc": [
+   "冰糖银耳羹"
+  ],
+  "Lait chaud": [
+   "热牛奶"
+  ],
+  "Café espresso": [
+   "意式浓缩咖啡"
+  ],
+  "Irish coffee (cognac)": [
+   "爱尔兰咖啡（干邑）"
+  ],
+  "Irish coffee (whisky)": [
+   "爱尔兰咖啡（威士忌）"
+  ],
+  "Thé menthe, thé citron, thé Lipton": [
+   "薄荷茶、柠檬茶、立顿红茶"
+  ],
+  "Thé chinois (thé vert)": [
+   "中国绿茶"
+  ],
+  "Thé au jasmin": [
+   "茉莉花茶"
+  ],
+  "Thé rouge": [
+   "红茶"
+  ],
+  "Thé au chrysanthème": [
+   "菊花茶"
+  ],
+  "Thé à la rose": [
+   "玫瑰花茶"
+  ],
+  "Thé oolong, thé Pu'er": [
+   "乌龙茶、普洱茶"
+  ],
+  "Thé au ginseng": [
+   "人参茶"
+  ],
+  "Thé aux fleurs": [
+   "花草茶"
+  ],
+  "Bubble tea": [
+   "珍珠奶茶"
+  ],
+  "Bubble tea goyave au thé jasmin": [
+   "芭乐茉莉珍珠茶"
+  ],
+  "Bubble tea avocat au thé jasmin": [
+   "牛油果茉莉珍珠茶"
+  ],
+  "Bubble tea café au thé": [
+   "咖啡珍珠奶茶"
+  ],
+  "Thé jasmin passion": [
+   "百香果茉莉茶"
+  ],
+  "Thé jasmin litchi": [
+   "荔枝茉莉茶"
+  ],
+  "Thé jasmin pamplemousse": [
+   "西柚茉莉茶"
+  ],
+  "Thé noir citron glacé": [
+   "柠檬冰红茶"
+  ],
+  "Thé glacé": [
+   "冰茶"
+  ],
+  "Coca, Fanta, Sprite": [
+   "可乐、芬达、雪碧"
+  ],
+  "Coca Zéro": [
+   "零度可乐"
+  ],
+  "Tonic (eau gazeuse)": [
+   "汤力水"
+  ],
+  "Diabolo menthe": [
+   "薄荷苏打"
+  ],
+  "Sirop à l'eau minérale 0,5 L": [
+   "糖浆兑矿泉水 0.5升",
+   "薄荷、黑加仑、石榴或柠檬"
+  ],
+  "Eau minérale 0,5 L": [
+   "矿泉水 0.5升"
+  ],
+  "Eau minérale 1,5 L": [
+   "矿泉水 1.5升"
+  ],
+  "Jus de fruits (verre)": [
+   "果汁（杯）",
+   "橙、苹果、菠萝或芒果"
+  ],
+  "Jus de fruits (boîte 1 L)": [
+   "果汁（1升盒装）",
+   "橙、苹果、菠萝或芒果"
+  ],
+  "Jus de fruits pressé": [
+   "鲜榨果汁"
+  ],
+  "Jus de gingembre (canette)": [
+   "姜汁（罐装）"
+  ],
+  "Jus de tomate": [
+   "番茄汁"
+  ],
+  "Malta": [
+   "麦芽饮料 Malta"
+  ],
+  "Red Bull": [
+   "红牛"
+  ],
+  "Yaourt nutritif": [
+   "营养酸奶"
+  ],
+  "Vita milk": [
+   "维他奶"
+  ],
+  "Bière 33 cl": [
+   "啤酒 33厘升",
+   "Flag、Beaufort、Castel、Brakina、Chill"
+  ],
+  "Bière 66 cl": [
+   "啤酒 66厘升",
+   "Brakina、Sobbra、Flag、Castel、Beaufort、Chill、Tequila"
+  ],
+  "Guinness ou Heineken 33 cl": [
+   "健力士或喜力 33厘升"
+  ],
+  "Tsingtao 500 ml": [
+   "青岛啤酒 500毫升"
+  ],
+  "Bière pression (verre)": [
+   "扎啤（杯）"
+  ],
+  "Bière pression (1 L)": [
+   "扎啤（1升）"
+  ],
+  "Johnnie Walker Red, J&B": [
+   "尊尼获加红牌、J&B"
+  ],
+  "Ricard, pastis, vodka": [
+   "力加茴香酒、帕斯提斯、伏特加"
+  ],
+  "Campari, gin, rhum": [
+   "金巴利、金酒、朗姆酒"
+  ],
+  "Campari orange": [
+   "金巴利橙汁"
+  ],
+  "Martini": [
+   "马天尼",
+   "红、桃红或白"
+  ],
+  "Porto rouge": [
+   "红波特酒"
+  ],
+  "Malibu": [
+   "马利宝"
+  ],
+  "Vodka orange": [
+   "伏特加橙汁"
+  ],
+  "Malibu ananas": [
+   "马利宝菠萝汁"
+  ],
+  "Cocktail de jus (sans alcool)": [
+   "果汁鸡尾酒（无酒精）",
+   "薄荷糖浆、橙汁、菠萝汁、苹果汁、芒果汁"
+  ],
+  "Cocktail maison": [
+   "招牌鸡尾酒",
+   "朗姆酒、石榴糖浆、橙汁、菠萝汁、苹果汁、芒果汁"
+  ],
+  "Kir": [
+   "基尔",
+   "白葡萄酒、黑加仑利口酒"
+  ],
+  "Kir royal": [
+   "皇家基尔",
+   "香槟、黑加仑利口酒"
+  ],
+  "Perroquet": [
+   "鹦鹉",
+   "茴香酒、薄荷糖浆"
+  ],
+  "Tomate": [
+   "番茄",
+   "茴香酒、石榴糖浆"
+  ],
+  "Mauresque": [
+   "摩尔",
+   "茴香酒、杏仁糖浆"
+  ],
+  "Americano": [
+   "美国佬",
+   "马天尼、金巴利"
+  ],
+  "Bloody Mary": [
+   "血腥玛丽",
+   "伏特加、番茄汁"
+  ],
+  "Mojito": [
+   "莫吉托",
+   "白朗姆酒、雪碧、薄荷、柠檬"
+  ],
+  "Mojito sans alcool": [
+   "无酒精莫吉托",
+   "雪碧、薄荷、柠檬"
+  ],
+  "Saké (alcool chinois)": [
+   "中国白酒"
+  ],
+  "Marie Brizard": [
+   "玛丽布利扎"
+  ],
+  "Get 27": [
+   "Get 27 薄荷酒"
+  ],
+  "Armagnac": [
+   "雅文邑白兰地"
+  ],
+  "Grand Marnier, Cointreau": [
+   "柑曼怡、君度"
+  ],
+  "Chivas Regal, Johnnie Walker Black Label": [
+   "芝华士、尊尼获加黑牌"
+  ],
+  "Cognac": [
+   "干邑"
+  ],
+  "Listel Gris (1/2 bouteille)": [
+   "Listel Gris 桃红（半瓶）"
+  ],
+  "Listel Gris": [
+   "Listel Gris 桃红"
+  ],
+  "Côtes de Provence (1/2 bouteille)": [
+   "普罗旺斯桃红（半瓶）"
+  ],
+  "Côtes de Provence": [
+   "普罗旺斯桃红"
+  ],
+  "Vin rouge sucré": [
+   "甜红葡萄酒"
+  ],
+  "J.P. Chenet": [
+   "J.P. Chenet 香奈"
+  ],
+  "Chianti": [
+   "基安蒂"
+  ],
+  "Beaujolais": [
+   "博若莱"
+  ],
+  "Côtes du Rhône": [
+   "罗纳河谷"
+  ],
+  "Côtes du Rhône (1/2 bouteille)": [
+   "罗纳河谷（半瓶）"
+  ],
+  "Baron de Lestac Bordeaux": [
+   "巴龙德莱斯塔克 波尔多"
+  ],
+  "Saint-Émilion Château": [
+   "圣埃美隆 酒庄"
+  ],
+  "Haut-Médoc Château d'Arcins": [
+   "上梅多克 阿尔仙酒庄"
+  ],
+  "Haut-Médoc Château Barreyre": [
+   "上梅多克 巴雷尔酒庄"
+  ],
+  "Mouton Cadet Baron Philippe de Rothschild": [
+   "木桐嘉棣 菲利普罗斯柴尔德男爵"
+  ],
+  "Châteauneuf-du-Pape": [
+   "教皇新堡"
+  ],
+  "Maison Castel Pinot Noir": [
+   "卡思黛乐 黑皮诺"
+  ],
+  "Sauvignon": [
+   "长相思"
+  ],
+  "Baron d'Orcel": [
+   "奥塞尔男爵"
+  ],
+  "Muscadet": [
+   "密斯卡岱"
+  ],
+  "Champagne": [
+   "香槟"
+  ],
+  "Verre de vin": [
+   "一杯葡萄酒"
+  ],
+  "1/4 pichet": [
+   "1/4 壶"
+  ],
+  "1/2 pichet": [
+   "半壶"
+  ]
+ },
+ "EN_SECTIONS": {
+  "brochettes": "Skewers",
+  "specialites": "Chinese specialties",
+  "legumes": "Vegetables",
+  "boeuf": "Beef",
+  "poulet": "Chicken",
+  "canard": "Duck",
+  "porc": "Pork",
+  "fruits-de-mer": "Seafood",
+  "chauffants": "Hot pots & sizzling plates",
+  "riz-nouilles": "Rice & noodles",
+  "desserts": "Desserts",
+  "boissons-chaudes": "Hot drinks",
+  "boissons-fraiches": "Cold drinks",
+  "aperitifs": "Aperitifs & cocktails",
+  "digestifs": "After-dinner drinks",
+  "vins": "Wines"
+ },
+ "EN_GROUPS": {
+  "Prix par portion": "Price per portion",
+  "Fondue chinoise": "Chinese hot pot",
+  "Plats du chef": "Chef's dishes",
+  "Crevettes et seiches": "Shrimp & cuttlefish",
+  "Gambas et langouste": "King prawns & lobster",
+  "Poisson": "Fish",
+  "Marmites": "Hot pots",
+  "Plaques chauffantes": "Sizzling plates",
+  "Riz": "Rice",
+  "Nouilles et vermicelles": "Noodles & vermicelli",
+  "Accompagnements": "Sides & snacks",
+  "Thés glacés et bubble tea": "Iced teas & bubble tea",
+  "Sodas, jus et eaux": "Sodas, juices & water",
+  "Bières": "Beers",
+  "Vin rosé": "Rosé wine",
+  "Vin rouge": "Red wine",
+  "Vin blanc et champagne": "White wine & champagne",
+  "Vin en pichet (rouge, rosé, blanc)": "Wine by the carafe (red, rosé, white)"
+ },
+ "EN": {
+  "Champagne · 48 000 F": [
+   "Champagne · 48,000 F"
+  ],
+  "Champagne · 78 000 F": [
+   "Champagne · 78,000 F"
+  ],
+  "Brochettes de crevettes grillées": [
+   "Grilled shrimp skewers"
+  ],
+  "Brochettes de calamar grillé": [
+   "Grilled squid skewers"
+  ],
+  "Brochettes de bœuf": [
+   "Beef skewers"
+  ],
+  "Rognons d'agneau grillés": [
+   "Grilled lamb kidneys"
+  ],
+  "Pattes de poulet grillées": [
+   "Grilled chicken feet"
+  ],
+  "Gésiers de poulet grillés": [
+   "Grilled chicken gizzards"
+  ],
+  "Poitrine de porc grillée": [
+   "Grilled pork belly"
+  ],
+  "Pommes de terre grillées en brochette": [
+   "Grilled potato slices"
+  ],
+  "Tofu grillé en brochette": [
+   "Grilled tofu skewers"
+  ],
+  "Lotus grillé en brochette": [
+   "Grilled lotus root slices"
+  ],
+  "Fondue chinoise (petite portion)": [
+   "Chinese hot pot (small)"
+  ],
+  "Fondue chinoise (grande portion)": [
+   "Chinese hot pot (large)"
+  ],
+  "Poulet sauté piment rouge": [
+   "Stir-fried chicken with red chili"
+  ],
+  "Filet de poulet frit": [
+   "Fried chicken strips"
+  ],
+  "Soupe de poulet aux vermicelles": [
+   "Chicken vermicelli soup"
+  ],
+  "Cuisse de porc à la vapeur": [
+   "Steamed pork knuckle"
+  ],
+  "Boulettes de porc sauce soja": [
+   "Pork meatballs in soy sauce"
+  ],
+  "Porc au meicai": [
+   "Pork belly with preserved mustard greens"
+  ],
+  "Crevettes à la vapeur": [
+   "Steamed shrimp"
+  ],
+  "Crevettes à la moutarde": [
+   "Mustard shrimp"
+  ],
+  "Petites crevettes frites": [
+   "Crispy small shrimp"
+  ],
+  "Crevettes au pain frit": [
+   "Breaded fried shrimp"
+  ],
+  "Crabe sauté au piment": [
+   "Spicy stir-fried crab"
+  ],
+  "Marmite au poisson": [
+   "Spicy fish pot"
+  ],
+  "Salade au champignon noir": [
+   "Black fungus salad"
+  ],
+  "Salade de pattes de poulet": [
+   "Chicken feet salad"
+  ],
+  "Suancaiyu": [
+   "Suancaiyu",
+   "Fish in sour and spicy pickled cabbage broth"
+  ],
+  "Suancai bœuf": [
+   "Beef with pickled cabbage"
+  ],
+  "Filet de bœuf dans l'huile pimentée": [
+   "Beef fillet in chili oil"
+  ],
+  "Filet de capitaine dans l'huile pimentée": [
+   "Nile perch fillet in chili oil"
+  ],
+  "Salade au journal (sautée)": [
+   "Stir-fried beef tripe"
+  ],
+  "Mouton sauté au piment": [
+   "Spicy stir-fried mutton"
+  ],
+  "Bœuf aux pommes de terre et tomates": [
+   "Beef stew with potatoes and tomatoes"
+  ],
+  "Golden soupe au bœuf": [
+   "Golden beef soup"
+  ],
+  "Tête de poisson à la vapeur": [
+   "Steamed fish head with chili"
+  ],
+  "Champignons noirs sautés": [
+   "Stir-fried black fungus"
+  ],
+  "Tomates sautées aux œufs": [
+   "Stir-fried tomatoes and eggs"
+  ],
+  "Pommes de terre sautées": [
+   "Stir-fried shredded potatoes",
+   "Sour and spicy"
+  ],
+  "Pommes de terre grillées": [
+   "Grilled potatoes"
+  ],
+  "Marmite aux aubergines": [
+   "Eggplant clay pot"
+  ],
+  "Chou sauté": [
+   "Stir-fried cabbage"
+  ],
+  "Marmite au chou": [
+   "Dry-pot cabbage"
+  ],
+  "Pousses de bambou sautées": [
+   "Stir-fried bamboo shoots"
+  ],
+  "Mapo tofu": [
+   "Mapo tofu"
+  ],
+  "Tofu sauce soja": [
+   "Tofu in soy sauce"
+  ],
+  "Chou chinois sauté": [
+   "Stir-fried Chinese cabbage"
+  ],
+  "Salade d'algues vertes": [
+   "Seaweed salad"
+  ],
+  "Ciboulette chinoise sautée aux œufs": [
+   "Chinese chives stir-fried with eggs"
+  ],
+  "Salade de concombres": [
+   "Smashed cucumber salad"
+  ],
+  "Tofu grillé": [
+   "Grilled tofu"
+  ],
+  "Tofu aux œufs de cent ans": [
+   "Tofu with century eggs"
+  ],
+  "Salade de tofu bambou": [
+   "Tofu skin salad"
+  ],
+  "Salade de pousses de bambou": [
+   "Bamboo shoot salad"
+  ],
+  "Germes de soja sautés": [
+   "Stir-fried bean sprouts"
+  ],
+  "Champignons blancs frits": [
+   "Crispy fried mushrooms"
+  ],
+  "Filet de bœuf sauce piquante": [
+   "Beef fillet in spicy sauce"
+  ],
+  "Filet de bœuf à l'ananas": [
+   "Beef fillet with pineapple"
+  ],
+  "Filet de bœuf au gingembre": [
+   "Beef fillet with ginger"
+  ],
+  "Filet de bœuf aux pousses de bambou": [
+   "Beef fillet with bamboo shoots"
+  ],
+  "Filet de bœuf aux champignons noirs": [
+   "Beef fillet with black fungus"
+  ],
+  "Filet de bœuf aux oignons": [
+   "Beef fillet with onions"
+  ],
+  "Filet de bœuf aux poivrons verts": [
+   "Beef fillet with green peppers"
+  ],
+  "Filet de bœuf au curry": [
+   "Curry beef fillet"
+  ],
+  "Filet de bœuf aux légumes": [
+   "Beef fillet with vegetables"
+  ],
+  "Filet de bœuf aux champignons de Paris": [
+   "Beef fillet with button mushrooms"
+  ],
+  "Filet de bœuf aux champignons et bambou": [
+   "Beef fillet with mushrooms and bamboo"
+  ],
+  "Bœuf braisé aux épices": [
+   "Spiced braised beef"
+  ],
+  "Salade de bœuf braisé aux épices": [
+   "Spiced braised beef salad"
+  ],
+  "Bœuf sauté au piment vert": [
+   "Beef stir-fried with green chili",
+   "Dry, no sauce"
+  ],
+  "Bœuf dans l'huile pimentée": [
+   "Beef in chili oil"
+  ],
+  "Poulet sauce piquante": [
+   "Chicken in spicy sauce"
+  ],
+  "Poulet sauce aigre-douce": [
+   "Sweet and sour chicken"
+  ],
+  "Poulet aux noix de cajou": [
+   "Cashew chicken"
+  ],
+  "Poulet aux poivrons verts": [
+   "Chicken with green peppers"
+  ],
+  "Poulet aux champignons noirs": [
+   "Chicken with black fungus"
+  ],
+  "Poulet au curry": [
+   "Curry chicken"
+  ],
+  "Poulet au gingembre": [
+   "Ginger chicken"
+  ],
+  "Poulet aux pousses de bambou": [
+   "Chicken with bamboo shoots"
+  ],
+  "Poulet au citron": [
+   "Lemon chicken"
+  ],
+  "Poulet à l'ananas": [
+   "Pineapple chicken"
+  ],
+  "Poulet aux champignons de Paris": [
+   "Chicken with button mushrooms"
+  ],
+  "Poulet aux légumes": [
+   "Chicken with vegetables"
+  ],
+  "Poulet du chef sauce piquante": [
+   "Chef's spicy chicken"
+  ],
+  "Poulet sauce tomate": [
+   "Chicken in tomato sauce"
+  ],
+  "Poulet pané frit": [
+   "Breaded fried chicken"
+  ],
+  "Ailes de poulet grillées": [
+   "Grilled chicken wings"
+  ],
+  "Poulet sauté au piment vert": [
+   "Chicken stir-fried with green chili",
+   "Dry, no sauce"
+  ],
+  "Poulet local sauté": [
+   "Stir-fried free-range chicken"
+  ],
+  "Canard sauce piquante": [
+   "Duck in spicy sauce"
+  ],
+  "Canard aux légumes": [
+   "Duck with vegetables"
+  ],
+  "Canard au gingembre": [
+   "Ginger duck"
+  ],
+  "Canard au curry": [
+   "Curry duck"
+  ],
+  "Canard à l'ananas": [
+   "Pineapple duck"
+  ],
+  "Canard aux champignons et bambou": [
+   "Duck with mushrooms and bamboo"
+  ],
+  "Canard aux champignons noirs": [
+   "Duck with black fungus"
+  ],
+  "Canard frit aux épices": [
+   "Crispy spiced duck"
+  ],
+  "Pigeon frit aux épices": [
+   "Crispy spiced pigeon"
+  ],
+  "Porc aux oignons": [
+   "Pork with onions"
+  ],
+  "Porc sauce piquante": [
+   "Pork in spicy sauce"
+  ],
+  "Porc aux poivrons verts": [
+   "Pork with green peppers"
+  ],
+  "Porc au gingembre": [
+   "Ginger pork"
+  ],
+  "Porc aux champignons de Paris": [
+   "Pork with button mushrooms"
+  ],
+  "Porc à l'ananas": [
+   "Pineapple pork"
+  ],
+  "Porc sauce aigre-douce": [
+   "Sweet and sour pork"
+  ],
+  "Porc aux champignons noirs": [
+   "Pork with black fungus"
+  ],
+  "Porc au caramel": [
+   "Caramelized braised pork"
+  ],
+  "Porc aux légumes": [
+   "Pork with vegetables"
+  ],
+  "Porc aux champignons et bambou": [
+   "Pork with mushrooms and bamboo"
+  ],
+  "Pieds de porc sauce soja": [
+   "Pig's feet in soy sauce"
+  ],
+  "Crevettes au gingembre": [
+   "Ginger shrimp"
+  ],
+  "Crevettes aux légumes": [
+   "Shrimp with vegetables"
+  ],
+  "Crevettes aux tomates": [
+   "Shrimp with tomatoes"
+  ],
+  "Crevettes à l'ail": [
+   "Garlic shrimp"
+  ],
+  "Crevettes sauce piquante": [
+   "Shrimp in spicy sauce"
+  ],
+  "Crevettes au curry": [
+   "Curry shrimp"
+  ],
+  "Crevettes aux noix de cajou": [
+   "Cashew shrimp"
+  ],
+  "Crevettes aux champignons noirs": [
+   "Shrimp with black fungus"
+  ],
+  "Crevettes sauce aigre-douce": [
+   "Sweet and sour shrimp"
+  ],
+  "Seiches sauce piquante": [
+   "Cuttlefish in spicy sauce"
+  ],
+  "Seiches sautées": [
+   "Stir-fried cuttlefish"
+  ],
+  "Crevettes frites": [
+   "Fried shrimp"
+  ],
+  "Gambas au caramel": [
+   "Caramelized king prawns"
+  ],
+  "Gambas à la vapeur": [
+   "Steamed king prawns"
+  ],
+  "Gambas sauce piquante": [
+   "King prawns in spicy sauce"
+  ],
+  "Gambas sauce légumes": [
+   "King prawns in vegetable sauce"
+  ],
+  "Gambas sauce tomate": [
+   "King prawns in tomato sauce"
+  ],
+  "Gambas grillées": [
+   "Grilled king prawns"
+  ],
+  "Langouste à la vapeur": [
+   "Steamed lobster"
+  ],
+  "Langouste sauce tomate": [
+   "Lobster in tomato sauce"
+  ],
+  "Filet de capitaine sauce piquante": [
+   "Nile perch fillet in spicy sauce"
+  ],
+  "Filet de capitaine sauce aigre-douce": [
+   "Sweet and sour Nile perch fillet"
+  ],
+  "Filet de capitaine sauté": [
+   "Stir-fried Nile perch fillet"
+  ],
+  "Filet de capitaine aux tomates": [
+   "Nile perch fillet with tomatoes"
+  ],
+  "Poisson entier à la vapeur": [
+   "Steamed whole fish"
+  ],
+  "Poisson entier sauce légumes": [
+   "Whole fish in vegetable sauce"
+  ],
+  "Poisson entier sauce aigre-douce": [
+   "Sweet and sour whole fish"
+  ],
+  "Saumon nature": [
+   "Plain salmon"
+  ],
+  "Marmite aux fruits de mer": [
+   "Seafood hot pot"
+  ],
+  "Marmite aux crevettes": [
+   "Shrimp hot pot"
+  ],
+  "Marmite aux trois trésors": [
+   "Three treasures hot pot"
+  ],
+  "Marmite aux vermicelles et crevettes": [
+   "Vermicelli and shrimp hot pot"
+  ],
+  "Poulet saté": [
+   "Sizzling satay chicken"
+  ],
+  "Crevettes saté": [
+   "Sizzling satay shrimp"
+  ],
+  "Bœuf saté": [
+   "Sizzling satay beef"
+  ],
+  "Seiches": [
+   "Sizzling cuttlefish"
+  ],
+  "Gambas sucrées et pimentées": [
+   "Sizzling sweet chili king prawns"
+  ],
+  "Gambas à l'ail": [
+   "Sizzling garlic king prawns"
+  ],
+  "Mouton": [
+   "Sizzling mutton"
+  ],
+  "Chap shoue": [
+   "Sizzling chop suey"
+  ],
+  "Crevettes à la tomate": [
+   "Sizzling tomato shrimp"
+  ],
+  "Poisson saté": [
+   "Sizzling satay fish"
+  ],
+  "Tofu saté": [
+   "Sizzling satay tofu"
+  ],
+  "Riz nature": [
+   "Steamed rice"
+  ],
+  "Riz cantonais au jambon": [
+   "Ham fried rice"
+  ],
+  "Riz cantonais au bœuf": [
+   "Beef fried rice"
+  ],
+  "Riz cantonais aux crevettes": [
+   "Shrimp fried rice"
+  ],
+  "Riz sauté au curry": [
+   "Curry fried rice",
+   "Chicken"
+  ],
+  "Riz sauté à l'ananas": [
+   "Pineapple fried rice",
+   "Chicken and shrimp"
+  ],
+  "Riz sauté à l'ail": [
+   "Garlic fried rice"
+  ],
+  "Riz sauté aux légumes": [
+   "Vegetable fried rice"
+  ],
+  "Nouilles sautées aux crevettes": [
+   "Shrimp fried noodles"
+  ],
+  "Nouilles sautées au bœuf": [
+   "Beef fried noodles"
+  ],
+  "Nouilles sautées au poulet": [
+   "Chicken fried noodles"
+  ],
+  "Nouilles sautées au porc": [
+   "Pork fried noodles"
+  ],
+  "Nouilles sautées aux trois trésors": [
+   "Three treasures fried noodles"
+  ],
+  "Nouilles sautées aux légumes": [
+   "Vegetable fried noodles"
+  ],
+  "Vermicelles sautés au porc": [
+   "Pork fried vermicelli"
+  ],
+  "Vermicelles sautés aux crevettes": [
+   "Shrimp fried vermicelli"
+  ],
+  "Vermicelles sautés aux trois trésors": [
+   "Three treasures fried vermicelli"
+  ],
+  "Vermicelles sautés aux légumes": [
+   "Vegetable fried vermicelli"
+  ],
+  "Soupe de nouilles au bœuf": [
+   "Beef noodle soup"
+  ],
+  "Soupe de vermicelles blancs au bœuf": [
+   "Beef rice-noodle soup"
+  ],
+  "Niangao sauté": [
+   "Stir-fried rice cakes",
+   "Glutinous rice cakes"
+  ],
+  "Petits pains farcis à la vapeur": [
+   "Steamed stuffed buns",
+   "Pork or beef"
+  ],
+  "Frites": [
+   "French fries"
+  ],
+  "Tarte à la citrouille": [
+   "Pumpkin cakes"
+  ],
+  "Golden pain grillé": [
+   "Golden toasted bread"
+  ],
+  "Litchis": [
+   "Lychees"
+  ],
+  "Gingembre confit": [
+   "Candied ginger"
+  ],
+  "Glace (1 boule)": [
+   "Ice cream (1 scoop)",
+   "Vanilla, chocolate or strawberry"
+  ],
+  "Sorbet (1 boule)": [
+   "Sorbet (1 scoop)",
+   "Coffee, lemon, apple or mango"
+  ],
+  "Colonel": [
+   "Colonel",
+   "2 scoops lemon sorbet, vodka"
+  ],
+  "Dame blanche": [
+   "Dame blanche sundae",
+   "2 scoops vanilla, chocolate sauce, Get 27, whipped cream"
+  ],
+  "Pêche Melba": [
+   "Peach Melba",
+   "2 scoops vanilla, peach, chocolate sauce, whipped cream"
+  ],
+  "Poire Belle-Hélène": [
+   "Pear Belle-Hélène",
+   "2 scoops vanilla, pear, chocolate sauce, whipped cream"
+  ],
+  "Banana split": [
+   "Banana split",
+   "Banana, vanilla, chocolate, strawberry, chocolate sauce, whipped cream"
+  ],
+  "Salade de fruits": [
+   "Fruit salad"
+  ],
+  "Ananas nature": [
+   "Fresh pineapple"
+  ],
+  "Beignet de fruit": [
+   "Fruit fritters",
+   "Apple, banana or pineapple"
+  ],
+  "Beignet de fruit flambé": [
+   "Flambéed fruit fritters",
+   "Apple, banana or pineapple"
+  ],
+  "Champignon blanc": [
+   "White fungus dessert soup"
+  ],
+  "Lait chaud": [
+   "Hot milk"
+  ],
+  "Café espresso": [
+   "Espresso"
+  ],
+  "Irish coffee (cognac)": [
+   "Irish coffee (cognac)"
+  ],
+  "Irish coffee (whisky)": [
+   "Irish coffee (whisky)"
+  ],
+  "Thé menthe, thé citron, thé Lipton": [
+   "Mint tea, lemon tea, Lipton tea"
+  ],
+  "Thé chinois (thé vert)": [
+   "Chinese green tea"
+  ],
+  "Thé au jasmin": [
+   "Jasmine tea"
+  ],
+  "Thé rouge": [
+   "Black tea"
+  ],
+  "Thé au chrysanthème": [
+   "Chrysanthemum tea"
+  ],
+  "Thé à la rose": [
+   "Rose tea"
+  ],
+  "Thé oolong, thé Pu'er": [
+   "Oolong tea, Pu'er tea"
+  ],
+  "Thé au ginseng": [
+   "Ginseng tea"
+  ],
+  "Thé aux fleurs": [
+   "Flower tea"
+  ],
+  "Bubble tea": [
+   "Bubble tea"
+  ],
+  "Bubble tea goyave au thé jasmin": [
+   "Guava jasmine bubble tea"
+  ],
+  "Bubble tea avocat au thé jasmin": [
+   "Avocado jasmine bubble tea"
+  ],
+  "Bubble tea café au thé": [
+   "Coffee milk tea with bubbles"
+  ],
+  "Thé jasmin passion": [
+   "Passion fruit jasmine tea"
+  ],
+  "Thé jasmin litchi": [
+   "Lychee jasmine tea"
+  ],
+  "Thé jasmin pamplemousse": [
+   "Grapefruit jasmine tea"
+  ],
+  "Thé noir citron glacé": [
+   "Iced lemon black tea"
+  ],
+  "Thé glacé": [
+   "Iced tea"
+  ],
+  "Coca, Fanta, Sprite": [
+   "Coke, Fanta, Sprite"
+  ],
+  "Coca Zéro": [
+   "Coke Zero"
+  ],
+  "Tonic (eau gazeuse)": [
+   "Tonic water"
+  ],
+  "Diabolo menthe": [
+   "Mint lemonade soda"
+  ],
+  "Sirop à l'eau minérale 0,5 L": [
+   "Syrup with mineral water 0.5 L",
+   "Mint, blackcurrant, grenadine or lemon"
+  ],
+  "Eau minérale 0,5 L": [
+   "Mineral water 0.5 L"
+  ],
+  "Eau minérale 1,5 L": [
+   "Mineral water 1.5 L"
+  ],
+  "Jus de fruits (verre)": [
+   "Fruit juice (glass)",
+   "Orange, apple, pineapple or mango"
+  ],
+  "Jus de fruits (boîte 1 L)": [
+   "Fruit juice (1 L carton)",
+   "Orange, apple, pineapple or mango"
+  ],
+  "Jus de fruits pressé": [
+   "Fresh-squeezed juice"
+  ],
+  "Jus de gingembre (canette)": [
+   "Ginger juice (can)"
+  ],
+  "Jus de tomate": [
+   "Tomato juice"
+  ],
+  "Malta": [
+   "Malta (malt drink)"
+  ],
+  "Red Bull": [
+   "Red Bull"
+  ],
+  "Yaourt nutritif": [
+   "Drinking yogurt"
+  ],
+  "Vita milk": [
+   "Vitamilk soy milk"
+  ],
+  "Bière 33 cl": [
+   "Beer 33 cl",
+   "Flag, Beaufort, Castel, Brakina, Chill"
+  ],
+  "Bière 66 cl": [
+   "Beer 66 cl",
+   "Brakina, Sobbra, Flag, Castel, Beaufort, Chill, Tequila"
+  ],
+  "Guinness ou Heineken 33 cl": [
+   "Guinness or Heineken 33 cl"
+  ],
+  "Tsingtao 500 ml": [
+   "Tsingtao 500 ml"
+  ],
+  "Bière pression (verre)": [
+   "Draft beer (glass)"
+  ],
+  "Bière pression (1 L)": [
+   "Draft beer (1 L)"
+  ],
+  "Johnnie Walker Red, J&B": [
+   "Johnnie Walker Red, J&B"
+  ],
+  "Ricard, pastis, vodka": [
+   "Ricard, pastis, vodka"
+  ],
+  "Campari, gin, rhum": [
+   "Campari, gin, rum"
+  ],
+  "Campari orange": [
+   "Campari orange"
+  ],
+  "Martini": [
+   "Martini",
+   "Red, rosé or white"
+  ],
+  "Porto rouge": [
+   "Red port"
+  ],
+  "Malibu": [
+   "Malibu"
+  ],
+  "Vodka orange": [
+   "Vodka orange"
+  ],
+  "Malibu ananas": [
+   "Malibu pineapple"
+  ],
+  "Cocktail de jus (sans alcool)": [
+   "Juice cocktail (alcohol-free)",
+   "Mint syrup, orange, pineapple, apple, mango juice"
+  ],
+  "Cocktail maison": [
+   "House cocktail",
+   "Rum, grenadine, orange, pineapple, apple, mango juice"
+  ],
+  "Kir": [
+   "Kir",
+   "White wine, crème de cassis"
+  ],
+  "Kir royal": [
+   "Kir royal",
+   "Champagne, crème de cassis"
+  ],
+  "Perroquet": [
+   "Perroquet",
+   "Pastis, mint syrup"
+  ],
+  "Tomate": [
+   "Tomate",
+   "Pastis, grenadine syrup"
+  ],
+  "Mauresque": [
+   "Mauresque",
+   "Pastis, orgeat syrup"
+  ],
+  "Americano": [
+   "Americano",
+   "Martini, Campari"
+  ],
+  "Bloody Mary": [
+   "Bloody Mary",
+   "Vodka, tomato juice"
+  ],
+  "Mojito": [
+   "Mojito",
+   "White rum, Sprite, mint, lime"
+  ],
+  "Mojito sans alcool": [
+   "Virgin mojito",
+   "Sprite, mint, lime"
+  ],
+  "Saké (alcool chinois)": [
+   "Chinese rice spirit"
+  ],
+  "Marie Brizard": [
+   "Marie Brizard"
+  ],
+  "Get 27": [
+   "Get 27 (mint liqueur)"
+  ],
+  "Armagnac": [
+   "Armagnac"
+  ],
+  "Grand Marnier, Cointreau": [
+   "Grand Marnier, Cointreau"
+  ],
+  "Chivas Regal, Johnnie Walker Black Label": [
+   "Chivas Regal, Johnnie Walker Black Label"
+  ],
+  "Cognac": [
+   "Cognac"
+  ],
+  "Listel Gris (1/2 bouteille)": [
+   "Listel Gris (half bottle)"
+  ],
+  "Listel Gris": [
+   "Listel Gris"
+  ],
+  "Côtes de Provence (1/2 bouteille)": [
+   "Côtes de Provence (half bottle)"
+  ],
+  "Côtes de Provence": [
+   "Côtes de Provence"
+  ],
+  "Vin rouge sucré": [
+   "Sweet red wine"
+  ],
+  "J.P. Chenet": [
+   "J.P. Chenet"
+  ],
+  "Chianti": [
+   "Chianti"
+  ],
+  "Beaujolais": [
+   "Beaujolais"
+  ],
+  "Côtes du Rhône": [
+   "Côtes du Rhône"
+  ],
+  "Côtes du Rhône (1/2 bouteille)": [
+   "Côtes du Rhône (half bottle)"
+  ],
+  "Baron de Lestac Bordeaux": [
+   "Baron de Lestac Bordeaux"
+  ],
+  "Saint-Émilion Château": [
+   "Saint-Émilion Château"
+  ],
+  "Haut-Médoc Château d'Arcins": [
+   "Haut-Médoc Château d'Arcins"
+  ],
+  "Haut-Médoc Château Barreyre": [
+   "Haut-Médoc Château Barreyre"
+  ],
+  "Mouton Cadet Baron Philippe de Rothschild": [
+   "Mouton Cadet Baron Philippe de Rothschild"
+  ],
+  "Châteauneuf-du-Pape": [
+   "Châteauneuf-du-Pape"
+  ],
+  "Maison Castel Pinot Noir": [
+   "Maison Castel Pinot Noir"
+  ],
+  "Sauvignon": [
+   "Sauvignon"
+  ],
+  "Baron d'Orcel": [
+   "Baron d'Orcel"
+  ],
+  "Muscadet": [
+   "Muscadet"
+  ],
+  "Champagne": [
+   "Champagne"
+  ],
+  "Verre de vin": [
+   "Glass of wine"
+  ],
+  "1/4 pichet": [
+   "1/4 carafe"
+  ],
+  "1/2 pichet": [
+   "1/2 carafe"
+  ]
+ },
+ "PHOTOS": {
+  "Brochettes de crevettes grillées": "img/brochettes-crevettes.jpg",
+  "Brochettes de calamar grillé": "img/brochettes-calamar.jpg",
+  "Brochettes de bœuf": "img/brochettes-boeuf.jpg",
+  "Rognons d'agneau grillés": "img/rognons-agneau.jpg",
+  "Pattes de poulet grillées": "img/pattes-poulet-grillees.jpg",
+  "Gésiers de poulet grillés": "img/gesiers-poulet.jpg",
+  "Poitrine de porc grillée": "img/poitrine-porc-grillee.jpg",
+  "Pommes de terre grillées en brochette": "img/pommes-de-terre-brochette.jpg",
+  "Tofu grillé en brochette": "img/tofu-brochette.jpg",
+  "Lotus grillé en brochette": "img/lotus-grille.jpg",
+  "Poulet sauté piment rouge": "img/poulet-saute-piment-rouge.jpg",
+  "Filet de poulet frit": "img/filet-de-poulet-frit.jpg",
+  "Soupe de poulet aux vermicelles": "img/soupe-de-poulet-aux-vermicelles.jpg",
+  "Cuisse de porc à la vapeur": "img/cuisse-de-porc-a-la-vapeur.jpg",
+  "Boulettes de porc sauce soja": "img/boulettes-de-porc-sauce-soja.jpg",
+  "Porc au meicai": "img/porc-au-meicai.jpg",
+  "Crevettes à la vapeur": "img/crevettes-a-la-vapeur.jpg",
+  "Crevettes à la moutarde": "img/crevettes-a-la-moutarde.jpg",
+  "Petites crevettes frites": "img/petites-crevettes-frites.jpg",
+  "Crevettes au pain frit": "img/crevettes-au-pain-frit.jpg",
+  "Crabe sauté au piment": "img/crabe-saute-au-piment.jpg",
+  "Marmite au poisson": "img/marmite-au-poisson.jpg",
+  "Salade au champignon noir": "img/salade-au-champignon-noir.jpg",
+  "Salade de pattes de poulet": "img/salade-de-pattes-de-poulet.jpg",
+  "Suancaiyu": "img/suancaiyu.jpg",
+  "Filet de bœuf dans l'huile pimentée": "img/filet-de-boeuf-dans-l-huile-pimentee.jpg",
+  "Salade au journal (sautée)": "img/salade-au-journal-sautee.jpg",
+  "Mouton sauté au piment": "img/mouton-saute-au-piment.jpg",
+  "Bœuf aux pommes de terre et tomates": "img/boeuf-aux-pommes-de-terre-et-tomates.jpg",
+  "Golden soupe au bœuf": "img/golden-soupe-au-boeuf.jpg",
+  "Tête de poisson à la vapeur": "img/tete-de-poisson-a-la-vapeur.jpg",
+  "Fondue chinoise": "img/fondue-chinoise.jpg",
+  "Salade de concombres": "img/salade-de-concombres.jpg",
+  "Tofu grillé": "img/tofu-grille.jpg",
+  "Tofu aux œufs de cent ans": "img/tofu-aux-oeufs-de-cent-ans.jpg",
+  "Salade de tofu bambou": "img/salade-de-tofu-bambou.jpg",
+  "Salade de pousses de bambou": "img/salade-de-pousses-de-bambou.jpg",
+  "Germes de soja sautés": "img/germes-de-soja-sautes.jpg",
+  "Champignons blancs frits": "img/champignons-blancs-frits.jpg",
+  "Champignons noirs sautés": "img/champignons-noirs-sautes.jpg",
+  "Pommes de terre grillées": "img/pommes-de-terre-grillees.jpg",
+  "Tomates sautées aux œufs": "img/tomates-sautees-aux-oeufs.jpg",
+  "Chou chinois sauté": "img/chou-chinois-saute.jpg",
+  "Salade d'algues vertes": "img/salade-d-algues-vertes.jpg",
+  "Ciboulette chinoise sautée aux œufs": "img/ciboulette-chinoise-sautee-aux-oeufs.jpg",
+  "Mapo tofu": "img/mapo-tofu.jpg",
+  "Marmite aux aubergines": "img/marmite-aux-aubergines.jpg",
+  "Pommes de terre sautées": "img/pommes-de-terre-sautees.jpg",
+  "Filet de bœuf au curry": "img/filet-de-boeuf-au-curry.jpg",
+  "Filet de bœuf aux poivrons verts": "img/filet-de-boeuf-aux-poivrons-verts.jpg",
+  "Bœuf braisé aux épices": "img/boeuf-braise-aux-epices.jpg",
+  "Bœuf dans l'huile pimentée": "img/boeuf-dans-l-huile-pimentee.jpg",
+  "Ailes de poulet grillées": "img/ailes-de-poulet-grillees.jpg",
+  "Poulet sauté au piment vert": "img/poulet-saute-au-piment-vert.jpg",
+  "Poulet au citron": "img/poulet-au-citron.jpg",
+  "Poulet pané frit": "img/poulet-pane-frit.jpg",
+  "Poulet sauce aigre-douce": "img/poulet-sauce-aigre-douce.jpg",
+  "Canard frit aux épices": "img/canard-frit-aux-epices.jpg",
+  "Pieds de porc sauce soja": "img/pieds-de-porc-sauce-soja.jpg",
+  "Porc à l'ananas": "img/porc-a-l-ananas.jpg",
+  "Crevettes aux noix de cajou": "img/crevettes-aux-noix-de-cajou.jpg",
+  "Seiches sauce piquante": "img/seiches-sauce-piquante.jpg",
+  "Langouste à la vapeur": "img/langouste-a-la-vapeur.jpg",
+  "Poisson entier à la vapeur": "img/poisson-entier-a-la-vapeur.jpg",
+  "Poisson entier sauce aigre-douce": "img/poisson-entier-sauce-aigre-douce.jpg",
+  "Saumon nature": "img/saumon-nature.jpg",
+  "Bœuf saté": "img/boeuf-sate.jpg",
+  "Marmite aux fruits de mer": "img/marmite-aux-fruits-de-mer.jpg",
+  "Nouilles sautées aux légumes": "img/nouilles-sautees-aux-legumes.jpg",
+  "Riz cantonais au jambon": "img/riz-cantonais-au-jambon.jpg",
+  "Niangao sauté": "img/niangao-saute.jpg",
+  "Petits pains farcis à la vapeur": "img/petits-pains-farcis-a-la-vapeur.jpg",
+  "Soupe de vermicelles blancs au bœuf": "img/soupe-de-vermicelles-blancs-au-boeuf.jpg",
+  "Golden pain grillé": "img/golden-pain-grille.jpg",
+  "Soupe de nouilles au bœuf": "img/soupe-de-nouilles-au-boeuf.jpg",
+  "Tarte à la citrouille": "img/tarte-a-la-citrouille.jpg",
+  "Litchis": "img/litchis.jpg",
+  "Jus de fruits pressé": "img/jus-de-fruits-presse.jpg"
+ },
+ "PHONES": [
+  "63335888",
+  "05689158",
+  "77299878",
+  "73986666"
+ ],
+ "TABLES": [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20"
+ ],
+ "ROOMS": [
+  "201",
+  "202",
+  "203",
+  "601",
+  "602",
+  "603",
+  "605",
+  "606",
+  "608",
+  "610",
+  "616",
+  "618"
+ ]
+}
