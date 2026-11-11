@@ -16,6 +16,8 @@ export const MAX_OWNED_RESTAURANTS = 3;
 export const CreateRestaurantInput = z.object({
   name: z.string().trim().min(2).max(80),
   city: z.string().trim().min(2).max(60).default("Ouagadougou"),
+  /** « transport »: a VIP bus company serving food on board (buses, itineraries, hostesses). */
+  kind: z.enum(["restaurant", "transport"]).default("restaurant"),
 });
 export type CreateRestaurantInput = z.infer<typeof CreateRestaurantInput>;
 
@@ -38,7 +40,7 @@ async function uniqueSlug(db: Pick<DB, "select">, name: string): Promise<string>
 export async function createRestaurantForUser(
   db: DB,
   user: { clerkUserId: string; email?: string | null; name?: string | null },
-  input: CreateRestaurantInput,
+  input: z.input<typeof CreateRestaurantInput>,
 ) {
   const data = CreateRestaurantInput.parse(input);
   // Two sign-ups with the same name can pick the same free slug at once: retry on the unique index.
@@ -62,7 +64,17 @@ async function insertRestaurant(db: DB, user: { clerkUserId: string; email?: str
     const expires = new Date(Date.now() + TRIAL_DAYS * 86_400_000);
     const [restaurant] = await tx
       .insert(restaurants)
-      .values({ name: data.name, city: data.city, slug, plan: TRIAL_PLAN, planStatus: "trial", planExpiresAt: expires })
+      .values({
+        name: data.name,
+        city: data.city,
+        kind: data.kind,
+        slug,
+        plan: TRIAL_PLAN,
+        planStatus: "trial",
+        planExpiresAt: expires,
+        // On a bus: one QR per seat back, and the hostess confirms each order she scans.
+        ...(data.kind === "transport" ? { settings: { qrStrategy: "per_seat" as const, orderValidation: "server_confirms" as const, seatingModes: [] } } : {}),
+      })
       .returning();
     if (!restaurant) throw new Error("restaurant insert failed");
     const [owner] = await tx

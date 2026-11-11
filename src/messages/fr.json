@@ -347,6 +347,18 @@
           "title": "Tout est enregistré",
           "text": "Ventes, commandes et personnel dans votre tableau de bord."
         }
+      },
+      "kind": "Type d'établissement",
+      "namePlaceholderTransport": "Express Voyage",
+      "kinds": {
+        "restaurant": {
+          "title": "Restaurant, maquis, bar, café, hôtel…",
+          "text": "Tables, salons, comptoir, à emporter."
+        },
+        "transport": {
+          "title": "Transport : bus VIP avec repas à bord",
+          "text": "Bus avec plan des sièges, itinéraires et hôtesses. Les voyageurs commandent depuis leur siège."
+        }
       }
     },
     "switchRestaurant": "Changer d'établissement",
@@ -373,7 +385,8 @@
       "kitchen": "Cuisine",
       "history": "Historique",
       "scan": "Scanner"
-    }
+    },
+    "buses": "Bus et itinéraires"
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -619,7 +632,8 @@
         "room": "Salons privés",
         "counter": "Comptoir (prénom + numéro de retrait)",
         "takeaway": "À emporter",
-        "delivery": "Livraison"
+        "delivery": "Livraison",
+        "seat": "Sièges"
       },
       "qr": "QR codes",
       "qrPerSeat": "Un QR code par table ou salon (recommandé)",
@@ -864,7 +878,8 @@
     "occupiedTitle_table": "La table {label} est déjà prise",
     "occupiedTitle_room": "Le salon « {label} » est déjà pris",
     "occupiedQuestion_table": "Un autre client a déjà choisi cette table. Êtes-vous assis avec lui ?",
-    "occupiedQuestion_room": "Un autre client a déjà choisi ce salon. Êtes-vous ensemble ?"
+    "occupiedQuestion_room": "Un autre client a déjà choisi ce salon. Êtes-vous ensemble ?",
+    "seat_seat": "Siège"
   },
   "seating": {
     "title": "Tables et salles",
@@ -895,7 +910,8 @@
       "area": "Zones (place libre)",
       "counter": "Comptoir",
       "takeaway": "À emporter",
-      "delivery": "Livraison"
+      "delivery": "Livraison",
+      "seat": "Sièges"
     },
     "typeOne": {
       "table": "Table",
@@ -903,7 +919,8 @@
       "area": "Zone",
       "counter": "Comptoir",
       "takeaway": "À emporter",
-      "delivery": "Livraison"
+      "delivery": "Livraison",
+      "seat": "Siège"
     },
     "empty": "Aucune place pour le moment. Ajoutez vos tables ci-dessus.",
     "inactive": "Désactivée",
@@ -1052,7 +1069,8 @@
       "area": "Zone",
       "counter": "Comptoir",
       "takeaway": "À emporter",
-      "delivery": "Livraison"
+      "delivery": "Livraison",
+      "seat": "Siège"
     },
     "station": "Poste",
     "allStations": "Tous les postes",
@@ -1614,7 +1632,8 @@
       "menuPage": "Voir mon menu",
       "guide": "Guide",
       "invite": "Ajouter du personnel",
-      "devices": "Appareils (tablettes)"
+      "devices": "Appareils (tablettes)",
+      "buses": "Bus et itinéraires"
     },
     "ranking": {
       "title": "Classement du personnel",
@@ -1896,6 +1915,82 @@
       "locked": "Trop d'erreurs : profil bloqué pendant {m} min.",
       "device": "Cet appareil n'est plus autorisé. Demandez au responsable.",
       "too_many": "Trop d'essais. Patientez un instant."
+    }
+  },
+  "transport": {
+    "title": "Bus et itinéraires",
+    "intro": "Vos bus avec leur plan des sièges et leurs QR codes, et vos itinéraires avec les hôtesses affectées.",
+    "buses": "Bus",
+    "noBus": "Aucun bus pour l'instant. Ajoutez-en un ci-dessous.",
+    "seats": "{n, plural, one {# siège} other {# sièges}}",
+    "onTrip": "En voyage : {route}",
+    "printSeats": "Imprimer les QR des sièges",
+    "editLayout": "Modifier le plan des sièges",
+    "editLayoutHint": "Les sièges dont le numéro existe toujours gardent leur QR code imprimé. Impossible pendant un voyage.",
+    "saveLayout": "Enregistrer le plan",
+    "rename": "Renommer",
+    "delete": "Supprimer",
+    "deleteConfirm": "Supprimer le bus « {name} » et ses sièges ?",
+    "addBus": "Ajouter un bus",
+    "addBusHint": "Indiquez le nombre de rangées et de sièges de chaque côté de l'allée : le plan se dessine. La plupart des bus ont 2 sièges de chaque côté.",
+    "addBusSubmit": "Ajouter ce bus",
+    "setupBuses": "{n, plural, one {# bus ajouté} other {# bus ajoutés}}. Vous pouvez en ajouter d'autres maintenant ou plus tard.",
+    "skipBus": "Plus tard",
+    "routes": "Itinéraires",
+    "routesIntro": "Vos lignes (Ouaga → Bobo, Ouaga → Koudougou…). Affectez les hôtesses à chaque itinéraire : elles verront ces voyages.",
+    "noRoute": "Aucun itinéraire pour l'instant.",
+    "nobodyAssigned": "Personne d'affecté.",
+    "assign": "Affecter les hôtesses",
+    "noTeam": "Ajoutez d'abord votre personnel dans Personnel.",
+    "assignSave": "Enregistrer",
+    "deleteRouteConfirm": "Supprimer l'itinéraire « {route} » ?",
+    "addRoute": "Ajouter un itinéraire",
+    "origin": "Départ",
+    "destination": "Arrivée",
+    "addRouteSubmit": "Ajouter",
+    "ok": {
+      "busCreated": "Bus ajouté : {n} sièges, chacun avec son QR code.",
+      "busUpdated": "Plan enregistré : {n} sièges.",
+      "busRenamed": "Bus renommé.",
+      "busDeleted": "Bus supprimé.",
+      "routeCreated": "Itinéraire ajouté.",
+      "routeDeleted": "Itinéraire supprimé.",
+      "routeAssigned": "Hôtesses affectées."
+    },
+    "err": {
+      "duplicate": "Ce nom existe déjà.",
+      "tripOpen": "Ce bus est en voyage : terminez le voyage d'abord.",
+      "invalid": "Vérifiez les chiffres (au moins 1 rangée et 1 siège par rangée) ou les villes (départ et arrivée différents).",
+      "forbidden": "Vous n'avez pas accès à cette action.",
+      "notFound": "Introuvable."
+    },
+    "bus": {
+      "name": "Nom ou numéro du bus",
+      "namePlaceholder": "Bus 12",
+      "rows": "Rangées",
+      "left": "Sièges à gauche",
+      "right": "Sièges à droite",
+      "back": "Banquette du fond",
+      "backHint": "Sièges sur la dernière rangée, d'un bout à l'autre (0 si aucune).",
+      "door": "Porte au milieu (une rangée sans sièges d'un côté)",
+      "doorRow": "Rangée de la porte",
+      "doorSide": "Côté de la porte",
+      "sideRight": "À droite",
+      "sideLeft": "À gauche",
+      "total": "{n} sièges au total",
+      "invalid": "Plan impossible : vérifiez les chiffres.",
+      "front": "Avant",
+      "backLabel": "Arrière",
+      "doorShort": "Porte",
+      "window": "fenêtre",
+      "aisle": "couloir"
+    },
+    "print": {
+      "back": "Bus et itinéraires",
+      "print": "Imprimer",
+      "hint": "{bus} : {n} cartes à coller au dos des sièges, plus le QR du bus.",
+      "seat": "Siège {n}",
+      "busCard": "À afficher à la porte ou sur le billet : il ouvre le plan des sièges et le menu."
     }
   }
 }

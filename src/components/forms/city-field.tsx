@@ -11,7 +11,22 @@ const same = (a: string, b: string) => a.localeCompare(b, "fr", { sensitivity: "
  * City: a list of Burkina's towns (works on every phone, unlike a datalist), with « Autre ville… »
  * to type any other place. The form receives one `city` value either way.
  */
-export function CityField({ defaultValue = "Ouagadougou", className, label, required = false }: { defaultValue?: string; className: string; label: string; required?: boolean }) {
+export function CityField({
+  defaultValue = "Ouagadougou",
+  className,
+  label,
+  required = false,
+  name = "city",
+  id = "city-select",
+}: {
+  defaultValue?: string;
+  className: string;
+  label: string;
+  required?: boolean;
+  /** Form field name (« city », or « origin » / « destination » for an itinerary). */
+  name?: string;
+  id?: string;
+}) {
   const t = useTranslations("common.city");
   const known = BF_CITIES.find((c) => same(c, defaultValue));
   const [choice, setChoice] = useState(known ?? (defaultValue ? OTHER : BF_CITIES_TOP[0]));
@@ -19,10 +34,10 @@ export function CityField({ defaultValue = "Ouagadougou", className, label, requ
   const value = choice === OTHER ? typed : choice;
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor="city-select" className="text-sm font-bold">
+      <label htmlFor={id} className="text-sm font-bold">
         {label}
       </label>
-      <select id="city-select" value={choice} onChange={(e) => setChoice(e.target.value)} className={className} data-testid="city-select">
+      <select id={id} value={choice} onChange={(e) => setChoice(e.target.value)} className={className} data-testid={id}>
         <optgroup label={t("main")}>
           {BF_CITIES_TOP.map((c) => (
             <option key={c} value={c}>
@@ -50,10 +65,10 @@ export function CityField({ defaultValue = "Ouagadougou", className, label, requ
           autoComplete="address-level2"
           placeholder={t("placeholder")}
           className={className}
-          data-testid="city-other"
+          data-testid={`${id}-other`}
         />
       )}
-      <input type="hidden" name="city" value={value} />
+      <input type="hidden" name={name} value={value} />
     </div>
   );
 }

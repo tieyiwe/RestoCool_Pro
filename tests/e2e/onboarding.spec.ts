@@ -20,13 +20,13 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await expect(page.getByTestId("city-select")).toHaveValue("Ouagadougou");
   await page.getByTestId("city-select").selectOption("Koudougou");
   await page.getByTestId("city-select").selectOption({ label: "Autre ville…" });
-  await page.getByTestId("city-other").fill("Kokologho");
+  await page.getByTestId("city-select-other").fill("Kokologho");
   await page.getByRole("button", { name: "Créer mon établissement" }).click();
 
   // 2. Wizard: profile → contacts → hours → service → appearance → done
   await expect(page).toHaveURL(/\/app\/onboarding\/1$/);
   // The typed town is kept (shown as « Autre ville » + the name).
-  await expect(page.getByTestId("city-other")).toHaveValue("Kokologho");
+  await expect(page.getByTestId("city-select-other")).toHaveValue("Kokologho");
   // Business first: other sections stay locked (no navigation, pages lead back to the setup).
   await expect(page.getByRole("link", { name: "Personnel" })).toHaveCount(0);
   await page.goto("/app/staff");

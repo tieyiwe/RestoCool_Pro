@@ -17,7 +17,7 @@ export async function createRestaurantAction(_prev: CreateRestaurantState, formD
   const user = await getIdentityProfile();
   if (!user) redirect("/sign-in");
 
-  const parsed = CreateRestaurantInput.safeParse({ name: formData.get("name"), city: formData.get("city") || undefined });
+  const parsed = CreateRestaurantInput.safeParse({ name: formData.get("name"), city: formData.get("city") || undefined, kind: formData.get("kind") || undefined });
   if (!parsed.success) return { error: "name" };
 
   const db = getDb();

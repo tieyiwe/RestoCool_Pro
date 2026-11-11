@@ -113,6 +113,20 @@
       "when": 1794363944836,
       "tag": "0015_devices_pin_sessions",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1794365383836,
+      "tag": "0016_transport_buses_trips",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1794365464694,
+      "tag": "0017_transport_routes",
+      "breakpoints": true
     }
   ]
 }

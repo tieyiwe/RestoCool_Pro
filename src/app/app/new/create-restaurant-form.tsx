@@ -12,12 +12,33 @@ export function CreateRestaurantForm() {
   const tc = useTranslations("common");
   const [state, action, pending] = useActionState<CreateRestaurantState, FormData>(createRestaurantAction, undefined);
   const [name, setName] = useState("");
+  const [kind, setKind] = useState<"restaurant" | "transport">("restaurant");
   const error = state?.error === "name" ? t("errorName") : state?.error === "limit" ? t("errorLimit") : state?.error ? tc("error") : null;
   const slug = name.trim().length >= 2 ? slugify(name) : null;
   const input = "min-h-12 w-full rounded-xl border border-border bg-background px-4 text-base outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15";
 
   return (
     <form action={action} className="flex flex-col gap-5" noValidate>
+      {/* What kind of business: restaurants & co, or a VIP bus company serving food on board. */}
+      <fieldset className="grid gap-3 sm:grid-cols-2" data-testid="kind-choice">
+        <legend className="mb-2 text-sm font-bold">{t("kind")}</legend>
+        {(["restaurant", "transport"] as const).map((k) => (
+          <label
+            key={k}
+            className="flex cursor-pointer items-start gap-3 rounded-2xl border-2 border-border p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/5"
+            data-testid={`kind-${k}`}
+          >
+            <input type="radio" name="kind" value={k} checked={kind === k} onChange={() => setKind(k)} className="mt-1 size-5 accent-[var(--color-primary)]" />
+            <span>
+              <span className="block text-2xl" aria-hidden>
+                {k === "restaurant" ? "🍽️" : "🚌"}
+              </span>
+              <span className="block font-bold">{t(`kinds.${k}.title`)}</span>
+              <span className="text-sm text-muted-foreground">{t(`kinds.${k}.text`)}</span>
+            </span>
+          </label>
+        ))}
+      </fieldset>
       <label className="flex flex-col gap-1.5">
         <span className="text-sm font-bold">{t("name")}</span>
         <input
@@ -29,7 +50,7 @@ export function CreateRestaurantForm() {
           autoFocus
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder={t("namePlaceholder")}
+          placeholder={kind === "transport" ? t("namePlaceholderTransport") : t("namePlaceholder")}
           aria-invalid={state?.error === "name" || undefined}
           aria-describedby="name-hint"
           className={input + " text-lg font-semibold"}

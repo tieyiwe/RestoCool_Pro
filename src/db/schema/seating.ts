@@ -16,6 +16,26 @@ export const areas = pgTable(
   (t) => [index("areas_restaurant_idx").on(t.restaurantId)],
 );
 
+/**
+ * A bus of a transport business: its seat map comes from `layout` (src/lib/transport/layout.ts).
+ * Its own QR (`qr_token`) opens the menu with this bus's seat map.
+ */
+export const buses = pgTable(
+  "buses",
+  {
+    id: id(),
+    restaurantId: uuid("restaurant_id").notNull().references(() => restaurants.id, { onDelete: "cascade" }),
+    /** As painted on the bus: « Bus 12 », « Car VIP 3 ». */
+    name: text("name").notNull(),
+    layout: jsonb("layout").$type<{ rows: number; left: number; right: number; doorRow: number | null; doorSide: "left" | "right"; back: number }>().notNull(),
+    qrToken: text("qr_token").notNull(),
+    active: boolean("active").notNull().default(true),
+    sort: integer("sort").notNull().default(0),
+    ...timestamps,
+  },
+  (t) => [index("buses_restaurant_idx").on(t.restaurantId), uniqueIndex("buses_qr_token_uq").on(t.qrToken), uniqueIndex("buses_restaurant_name_uq").on(t.restaurantId, t.name)],
+);
+
 export const seats = pgTable(
   "seats",
   {
@@ -29,12 +49,20 @@ export const seats = pgTable(
     qrToken: text("qr_token").notNull(),
     active: boolean("active").notNull().default(true),
     sort: integer("sort").notNull().default(0),
+    /** Bus seats only: the bus, and the place on its map (row, column, window/aisle). */
+    busId: uuid("bus_id").references(() => buses.id, { onDelete: "cascade" }),
+    mapRow: smallint("map_row"),
+    mapCol: smallint("map_col"),
+    position: text("position").$type<"window" | "aisle" | "middle">(),
     ...timestamps,
   },
   (t) => [
     index("seats_restaurant_idx").on(t.restaurantId),
+    index("seats_bus_idx").on(t.busId),
     uniqueIndex("seats_qr_token_uq").on(t.qrToken),
-    uniqueIndex("seats_restaurant_type_label_uq").on(t.restaurantId, t.type, t.label),
+    // Labels are unique per business (tables, rooms…) and per bus for bus seats (« 12 » on every bus).
+    uniqueIndex("seats_restaurant_type_label_uq").on(t.restaurantId, t.type, t.label).where(sql`${t.busId} is null`),
+    uniqueIndex("seats_bus_label_uq").on(t.busId, t.label).where(sql`${t.busId} is not null`),
   ],
 );
 

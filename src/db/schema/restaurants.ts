@@ -39,6 +39,8 @@ export const restaurants = pgTable(
      */
     parentRestaurantId: uuid("parent_restaurant_id").references((): AnyPgColumn => restaurants.id, { onDelete: "set null" }),
     slug: text("slug").notNull(),
+    /** « restaurant » (tables, rooms…) or « transport » (VIP buses serving food on board). */
+    kind: text("kind").$type<"restaurant" | "transport">().notNull().default("restaurant"),
     name: text("name").notNull(),
     /** Short presentation shown under the name on the public menu. */
     description: jsonb("description").$type<I18nText>(),

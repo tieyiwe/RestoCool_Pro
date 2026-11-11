@@ -347,6 +347,18 @@
           "title": "一切都有记录",
           "text": "销售、订单和员工数据都在控制台。"
         }
+      },
+      "kind": "店铺类型",
+      "namePlaceholderTransport": "快捷客运",
+      "kinds": {
+        "restaurant": {
+          "title": "餐厅、小吃店、酒吧、咖啡馆、酒店…",
+          "text": "餐桌、包间、柜台、外卖。"
+        },
+        "transport": {
+          "title": "客运：车上供餐的 VIP 巴士",
+          "text": "巴士座位图、线路和乘务员。旅客在座位上点餐。"
+        }
       }
     },
     "switchRestaurant": "切换店铺",
@@ -373,7 +385,8 @@
       "kitchen": "厨房",
       "history": "记录",
       "scan": "扫码"
-    }
+    },
+    "buses": "巴士与线路"
   },
   "admin": {
     "title": "RestoCool 管理后台",
@@ -619,7 +632,8 @@
         "room": "包间",
         "counter": "柜台（名字 + 取餐号）",
         "takeaway": "外带",
-        "delivery": "外送"
+        "delivery": "外送",
+        "seat": "座位"
       },
       "qr": "二维码",
       "qrPerSeat": "每张餐桌或包间一个二维码（推荐）",
@@ -864,7 +878,8 @@
     "occupiedTitle_table": "{label} 号桌已有人选择",
     "occupiedTitle_room": "包间“{label}”已有人选择",
     "occupiedQuestion_table": "另一位顾客已选择这张桌子。您和他们坐在一起吗？",
-    "occupiedQuestion_room": "另一位顾客已选择这个包间。您们是一起的吗？"
+    "occupiedQuestion_room": "另一位顾客已选择这个包间。您们是一起的吗？",
+    "seat_seat": "座位"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -895,7 +910,8 @@
       "area": "区域（自由入座）",
       "counter": "柜台",
       "takeaway": "外带",
-      "delivery": "外送"
+      "delivery": "外送",
+      "seat": "座位"
     },
     "typeOne": {
       "table": "餐桌",
@@ -903,7 +919,8 @@
       "area": "区域",
       "counter": "柜台",
       "takeaway": "外带",
-      "delivery": "外送"
+      "delivery": "外送",
+      "seat": "座位"
     },
     "empty": "暂无座位。请在上方添加餐桌。",
     "inactive": "已停用",
@@ -1052,7 +1069,8 @@
       "area": "区域",
       "counter": "柜台",
       "takeaway": "外带",
-      "delivery": "外送"
+      "delivery": "外送",
+      "seat": "座位"
     },
     "station": "工位",
     "allStations": "所有工位",
@@ -1614,7 +1632,8 @@
       "menuPage": "查看我的菜单",
       "guide": "指南",
       "invite": "添加员工",
-      "devices": "设备（平板）"
+      "devices": "设备（平板）",
+      "buses": "巴士与线路"
     },
     "ranking": {
       "title": "员工排名",
@@ -1896,6 +1915,82 @@
       "locked": "错误次数过多：已锁定 {m} 分钟。",
       "device": "此设备已不再授权。请询问负责人。",
       "too_many": "尝试次数过多，请稍候。"
+    }
+  },
+  "transport": {
+    "title": "巴士与线路",
+    "intro": "您的巴士（座位图和二维码）以及线路和指派的乘务员。",
+    "buses": "巴士",
+    "noBus": "还没有巴士，请在下方添加。",
+    "seats": "{n} 个座位",
+    "onTrip": "行驶中：{route}",
+    "printSeats": "打印座位二维码",
+    "editLayout": "修改座位图",
+    "editLayoutHint": "仍存在的座位号保留已打印的二维码。行程中无法修改。",
+    "saveLayout": "保存座位图",
+    "rename": "重命名",
+    "delete": "删除",
+    "deleteConfirm": "删除巴士“{name}”及其座位？",
+    "addBus": "添加巴士",
+    "addBusHint": "输入排数和过道两侧的座位数，座位图会自动生成。大多数巴士每侧 2 个座位。",
+    "addBusSubmit": "添加此巴士",
+    "setupBuses": "已添加 {n} 辆巴士。可以现在或以后再添加。",
+    "skipBus": "稍后",
+    "routes": "线路",
+    "routesIntro": "您的线路（瓦加 → 博博、瓦加 → 库杜古…）。为每条线路指派乘务员，她们将看到这些行程。",
+    "noRoute": "还没有线路。",
+    "nobodyAssigned": "未指派人员。",
+    "assign": "指派乘务员",
+    "noTeam": "请先在“员工”中添加人员。",
+    "assignSave": "保存",
+    "deleteRouteConfirm": "删除线路“{route}”？",
+    "addRoute": "添加线路",
+    "origin": "出发",
+    "destination": "到达",
+    "addRouteSubmit": "添加",
+    "ok": {
+      "busCreated": "已添加巴士：{n} 个座位，每个都有二维码。",
+      "busUpdated": "座位图已保存：{n} 个座位。",
+      "busRenamed": "巴士已重命名。",
+      "busDeleted": "巴士已删除。",
+      "routeCreated": "线路已添加。",
+      "routeDeleted": "线路已删除。",
+      "routeAssigned": "乘务员已指派。"
+    },
+    "err": {
+      "duplicate": "名称已存在。",
+      "tripOpen": "此巴士正在行程中：请先结束行程。",
+      "invalid": "请检查数字（至少 1 排、每排 1 个座位）或城市（出发和到达不同）。",
+      "forbidden": "您无权执行此操作。",
+      "notFound": "未找到。"
+    },
+    "bus": {
+      "name": "巴士名称或编号",
+      "namePlaceholder": "Bus 12",
+      "rows": "排数",
+      "left": "左侧座位",
+      "right": "右侧座位",
+      "back": "后排长座",
+      "backHint": "最后一排横跨的座位数（没有填 0）。",
+      "door": "中门（某一排一侧没有座位）",
+      "doorRow": "车门所在排",
+      "doorSide": "车门方向",
+      "sideRight": "右侧",
+      "sideLeft": "左侧",
+      "total": "共 {n} 个座位",
+      "invalid": "无法生成座位图：请检查数字。",
+      "front": "车头",
+      "backLabel": "车尾",
+      "doorShort": "车门",
+      "window": "靠窗",
+      "aisle": "靠过道"
+    },
+    "print": {
+      "back": "巴士与线路",
+      "print": "打印",
+      "hint": "{bus}：{n} 张座椅背卡片，另加巴士二维码。",
+      "seat": "{n} 号座",
+      "busCard": "贴在车门或车票上：打开座位图和菜单。"
     }
   }
 }

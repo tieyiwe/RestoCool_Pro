@@ -347,6 +347,18 @@
           "title": "Everything recorded",
           "text": "Sales, orders and personnel in your dashboard."
         }
+      },
+      "kind": "Type of business",
+      "namePlaceholderTransport": "Express Travel",
+      "kinds": {
+        "restaurant": {
+          "title": "Restaurant, maquis, bar, café, hotel…",
+          "text": "Tables, rooms, counter, takeaway."
+        },
+        "transport": {
+          "title": "Transport: VIP buses with food on board",
+          "text": "Buses with a seat map, itineraries and hostesses. Travelers order from their seat."
+        }
       }
     },
     "switchRestaurant": "Switch business",
@@ -373,7 +385,8 @@
       "kitchen": "Kitchen",
       "history": "History",
       "scan": "Scan"
-    }
+    },
+    "buses": "Buses & itineraries"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -619,7 +632,8 @@
         "room": "Private rooms",
         "counter": "Counter (first name + pickup number)",
         "takeaway": "Takeaway",
-        "delivery": "Delivery"
+        "delivery": "Delivery",
+        "seat": "Seats"
       },
       "qr": "QR codes",
       "qrPerSeat": "One QR code per table or room (recommended)",
@@ -864,7 +878,8 @@
     "occupiedTitle_table": "Table {label} is already taken",
     "occupiedTitle_room": "Room “{label}” is already taken",
     "occupiedQuestion_table": "Another customer already chose this table. Are you sitting with them?",
-    "occupiedQuestion_room": "Another customer already chose this room. Are you together?"
+    "occupiedQuestion_room": "Another customer already chose this room. Are you together?",
+    "seat_seat": "Seat"
   },
   "seating": {
     "title": "Tables and rooms",
@@ -895,7 +910,8 @@
       "area": "Areas (free seating)",
       "counter": "Counter",
       "takeaway": "Takeaway",
-      "delivery": "Delivery"
+      "delivery": "Delivery",
+      "seat": "Seats"
     },
     "typeOne": {
       "table": "Table",
@@ -903,7 +919,8 @@
       "area": "Area",
       "counter": "Counter",
       "takeaway": "Takeaway",
-      "delivery": "Delivery"
+      "delivery": "Delivery",
+      "seat": "Seat"
     },
     "empty": "No seats yet. Add your tables above.",
     "inactive": "Inactive",
@@ -1052,7 +1069,8 @@
       "area": "Area",
       "counter": "Counter",
       "takeaway": "Takeaway",
-      "delivery": "Delivery"
+      "delivery": "Delivery",
+      "seat": "Seat"
     },
     "station": "Station",
     "allStations": "All stations",
@@ -1614,7 +1632,8 @@
       "menuPage": "View my menu",
       "guide": "Guide",
       "invite": "Add personnel",
-      "devices": "Devices (tablets)"
+      "devices": "Devices (tablets)",
+      "buses": "Buses & itineraries"
     },
     "ranking": {
       "title": "Personnel ranking",
@@ -1896,6 +1915,82 @@
       "locked": "Too many errors: profile locked for {m} min.",
       "device": "This device is no longer authorised. Ask the manager.",
       "too_many": "Too many tries. Please wait a moment."
+    }
+  },
+  "transport": {
+    "title": "Buses & itineraries",
+    "intro": "Your buses with their seat maps and QR codes, and your itineraries with the hostesses assigned.",
+    "buses": "Buses",
+    "noBus": "No buses yet. Add one below.",
+    "seats": "{n, plural, one {# seat} other {# seats}}",
+    "onTrip": "On a trip: {route}",
+    "printSeats": "Print the seat QR codes",
+    "editLayout": "Change the seat map",
+    "editLayoutHint": "Seats whose number still exists keep their printed QR code. Not possible during a trip.",
+    "saveLayout": "Save the map",
+    "rename": "Rename",
+    "delete": "Delete",
+    "deleteConfirm": "Delete bus “{name}” and its seats?",
+    "addBus": "Add a bus",
+    "addBusHint": "Give the number of rows and seats on each side of the aisle: the map draws itself. Most buses have 2 seats on each side.",
+    "addBusSubmit": "Add this bus",
+    "setupBuses": "{n, plural, one {# bus added} other {# buses added}}. You can add more now or later.",
+    "skipBus": "Later",
+    "routes": "Itineraries",
+    "routesIntro": "Your lines (Ouaga → Bobo, Ouaga → Koudougou…). Assign hostesses to each itinerary: they will see those trips.",
+    "noRoute": "No itineraries yet.",
+    "nobodyAssigned": "Nobody assigned.",
+    "assign": "Assign hostesses",
+    "noTeam": "First add your personnel in Personnel.",
+    "assignSave": "Save",
+    "deleteRouteConfirm": "Delete itinerary “{route}”?",
+    "addRoute": "Add an itinerary",
+    "origin": "From",
+    "destination": "To",
+    "addRouteSubmit": "Add",
+    "ok": {
+      "busCreated": "Bus added: {n} seats, each with its QR code.",
+      "busUpdated": "Map saved: {n} seats.",
+      "busRenamed": "Bus renamed.",
+      "busDeleted": "Bus deleted.",
+      "routeCreated": "Itinerary added.",
+      "routeDeleted": "Itinerary deleted.",
+      "routeAssigned": "Hostesses assigned."
+    },
+    "err": {
+      "duplicate": "This name already exists.",
+      "tripOpen": "This bus is on a trip: end the trip first.",
+      "invalid": "Check the numbers (at least 1 row and 1 seat per row) or the cities (different from and to).",
+      "forbidden": "You don't have access to this action.",
+      "notFound": "Not found."
+    },
+    "bus": {
+      "name": "Bus name or number",
+      "namePlaceholder": "Bus 12",
+      "rows": "Rows",
+      "left": "Seats on the left",
+      "right": "Seats on the right",
+      "back": "Back bench",
+      "backHint": "Seats on the last row, from side to side (0 if none).",
+      "door": "Middle door (one row without seats on one side)",
+      "doorRow": "Door row",
+      "doorSide": "Door side",
+      "sideRight": "Right",
+      "sideLeft": "Left",
+      "total": "{n} seats in total",
+      "invalid": "Impossible map: check the numbers.",
+      "front": "Front",
+      "backLabel": "Back",
+      "doorShort": "Door",
+      "window": "window",
+      "aisle": "aisle"
+    },
+    "print": {
+      "back": "Buses & itineraries",
+      "print": "Print",
+      "hint": "{bus}: {n} cards for the seat backs, plus the bus QR.",
+      "seat": "Seat {n}",
+      "busCard": "For the door or the ticket: it opens the seat map and the menu."
     }
   }
 }

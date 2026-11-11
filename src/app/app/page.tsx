@@ -84,8 +84,12 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       { key: "kitchen", href: "/app/kitchen", icon: "👩‍🍳", need: "orders.read" },
       { key: "history", href: "/app/orders", icon: "🧾", need: "reports.read" },
       { key: "menu", href: "/app/menu", icon: "📖", need: "menu.write" },
-      { key: "seating", href: "/app/seating", icon: "🪑", need: "seats.write" },
-      { key: "qr", href: "/app/seating/print?qr=main&layout=grid", icon: "🖨️", need: "seats.write" },
+      ...(r.kind === "transport"
+        ? ([{ key: "buses", href: "/app/buses", icon: "🚌", need: "seats.write" }] as const)
+        : ([
+            { key: "seating", href: "/app/seating", icon: "🪑", need: "seats.write" },
+            { key: "qr", href: "/app/seating/print?qr=main&layout=grid", icon: "🖨️", need: "seats.write" },
+          ] as const)),
       { key: "staff", href: "/app/staff", icon: "👥", need: "staff.write" },
       { key: "invite", href: "/app/staff#add", icon: "➕", need: "staff.write" },
       { key: "roles", href: "/app/staff/roles", icon: "🔑", need: "staff.write" },

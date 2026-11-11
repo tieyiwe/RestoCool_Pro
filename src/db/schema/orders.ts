@@ -1,5 +1,7 @@
 import { sql } from "drizzle-orm";
 import { boolean, date, index, integer, jsonb, pgTable, smallint, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import type { AnyPgColumn } from "drizzle-orm/pg-core";
+import { trips } from "./trips";
 import { id, timestamps, type I18nText } from "./_shared";
 import { orderItemStatusEnum, orderSourceEnum, orderStatusEnum, seatTypeEnum, stationEnum } from "./enums";
 import { menuItems } from "./menu";
@@ -20,6 +22,8 @@ export const orders = pgTable(
     /** Seat at the time of the order (the seat may be renamed or deleted later). */
     seatType: seatTypeEnum("seat_type"),
     seatLabel: text("seat_label"),
+    /** Transport businesses: the bus trip this order was placed on. */
+    tripId: uuid("trip_id").references((): AnyPgColumn => trips.id, { onDelete: "set null" }),
     businessDate: date("business_date", { mode: "string" }).notNull(),
     number: integer("number").notNull(),
     source: orderSourceEnum("source").notNull().default("customer"),

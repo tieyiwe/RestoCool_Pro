@@ -2,6 +2,9 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { MainQrCard } from "@/components/qr/main-qr-card";
+import { BusForm } from "@/components/transport/bus-form";
+import { createBusAction } from "@/app/app/buses/actions";
+import { listBuses } from "@/lib/transport/buses";
 import { AppearanceSection, ContactsSection, HoursSection, LocationSection, ProfileSection, ServiceSection } from "@/components/settings/sections";
 import { SetupShell } from "@/components/setup/setup-shell";
 import { getDb } from "@/db";
@@ -18,6 +21,8 @@ export default async function OnboardingStep({ params }: { params: Promise<{ ste
   const t = await getTranslations("settings");
   const ts = await getTranslations("setup");
   const [r, hours, seatRows] = await Promise.all([ctx.repo.restaurant.get(), ctx.repo.restaurant.openingHours(), ctx.repo.seating.seats()]);
+  const tt = await getTranslations("transport");
+  const busCount = r?.kind === "transport" ? (await listBuses(getDb(), r.id)).length : 0;
   if (!r) redirect("/app");
 
   if (n === STEPS.length + 1) {
@@ -25,7 +30,9 @@ export default async function OnboardingStep({ params }: { params: Promise<{ ste
     if (!r.settings.onboardedAt) await markOnboarded({ db: getDb(), actor: ctx.actor, repo: ctx.repo });
     const next = [
       { href: "/app/menu", icon: "🍽️", key: "dishes", primary: true },
-      { href: "/app/seating/print?qr=main&layout=grid", icon: "🖨️", key: "print", primary: false },
+      r.kind === "transport"
+        ? { href: "/app/buses", icon: "🖨️", key: "print", primary: false }
+        : { href: "/app/seating/print?qr=main&layout=grid", icon: "🖨️", key: "print", primary: false },
       { href: `/r/${r.slug}`, icon: "👀", key: "preview", primary: false },
     ] as const;
     return (
@@ -84,7 +91,21 @@ export default async function OnboardingStep({ params }: { params: Promise<{ ste
           )}
           {step === "contacts" && <ContactsSection {...props} />}
           {step === "hours" && <HoursSection hours={hours} next={next} submitLabel={props.submitLabel} />}
-          {step === "service" && <ServiceSection {...props} askTableCount={!seatRows.some((x) => x.type === "table")} />}
+          {step === "service" && r.kind === "transport" && (
+            // A bus company: its first bus (seat map from a few numbers), then continue.
+            <div className="flex flex-col gap-4" data-testid="setup-buses">
+              {busCount > 0 && (
+                <p className="rounded-xl bg-emerald-50 p-3 font-semibold text-emerald-900" data-testid="setup-bus-count">
+                  ✓ {tt("setupBuses", { n: busCount })}
+                </p>
+              )}
+              <BusForm action={createBusAction} submitLabel={tt("addBusSubmit")} backTo={`/app/onboarding/${n}`} />
+              <Link href={next} className={`flex min-h-12 items-center justify-center rounded-xl px-5 font-bold ${busCount ? "bg-primary text-primary-foreground" : "border border-border"}`} data-testid="setup-buses-next">
+                {busCount ? props.submitLabel : tt("skipBus")} →
+              </Link>
+            </div>
+          )}
+          {step === "service" && r.kind !== "transport" && <ServiceSection {...props} askTableCount={!seatRows.some((x) => x.type === "table")} />}
           {step === "appearance" && <AppearanceSection {...props} />}
         </div>
         <div className="flex flex-wrap justify-between gap-2">

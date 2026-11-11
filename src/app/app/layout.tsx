@@ -28,6 +28,8 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   const ctx = await getMemberContext().catch(() => null);
   // Each person only sees the sections their role can open (the server checks again on every page).
   const allowed = (a: Action | null) => !a || (ctx ? can(ctx.actor, a, { restaurantId: ctx.repo.restaurantId }) : false);
+  // A bus company manages buses and itineraries instead of tables and rooms.
+  const transport = ctx ? (await ctx.repo.restaurant.get().catch(() => null))?.kind === "transport" : false;
   const nav = (
     [
       { href: "/app", label: t("dashboard"), icon: "🏠", need: null },
@@ -36,7 +38,9 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       { href: "/app/scan", label: t("scan"), icon: "📷", need: null },
       { href: "/app/orders", label: t("history"), icon: "🧾", need: "reports.read" },
       { href: "/app/menu", label: t("menu"), icon: "📖", need: "menu.write" },
-      { href: "/app/seating", label: t("seating"), icon: "🪑", need: "seats.write" },
+      transport
+        ? ({ href: "/app/buses", label: t("buses"), icon: "🚌", need: "seats.write" } as const)
+        : ({ href: "/app/seating", label: t("seating"), icon: "🪑", need: "seats.write" } as const),
       { href: "/app/staff", label: t("staff"), icon: "👥", need: "staff.write" },
       { href: "/app/settings", label: t("settings"), icon: "⚙️", need: "settings.write" },
       { href: "/app/guide", label: t("guide"), icon: "🎓", need: null },

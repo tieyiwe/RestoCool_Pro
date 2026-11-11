@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { brandedQrSvg } from "@/lib/qr-branded";
 import { ensureMainCode, ensureSeatCodes, formatRc } from "@/lib/access-codes";
 import Link from "next/link";
@@ -39,6 +40,8 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
   const { ok, error } = await searchParams;
   const [r, areaRows, seatRows] = await Promise.all([ctx.repo.restaurant.get(), ctx.repo.seating.areas(), ctx.repo.seating.seats()]);
   if (!r) return null;
+  // A bus company has buses and itineraries instead of tables and rooms.
+  if (r.kind === "transport") redirect("/app/buses");
   const sessions = await openSessions({ db: getDb(), actor: ctx.actor, repo: ctx.repo });
   const base = await publicBaseUrl();
   const perSeatAllowed = hasFeature(r, "qrPerSeat");
