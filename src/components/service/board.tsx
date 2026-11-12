@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { formatFCFA } from "@/lib/format";
 import type { StaffOrder } from "@/lib/orders/serialize";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,14 @@ import { cn } from "@/lib/utils";
 type I18n = { fr: string } & Partial<Record<string, string>>;
 const pick = (x: I18n | null | undefined, locale: string) => (x ? x[locale]?.trim() || x.fr : "");
 export type Delays = { warnMin: number; lateMin: number };
+
+/** What the signed-in person may do to an order (from can() on the server): buttons follow it. */
+export type OrderPerms = { confirm: boolean; prepare: boolean; serve: boolean; cancel: boolean };
+const ALL: OrderPerms = { confirm: true, prepare: true, serve: true, cancel: true };
+const PermsContext = createContext<OrderPerms>(ALL);
+export function OrderPermsProvider({ perms, children }: { perms: OrderPerms; children: React.ReactNode }) {
+  return <PermsContext.Provider value={perms}>{children}</PermsContext.Provider>;
+}
 const POLL_MS = 4000;
 const STATIONS = ["grill", "wok", "kitchen", "drinks", "desserts"] as const;
 
@@ -238,11 +246,15 @@ export function OrderCard({ order, now, delays, onChanged, big = false }: { orde
     setMsg(r.ok ? null : t(r.error === "conflict" ? "conflict" : r.error === "forbidden" ? "forbidden" : "actionError"));
     onChanged();
   };
-  const next: Partial<Record<StaffOrder["status"], { to: string; label: string }>> = {
-    sent: { to: "confirmed", label: t("confirm") },
-    confirmed: { to: "ready", label: t("markReady") },
-    preparing: { to: "ready", label: t("markReady") },
-    ready: { to: "served", label: t("markServed") },
+  const perms = useContext(PermsContext);
+  // The next step this person can do: a server who doesn't prepare dishes serves a confirmed order.
+  const ready = { to: "ready", label: t("markReady") };
+  const served = { to: "served", label: t("markServed") };
+  const next: Partial<Record<StaffOrder["status"], { to: string; label: string } | null>> = {
+    sent: perms.confirm ? { to: "confirmed", label: t("confirm") } : null,
+    confirmed: perms.prepare ? ready : perms.serve ? served : null,
+    preparing: perms.prepare ? ready : perms.serve ? served : null,
+    ready: perms.serve ? served : null,
   };
   const action = next[order.status];
   const done = order.status === "served" || order.status === "cancelled" || order.status === "paid";
@@ -291,7 +303,7 @@ export function OrderCard({ order, now, delays, onChanged, big = false }: { orde
               {action.label}
             </button>
           )}
-          {!cancelling && (
+          {!cancelling && perms.cancel && (
             <button type="button" disabled={busy} onClick={() => setCancelling(true)} className="min-h-12 rounded-xl border border-border px-3 text-sm font-semibold" data-testid="action-cancel">
               {t("cancel")}
             </button>

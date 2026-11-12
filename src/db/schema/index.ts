@@ -10,3 +10,4 @@ export * from "./attendance";
 export * from "./join";
 export * from "./devices";
 export * from "./trips";
+export * from "./email";

@@ -3,9 +3,13 @@
 import { and, eq, sql } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
+import { getLocale } from "next-intl/server";
 import { getDb } from "@/db";
 import { members } from "@/db/schema";
-import { ACTIVE_RESTAURANT_COOKIE, getIdentityProfile, getMemberships } from "@/lib/auth/context";
+import { ACTIVE_RESTAURANT_COOKIE, getIdentityProfile, getMemberships, getVerifiedEmail } from "@/lib/auth/context";
+import { sendWelcomeEmail } from "@/lib/email/welcome";
+import { publicBaseUrl } from "@/lib/urls";
 import { log } from "@/lib/log";
 import { CreateRestaurantInput, MAX_OWNED_RESTAURANTS, createRestaurantForUser } from "@/lib/restaurants/provision";
 
@@ -35,6 +39,13 @@ export async function createRestaurantAction(_prev: CreateRestaurantState, formD
     return { error: "unknown" };
   }
   (await cookies()).set(ACTIVE_RESTAURANT_COOKIE, restaurantId, COOKIE_OPTS);
+  // The welcome email leaves after the answer: the owner goes on with the setup without waiting.
+  // Only to an address the sign-in provider verified.
+  const [verified, locale, baseUrl] = await Promise.all([getVerifiedEmail(), getLocale(), publicBaseUrl()]);
+  if (verified?.email) {
+    const id = restaurantId;
+    after(() => sendWelcomeEmail(db, { restaurantId: id, to: verified.email, ownerName: verified.name ?? user.name ?? null, locale, baseUrl }));
+  }
   redirect("/app/onboarding/1");
 }
 

@@ -127,6 +127,13 @@
       "when": 1794365464694,
       "tag": "0017_transport_routes",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1794451445245,
+      "tag": "0018_email_log",
+      "breakpoints": true
     }
   ]
 }

@@ -1,3 +1,4 @@
+import { FREE_LAUNCH } from "@/config/plans";
 import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import Link from "next/link";
@@ -136,8 +137,13 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           </Button>
         </Card>
       )}
-      {status === "trial" && r.planExpiresAt && (
-        <p className="text-sm text-muted-foreground">{t("plan.trialEnds", { date: format.dateTime(r.planExpiresAt, { dateStyle: "long" }) })}</p>
+      {status === "trial" && FREE_LAUNCH ? (
+        <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300" data-testid="free-launch">
+          🎁 {t("plan.freeLaunch")}
+        </p>
+      ) : (
+        status === "trial" &&
+        r.planExpiresAt && <p className="text-sm text-muted-foreground">{t("plan.trialEnds", { date: format.dateTime(r.planExpiresAt, { dateStyle: "long" }) })}</p>
       )}
 
       {showSteps && (

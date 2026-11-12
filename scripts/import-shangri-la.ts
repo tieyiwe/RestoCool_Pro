@@ -103,6 +103,15 @@ async function main() {
         console.log(`✓ Shangri-La: owner email recorded (${ownerEmail}).`);
       }
     }
+    // One-time fix while nobody owns it yet: like the original Shangri-La menu, one QR for the
+    // restaurant where customers pick their table or room (with the « déjà prise » warning).
+    // Table/room QRs keep working. The owner can change it in Paramètres.
+    const fresh = (await db.query.restaurants.findFirst({ where: eq(restaurants.id, existing.id) }))!;
+    const [anyOwner] = await db.select({ id: members.id }).from(members).where(and(eq(members.restaurantId, existing.id), eq(members.role, "owner"))).limit(1);
+    if (!anyOwner && fresh.settings.qrStrategy !== "generic") {
+      await db.update(restaurants).set({ settings: { ...fresh.settings, qrStrategy: "generic" } }).where(eq(restaurants.id, existing.id));
+      console.log("✓ Shangri-La: customers can now pick their table or room from the main QR.");
+    }
     if (ifMissing) {
       console.log("✓ Shangri-La already exists.");
       return;
@@ -145,7 +154,7 @@ async function main() {
       settings: {
         onboardedAt: new Date().toISOString(),
         seatingModes: ["table", "room", "takeaway"],
-        qrStrategy: "per_seat",
+        qrStrategy: "generic",
         orderValidation: "server_confirms",
         enabledLocales: ["fr", "en", "zh"],
         features: { welcomeScreen: true, fortuneCookie: true, takeawayWhatsapp: true, share: true, localBadge: false },

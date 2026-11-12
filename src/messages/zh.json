@@ -299,7 +299,8 @@
       "active": "有效",
       "past_due": "付款逾期",
       "suspended": "已暂停",
-      "trialEnds": "专业版试用至 {date}"
+      "trialEnds": "专业版试用至 {date}",
+      "freeLaunch": "上线期间免费：在线支付开通前，所有专业版功能免费使用。"
     },
     "role": {
       "owner": "店主",
@@ -2086,5 +2087,41 @@
     "orderError": "订单未发送。请重试，或向乘务员出示您的选择。",
     "showToServer": "出示给乘务员",
     "orderQrHint": "乘务员扫描此码即可收到您的订单。"
+  },
+  "email": {
+    "welcome": {
+      "subject": "欢迎加入 RestoCool，{business} 🎉",
+      "preheader": "您的店铺已创建。以下是开始使用 RestoCool 的方法。",
+      "tagline": "您的菜单、订单和餐桌，一切简单。",
+      "hello": "Laafi {name}，欢迎您！",
+      "helloNoName": "Laafi，欢迎您！",
+      "intro": "感谢您加入 RestoCool。“{business}”现已加入这个为布基纳法索商家打造的平台。菜单、订单和团队，都可以在手机或平板上一处管理。",
+      "rcTitle": "您的 RC 编号",
+      "rcText": "这是您店铺的识别码，印在二维码下方。顾客也可以在 restocool.com/c 输入它来打开您的菜单。",
+      "offerTitle": "🎁 上线期间免费",
+      "offerText": "在线支付开通前，所有专业版功能免费使用。趁此机会，零成本实现数字化。",
+      "stepsTitle": "开始的 3 个步骤",
+      "step1": "完善菜单：菜品、FCFA 价格和照片（几分钟即可）。",
+      "step2": "打印二维码，放在餐桌和柜台上。",
+      "step2Transport": "添加大巴和线路，然后打印座位二维码。",
+      "step3": "邀请团队：每人扫描您的团队二维码，经您同意后获得工号。",
+      "cta": "打开我的 RestoCool",
+      "featuresTitle": "RestoCool 为您做的一切",
+      "f1": "📱 法语、英语和中文电子菜单，带照片，在普通手机和慢速网络上也很流畅。",
+      "f2": "🛎️ 实时订单：顾客在座位上下单，厨房和服务员实时跟进。",
+      "f3": "🪑 餐桌、包间、柜台、外带：每份订单都送到正确的位置。",
+      "f3Transport": "🚌 VIP 大巴：座位图，乘客在座位上下单，乘务员一键确认。",
+      "f4": "👥 无需邮箱的团队：平板上用 PIN 登录，每人一个工号，并记录考勤。",
+      "f5": "💬 内置 WhatsApp：外带订单、联系和分享菜单一键完成。",
+      "f6": "📊 清晰的仪表板：今日销售、热门菜品和团队排名。",
+      "whyTitle": "为什么商家选择 RestoCool",
+      "whyText": "告别破旧的纸质菜单和记错的订单。顾客看照片点菜、无需等待，您掌控每一张桌子。每次分享菜单，也在为您的店铺做宣传。",
+      "menuLink": "您的公开菜单：",
+      "help": "有问题吗？直接回复此邮件，我们会帮助您。",
+      "sign": "Barka，祝您生意兴隆！",
+      "team": "RestoCool 团队",
+      "local": "100% 本地 · 布基纳法索骄傲出品",
+      "footer": "RestoCool 是 TIBLOGICS 旗下产品 · restocool.com。您收到此邮件是因为您刚刚在 RestoCool 上创建了店铺。"
+    }
   }
 }

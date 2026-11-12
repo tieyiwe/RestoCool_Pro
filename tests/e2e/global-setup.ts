@@ -10,4 +10,6 @@ export default function globalSetup() {
     `psql "${process.env.E2E_DATABASE_URL}" -qc "delete from restaurants where id in (select restaurant_id from members where clerk_user_id = 'dev-owner') and slug <> 'restaurant-demo'"`,
     { stdio: "inherit" },
   );
+  // The real restaurant Shangri-La (its own spec checks every feature on the real menu).
+  execSync("npx tsx --conditions=react-server scripts/import-shangri-la.ts --if-missing", { stdio: "inherit", env });
 }

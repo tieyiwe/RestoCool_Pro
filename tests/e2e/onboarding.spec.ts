@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { pngBuffer } from "./helpers";
+import { pngBuffer, sql } from "./helpers";
 
 test.describe.configure({ mode: "serial" });
 
@@ -111,7 +111,42 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   const img = await page.request.get((await thumb.getAttribute("src"))!);
   expect(img.headers()["content-type"]).toBe("image/webp");
 
-  // 5. Switch back to the demo restaurant with the header selector.
+  // 5. Start using it, for free: the welcome email went out (recorded once), the dashboard shows
+  // the launch offer, a customer orders at table 1 and the owner serves it live.
+  const [biz] = await sql<{ id: string }>("select id from restaurants where slug = $1", [slug]);
+  await expect
+    .poll(async () => (await sql<{ to: string; status: string }>("select \"to\", status from email_log where restaurant_id = $1 and kind = 'welcome'", [biz!.id]))[0])
+    .toMatchObject({ to: "dev@localhost", status: "skipped" }); // no SMTP password in tests: written to .data/outbox
+  await page.goto("/app");
+  await expect(page.getByTestId("free-launch")).toContainText("Offert pendant le lancement");
+  // Even past the 30 days, nothing locks while the launch offer is on.
+  await sql("update restaurants set plan_expires_at = now() - interval '1 day' where id = $1", [biz!.id]);
+  await page.reload();
+  await expect(page.getByTestId("free-launch")).toBeVisible();
+  const [t1] = await sql<{ qr_token: string }>("select qr_token from seats where restaurant_id = $1 and type = 'table' and label = '1'", [biz!.id]);
+  const phoneCtx = await page.context().browser()!.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await phoneCtx.addInitScript((sl) => sessionStorage.setItem(`rc-welcome-${sl}`, "1"), slug);
+  const phone = await phoneCtx.newPage();
+  await phone.goto(`/r/${slug}/t/${t1!.qr_token}`);
+  await expect(phone.getByTestId("seat-badge")).toContainText("Table 1", { timeout: 25_000 });
+  await phone.getByTestId("add-button").click();
+  await phone.getByTestId("variant-sheet").getByText("Complet").click();
+  await phone.getByTestId("variant-confirm").click();
+  await phone.getByTestId("cart-bar").click();
+  await phone.getByTestId("send-order").click();
+  await expect(phone.getByTestId("my-order").first()).toHaveAttribute("data-status", /sent|confirmed/);
+  await page.goto("/app/service");
+  const card = page.getByTestId("order-card").filter({ hasText: "Riz gras" });
+  await expect(card).toContainText("2\u202F500\u202FF");
+  for (let i = 0; i < 4 && (await card.getAttribute("data-status")) !== "served"; i++) {
+    const before = (await card.getAttribute("data-status"))!;
+    await card.locator("[data-testid=action-confirmed], [data-testid=action-ready], [data-testid=action-served]").first().click();
+    await expect(card).not.toHaveAttribute("data-status", before);
+  }
+  await expect(phone.getByTestId("served")).toContainText("Vous avez été servi", { timeout: 15_000 });
+  await phoneCtx.close();
+
+  // 6. Switch back to the demo restaurant with the header selector.
   await page.goto("/app");
   await page.getByLabel("Changer d'établissement").selectOption({ label: "Restaurant Démo" });
   await page.getByRole("button", { name: "Valider" }).click();

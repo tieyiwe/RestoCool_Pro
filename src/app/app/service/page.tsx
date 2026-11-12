@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { FrontDesk } from "@/components/service/board";
+import { FrontDesk, OrderPermsProvider } from "@/components/service/board";
 import { ServicePlanGate } from "@/components/service/plan-gate";
 import { servicePage } from "@/lib/orders/page";
 
@@ -12,7 +12,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** Front desk: live board of every open order (tablet first). */
 export default async function ServicePage() {
-  const { allowed, delays } = await servicePage("orders.read");
+  const { allowed, delays, perms } = await servicePage("orders.read");
   if (!allowed) return <ServicePlanGate />;
-  return <FrontDesk delays={delays} />;
+  return (
+    <OrderPermsProvider perms={perms}>
+      <FrontDesk delays={delays} />
+    </OrderPermsProvider>
+  );
 }

@@ -299,7 +299,8 @@
       "active": "Actif",
       "past_due": "Paiement en retard",
       "suspended": "Suspendu",
-      "trialEnds": "Essai Pro jusqu’au {date}"
+      "trialEnds": "Essai Pro jusqu’au {date}",
+      "freeLaunch": "Offert pendant le lancement : toutes les fonctions Pro, gratuitement, jusqu’à l’ouverture des paiements en ligne."
     },
     "role": {
       "owner": "Propriétaire",
@@ -2086,5 +2087,41 @@
     "orderError": "La commande n'est pas partie. Réessayez, ou montrez votre sélection à l'hôtesse.",
     "showToServer": "Montrer à l'hôtesse",
     "orderQrHint": "L'hôtesse scanne ce code pour recevoir votre commande."
+  },
+  "email": {
+    "welcome": {
+      "subject": "Bienvenue sur RestoCool, {business} 🎉",
+      "preheader": "Votre établissement est créé. Voici comment bien démarrer avec RestoCool.",
+      "tagline": "Votre menu, vos commandes, vos tables. Simple.",
+      "hello": "Laafi {name}, bienvenue !",
+      "helloNoName": "Laafi, bienvenue !",
+      "intro": "Merci d’avoir rejoint RestoCool. « {business} » fait maintenant partie de la plateforme pensée au Burkina, pour les établissements du Burkina. Votre menu, vos commandes et votre équipe se gèrent au même endroit, depuis votre téléphone ou une tablette.",
+      "rcTitle": "Votre numéro RC",
+      "rcText": "C’est l’identifiant de votre établissement. Il est imprimé sous vos QR codes, et vos clients peuvent aussi le taper sur restocool.com/c pour ouvrir votre menu.",
+      "offerTitle": "🎁 Offert pendant le lancement",
+      "offerText": "Toutes les fonctions Pro sont gratuites jusqu’à l’ouverture des paiements en ligne. Profitez-en pour digitaliser votre établissement sans rien payer.",
+      "stepsTitle": "Vos 3 premières étapes",
+      "step1": "Complétez votre menu : plats, prix en FCFA et photos (quelques minutes suffisent).",
+      "step2": "Imprimez vos QR codes et posez-les sur les tables et au comptoir.",
+      "step2Transport": "Créez vos bus et vos itinéraires, puis imprimez les QR codes des sièges.",
+      "step3": "Invitez votre équipe : chacun scanne votre QR d’équipe et reçoit son matricule après votre accord.",
+      "cta": "Ouvrir mon espace RestoCool",
+      "featuresTitle": "Tout ce que RestoCool fait pour vous",
+      "f1": "📱 Un menu digital en français, anglais et chinois, avec photos, rapide même sur les petits téléphones et les réseaux lents.",
+      "f2": "🛎️ Des commandes en direct : vos clients commandent depuis leur place, la cuisine et les serveurs suivent tout en temps réel.",
+      "f3": "🪑 Tables, salons privés, comptoir, à emporter : chaque commande arrive à la bonne place, sans erreur.",
+      "f3Transport": "🚌 Bus VIP : plan des sièges, le voyageur commande depuis son siège et l’hôtesse confirme sa tournée en un geste.",
+      "f4": "👥 Une équipe sans e-mail : connexion par code PIN sur la tablette, matricule pour chacun et pointage des arrivées.",
+      "f5": "💬 WhatsApp intégré : commandes à emporter, contact et partage du menu en un clic.",
+      "f6": "📊 Un tableau de bord clair : ventes du jour, plats qui marchent et classement de votre équipe.",
+      "whyTitle": "Pourquoi les établissements choisissent RestoCool",
+      "whyText": "Fini les menus papier abîmés et les commandes mal notées. Vos clients voient vos plats en photo, commandent sans attendre, et vous gardez le contrôle de chaque table. Chaque menu partagé fait aussi connaître votre établissement.",
+      "menuLink": "Votre menu public :",
+      "help": "Une question ? Répondez simplement à cet e-mail : nous vous aidons en français.",
+      "sign": "Barka, et bon service !",
+      "team": "L’équipe RestoCool",
+      "local": "100 % local · Fièrement burkinabè",
+      "footer": "RestoCool, un produit TIBLOGICS · restocool.com. Vous recevez cet e-mail parce que vous venez de créer un établissement sur RestoCool."
+    }
   }
 }

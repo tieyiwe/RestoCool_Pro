@@ -299,7 +299,8 @@
       "active": "Active",
       "past_due": "Payment overdue",
       "suspended": "Suspended",
-      "trialEnds": "Pro trial until {date}"
+      "trialEnds": "Pro trial until {date}",
+      "freeLaunch": "Free during our launch: every Pro feature at no cost until online payment opens."
     },
     "role": {
       "owner": "Owner",
@@ -2086,5 +2087,41 @@
     "orderError": "The order didn't go through. Try again, or show your selection to the hostess.",
     "showToServer": "Show the hostess",
     "orderQrHint": "The hostess scans this code to receive your order."
+  },
+  "email": {
+    "welcome": {
+      "subject": "Welcome to RestoCool, {business} 🎉",
+      "preheader": "Your business is ready. Here is how to get started with RestoCool.",
+      "tagline": "Your menu, your orders, your tables. Simple.",
+      "hello": "Laafi {name}, welcome!",
+      "helloNoName": "Laafi, welcome!",
+      "intro": "Thank you for joining RestoCool. “{business}” is now part of the platform designed in Burkina, for Burkina’s businesses. Your menu, your orders and your team are managed in one place, from your phone or a tablet.",
+      "rcTitle": "Your RC number",
+      "rcText": "This is your business’s identifier. It is printed under your QR codes, and customers can also type it at restocool.com/c to open your menu.",
+      "offerTitle": "🎁 Free during our launch",
+      "offerText": "Every Pro feature is free until online payment opens. Make the most of it to go digital without paying anything.",
+      "stepsTitle": "Your first 3 steps",
+      "step1": "Complete your menu: dishes, prices in FCFA and photos (a few minutes are enough).",
+      "step2": "Print your QR codes and place them on the tables and at the counter.",
+      "step2Transport": "Add your buses and itineraries, then print the seat QR codes.",
+      "step3": "Invite your team: each person scans your team QR and gets their staff number once you approve.",
+      "cta": "Open my RestoCool space",
+      "featuresTitle": "Everything RestoCool does for you",
+      "f1": "📱 A digital menu in French, English and Chinese, with photos, fast even on small phones and slow networks.",
+      "f2": "🛎️ Live orders: customers order from their seat, the kitchen and servers follow everything in real time.",
+      "f3": "🪑 Tables, private rooms, counter, takeaway: every order reaches the right place, with no mix-ups.",
+      "f3Transport": "🚌 VIP buses: a seat map, travelers order from their seat and the hostess confirms her round in one tap.",
+      "f4": "👥 A team without email: PIN login on the tablet, a staff number for everyone and check-in times.",
+      "f5": "💬 WhatsApp built in: takeaway orders, contact and menu sharing in one tap.",
+      "f6": "📊 A clear dashboard: today’s sales, best-selling dishes and your team’s ranking.",
+      "whyTitle": "Why businesses choose RestoCool",
+      "whyText": "No more worn-out paper menus or misheard orders. Customers see your dishes in photos, order without waiting, and you stay in control of every table. Every shared menu also spreads the word about your business.",
+      "menuLink": "Your public menu:",
+      "help": "A question? Just reply to this email and we will help you.",
+      "sign": "Barka, and enjoy your service!",
+      "team": "The RestoCool team",
+      "local": "100% local · Proudly Burkinabè",
+      "footer": "RestoCool, a TIBLOGICS product · restocool.com. You are receiving this email because you just created a business on RestoCool."
+    }
   }
 }

@@ -1,4 +1,5 @@
 import "server-only";
+import { DEFAULT_FORTUNES } from "@/config/fortunes";
 import type { DB } from "@/db";
 import type { restaurants } from "@/db/schema";
 import { tenantRepo } from "@/db/repos/tenant";
@@ -51,7 +52,7 @@ export async function loadPublicMenu(db: DB, r: Restaurant, opts: { preview: boo
     poweredBadge: r.poweredBadge,
     features: {
       welcomeScreen: f.welcomeScreen ?? true,
-      fortuneCookie: (f.fortuneCookie ?? true) && fortunes.length > 0,
+      fortuneCookie: f.fortuneCookie ?? true,
       share: f.share ?? true,
       takeawayWhatsapp: (f.takeawayWhatsapp ?? true) && Boolean(r.whatsapp),
       localBadge: f.localBadge ?? false,
@@ -82,7 +83,8 @@ export async function loadPublicMenu(db: DB, r: Restaurant, opts: { preview: boo
           })),
       }))
       .filter((c) => c.items.length > 0),
-    fortunes: fortunes.map((x) => x.text),
+    // A business that wrote no fortunes yet uses the built-in ones.
+    fortunes: fortunes.length ? fortunes.map((x) => x.text) : DEFAULT_FORTUNES,
     preview: opts.preview,
   };
 }

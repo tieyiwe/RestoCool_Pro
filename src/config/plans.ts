@@ -72,6 +72,11 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
 /** New restaurants get this plan for TRIAL_DAYS. */
 export const TRIAL_PLAN: PlanId = "pro";
 export const TRIAL_DAYS = 30;
+/**
+ * Launch offer: until online payment exists, every business keeps the Pro trial for free (it
+ * never turns « en retard »). Set to false the day plans can be paid, then trials end normally.
+ */
+export const FREE_LAUNCH = true;
 /** Days a past_due restaurant keeps working (with a banner) before suspension. */
 export const GRACE_DAYS = 7;
 

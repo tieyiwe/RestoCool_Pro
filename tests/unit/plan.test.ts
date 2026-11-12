@@ -28,9 +28,13 @@ describe("plans", () => {
     expect(hasFeature({ plan: "pro", planStatus: "past_due" }, "ordering", now)).toBe(true);
   });
 
-  it("an expired trial becomes past_due", () => {
-    expect(effectiveStatus({ plan: "pro", planStatus: "trial", planExpiresAt: new Date("2026-11-01") }, now)).toBe("past_due");
-    expect(effectiveStatus({ plan: "pro", planStatus: "trial", planExpiresAt: new Date("2026-12-01") }, now)).toBe("trial");
+  it("an expired trial becomes past_due (once the launch offer ends)", () => {
+    expect(effectiveStatus({ plan: "pro", planStatus: "trial", planExpiresAt: new Date("2026-11-01") }, now, false)).toBe("past_due");
+    expect(effectiveStatus({ plan: "pro", planStatus: "trial", planExpiresAt: new Date("2026-12-01") }, now, false)).toBe("trial");
+  });
+
+  it("during the launch offer a trial never runs out", () => {
+    expect(effectiveStatus({ plan: "pro", planStatus: "trial", planExpiresAt: new Date("2026-11-01") }, now, true)).toBe("trial");
   });
 
   it("enforces the 40-item limit on Gratuit only", () => {

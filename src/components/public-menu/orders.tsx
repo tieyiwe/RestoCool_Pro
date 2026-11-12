@@ -11,6 +11,15 @@ type T = ReturnType<typeof makeT>;
 type Lang = "fr" | "en" | "zh";
 type I18n = { fr: string } & Partial<Record<string, string>>;
 const pick = (x: I18n | null | undefined, lang: Lang) => (x ? x[lang]?.trim() || x.fr : "");
+/** Translated names that differ from the French one: the customer's language first. */
+const otherNames = (x: I18n, lang: Lang) => {
+  const out: string[] = [];
+  for (const l of [lang, "en", "zh"] as const) {
+    const n = x[l]?.trim();
+    if (n && n !== x.fr && !out.includes(n)) out.push(n);
+  }
+  return out;
+};
 
 /** Mirrors lib/orders/serialize publicOrder (kept here so the menu bundle has no server code). */
 export type CustomerOrder = {
@@ -293,7 +302,12 @@ export function ShowToServer({ order, slug, lang, t, onClose }: { order: Custome
             <li key={i.id} className="py-2">
               <span className="font-extrabold">{i.qty} ×</span> {i.code && <span className="text-[#E9B530]">{i.code}. </span>}
               {i.name.fr}
-              {lang !== "fr" && pick(i.name, lang) !== i.name.fr && <span className="block text-base text-white/70">{pick(i.name, lang)}</span>}
+              {/* The other languages under the French name, so any staff member can read it (e.g. Chinese for the kitchen). */}
+              {otherNames(i.name, lang).map((n) => (
+                <span key={n} lang={n === i.name.zh ? "zh" : undefined} className="block text-base text-white/70">
+                  {n}
+                </span>
+              ))}
               {(i.variantName || i.options.length > 0) && <span className="block text-base text-white/80">{[i.variantName?.fr, ...i.options.map((x) => x.fr)].filter(Boolean).join(", ")}</span>}
               {i.note && <span className="block text-base italic text-[#E9B530]">« {i.note} »</span>}
             </li>
