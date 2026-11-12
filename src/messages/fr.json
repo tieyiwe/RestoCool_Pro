@@ -482,7 +482,8 @@
       "messages": "Messages",
       "team": "Équipe",
       "recovery": "Récupération d’accès",
-      "marketing": "Marketing"
+      "marketing": "Marketing",
+      "deletions": "Demandes de suppression"
     },
     "empty": "Rien pour l’instant.",
     "draft": "Brouillon",
@@ -912,7 +913,10 @@
         "promo_updated": "A modifié une campagne",
         "promo_paused": "A mis une promotion en pause",
         "promo_resumed": "A relancé une promotion",
-        "promo_deleted": "A supprimé une promotion"
+        "promo_deleted": "A supprimé une promotion",
+        "deletion_contacted": "A appelé un propriétaire (suppression)",
+        "deletion_confirmed": "A confirmé une suppression",
+        "deletion_refused": "A refusé une suppression"
       }
     },
     "support": {
@@ -1190,6 +1194,42 @@
       "badge": "Console",
       "owner": "Propriétaire · tous les droits",
       "search": "Trouver un établissement : nom, ville, RC-…"
+    },
+    "deletions": {
+      "title": "Demandes de suppression",
+      "intro": "Les propriétaires qui ont demandé à supprimer leur établissement. Appelez-les d’abord (la demande prend effet 72 h après, seulement si vous confirmez). Un établissement supprimé reste restaurable 10 jours, puis il est effacé. Le propriétaire reçoit un e-mail à chaque étape.",
+      "none": "Aucune demande de suppression.",
+      "error": "Cette action n’est pas possible pour cette demande.",
+      "noEmail": "pas d’e-mail",
+      "requested": "Demandée :",
+      "effective": "Effective au plus tôt :",
+      "contacted": "Propriétaire contacté :",
+      "notYet": "pas encore",
+      "decided": "Décision :",
+      "deletedAt": "Supprimé :",
+      "restoreUntil": "Restaurable jusqu’au :",
+      "notePlaceholder": "Note (résumé de l’appel, raison…)",
+      "markContacted": "Propriétaire contacté",
+      "confirm": "Confirmer la suppression",
+      "confirmConfirm": "Confirmer ? L’établissement sera supprimé le {date} (restaurable 10 jours).",
+      "confirmNowConfirm": "Confirmer ? Les 72 h sont passées : l’établissement est supprimé maintenant (restaurable 10 jours).",
+      "refuse": "Refuser / clore",
+      "restore": "Restaurer l’établissement",
+      "statuses": {
+        "pending": "En attente de vous",
+        "confirmed": "Confirmée — sera supprimé",
+        "deleted": "Supprimé (restaurable)",
+        "restored": "Restauré",
+        "cancelled": "Annulée par le propriétaire",
+        "refused": "Refusée",
+        "purged": "Effacé définitivement"
+      },
+      "ok": {
+        "contacted": "Noté comme contacté.",
+        "confirm": "Suppression confirmée.",
+        "refuse": "Demande close.",
+        "restore": "Établissement restauré."
+      }
     }
   },
   "demo": {
@@ -3196,5 +3236,47 @@
     "upsell2": "Offres de l’établissement : happy hour, soirée, menu du jour…",
     "upsell3": "Vues et ouvertures de chaque offre",
     "upsellCta": "Passer à Business"
+  },
+  "danger": {
+    "title": "Zone de danger",
+    "back": "Paramètres",
+    "settingsHint": "Supprimer votre établissement et toutes ses données. Plusieurs vérifications vous protègent d’une erreur.",
+    "open": "Supprimer mon établissement…",
+    "openConfirm": "Vous allez ouvrir la zone de danger pour demander la suppression de votre établissement. Continuer ?",
+    "intro": "Vous êtes sur le point de demander la suppression de « {name} » : menu, photos, QR codes, équipe, commandes et réglages.",
+    "ownerOnly": "Seul le propriétaire, connecté avec son propre compte, peut demander la suppression de l’établissement.",
+    "whatHappens": "Ce qui va se passer :",
+    "step1": "Rien ne change tout de suite : la suppression prendra effet au plus tôt dans {hours} heures.",
+    "step2": "Pendant ce délai, l’équipe RestoCool vous contactera pour s’assurer que vous voulez vraiment continuer.",
+    "step3": "Vous pouvez annuler la demande à tout moment avant la suppression.",
+    "step4": "Après la suppression, vous aurez encore {days} jours pour restaurer votre établissement intact. Un e-mail vous le rappellera.",
+    "step5": "Ensuite, toutes les données seront définitivement effacées.",
+    "reason": "Pourquoi souhaitez-vous supprimer votre établissement ?",
+    "reasonPlaceholder": "Expliquez en quelques phrases : fermeture, changement d’outil, problème rencontré…",
+    "reasonHint": "Quelques phrases (au moins 60 caractères). Elles aident notre équipe à vous rappeler et, si possible, à vous aider.",
+    "typeName": "Pour confirmer, tapez le nom de votre établissement : {name}",
+    "understood": "Je comprends que la suppression prend effet dans {hours} heures après confirmation par l’équipe RestoCool, et que je pourrai la restaurer pendant {days} jours seulement.",
+    "submit": "Demander la suppression",
+    "pendingTitle": "Suppression demandée",
+    "pendingText": "La suppression prendra effet au plus tôt le {date}, après confirmation par l’équipe RestoCool. Vous aurez ensuite {days} jours pour restaurer votre établissement.",
+    "statusPending": "L’équipe RestoCool va vous contacter pour confirmer.",
+    "statusConfirmed": "L’équipe RestoCool a confirmé la demande avec vous.",
+    "cancel": "Annuler la demande de suppression",
+    "banner": "Suppression de l’établissement demandée : effective au plus tôt le {date}.",
+    "bannerManage": "Gérer ou annuler",
+    "restoreTitle": "Établissement supprimé : vous pouvez encore le restaurer",
+    "restoreUntil": "Restauration possible jusqu’au {date}",
+    "restore": "Restaurer intact",
+    "restoreFailed": "La restauration n’a pas pu se faire. Contactez-nous depuis /aide.",
+    "ok": {
+      "requested": "Demande enregistrée. Un e-mail vous a été envoyé ; notre équipe va vous contacter.",
+      "cancelled": "Demande de suppression annulée. Votre établissement reste actif."
+    },
+    "errors": {
+      "reason": "Expliquez votre demande en quelques phrases (au moins 60 caractères).",
+      "name": "Le nom tapé ne correspond pas exactement au nom de l’établissement.",
+      "understood": "Cochez la case pour confirmer que vous avez compris.",
+      "forbidden": "Une demande est déjà en cours, ou vous n’êtes pas le propriétaire."
+    }
   }
 }

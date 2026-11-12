@@ -482,7 +482,8 @@
       "messages": "Messages",
       "team": "Team",
       "recovery": "Account recovery",
-      "marketing": "Marketing"
+      "marketing": "Marketing",
+      "deletions": "Deletion requests"
     },
     "empty": "Nothing yet.",
     "draft": "Draft",
@@ -912,7 +913,10 @@
         "promo_updated": "Updated a campaign",
         "promo_paused": "Paused a promotion",
         "promo_resumed": "Resumed a promotion",
-        "promo_deleted": "Deleted a promotion"
+        "promo_deleted": "Deleted a promotion",
+        "deletion_contacted": "Called an owner about a deletion",
+        "deletion_confirmed": "Confirmed a deletion",
+        "deletion_refused": "Refused a deletion"
       }
     },
     "support": {
@@ -1190,6 +1194,42 @@
       "badge": "Console",
       "owner": "Owner · all rights",
       "search": "Find a business: name, town, RC-…"
+    },
+    "deletions": {
+      "title": "Deletion requests",
+      "intro": "Owners who asked to delete their business. Call them first (the request takes effect 72 h after it was made, only once you confirm). A deleted business stays restorable for 10 days, then is removed for good. The owner is emailed at each step.",
+      "none": "No deletion requests.",
+      "error": "That action is not possible for this request.",
+      "noEmail": "no email",
+      "requested": "Requested:",
+      "effective": "Effective at the earliest:",
+      "contacted": "Owner contacted:",
+      "notYet": "not yet",
+      "decided": "Decided:",
+      "deletedAt": "Deleted:",
+      "restoreUntil": "Restorable until:",
+      "notePlaceholder": "Note (call summary, reason…)",
+      "markContacted": "Owner contacted",
+      "confirm": "Confirm the deletion",
+      "confirmConfirm": "Confirm? The business will be deleted on {date} (restorable 10 days).",
+      "confirmNowConfirm": "Confirm? The 72 h are over: the business is deleted now (restorable 10 days).",
+      "refuse": "Refuse / close",
+      "restore": "Restore the business",
+      "statuses": {
+        "pending": "Waiting for you",
+        "confirmed": "Confirmed — will be deleted",
+        "deleted": "Deleted (restorable)",
+        "restored": "Restored",
+        "cancelled": "Cancelled by the owner",
+        "refused": "Refused",
+        "purged": "Removed for good"
+      },
+      "ok": {
+        "contacted": "Marked as contacted.",
+        "confirm": "Deletion confirmed.",
+        "refuse": "Request closed.",
+        "restore": "Business restored."
+      }
     }
   },
   "demo": {
@@ -3196,5 +3236,47 @@
     "upsell2": "Business offers: happy hour, evenings, menu of the day…",
     "upsell3": "Views and opens for each offer",
     "upsellCta": "Move to Business"
+  },
+  "danger": {
+    "title": "Danger zone",
+    "back": "Settings",
+    "settingsHint": "Delete your business and all its data. Several checks protect you from a mistake.",
+    "open": "Delete my business…",
+    "openConfirm": "You are about to open the danger zone to request deleting your business. Continue?",
+    "intro": "You are about to request the deletion of « {name} »: menu, photos, QR codes, team, orders and settings.",
+    "ownerOnly": "Only the owner, signed in with their own account, can request deleting the business.",
+    "whatHappens": "What will happen:",
+    "step1": "Nothing changes right away: deletion takes effect at the earliest in {hours} hours.",
+    "step2": "Meanwhile, the RestoCool team will contact you to make sure you really want to go ahead.",
+    "step3": "You can cancel the request at any time before the deletion.",
+    "step4": "After deletion, you will still have {days} days to restore your business intact. An email will remind you.",
+    "step5": "After that, all data is permanently erased.",
+    "reason": "Why do you want to delete your business?",
+    "reasonPlaceholder": "Explain in a few sentences: closing, switching tools, a problem you met…",
+    "reasonHint": "A few sentences (at least 60 characters). They help our team call you back and, if possible, help you.",
+    "typeName": "To confirm, type your business’s name: {name}",
+    "understood": "I understand that deletion takes effect {hours} hours after the RestoCool team confirms it, and that I can restore it for {days} days only.",
+    "submit": "Request deletion",
+    "pendingTitle": "Deletion requested",
+    "pendingText": "Deletion takes effect at the earliest on {date}, after the RestoCool team confirms it. You will then have {days} days to restore your business.",
+    "statusPending": "The RestoCool team will contact you to confirm.",
+    "statusConfirmed": "The RestoCool team confirmed the request with you.",
+    "cancel": "Cancel the deletion request",
+    "banner": "Deletion of the business requested: effective at the earliest on {date}.",
+    "bannerManage": "Manage or cancel",
+    "restoreTitle": "Deleted business: you can still restore it",
+    "restoreUntil": "Can be restored until {date}",
+    "restore": "Restore intact",
+    "restoreFailed": "The restore did not work. Contact us from /aide.",
+    "ok": {
+      "requested": "Request recorded. An email was sent to you; our team will contact you.",
+      "cancelled": "Deletion request cancelled. Your business stays active."
+    },
+    "errors": {
+      "reason": "Explain your request in a few sentences (at least 60 characters).",
+      "name": "The name typed does not exactly match the business name.",
+      "understood": "Tick the box to confirm you understood.",
+      "forbidden": "A request is already in progress, or you are not the owner."
+    }
   }
 }

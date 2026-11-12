@@ -6,6 +6,7 @@ import { z } from "zod";
 import { getDb } from "@/db";
 import { addNote, changePlan, recordPlanPayment, resolveErrors, setFeatured, setPublished, setSuspended, type AdminCtx } from "@/lib/admin/manage";
 import { getSuperadmin, requireSuperadmin } from "@/lib/auth/context";
+import { confirmDeletion, markContacted, refuseDeletion, restoreDeleted } from "@/lib/restaurants/deletion";
 import { hasPerm } from "@/lib/admin/access";
 import { deletePromo, savePlatformPromo, setPromoActive } from "@/lib/promotions";
 import { writeAudit } from "@/lib/audit";
@@ -303,5 +304,23 @@ export async function deletePlatformPromoAction(fd: FormData) {
   await run("/admin_pro/marketing", async () => {
     await deletePromo(getDb(), await requireSuperadmin("marketing"), id);
     return "promoDeleted";
+  });
+}
+
+// ---- Business deletion requests ----
+
+export async function deletionAction(fd: FormData) {
+  const id = Id.parse(s(fd, "id"));
+  const what = s(fd, "what");
+  await run("/admin_pro/deletions", async () => {
+    const actor = await requireSuperadmin("businesses.write");
+    const db = getDb();
+    const note = s(fd, "note") || undefined;
+    if (what === "contacted") await markContacted(db, actor, id, note);
+    else if (what === "confirm") await confirmDeletion(db, actor, id, note);
+    else if (what === "refuse") await refuseDeletion(db, actor, id, note);
+    else if (what === "restore") await restoreDeleted(db, actor, id);
+    else throw new z.ZodError([]);
+    return `deletion_${what}#d-${id}`;
   });
 }

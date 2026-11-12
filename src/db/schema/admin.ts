@@ -239,3 +239,38 @@ export const promotions = pgTable(
   },
   (t) => [index("promotions_scope_idx").on(t.scope, t.placement, t.active), index("promotions_restaurant_idx").on(t.restaurantId)],
 );
+
+/**
+ * An owner asked to delete their business. Effective 72 h after the request, only once the
+ * RestoCool team has confirmed it (they call the owner first). Deleted = offline and closed,
+ * data kept and restorable for 10 days, then removed for good.
+ */
+export const deletionRequests = pgTable(
+  "deletion_requests",
+  {
+    id: id(),
+    restaurantId: uuid("restaurant_id").references(() => restaurants.id, { onDelete: "set null" }),
+    /** Kept for after the business is purged. */
+    businessName: text("business_name").notNull(),
+    rcCode: text("rc_code"),
+    ownerEmail: text("owner_email"),
+    ownerName: text("owner_name"),
+    requestedBy: text("requested_by").notNull(),
+    reason: text("reason").notNull(),
+    /** pending → confirmed → deleted → purged | restored · cancelled · refused */
+    status: text("status").notNull().default("pending"),
+    effectiveAt: timestamp("effective_at", { withTimezone: true }).notNull(),
+    contactedAt: timestamp("contacted_at", { withTimezone: true }),
+    contactedBy: text("contacted_by"),
+    decidedAt: timestamp("decided_at", { withTimezone: true }),
+    decidedBy: text("decided_by"),
+    adminNote: text("admin_note"),
+    wasPublished: boolean("was_published").notNull().default(false),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    restoreUntil: timestamp("restore_until", { withTimezone: true }),
+    restoredAt: timestamp("restored_at", { withTimezone: true }),
+    purgedAt: timestamp("purged_at", { withTimezone: true }),
+    ...timestamps,
+  },
+  (t) => [index("deletion_requests_status_idx").on(t.status, t.effectiveAt), index("deletion_requests_restaurant_idx").on(t.restaurantId)],
+);

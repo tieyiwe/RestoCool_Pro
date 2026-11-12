@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq, isNull, sql } from "drizzle-orm";
 import type { DB } from "@/db";
 import {
   areas,
@@ -97,6 +97,7 @@ export type TenantRepo = ReturnType<typeof tenantRepo>;
 export async function findRestaurantBySlug(db: DB, slug: string, opts: { includeUnpublished?: boolean } = {}) {
   const r = await db.query.restaurants.findFirst({ where: eq(restaurants.slug, slug.toLowerCase()) });
   if (!r) return null;
+  if (r.deletedAt) return null;
   if (!r.published && !opts.includeUnpublished) return null;
   return r;
 }
@@ -119,7 +120,8 @@ export async function membershipsForUser(db: DB, clerkUserId: string) {
     .from(members)
     .innerJoin(restaurants, eq(restaurants.id, members.restaurantId))
     .leftJoin(jobRoles, and(eq(jobRoles.id, members.jobRoleId), eq(jobRoles.restaurantId, members.restaurantId)))
-    .where(and(eq(members.clerkUserId, clerkUserId), eq(members.active, true)))
+    // A deleted business (owner's request, confirmed) closes for its whole team.
+    .where(and(eq(members.clerkUserId, clerkUserId), eq(members.active, true), isNull(restaurants.deletedAt)))
     .orderBy(asc(members.createdAt));
 }
 

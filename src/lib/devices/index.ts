@@ -170,6 +170,7 @@ export async function sessionFromToken(db: DB, token: string | undefined, now = 
     row.member.restaurantId === row.session.restaurantId &&
     row.member.active &&
     row.member.role !== "owner" &&
+    !row.restaurant.deletedAt &&
     row.session.expiresAt > now &&
     !idle;
   if (!valid) {

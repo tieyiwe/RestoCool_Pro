@@ -197,6 +197,13 @@
       "when": 1794515029102,
       "tag": "0027_member_archive",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1794515323338,
+      "tag": "0028_business_deletion",
+      "breakpoints": true
     }
   ]
 }

@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 
 /** Submit button that asks for confirmation first (works inside a server-action form). */
-export function ConfirmButton({ message, className, children, ...rest }: { message: string; className?: string; children: React.ReactNode; "data-testid"?: string }) {
+export function ConfirmButton({ message, className, children, ...rest }: { message: string; className?: string; children: React.ReactNode; "data-testid"?: string; name?: string; value?: string }) {
   return (
     <button
       {...rest}

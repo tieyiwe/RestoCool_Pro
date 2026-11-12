@@ -2,6 +2,9 @@ import { setErrorSink } from "./lib/log";
 import { recordError } from "./lib/platform/errors";
 import { getPlatformSettings } from "./lib/platform/settings";
 import { startTrafficClock } from "./lib/usage/presence";
+import { getDb } from "./db";
+import { processDeletions } from "./lib/restaurants/deletion";
+import { log } from "./lib/log";
 
 /** Node-only start-up work (database access): never bundled for the edge runtime. */
 export function startNode() {
@@ -11,6 +14,14 @@ export function startNode() {
   });
   void getPlatformSettings().catch(() => {});
   startTrafficClock();
+  // Business deletions: carried out after 72 h once confirmed, purged after the 10 days to restore.
+  const g = globalThis as unknown as { __rcDeletionTimer?: ReturnType<typeof setInterval> };
+  if (!g.__rcDeletionTimer) {
+    g.__rcDeletionTimer = setInterval(() => {
+      processDeletions(getDb()).catch((err) => log.warn("deletion.process_failed", { error: err instanceof Error ? err.message : String(err) }));
+    }, 5 * 60_000);
+    g.__rcDeletionTimer.unref?.();
+  }
 }
 
 export async function reportRequestError(err: unknown, path: string, context: { routePath?: string; routeType?: string }, method: string) {

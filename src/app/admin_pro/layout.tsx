@@ -9,6 +9,7 @@ import { getSuperadmin } from "@/lib/auth/context";
 import { hasPerm, PAGE_PERM } from "@/lib/admin/access";
 import { getDb } from "@/db";
 import { inboxCounts } from "@/lib/support/requests";
+import { openDeletionCount } from "@/lib/restaurants/deletion";
 import { adminLangAction } from "./actions";
 import { ConsoleNav } from "@/components/admin/console-nav";
 import { NOINDEX } from "@/lib/seo/site";
@@ -28,6 +29,7 @@ const NAV = [
   { href: "/admin_pro/marketing", key: "marketing", icon: "✨" },
   { href: "/admin_pro/billing", key: "billing", icon: "💳" },
   { href: "/admin_pro/map", key: "map", icon: "🗺️" },
+  { href: "/admin_pro/deletions", key: "deletions", icon: "🗑️" },
   { href: "/admin_pro/activity", key: "activity", icon: "🧾" },
   { href: "/admin_pro/team", key: "team", icon: "🧑‍🤝‍🧑" },
   { href: "/admin_pro/settings", key: "settings", icon: "⚙️" },
@@ -42,10 +44,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // Anyone else gets the normal « page introuvable »: the console never says it exists.
   const sa = await getSuperadmin();
   if (!sa) notFound();
-  const badges: Record<string, number> = hasPerm(sa, "support") ? { "/admin_pro/support": (await inboxCounts(getDb()).catch(() => ({ open: 0 }))).open } : {};
+  const badges: Record<string, number> = {
+    ...(hasPerm(sa, "support") ? { "/admin_pro/support": (await inboxCounts(getDb()).catch(() => ({ open: 0 }))).open } : {}),
+    ...(hasPerm(sa, "businesses.write") ? { "/admin_pro/deletions": await openDeletionCount(getDb()).catch(() => 0) } : {}),
+  };
   const GROUPS: Array<[string, string[]]> = [
     ["pilot", ["/admin_pro", "/admin_pro/live"]],
-    ["businesses", ["/admin_pro/businesses", "/admin_pro/map", "/admin_pro/billing"]],
+    ["businesses", ["/admin_pro/businesses", "/admin_pro/map", "/admin_pro/billing", "/admin_pro/deletions"]],
     ["relation", ["/admin_pro/support", "/admin_pro/recovery", "/admin_pro/messages", "/admin_pro/marketing"]],
     ["platform", ["/admin_pro/activity", "/admin_pro/team", "/admin_pro/settings"]],
   ];

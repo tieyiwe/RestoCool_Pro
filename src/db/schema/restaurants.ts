@@ -86,6 +86,8 @@ export const restaurants = pgTable(
     published: boolean("published").notNull().default(false),
     poweredBadge: boolean("powered_badge").notNull().default(true),
     /** Shown on restocool.com (1 = first). Set by the platform admin; null = not featured. */
+    /** Deleted at the owner's request (confirmed by RestoCool): offline, team closed, restorable 10 days. */
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
     featuredRank: smallint("featured_rank"),
     ...timestamps,
   },

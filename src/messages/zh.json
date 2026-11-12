@@ -482,7 +482,8 @@
       "messages": "Messages",
       "team": "Team",
       "recovery": "Account recovery",
-      "marketing": "Marketing"
+      "marketing": "Marketing",
+      "deletions": "Deletion requests"
     },
     "empty": "Nothing yet.",
     "draft": "Draft",
@@ -912,7 +913,10 @@
         "promo_updated": "Updated a campaign",
         "promo_paused": "Paused a promotion",
         "promo_resumed": "Resumed a promotion",
-        "promo_deleted": "Deleted a promotion"
+        "promo_deleted": "Deleted a promotion",
+        "deletion_contacted": "Called an owner about a deletion",
+        "deletion_confirmed": "Confirmed a deletion",
+        "deletion_refused": "Refused a deletion"
       }
     },
     "support": {
@@ -1190,6 +1194,42 @@
       "badge": "Console",
       "owner": "Owner · all rights",
       "search": "Find a business: name, town, RC-…"
+    },
+    "deletions": {
+      "title": "Deletion requests",
+      "intro": "Owners who asked to delete their business. Call them first (the request takes effect 72 h after it was made, only once you confirm). A deleted business stays restorable for 10 days, then is removed for good. The owner is emailed at each step.",
+      "none": "No deletion requests.",
+      "error": "That action is not possible for this request.",
+      "noEmail": "no email",
+      "requested": "Requested:",
+      "effective": "Effective at the earliest:",
+      "contacted": "Owner contacted:",
+      "notYet": "not yet",
+      "decided": "Decided:",
+      "deletedAt": "Deleted:",
+      "restoreUntil": "Restorable until:",
+      "notePlaceholder": "Note (call summary, reason…)",
+      "markContacted": "Owner contacted",
+      "confirm": "Confirm the deletion",
+      "confirmConfirm": "Confirm? The business will be deleted on {date} (restorable 10 days).",
+      "confirmNowConfirm": "Confirm? The 72 h are over: the business is deleted now (restorable 10 days).",
+      "refuse": "Refuse / close",
+      "restore": "Restore the business",
+      "statuses": {
+        "pending": "Waiting for you",
+        "confirmed": "Confirmed — will be deleted",
+        "deleted": "Deleted (restorable)",
+        "restored": "Restored",
+        "cancelled": "Cancelled by the owner",
+        "refused": "Refused",
+        "purged": "Removed for good"
+      },
+      "ok": {
+        "contacted": "Marked as contacted.",
+        "confirm": "Deletion confirmed.",
+        "refuse": "Request closed.",
+        "restore": "Business restored."
+      }
     }
   },
   "demo": {
@@ -3196,5 +3236,47 @@
     "upsell2": "店铺优惠：欢乐时光、晚会、每日套餐…",
     "upsell3": "每个优惠的浏览和点开次数",
     "upsellCta": "升级到 Business"
+  },
+  "danger": {
+    "title": "危险区域",
+    "back": "设置",
+    "settingsHint": "删除您的店铺及其所有数据。多重确认可防止误操作。",
+    "open": "删除我的店铺…",
+    "openConfirm": "您即将进入危险区域申请删除店铺。继续吗？",
+    "intro": "您即将申请删除「{name}」：菜单、照片、二维码、团队、订单和设置。",
+    "ownerOnly": "只有店主使用本人账户登录后才能申请删除店铺。",
+    "whatHappens": "接下来：",
+    "step1": "不会立即生效：最早 {hours} 小时后删除。",
+    "step2": "在此期间，RestoCool 团队会联系您确认。",
+    "step3": "删除前可随时取消申请。",
+    "step4": "删除后，您仍有 {days} 天可完整恢复店铺，我们会发邮件提醒。",
+    "step5": "之后所有数据将被永久清除。",
+    "reason": "您为什么要删除店铺？",
+    "reasonPlaceholder": "用几句话说明：停业、更换工具、遇到的问题…",
+    "reasonHint": "几句话（至少 60 个字符），帮助我们的团队回电，并尽可能帮助您。",
+    "typeName": "请输入店铺名称以确认：{name}",
+    "understood": "我了解删除将在 RestoCool 团队确认后 {hours} 小时生效，且仅可在 {days} 天内恢复。",
+    "submit": "申请删除",
+    "pendingTitle": "已申请删除",
+    "pendingText": "删除最早于 {date} 生效（需 RestoCool 团队确认）。之后您有 {days} 天可恢复店铺。",
+    "statusPending": "RestoCool 团队会联系您确认。",
+    "statusConfirmed": "RestoCool 团队已与您确认申请。",
+    "cancel": "取消删除申请",
+    "banner": "已申请删除店铺：最早于 {date} 生效。",
+    "bannerManage": "管理或取消",
+    "restoreTitle": "店铺已删除：仍可恢复",
+    "restoreUntil": "可恢复至 {date}",
+    "restore": "完整恢复",
+    "restoreFailed": "恢复失败，请通过 /aide 联系我们。",
+    "ok": {
+      "requested": "申请已记录，已发送邮件给您，我们的团队会联系您。",
+      "cancelled": "已取消删除申请，店铺保持正常。"
+    },
+    "errors": {
+      "reason": "请用几句话说明（至少 60 个字符）。",
+      "name": "输入的名称与店铺名称不完全一致。",
+      "understood": "请勾选确认您已了解。",
+      "forbidden": "已有申请在处理中，或您不是店主。"
+    }
   }
 }

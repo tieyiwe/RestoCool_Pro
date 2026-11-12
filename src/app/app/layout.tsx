@@ -27,6 +27,7 @@ import { InstallApp } from "@/components/app-shell/install-app";
 import { NotificationBell } from "@/components/app-shell/notification-bell";
 import { SideNav } from "@/components/app-shell/side-nav";
 import { notificationSummary } from "@/lib/platform/notifications";
+import { currentDeletion } from "@/lib/restaurants/deletion";
 
 /** Private area: never in search results (robots.txt closes it too). */
 export const metadata: Metadata = { robots: NOINDEX };
@@ -101,6 +102,9 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     "/admin_pro": "help",
   };
   const db = getDb();
+  const deletionReq = ctx ? await currentDeletion(db, ctx.repo.restaurantId).catch(() => null) : null;
+  const deletion = deletionReq && (deletionReq.status === "pending" || deletionReq.status === "confirmed") ? deletionReq : null;
+  const td = await getTranslations("danger");
   const summary = ctx ? await notificationSummary(db, ctx, locale).catch(() => ({ unread: 0, support: 0, popup: null })) : null;
   const groups = (["service", "manage", "help"] as const)
     .map((g) => ({
@@ -173,6 +177,17 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
             </p>
           )}
           <RegisterStaffSw />
+          {deletion && (
+            // The owner asked to delete the business: everyone in the team sees it, the owner can cancel.
+            <p role="status" className="bg-red-700 px-4 py-2 text-center text-sm font-semibold text-white print:hidden" data-testid="deletion-banner">
+              ⚠️ {td("banner", { date: new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : locale, { dateStyle: "long", timeStyle: "short", timeZone: "Africa/Ouagadougou" }).format(deletion.effectiveAt) })}{" "}
+              {ctx?.actor.role === "owner" && (
+                <Link href="/app/settings/danger" className="underline underline-offset-2">
+                  {td("bannerManage")}
+                </Link>
+              )}
+            </p>
+          )}
           {announcement && (
             // Message from the RestoCool team to every business (maintenance, news…), set in the console.
             <p

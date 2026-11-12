@@ -77,6 +77,7 @@ export const PAGE_PERM: Record<string, AdminPerm | null> = {
   "/admin_pro": null,
   "/admin_pro/live": "dashboard",
   "/admin_pro/businesses": "businesses.read",
+  "/admin_pro/deletions": "businesses.write",
   "/admin_pro/billing": "billing.read",
   "/admin_pro/map": "businesses.read",
   "/admin_pro/support": "support",
