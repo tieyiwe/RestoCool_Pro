@@ -77,10 +77,17 @@ test("support request: a business reports a blocking problem, TIBLOGICS answers,
   await expect(card.getByTestId("support-status")).toContainText("En attente de vous");
 });
 
-test("messages: a new-feature announcement pops up once in the app and is counted as read", async ({ page }, info) => {
+test("messages: a new-feature announcement pops up once in the app and is counted as read", async ({ page, context }, info) => {
+  // Its own business, so the pop-up never opens over other tests' screens.
+  const slug = `popup-${info.project.name}`;
+  await sql("delete from restaurants where slug = $1", [slug]);
+  const [biz] = await sql<{ id: string }>(
+    `insert into restaurants (slug, name, plan, plan_status, published, settings) values ($1, $2, 'pro', 'trial', false, jsonb_build_object('onboardedAt', now()::text)) returning id`,
+    [slug, `Popup ${info.project.name}`],
+  );
+  await sql("insert into members (restaurant_id, clerk_user_id, role, staff_no, name) values ($1, 'dev-owner', 'owner', 1, 'Dev')", [biz!.id]);
   const title = `Nouveau : export PDF ${info.project.name} ${Date.now()}`;
-  await sql("delete from platform_messages where title->>'fr' like 'Nouveau : export PDF%'");
-  await page.goto("/admin_pro/messages");
+  await page.goto(`/admin_pro/messages?business=${biz!.id}`);
   await page.getByTestId("message-title").fill(title);
   await page.getByTestId("message-body").fill("Exportez votre clôture de caisse en PDF.");
   await page.getByTestId("message-popup").check();
@@ -88,8 +95,12 @@ test("messages: a new-feature announcement pops up once in the app and is counte
   await page.getByTestId("message-send").click();
   await expect(page.getByTestId("admin-ok")).toBeVisible();
 
-  // The demo owner opens the app: the pop-up shows, then not again.
-  await page.goto("/app");
+  // The owner of that business opens the app: the pop-up shows, then not again.
+  await context.addCookies([{ name: "rc_restaurant", value: biz!.id, domain: "localhost", path: "/" }]);
+  await page.goto("/app/notifications");
+  await expect(page.getByTestId("notification-item").filter({ hasText: title })).toBeVisible();
+  await sql("delete from platform_message_reads where message_id in (select id from platform_messages where title->>'fr' = $1)", [title]);
+  await page.goto("/app/guide");
   const popup = page.getByTestId("notification-popup");
   await expect(popup).toBeVisible();
   await expect(popup).toContainText(title);
@@ -97,13 +108,12 @@ test("messages: a new-feature announcement pops up once in the app and is counte
   await expect(popup).toBeHidden();
   await page.reload();
   await expect(page.getByTestId("notification-popup")).toBeHidden();
-  await page.goto("/app/notifications");
-  await expect(page.getByTestId("notification-item").filter({ hasText: title })).toBeVisible();
+  await context.clearCookies({ name: "rc_restaurant" });
 
   await page.goto("/admin_pro/messages");
-  await expect(page.getByTestId("admin-sent-messages").locator("li").filter({ hasText: title }).getByTestId("message-reads")).toContainText(/Read by [1-9]/);
-  // A pop-up left behind would open over other tests' screens.
+  await expect(page.getByTestId("admin-sent-messages").locator("li").filter({ hasText: title }).getByTestId("message-reads")).toContainText(/Read by 1 of 1/);
   await sql("delete from platform_messages where title->>'fr' = $1", [title]);
+  await sql("delete from restaurants where id = $1", [biz!.id]);
 });
 
 test("account recovery: wrong answers are refused; right answers allow a new PIN, shown once", async ({ page }, info) => {
