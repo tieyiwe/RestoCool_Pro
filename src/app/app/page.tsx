@@ -1,4 +1,3 @@
-import { FREE_LAUNCH } from "@/config/plans";
 import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import Link from "next/link";
@@ -10,6 +9,7 @@ import { setupState } from "@/lib/auth/setup";
 import { redirectWithoutMember } from "@/lib/auth/page";
 import { can } from "@/lib/auth/can";
 import { effectiveStatus } from "@/lib/plan";
+import { getPlatformSettings } from "@/lib/platform/settings";
 import { MainQrCard } from "@/components/qr/main-qr-card";
 import { CustomizeGuide, customizeSteps } from "@/components/onboarding/customize-guide";
 import { OrderAnalyticsPanel } from "@/components/analytics/order-analytics";
@@ -44,6 +44,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     ctx.repo.seating.areas(),
     canReadAudit ? ctx.repo.audit.recent(10) : Promise.resolve([]),
   ]);
+  const freeLaunch = (await getPlatformSettings()).freeLaunch;
   const status = effectiveStatus(r);
   // Analytics: owners and managers only (reports.read), checked on the server.
   const canReports = can(ctx.actor, "reports.read", { restaurantId: ctx.repo.restaurantId });
@@ -138,7 +139,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           </Button>
         </Card>
       )}
-      {status === "trial" && FREE_LAUNCH ? (
+      {status === "trial" && freeLaunch ? (
         <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300" data-testid="free-launch">
           🎁 {t("plan.freeLaunch")}
         </p>

@@ -430,12 +430,13 @@
           "text": "WhatsApp, téléphone, Orange Money : vos clients vous joignent en un geste."
         }
       }
-    }
+    },
+    "superadmin": "Super admin"
   },
   "admin": {
     "title": "Administration RestoCool",
     "restaurants": "Restaurants",
-    "forbidden": "Accès réservé à l’équipe TIBLOGICS.",
+    "forbidden": "Accès réservé à l’équipe RestoCool (TIBLOGICS). Connectez-vous avec l’adresse e-mail autorisée.",
     "colName": "Nom",
     "colCity": "Ville",
     "colPlan": "Formule",
@@ -443,7 +444,226 @@
     "colPublished": "Publié",
     "yes": "Oui",
     "no": "Non",
-    "badge": "Administration"
+    "badge": "Super admin",
+    "openApp": "Ouvrir l’app",
+    "nav": "Console",
+    "navItems": {
+      "overview": "Vue d’ensemble",
+      "businesses": "Établissements",
+      "billing": "Abonnements",
+      "map": "Carte",
+      "activity": "Activité et erreurs",
+      "settings": "Réglages"
+    },
+    "empty": "Rien pour l’instant.",
+    "draft": "Brouillon",
+    "published": "En ligne",
+    "setupPending": "Configuration en cours",
+    "inactive": "inactif",
+    "auto": "automatique",
+    "email": "E-mail",
+    "viewPage": "Voir la page",
+    "waHello": "Laafi ! Ici l’équipe RestoCool, au sujet de « {name} ».",
+    "createdOn": "créé le {date}",
+    "featuredRank": "À la une n° {n}",
+    "errorInvalid": "Valeur invalide : vérifiez le formulaire.",
+    "overview": {
+      "title": "Vue d’ensemble",
+      "intro": "La plateforme en un coup d’œil : croissance, usage, revenus et santé.",
+      "freeLaunchOn": "Offre de lancement active",
+      "kpi": {
+        "businesses": "Établissements",
+        "businessesSub": "{published} en ligne · {transport} transport",
+        "new": "Nouveaux (7 jours)",
+        "newSub": "{n} sur 30 jours",
+        "active": "Actifs (7 jours)",
+        "activeSub": "{pct} des établissements en ligne · {n} sur 30 jours",
+        "ordersToday": "Commandes aujourd’hui",
+        "ordersSub": "{n7} sur 7 jours · {n30} sur 30 jours",
+        "gmv": "Volume commandé (30 jours)",
+        "gmvSub": "{v} sur 7 jours",
+        "mrr": "Revenu mensuel (abonnements payés)",
+        "mrrSub": "potentiel : {v} (essais)",
+        "paid": "Encaissé (30 jours)",
+        "paidSub": "{n} paiements",
+        "errors": "Erreurs ouvertes",
+        "errorsSub": "{n} depuis 24 h"
+      },
+      "ordersPerDay": "Commandes par jour (30 jours)",
+      "signupsPerWeek": "Inscriptions par semaine (12 semaines)",
+      "funnel": "Parcours des établissements",
+      "funnelSteps": {
+        "created": "Créés",
+        "setup": "Configurés",
+        "menu": "Avec un menu",
+        "published": "En ligne",
+        "ordered": "Première commande"
+      },
+      "plans": "Abonnements",
+      "cities": "Villes",
+      "top": "Les plus actifs (30 jours)",
+      "ordersN": "{n} commandes",
+      "expiring": "Fin d’abonnement dans les 14 jours",
+      "expiringNone": "Aucune fin d’abonnement proche."
+    },
+    "businesses": {
+      "title": "Établissements",
+      "count": "{n} établissement(s)",
+      "export": "Exporter (CSV)",
+      "none": "Aucun établissement ne correspond."
+    },
+    "filters": {
+      "q": "Rechercher",
+      "qPlaceholder": "Nom, adresse, ville, e-mail, RC-…",
+      "plan": "Formule",
+      "status": "État",
+      "kind": "Type",
+      "published": "En ligne",
+      "sort": "Trier par",
+      "all": "Tous",
+      "apply": "Filtrer",
+      "sorts": {
+        "recent": "Plus récents",
+        "name": "Nom",
+        "orders": "Commandes",
+        "expiry": "Fin d’abonnement"
+      }
+    },
+    "kinds": {
+      "restaurant": "Restaurant et autres",
+      "transport": "Transport"
+    },
+    "cols": {
+      "business": "Établissement",
+      "owner": "Propriétaire",
+      "plan": "Formule",
+      "until": "Jusqu’au",
+      "items": "Plats",
+      "orders30": "Cmd 30 j",
+      "gmv30": "Volume 30 j",
+      "lastOrder": "Dernière commande",
+      "date": "Date",
+      "change": "Changement",
+      "by": "Par"
+    },
+    "ok": {
+      "plan": "Formule mise à jour.",
+      "payment": "Paiement enregistré : la formule est active.",
+      "suspended": "Établissement suspendu (menu visible, commandes arrêtées).",
+      "reactivated": "Établissement réactivé.",
+      "published": "Menu mis en ligne.",
+      "unpublished": "Menu retiré de la ligne.",
+      "featured": "« À la une » mis à jour.",
+      "note": "Note ajoutée.",
+      "resolved": "Erreur(s) marquée(s) comme réglée(s).",
+      "saved": "Réglage enregistré."
+    },
+    "detail": {
+      "orders30": "Commandes (30 jours)",
+      "gmv30": "Volume (30 jours)",
+      "ordersAll": "Commandes (total)",
+      "items": "Plats · équipe",
+      "team": "{n, plural, one {# personne} other {# personnes}}",
+      "payment": "Enregistrer un paiement",
+      "paymentHint": "Paiement reçu en Orange Money, Moov Money ou espèces : la formule devient active et sa fin avance du nombre de mois payés. Fin actuelle : {until}.",
+      "paymentSubmit": "Enregistrer le paiement",
+      "planManual": "Formule et contrôles",
+      "planSave": "Enregistrer la formule",
+      "unpublish": "Retirer le menu de la ligne",
+      "publish": "Mettre le menu en ligne",
+      "featured": "À la une",
+      "notFeatured": "Pas à la une",
+      "featuredSave": "Appliquer",
+      "reactivateConfirm": "Réactiver cet établissement ?",
+      "suspendConfirm": "Suspendre cet établissement ? Son menu reste visible, mais les commandes s’arrêtent.",
+      "reactivate": "Réactiver",
+      "suspend": "Suspendre",
+      "suspendHint": "Une suspension ne supprime jamais de données. Tout est enregistré dans l’historique.",
+      "menu": "Menu (lecture seule)",
+      "menuEmpty": "Pas encore de plats.",
+      "teamTitle": "Équipe",
+      "waitingOwner": "Propriétaire attendu : {email}",
+      "recent": "Dernières commandes",
+      "history": "Historique de la formule",
+      "notes": "Notes internes",
+      "notePlaceholder": "Appel, promesse de paiement, besoin…",
+      "noteAdd": "Ajouter la note",
+      "activity": "Activité de l’établissement"
+    },
+    "fields": {
+      "plan": "Formule",
+      "months": "Mois payés",
+      "amount": "Montant (F)",
+      "method": "Moyen",
+      "reference": "Référence",
+      "referencePlaceholder": "N° de transaction Orange Money…",
+      "status": "État",
+      "until": "Jusqu’au",
+      "reason": "Motif (facultatif)",
+      "suspendReason": "Motif de la suspension"
+    },
+    "methods": {
+      "orange_money": "Orange Money",
+      "moov_money": "Moov Money",
+      "cash": "Espèces",
+      "bank": "Virement",
+      "other": "Autre"
+    },
+    "roles": {
+      "owner": "Propriétaire",
+      "manager": "Gérant",
+      "server": "Service",
+      "kitchen": "Cuisine",
+      "cashier": "Caisse"
+    },
+    "billing": {
+      "title": "Abonnements et paiements",
+      "intro": "Revenus de la plateforme, paiements reçus, changements de formule et renouvellements à venir.",
+      "potential": "Revenu potentiel (essais)",
+      "payments30": "Paiements (30 jours)",
+      "perMonth": "Encaissé par mois",
+      "noPayments": "Aucun paiement enregistré pour l’instant.",
+      "events": "Tous les changements et paiements"
+    },
+    "activity": {
+      "title": "Activité et erreurs",
+      "intro": "Santé de la plateforme : les erreurs serveur, regroupées, et tout ce qui s’y passe.",
+      "errors": "Erreurs ouvertes ({n})",
+      "resolveAll": "Tout marquer comme réglé",
+      "noErrors": "Aucune erreur ouverte.",
+      "last": "dernière {when}",
+      "resolve": "Réglé",
+      "log": "Journal d’activité",
+      "filter": "Filtrer (ex. admin, order)"
+    },
+    "settings": {
+      "title": "Réglages de la plateforme",
+      "intro": "Les interrupteurs de RestoCool, sans redéploiement.",
+      "freeLaunch": "Offre de lancement",
+      "freeLaunchHint": "Activée, les essais Pro ne finissent jamais et chaque établissement voit « Offert pendant le lancement ». Désactivez-la le jour où les abonnements deviennent payants.",
+      "freeLaunchOn": "Active : tout est offert",
+      "freeLaunchOff": "Désactivée : les essais finissent à leur date",
+      "freeLaunchTurnOff": "Désactiver l’offre",
+      "freeLaunchTurnOn": "Activer l’offre",
+      "announcement": "Annonce à tous les établissements",
+      "announcementHint": "Un bandeau en haut de l’app de chaque établissement (maintenance, nouveauté…).",
+      "announcementActive": "Afficher l’annonce",
+      "level": "Ton",
+      "levels": {
+        "info": "Information",
+        "warning": "Important"
+      },
+      "save": "Enregistrer",
+      "announcementClear": "Supprimer l’annonce",
+      "featured": "À la une",
+      "featuredHint": "Les 3 établissements mis en avant sur l’accueil et l’annuaire. Choisissez le rang depuis la fiche de l’établissement.",
+      "featuredRemove": "Retirer"
+    },
+    "map": {
+      "title": "Carte des établissements",
+      "intro": "{n} établissement(s) ont enregistré leur position.",
+      "missing": "Les autres n’ont pas encore indiqué leur position"
+    }
   },
   "demo": {
     "title": "Comment ça marche",

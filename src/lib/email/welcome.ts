@@ -3,7 +3,7 @@ import { and, eq, isNull } from "drizzle-orm";
 import { getTranslations } from "next-intl/server";
 import type { DB } from "@/db";
 import { accessCodes, emailLog, restaurants } from "@/db/schema";
-import { FREE_LAUNCH } from "@/config/plans";
+import { getPlatformSettings } from "@/lib/platform/settings";
 import { isLocale, type Locale } from "@/i18n/config";
 import { log } from "@/lib/log";
 import { sendMail } from "./mailer";
@@ -23,6 +23,7 @@ export type WelcomeInput = {
 /** The welcome email (HTML with inline styles that mail apps keep, plus a plain-text version). */
 export async function welcomeEmail(i: WelcomeInput) {
   const t = await getTranslations({ locale: i.locale, namespace: "email.welcome" });
+  const FREE_LAUNCH = (await getPlatformSettings()).freeLaunch;
   const first = i.ownerName?.trim().split(/\s+/)[0] ?? "";
   const hello = first ? t("hello", { name: first }) : t("helloNoName");
   const features = (["f1", "f2", i.kind === "transport" ? "f3Transport" : "f3", "f4", "f5", "f6"] as const).map((k) => t(k));

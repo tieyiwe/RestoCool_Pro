@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { AuthProvider } from "@/components/auth-provider";
 import { Logo } from "@/components/brand/logo";
 import { LocaleSwitcher } from "@/components/locale-switcher";
@@ -17,7 +17,8 @@ import { Suspense } from "react";
 import { env } from "@/lib/env";
 import { setupState } from "@/lib/auth/setup";
 import { can, type Action } from "@/lib/auth/can";
-import { getMemberContext } from "@/lib/auth/context";
+import { getMemberContext, getSuperadmin } from "@/lib/auth/context";
+import { getPlatformSettings } from "@/lib/platform/settings";
 import type { Metadata } from "next";
 import { NOINDEX } from "@/lib/seo/site";
 
@@ -31,6 +32,8 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   // Business first: until it is created and set up, no other section is shown (focus mode).
   const focus = (await setupState().catch(() => "none" as const)) !== "ready";
   const ctx = await getMemberContext().catch(() => null);
+  const [platform, locale] = await Promise.all([getPlatformSettings(), getLocale()]);
+  const announcement = platform.announcement?.active && platform.announcement.text.fr ? platform.announcement : null;
   // Each person only sees the sections their role can open (the server checks again on every page).
   const allowed = (a: Action | null) => !a || (ctx ? can(ctx.actor, a, { restaurantId: ctx.repo.restaurantId }) : false);
   // A bus company manages buses and itineraries instead of tables and rooms.
@@ -52,6 +55,8 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       { href: "/app/guide", label: t("guide"), icon: "🎓", need: null },
     ] as const
   ).filter((n) => allowed(n.need));
+  // The RestoCool team (super admin) also gets the platform console.
+  if (await getSuperadmin().catch(() => null)) nav.push({ href: "/admin" as "/app/guide", label: t("superadmin"), icon: "🛡️" as "🎓", need: null });
   // Phones: the 4 most used screens for this role as tabs, the rest under « Plus ».
   const kitchenOnly = allowed("orders.prepare") && !allowed("orders.confirm");
   const order = transport
@@ -101,6 +106,16 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
           </p>
         )}
         <RegisterStaffSw />
+        {announcement && (
+          // Message from the RestoCool team to every business (maintenance, news…), set in /admin.
+          <p
+            role="status"
+            className={announcement.level === "warning" ? "bg-amber-100 px-4 py-2 text-center text-sm font-semibold text-amber-950 print:hidden" : "bg-sky-50 px-4 py-2 text-center text-sm font-semibold text-sky-950 print:hidden"}
+            data-testid="platform-announcement"
+          >
+            📣 {announcement.text[locale as "fr"] || announcement.text.fr}
+          </p>
+        )}
         <Suspense fallback={null}>
           <NavProgress />
         </Suspense>

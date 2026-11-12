@@ -430,12 +430,13 @@
           "text": "WhatsApp, phone, Orange Money: customers reach you in one tap."
         }
       }
-    }
+    },
+    "superadmin": "Super admin"
   },
   "admin": {
     "title": "RestoCool administration",
     "restaurants": "Restaurants",
-    "forbidden": "Restricted to the TIBLOGICS team.",
+    "forbidden": "Restricted to the RestoCool team (TIBLOGICS). Sign in with the authorised email address.",
     "colName": "Name",
     "colCity": "City",
     "colPlan": "Plan",
@@ -443,7 +444,226 @@
     "colPublished": "Published",
     "yes": "Yes",
     "no": "No",
-    "badge": "Admin"
+    "badge": "Super admin",
+    "openApp": "Open the app",
+    "nav": "Console",
+    "navItems": {
+      "overview": "Overview",
+      "businesses": "Businesses",
+      "billing": "Subscriptions",
+      "map": "Map",
+      "activity": "Activity & errors",
+      "settings": "Settings"
+    },
+    "empty": "Nothing yet.",
+    "draft": "Draft",
+    "published": "Online",
+    "setupPending": "Setting up",
+    "inactive": "inactive",
+    "auto": "automatic",
+    "email": "Email",
+    "viewPage": "View page",
+    "waHello": "Laafi! This is the RestoCool team, about “{name}”.",
+    "createdOn": "created {date}",
+    "featuredRank": "Featured #{n}",
+    "errorInvalid": "Invalid value: check the form.",
+    "overview": {
+      "title": "Overview",
+      "intro": "The platform at a glance: growth, usage, revenue and health.",
+      "freeLaunchOn": "Launch offer on",
+      "kpi": {
+        "businesses": "Businesses",
+        "businessesSub": "{published} online · {transport} transport",
+        "new": "New (7 days)",
+        "newSub": "{n} in 30 days",
+        "active": "Active (7 days)",
+        "activeSub": "{pct} of online businesses · {n} in 30 days",
+        "ordersToday": "Orders today",
+        "ordersSub": "{n7} in 7 days · {n30} in 30 days",
+        "gmv": "Order volume (30 days)",
+        "gmvSub": "{v} in 7 days",
+        "mrr": "Monthly revenue (paid plans)",
+        "mrrSub": "potential: {v} (trials)",
+        "paid": "Collected (30 days)",
+        "paidSub": "{n} payments",
+        "errors": "Open errors",
+        "errorsSub": "{n} in the last 24 h"
+      },
+      "ordersPerDay": "Orders per day (30 days)",
+      "signupsPerWeek": "Sign-ups per week (12 weeks)",
+      "funnel": "Business journey",
+      "funnelSteps": {
+        "created": "Created",
+        "setup": "Set up",
+        "menu": "With a menu",
+        "published": "Online",
+        "ordered": "First order"
+      },
+      "plans": "Subscriptions",
+      "cities": "Towns",
+      "top": "Most active (30 days)",
+      "ordersN": "{n} orders",
+      "expiring": "Plans ending within 14 days",
+      "expiringNone": "No plan ending soon."
+    },
+    "businesses": {
+      "title": "Businesses",
+      "count": "{n} business(es)",
+      "export": "Export (CSV)",
+      "none": "No business matches."
+    },
+    "filters": {
+      "q": "Search",
+      "qPlaceholder": "Name, address, town, email, RC-…",
+      "plan": "Plan",
+      "status": "Status",
+      "kind": "Type",
+      "published": "Online",
+      "sort": "Sort by",
+      "all": "All",
+      "apply": "Filter",
+      "sorts": {
+        "recent": "Newest",
+        "name": "Name",
+        "orders": "Orders",
+        "expiry": "Plan end"
+      }
+    },
+    "kinds": {
+      "restaurant": "Restaurants and others",
+      "transport": "Transport"
+    },
+    "cols": {
+      "business": "Business",
+      "owner": "Owner",
+      "plan": "Plan",
+      "until": "Until",
+      "items": "Dishes",
+      "orders30": "Orders 30 d",
+      "gmv30": "Volume 30 d",
+      "lastOrder": "Last order",
+      "date": "Date",
+      "change": "Change",
+      "by": "By"
+    },
+    "ok": {
+      "plan": "Plan updated.",
+      "payment": "Payment recorded: the plan is active.",
+      "suspended": "Business suspended (menu visible, ordering stopped).",
+      "reactivated": "Business reactivated.",
+      "published": "Menu put online.",
+      "unpublished": "Menu taken offline.",
+      "featured": "Featured list updated.",
+      "note": "Note added.",
+      "resolved": "Error(s) marked as resolved.",
+      "saved": "Setting saved."
+    },
+    "detail": {
+      "orders30": "Orders (30 days)",
+      "gmv30": "Volume (30 days)",
+      "ordersAll": "Orders (total)",
+      "items": "Dishes · team",
+      "team": "{n, plural, one {# person} other {# people}}",
+      "payment": "Record a payment",
+      "paymentHint": "Payment received by Orange Money, Moov Money or cash: the plan becomes active and its end moves forward by the months paid. Current end: {until}.",
+      "paymentSubmit": "Record the payment",
+      "planManual": "Plan and controls",
+      "planSave": "Save the plan",
+      "unpublish": "Take the menu offline",
+      "publish": "Put the menu online",
+      "featured": "Featured",
+      "notFeatured": "Not featured",
+      "featuredSave": "Apply",
+      "reactivateConfirm": "Reactivate this business?",
+      "suspendConfirm": "Suspend this business? Its menu stays visible, but ordering stops.",
+      "reactivate": "Reactivate",
+      "suspend": "Suspend",
+      "suspendHint": "Suspending never deletes data. Everything is recorded in the history.",
+      "menu": "Menu (read-only)",
+      "menuEmpty": "No dishes yet.",
+      "teamTitle": "Team",
+      "waitingOwner": "Owner expected: {email}",
+      "recent": "Latest orders",
+      "history": "Plan history",
+      "notes": "Internal notes",
+      "notePlaceholder": "Call, payment promise, need…",
+      "noteAdd": "Add the note",
+      "activity": "Business activity"
+    },
+    "fields": {
+      "plan": "Plan",
+      "months": "Months paid",
+      "amount": "Amount (F)",
+      "method": "Method",
+      "reference": "Reference",
+      "referencePlaceholder": "Orange Money transaction no.…",
+      "status": "Status",
+      "until": "Until",
+      "reason": "Reason (optional)",
+      "suspendReason": "Reason for suspension"
+    },
+    "methods": {
+      "orange_money": "Orange Money",
+      "moov_money": "Moov Money",
+      "cash": "Cash",
+      "bank": "Bank transfer",
+      "other": "Other"
+    },
+    "roles": {
+      "owner": "Owner",
+      "manager": "Manager",
+      "server": "Service",
+      "kitchen": "Kitchen",
+      "cashier": "Cashier"
+    },
+    "billing": {
+      "title": "Subscriptions and payments",
+      "intro": "Platform revenue, payments received, plan changes and upcoming renewals.",
+      "potential": "Potential revenue (trials)",
+      "payments30": "Payments (30 days)",
+      "perMonth": "Collected per month",
+      "noPayments": "No payment recorded yet.",
+      "events": "All changes and payments"
+    },
+    "activity": {
+      "title": "Activity and errors",
+      "intro": "Platform health: server errors, grouped, and everything that happens.",
+      "errors": "Open errors ({n})",
+      "resolveAll": "Mark all as resolved",
+      "noErrors": "No open error.",
+      "last": "last {when}",
+      "resolve": "Resolved",
+      "log": "Activity log",
+      "filter": "Filter (e.g. admin, order)"
+    },
+    "settings": {
+      "title": "Platform settings",
+      "intro": "RestoCool’s switches, without a redeploy.",
+      "freeLaunch": "Launch offer",
+      "freeLaunchHint": "When on, Pro trials never end and every business sees “Free during our launch”. Turn it off the day subscriptions become paid.",
+      "freeLaunchOn": "On: everything is free",
+      "freeLaunchOff": "Off: trials end on their date",
+      "freeLaunchTurnOff": "Turn the offer off",
+      "freeLaunchTurnOn": "Turn the offer on",
+      "announcement": "Announcement to every business",
+      "announcementHint": "A banner at the top of every business’s app (maintenance, news…).",
+      "announcementActive": "Show the announcement",
+      "level": "Tone",
+      "levels": {
+        "info": "Information",
+        "warning": "Important"
+      },
+      "save": "Save",
+      "announcementClear": "Delete the announcement",
+      "featured": "Featured",
+      "featuredHint": "The 3 businesses shown first on the home page and directory. Choose the rank from the business page.",
+      "featuredRemove": "Remove"
+    },
+    "map": {
+      "title": "Business map",
+      "intro": "{n} business(es) saved their location.",
+      "missing": "The others have not given their location yet"
+    }
   },
   "demo": {
     "title": "How it works",

@@ -20,6 +20,8 @@ export type RestaurantSettings = {
    * in with this verified email becomes its owner. Lower case; removed once claimed.
    */
   ownerEmail?: string;
+  /** Why the platform suspended this business (shown to the super admin). */
+  suspendedReason?: string;
   /** Second brand colour (« couleur d’accent »): header band, « Nouveau » badges, titles. */
   accent2?: string;
   /** WhatsApp that receives takeaway orders when it is not the main WhatsApp (absent = same). */

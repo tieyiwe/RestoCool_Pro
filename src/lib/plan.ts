@@ -1,5 +1,6 @@
-import { FREE_LAUNCH, PLANS, SUSPENDED_ALLOWED, type PlanFeature, type PlanId, type PlanLimits, type PlanStatus } from "@/config/plans";
+import { PLANS, SUSPENDED_ALLOWED, type PlanFeature, type PlanId, type PlanLimits, type PlanStatus } from "@/config/plans";
 import { PlanLimitError } from "./errors";
+import { freeLaunchActive } from "./platform/flags";
 
 export type PlanSubject = {
   plan: PlanId;
@@ -11,7 +12,7 @@ export type PlanSubject = {
  * The status that actually applies right now: an expired trial counts as past_due, except during
  * the launch offer (FREE_LAUNCH), when trials never run out.
  */
-export function effectiveStatus(r: PlanSubject, now: Date = new Date(), freeLaunch: boolean = FREE_LAUNCH): PlanStatus {
+export function effectiveStatus(r: PlanSubject, now: Date = new Date(), freeLaunch: boolean = freeLaunchActive()): PlanStatus {
   if (r.planStatus === "trial" && !freeLaunch && r.planExpiresAt && r.planExpiresAt.getTime() < now.getTime()) return "past_due";
   return r.planStatus;
 }
