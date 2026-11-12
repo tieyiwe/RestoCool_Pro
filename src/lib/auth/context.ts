@@ -33,7 +33,9 @@ export type MemberContext = {
 export const getStaffSessionContext = cache(async (): Promise<MemberContext | null> => {
   const token = (await cookies()).get(STAFF_COOKIE)?.value;
   if (!token) return null;
-  const s = await sessionFromToken(getDb(), token);
+  // « x-rc-passive: 1 »: a background request from the screen itself; it must not keep the session awake.
+  const passive = (await headers()).get("x-rc-passive") === "1";
+  const s = await sessionFromToken(getDb(), token, new Date(), { passive });
   if (!s) return null;
   const m = s.member;
   void touchLastSeen(m.id);

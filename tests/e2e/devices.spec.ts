@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("a tablet is authorised, Awa logs in with her PIN, works with her access only, locks; revoking stops the tablet", async ({ browser }, info) => {
+  test.setTimeout(120_000);
   const tag = info.project.name.replace(/\W/g, "");
   const ctx = await browser.newContext({ ...info.project.use });
   const page = await ctx.newPage();

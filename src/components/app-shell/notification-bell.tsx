@@ -23,7 +23,7 @@ export function NotificationBell({ initial, labels }: { initial: Summary; labels
   const refresh = useCallback(async () => {
     if (document.visibilityState !== "visible") return;
     try {
-      const r = await fetch("/api/app/notifications", { cache: "no-store" });
+      const r = await fetch("/api/app/notifications", { cache: "no-store", headers: { "x-rc-passive": "1" } });
       if (!r.ok) return;
       const next = (await r.json()) as Summary;
       setS(next);

@@ -35,7 +35,7 @@ export function Beat() {
     const send = (kind: "view" | "beat") => {
       if (document.visibilityState !== "visible") return;
       const body = JSON.stringify(app ? { kind, path, touch, standalone } : { path, deviceId: anonId(), touch, standalone });
-      fetch(url, { method: "POST", body, headers: { "Content-Type": "application/json" }, keepalive: true, credentials: "same-origin" }).catch(() => {});
+      fetch(url, { method: "POST", body, headers: { "Content-Type": "application/json", "x-rc-passive": "1" }, keepalive: true, credentials: "same-origin" }).catch(() => {});
     };
     send("view");
     const timer = setInterval(() => send("beat"), BEAT_MS);

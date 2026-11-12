@@ -150,7 +150,7 @@ export async function pinLogin(db: DB, device: { id: string; restaurantId: strin
  * end of the shift, not idle for longer than allowed, device not revoked, person still active.
  * An idle or expired session is ended here (the server decides, not the browser).
  */
-export async function sessionFromToken(db: DB, token: string | undefined, now = new Date()) {
+export async function sessionFromToken(db: DB, token: string | undefined, now = new Date(), opts: { passive?: boolean } = {}) {
   if (!token || token.length < 20 || token.length > 200) return null;
   const [row] = await db
     .select({ session: staffSessions, device: devices, member: members, restaurant: restaurants, access: jobRoles.access })
@@ -177,7 +177,8 @@ export async function sessionFromToken(db: DB, token: string | undefined, now = 
     if (idle) await writeAudit(db, null, { restaurantId: row.session.restaurantId, action: "staff.locked.idle", entity: "device", entityId: row.device.id, data: { memberId: row.member.id } });
     return null;
   }
-  if (now.getTime() - row.session.lastActivityAt.getTime() > 30_000) {
+  // Background requests (heartbeat, notification polling) are not someone using the tablet.
+  if (!opts.passive && now.getTime() - row.session.lastActivityAt.getTime() > 30_000) {
     await db.update(staffSessions).set({ lastActivityAt: now }).where(eq(staffSessions.id, row.session.id));
   }
   return { ...row, access: row.access ? cleanAccess(row.access) : null, idleMinutes };

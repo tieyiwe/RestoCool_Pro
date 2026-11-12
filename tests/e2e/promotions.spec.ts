@@ -23,13 +23,16 @@ test("console marketing: a home-page campaign shows and counts views/taps; a bus
   await expect(page).toHaveURL(/\/r\/restaurant-demo/);
   await expect.poll(async () => (await sql<{ views: number; clicks: number }>("select views, clicks from promotions where title->>'fr' = $1", [title]))[0], { timeout: 15_000 }).toMatchObject({ views: 1, clicks: 1 });
 
-  // Manual featuring: slot 1.
+  // Manual featuring: slot 1 (the featured order is put back afterwards for the other tests).
+  const before = await sql<{ id: string; featured_rank: number | null }>("select id, featured_rank from restaurants where featured_rank is not null");
   await page.goto("/admin_pro/marketing");
   await page.getByTestId("featured-slot-1").selectOption({ label: "Restaurant Démo · Ouagadougou" });
   await page.getByTestId("featured-save-1").click();
   await expect(page.getByTestId("admin-ok")).toBeVisible();
   const [r] = await sql<{ featured_rank: number }>("select featured_rank from restaurants where slug = 'restaurant-demo'");
   expect(r!.featured_rank).toBe(1);
+  await sql("update restaurants set featured_rank = null where featured_rank is not null");
+  for (const b of before) await sql("update restaurants set featured_rank = $2 where id = $1", [b.id, b.featured_rank]);
   await sql("delete from promotions where scope = 'platform'");
 });
 
