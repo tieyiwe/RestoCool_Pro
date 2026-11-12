@@ -1630,7 +1630,21 @@
     "takeawayDetailsHint": "Pour votre commande à emporter : votre nom et un numéro où l’établissement peut vous joindre.",
     "pickupTimeOptional": "Heure de retrait (facultatif)",
     "takeawayDetailsMissing": "Pour une commande à emporter, indiquez votre nom et votre numéro de téléphone.",
-    "takeawayByWhatsapp": "Ou commander à emporter par WhatsApp"
+    "takeawayByWhatsapp": "Ou commander à emporter par WhatsApp",
+    "orderSentAt": "Envoyée le {when}",
+    "orderServedAt": "servie le {when}",
+    "takeawayReceived": "Commande à emporter reçue par l’établissement.",
+    "deliveryReceived": "Commande de livraison reçue par l’établissement.",
+    "takeawayPickupAt": "Retrait à {time}",
+    "takeawayNoNeedToShow": "Pas besoin de la montrer : elle est déjà en cuisine. Suivez son avancement ici.",
+    "seeMyTicket": "Voir mon ticket",
+    "removeOrder": "Retirer de mon téléphone",
+    "removeFinished": "Retirer les {n} commandes terminées",
+    "howToOrder": "Comment souhaitez-vous commander ?",
+    "eatHere": "Sur place",
+    "eatHereHint": "Choisir ma table ou mon salon",
+    "takeawayQuick": "À emporter",
+    "takeawayQuickHint": "Je passe la récupérer"
   },
   "seating": {
     "title": "Tables et salles",

@@ -33,6 +33,8 @@ export type CustomerOrder = {
   current: boolean;
   seat: { type: string; label: string } | null;
   customerName: string | null;
+  /** Takeaway: « 12:30 », when the customer gave one. */
+  pickupTime?: string | null;
   subtotal: number;
   hasOnRequest: boolean;
   sentAt: string;
@@ -211,20 +213,45 @@ function orderTotal(o: CustomerOrder, t: T) {
   return o.subtotal === 0 && o.hasOnRequest ? t("onRequest") : `${formatFCFA(o.subtotal)}${o.hasOnRequest ? " +" : ""}`;
 }
 
+const FINISHED = new Set(["served", "paid", "cancelled"]);
+const NO_SERVER = new Set(["takeaway", "delivery"]);
+
+/** Orders this phone removed from its list (finished ones only). Device only: the restaurant keeps them. */
+export function useHiddenOrders(slug: string) {
+  const key = `rc-hidden-orders-${slug}`;
+  const [hidden, setHidden] = useState<Set<string>>(() => new Set());
+  useEffect(() => setHidden(new Set(readJson<string[]>(key, []))), [key]);
+  const hide = useCallback(
+    (ids: string[]) =>
+      setHidden((cur) => {
+        const next = new Set([...cur, ...ids]);
+        writeJson(key, [...next].slice(-200));
+        return next;
+      }),
+    [key],
+  );
+  return { hidden, hide };
+}
+
 export function OrdersList({
   orders,
   shared,
   lang,
   t,
   onShow,
+  onHide,
 }: {
   orders: CustomerOrder[];
   shared: boolean;
   lang: Lang;
   t: T;
   onShow: (o: CustomerOrder) => void;
+  /** Remove finished orders from this phone's list. */
+  onHide?: (ids: string[]) => void;
 }) {
   if (orders.length === 0) return <p className="py-6 text-center text-muted-foreground">{t("noOrders")}</p>;
+  const when = new Intl.DateTimeFormat(lang === "zh" ? "zh-CN" : lang, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Africa/Ouagadougou" });
+  const finishedMine = orders.filter((o) => o.mine && FINISHED.has(o.status));
   // The table bill is this table's orders only, not this phone's earlier visits of the day.
   const live = orders.filter((o) => o.current && o.status !== "cancelled");
   const tableTotal = live.reduce((s, o) => s + o.subtotal, 0);
@@ -251,6 +278,10 @@ export function OrdersList({
               </p>
               <p className="font-bold tabular-nums">{orderTotal(o, t)}</p>
             </div>
+            <p className="mb-2 text-xs text-muted-foreground" data-testid="my-order-date">
+              🕘 {t("orderSentAt", { when: when.format(new Date(o.sentAt)) })}
+              {o.servedAt && ` · ${t("orderServedAt", { when: when.format(new Date(o.servedAt)) })}`}
+            </p>
             <StatusSteps status={o.status} t={t} />
             {o.status === "cancelled" && o.cancelledReason && <p className="mt-1 text-sm text-muted-foreground">{o.cancelledReason}</p>}
             <ul className="mt-2 text-sm">
@@ -267,14 +298,38 @@ export function OrdersList({
                 </li>
               ))}
             </ul>
-            {o.mine && o.status !== "cancelled" && (
-              <button type="button" onClick={() => onShow(o)} className="mt-3 min-h-11 w-full rounded-xl border-2 border-[var(--accent)] font-bold" data-testid="show-server">
-                📱 {t("showToServer")}
+            {o.mine && o.status !== "cancelled" && o.seat && NO_SERVER.has(o.seat.type) ? (
+              // Takeaway / delivery: the order is already with the business, nothing to show anyone.
+              <div className="mt-3 rounded-xl bg-muted p-3 text-sm" data-testid="takeaway-confirmation">
+                <p className="font-bold">✓ {t(o.seat.type === "delivery" ? "deliveryReceived" : "takeawayReceived")}</p>
+                <p className="text-muted-foreground">
+                  {o.pickupTime ? t("takeawayPickupAt", { time: o.pickupTime }) : t("takeawayNoNeedToShow")}
+                </p>
+                <button type="button" onClick={() => onShow(o)} className="mt-2 min-h-11 text-sm font-semibold underline underline-offset-2" data-testid="show-server">
+                  🧾 {t("seeMyTicket")}
+                </button>
+              </div>
+            ) : (
+              o.mine &&
+              o.status !== "cancelled" && (
+                <button type="button" onClick={() => onShow(o)} className="mt-3 min-h-11 w-full rounded-xl border-2 border-[var(--accent)] font-bold" data-testid="show-server">
+                  📱 {t("showToServer")}
+                </button>
+              )
+            )}
+            {o.mine && FINISHED.has(o.status) && onHide && (
+              <button type="button" onClick={() => onHide([o.id])} className="mt-2 min-h-11 w-full rounded-xl border border-border text-sm font-semibold" data-testid="hide-order">
+                🗑️ {t("removeOrder")}
               </button>
             )}
           </li>
         ))}
       </ul>
+      {onHide && finishedMine.length > 1 && (
+        <button type="button" onClick={() => onHide(finishedMine.map((o) => o.id))} className="min-h-11 rounded-xl border border-border text-sm font-semibold" data-testid="hide-finished">
+          🗑️ {t("removeFinished", { n: finishedMine.length })}
+        </button>
+      )}
     </div>
   );
 }
@@ -285,48 +340,64 @@ export function ShowToServer({ order, slug, lang, t, onClose }: { order: Custome
   useEffect(() => closeRef.current?.focus(), []);
   const qs = new URLSearchParams({ slug, deviceId: deviceId() });
   const seatText = order.seat ? `${t(`seat_${order.seat.type}`)} ${order.seat.type === "takeaway" || order.seat.type === "delivery" || order.seat.type === "counter" ? "" : order.seat.label}`.trim() : "";
+  const takeaway = order.seat?.type === "takeaway" || order.seat?.type === "delivery";
+  const many = order.items.length > 5;
   return (
-    <div role="dialog" aria-modal="true" aria-label={t("showToServer")} className="fixed inset-0 z-[60] overflow-y-auto bg-black text-white" data-testid="server-view">
-      <div className="mx-auto flex min-h-full max-w-lg flex-col gap-4 p-5" style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))" }}>
-        <div className="flex items-start justify-between gap-3">
-          <p className="text-lg font-semibold text-white/80">{t("orderNumber", { n: order.number })}</p>
-          {order.code && (
-            <p className="font-mono text-base text-white/70" data-testid="server-code">
-              {order.code}
-            </p>
-          )}
-          <button ref={closeRef} type="button" onClick={onClose} className="min-h-11 rounded-full bg-white px-4 font-bold text-black">
+    <div role="dialog" aria-modal="true" aria-label={t("showToServer")} className="fixed inset-0 z-[60] bg-black text-white" data-testid="server-view">
+      {/* One screen: header, seat, the items (they scroll only when the order is long), then total + QR. */}
+      <div
+        className="mx-auto flex h-dvh max-w-lg flex-col gap-3 px-4 pt-3"
+        style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))", paddingTop: "max(0.75rem, env(safe-area-inset-top))" }}
+      >
+        <div className="flex shrink-0 items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-base font-semibold text-white/80">{t("orderNumber", { n: order.number })}</p>
+            {order.code && (
+              <p className="truncate font-mono text-sm text-white/60" data-testid="server-code">
+                {order.code}
+              </p>
+            )}
+          </div>
+          <button ref={closeRef} type="button" onClick={onClose} className="min-h-11 shrink-0 rounded-full bg-white px-4 font-bold text-black">
             {t("close")}
           </button>
         </div>
         {seatText && (
-          <p className="rounded-2xl bg-[#E9B530] px-4 py-3 text-center font-display text-5xl leading-none font-extrabold text-black" data-testid="server-seat">
+          <p className="shrink-0 rounded-2xl bg-[#E9B530] px-4 py-2 text-center font-display text-[clamp(1.75rem,7vw,2.75rem)] leading-tight font-extrabold text-black" data-testid="server-seat">
             {seatText}
+            {takeaway && order.pickupTime && <span className="block text-lg font-bold">{t("takeawayPickupAt", { time: order.pickupTime })}</span>}
           </p>
         )}
-        {order.customerName && <p className="text-center text-2xl font-bold">{order.customerName}</p>}
-        <ul className="flex flex-col divide-y divide-white/20 text-2xl">
+        {order.customerName && <p className="shrink-0 text-center text-xl font-bold">{order.customerName}</p>}
+        <ul className={cn("min-h-0 shrink divide-y divide-white/20 overflow-y-auto overscroll-contain", many ? "text-lg" : "text-xl")} data-testid="server-items">
           {order.items.map((i) => (
-            <li key={i.id} className="py-2">
+            <li key={i.id} className="py-1.5">
               <span className="font-extrabold">{i.qty} ×</span> {i.code && <span className="text-[#E9B530]">{i.code}. </span>}
               {i.name.fr}
               {/* The other languages under the French name, so any staff member can read it (e.g. Chinese for the kitchen). */}
               {otherNames(i.name, lang).map((n) => (
-                <span key={n} lang={n === i.name.zh ? "zh" : undefined} className="block text-base text-white/70">
+                <span key={n} lang={n === i.name.zh ? "zh" : undefined} className="block text-sm text-white/70">
                   {n}
                 </span>
               ))}
-              {(i.variantName || i.options.length > 0) && <span className="block text-base text-white/80">{[i.variantName?.fr, ...i.options.map((x) => x.fr)].filter(Boolean).join(", ")}</span>}
-              {i.note && <span className="block text-base italic text-[#E9B530]">« {i.note} »</span>}
+              {(i.variantName || i.options.length > 0) && <span className="block text-sm text-white/80">{[i.variantName?.fr, ...i.options.map((x) => x.fr)].filter(Boolean).join(", ")}</span>}
+              {i.note && <span className="block text-sm italic text-[#E9B530]">« {i.note} »</span>}
             </li>
           ))}
         </ul>
-        <p className="text-right text-3xl font-extrabold tabular-nums">{orderTotal(order, t)}</p>
-        <div className="mx-auto rounded-2xl bg-white p-3">
-          {/* eslint-disable-next-line @next/next/no-img-element -- server-made SVG, no QR library on the phone */}
-          <img src={`/api/public/orders/${order.id}/qr?${qs}`} alt={t("orderQrAlt")} width={200} height={200} className="h-50 w-50" />
+        <div className="flex shrink-0 items-center justify-between gap-3 border-t border-white/20 pt-3" data-testid="server-footer">
+          <div className="min-w-0">
+            <p className="text-sm text-white/70">{t("total")}</p>
+            <p className="text-3xl font-extrabold tabular-nums" data-testid="server-total">
+              {orderTotal(order, t)}
+            </p>
+            <p className="mt-1 text-xs text-white/60">{t("orderQrHint")}</p>
+          </div>
+          <div className="shrink-0 rounded-xl bg-white p-2">
+            {/* eslint-disable-next-line @next/next/no-img-element -- server-made SVG, no QR library on the phone */}
+            <img src={`/api/public/orders/${order.id}/qr?${qs}`} alt={t("orderQrAlt")} width={160} height={160} className="size-[min(36vw,22vh,10rem)]" data-testid="server-qr" />
+          </div>
         </div>
-        <p className="text-center text-sm text-white/70">{t("orderQrHint")}</p>
       </div>
     </div>
   );

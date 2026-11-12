@@ -17,6 +17,7 @@ export function publicOrder(o: OrderWithItems, deviceId: string, currentSessionI
     current: currentSessionId !== null && o.sessionId === currentSessionId,
     seat: o.seatType ? { type: o.seatType, label: o.seatLabel ?? "" } : null,
     customerName: mine ? o.customerName : null,
+    pickupTime: mine ? (o.pickupTime ?? null) : null,
     subtotal: o.subtotal,
     hasOnRequest: o.hasOnRequest,
     sentAt: o.sentAt.toISOString(),

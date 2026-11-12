@@ -9,7 +9,7 @@ import { itemMatches } from "@/lib/public-menu/search";
 import { makeT, type Messages } from "@/lib/public-menu/translate";
 import type { CartLine, PublicItem, PublicMenuData } from "@/lib/public-menu/types";
 import { cn } from "@/lib/utils";
-import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
+import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHiddenOrders, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
 import { deviceId, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
 import dynamic from "next/dynamic";
 import { rememberPlace } from "@/lib/public-menu/recent";
@@ -287,7 +287,26 @@ export function MenuApp({
     onSessionChange,
     onServed,
   });
-  const myOrders = live.orders;
+  // « À emporter » straight from the cart (no need to open the place picker first).
+  const [quickTakeaway, setQuickTakeaway] = useState<string | null>(null);
+  const cartOpen = panel?.type === "cart";
+  useEffect(() => {
+    if (!cartOpen || seat || quickTakeaway || !seating.enabled || !seating.pickerAvailable || seating.transport) return;
+    let gone = false;
+    fetch(`/api/public/r/${data.slug}/seats`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((b: { seats?: Array<{ id: string; type: string }> } | null) => {
+        const s = b?.seats?.find((x) => x.type === "takeaway");
+        if (!gone && s) setQuickTakeaway(s.id);
+      })
+      .catch(() => {});
+    return () => {
+      gone = true;
+    };
+  }, [cartOpen, seat, quickTakeaway, seating.enabled, seating.pickerAvailable, seating.transport, data.slug]);
+  const hiddenOrders = useHiddenOrders(data.slug);
+  // Finished orders the customer removed from this phone stay with the restaurant, not on the list.
+  const myOrders = useMemo(() => live.orders.filter((o) => !hiddenOrders.hidden.has(o.id)), [live.orders, hiddenOrders.hidden]);
   const activeOrders = myOrders.filter((o) => o.mine && ["sent", "confirmed", "preparing", "ready"].includes(o.status));
   useEffect(() => {
     // Only an order sent from this seat holds it (not one from an earlier visit today).
@@ -754,6 +773,27 @@ export function MenuApp({
                 <span className="tabular-nums">{totals.total === 0 && totals.hasOnRequest ? t("onRequest") : formatFCFA(totals.total)}</span>
               </p>
               {totals.hasOnRequest && <p className="text-sm text-muted-foreground">{t("plusOnRequest")}</p>}
+              {seating.enabled && !seat && quickTakeaway && (
+                <div className="mt-4" data-testid="order-mode">
+                  <p className="mb-2 font-semibold">{t("howToOrder")}</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button type="button" onClick={() => setPicker(true)} className="flex min-h-16 flex-col items-center justify-center rounded-xl border-2 border-border px-2 text-center" data-testid="mode-eat-in">
+                      <span className="font-bold">🍽️ {t("eatHere")}</span>
+                      <span className="text-xs text-muted-foreground">{t("eatHereHint")}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void choose(quickTakeaway)}
+                      className="flex min-h-16 flex-col items-center justify-center rounded-xl border-2 px-2 text-center"
+                      style={{ borderColor: "var(--accent)" }}
+                      data-testid="mode-takeaway"
+                    >
+                      <span className="font-bold">🛍️ {t("takeawayQuick")}</span>
+                      <span className="text-xs text-muted-foreground">{t("takeawayQuickHint")}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
               {seating.enabled ? (
                 <>
                   {seat && <OrderDetailsFields seat={seat} t={t} values={details} onChange={(v) => setDetails((d) => ({ ...d, ...v }))} />}
@@ -795,7 +835,7 @@ export function MenuApp({
       )}
       {panel?.type === "orders" && (
         <Sheet title={t("myOrders")} onClose={closePanel} t={t} testId="orders-sheet">
-          <OrdersList orders={myOrders} shared={live.shared} lang={lang} t={t} onShow={(o: CustomerOrder) => openPanel({ type: "server", orderId: o.id })} />
+          <OrdersList orders={myOrders} shared={live.shared} lang={lang} t={t} onShow={(o: CustomerOrder) => openPanel({ type: "server", orderId: o.id })} onHide={hiddenOrders.hide} />
         </Sheet>
       )}
       {panel?.type === "server" && myOrders.find((o) => o.id === panel.orderId) && (

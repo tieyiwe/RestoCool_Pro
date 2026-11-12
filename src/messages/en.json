@@ -1630,7 +1630,21 @@
     "takeawayDetailsHint": "For your takeaway order: your name and a number where the business can reach you.",
     "pickupTimeOptional": "Pickup time (optional)",
     "takeawayDetailsMissing": "For a takeaway order, enter your name and phone number.",
-    "takeawayByWhatsapp": "Or order takeaway by WhatsApp"
+    "takeawayByWhatsapp": "Or order takeaway by WhatsApp",
+    "orderSentAt": "Sent {when}",
+    "orderServedAt": "served {when}",
+    "takeawayReceived": "Takeaway order received by the restaurant.",
+    "deliveryReceived": "Delivery order received by the restaurant.",
+    "takeawayPickupAt": "Pick-up at {time}",
+    "takeawayNoNeedToShow": "No need to show it: it’s already in the kitchen. Follow it here.",
+    "seeMyTicket": "See my ticket",
+    "removeOrder": "Remove from my phone",
+    "removeFinished": "Remove the {n} finished orders",
+    "howToOrder": "How would you like to order?",
+    "eatHere": "Eat in",
+    "eatHereHint": "Choose my table or room",
+    "takeawayQuick": "Takeaway",
+    "takeawayQuickHint": "I’ll pick it up"
   },
   "seating": {
     "title": "Tables and rooms",

@@ -185,6 +185,17 @@ async function main() {
         .where(eq(restaurants.id, existing.id));
       console.log("✓ Shangri-La: table/room picker from the main QR, lacquer red accent.");
     }
+    // Takeaway on (customers order « À emporter » on the platform) while nobody owns it yet.
+    if (!anyOwner) {
+      const modes = fresh.settings.seatingModes ?? ["table", "room", "takeaway"];
+      if (!modes.includes("takeaway")) {
+        await db.update(restaurants).set({ settings: { ...fresh.settings, seatingModes: [...modes, "takeaway"] } }).where(eq(restaurants.id, existing.id));
+        console.log("✓ Shangri-La: takeaway switched on.");
+      }
+      const [ta] = await db.select({ id: seats.id, active: seats.active }).from(seats).where(and(eq(seats.restaurantId, existing.id), eq(seats.type, "takeaway"))).limit(1);
+      if (!ta) await db.insert(seats).values({ restaurantId: existing.id, type: "takeaway", label: "À emporter", qrToken: randomToken(), sort: 1 });
+      else if (!ta.active) await db.update(seats).set({ active: true }).where(eq(seats.id, ta.id));
+    }
     await repairPhotos(db, store, data, fresh, Boolean(anyOwner));
     if (ifMissing) {
       console.log("✓ Shangri-La already exists.");
