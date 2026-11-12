@@ -1,7 +1,9 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server";
 
-const PROTECTED = [/^\/app(\/|$)/, /^\/admin_pro(\/|$)/, /^\/api\/app(\/|$)/, /^\/api\/admin(\/|$)/];
+// The super admin console (/admin_pro) is not listed: a sign-in redirect would reveal it exists.
+// It answers 404 to anyone who is not super admin (checked on every page, action and API).
+const PROTECTED = [/^\/app(\/|$)/, /^\/api\/app(\/|$)/, /^\/api\/admin(\/|$)/];
 const isProtected = (req: NextRequest) => PROTECTED.some((re) => re.test(req.nextUrl.pathname));
 /**
  * A PIN session on an authorised device (cookie rc_staff) has no account: let it through the

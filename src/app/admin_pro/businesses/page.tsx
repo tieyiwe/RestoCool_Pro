@@ -2,7 +2,7 @@ import Link from "next/link";
 import { adminI18n } from "@/lib/admin/i18n";
 import { getDb } from "@/db";
 import { BusinessFilter, listBusinesses } from "@/lib/admin/businesses";
-import { requireSuperadmin } from "@/lib/auth/context";
+import { requireSuperadminPage } from "@/lib/auth/context";
 import { formatFCFA } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -17,7 +17,7 @@ const field = "min-h-11 w-full rounded-lg border border-border bg-surface px-3 t
 
 /** Every business on the platform: search (name, address, town, owner email, numéro RC), filters, export. */
 export default async function AdminBusinesses({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
-  await requireSuperadmin();
+  await requireSuperadminPage();
   const sp = await searchParams;
   const f = BusinessFilter.parse(Object.fromEntries(Object.entries(sp).filter(([, v]) => v)));
   const [t, tp, format, rows] = await Promise.all([adminI18n().then((x) => x.t), adminI18n().then((x) => x.tp), adminI18n().then((x) => x.format), listBusinesses(getDb(), f)]);

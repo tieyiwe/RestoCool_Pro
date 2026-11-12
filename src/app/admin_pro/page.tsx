@@ -4,7 +4,7 @@ import { Bars, Funnel } from "@/components/admin/charts";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getDb } from "@/db";
 import { platformOverview } from "@/lib/admin/metrics";
-import { requireSuperadmin } from "@/lib/auth/context";
+import { requireSuperadminPage } from "@/lib/auth/context";
 import { formatFCFA } from "@/lib/format";
 import { getPlatformSettings } from "@/lib/platform/settings";
 
@@ -22,7 +22,7 @@ function Kpi({ label, value, sub, testId, tone }: { label: string; value: string
 
 /** Platform overview for TIBLOGICS: growth, usage, money, health — and what needs attention. */
 export default async function AdminOverview() {
-  await requireSuperadmin();
+  await requireSuperadminPage();
   const [t, tp, format, o, platform] = await Promise.all([adminI18n().then((x) => x.t), adminI18n().then((x) => x.tp), adminI18n().then((x) => x.format), platformOverview(getDb()), getPlatformSettings()]);
   const F = (n: number) => formatFCFA(n) ?? "0 F";
   const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)} %` : "—");

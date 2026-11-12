@@ -6,14 +6,14 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { getDb } from "@/db";
 import { planEvents, restaurants } from "@/db/schema";
 import { platformOverview } from "@/lib/admin/metrics";
-import { requireSuperadmin } from "@/lib/auth/context";
+import { requireSuperadminPage } from "@/lib/auth/context";
 import { formatFCFA } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
 /** Plans and money: income per month, every payment and plan change, renewals coming up. */
 export default async function AdminBilling() {
-  await requireSuperadmin();
+  await requireSuperadminPage();
   const db = getDb();
   const [t, tp, format, o, events, months] = await Promise.all([
     adminI18n().then((x) => x.t),

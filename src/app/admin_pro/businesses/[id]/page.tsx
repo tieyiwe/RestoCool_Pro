@@ -7,7 +7,7 @@ import { ConfirmButton } from "@/components/ui/confirm-button";
 import { getDb } from "@/db";
 import { pickText } from "@/i18n/config";
 import { businessDetail } from "@/lib/admin/businesses";
-import { requireSuperadmin } from "@/lib/auth/context";
+import { requireSuperadminPage } from "@/lib/auth/context";
 import { formatBfPhone, formatFCFA, telHref, whatsappHref } from "@/lib/format";
 import { changePlanAction, featuredAction, noteAction, publishAction, recordPaymentAction, suspendAction } from "../../actions";
 
@@ -19,7 +19,7 @@ const OK = ["plan", "payment", "suspended", "reactivated", "published", "unpubli
 
 /** One business, for TIBLOGICS: contact, figures, plan & payments, controls, read-only view, notes, activity. */
 export default async function AdminBusiness({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ ok?: string; error?: string }> }) {
-  await requireSuperadmin();
+  await requireSuperadminPage();
   const id = z.uuid().safeParse((await params).id);
   if (!id.success) notFound();
   const d = await businessDetail(getDb(), id.data);

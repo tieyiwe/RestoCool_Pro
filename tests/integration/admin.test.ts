@@ -57,6 +57,10 @@ describe.skipIf(!hasDb)("super admin console (database)", () => {
     await changePlan(ctx(), id, { plan: "gratuit", status: "active", expiresOn: "" });
     r = await fresh(id);
     expect(r).toMatchObject({ plan: "gratuit", planStatus: "active", planExpiresAt: null });
+    // A free business that is suspended then reactivated is simply active again (never a « trial »).
+    await setSuspended(ctx(), id, true, "x");
+    await setSuspended(ctx(), id, false);
+    expect((await fresh(id)).planStatus).toBe("active");
     await addNote(ctx(), id, "Appelé le propriétaire : paiement vendredi.");
   });
 

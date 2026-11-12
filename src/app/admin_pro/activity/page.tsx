@@ -4,14 +4,14 @@ import Link from "next/link";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getDb } from "@/db";
 import { appErrors, auditLog, restaurants } from "@/db/schema";
-import { requireSuperadmin } from "@/lib/auth/context";
+import { requireSuperadminPage } from "@/lib/auth/context";
 import { resolveErrorAction } from "../actions";
 
 export const dynamic = "force-dynamic";
 
 /** Platform health: server errors (grouped, counted, resolvable) and the platform-wide activity log. */
 export default async function AdminActivity({ searchParams }: { searchParams: Promise<{ q?: string; ok?: string }> }) {
-  await requireSuperadmin();
+  await requireSuperadminPage();
   const sp = await searchParams;
   const db = getDb();
   const q = (sp.q ?? "").trim().slice(0, 60);

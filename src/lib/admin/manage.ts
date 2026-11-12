@@ -66,7 +66,16 @@ export async function recordPlanPayment(ctx: AdminCtx, id: string, input: z.inpu
 /** Suspend (menu stays visible, ordering stops; data is never deleted) or reactivate. */
 export async function setSuspended(ctx: AdminCtx, id: string, suspended: boolean, reason?: string) {
   const r = await load(ctx, id);
-  const to = suspended ? "suspended" : r.planExpiresAt && r.planExpiresAt < new Date() && r.plan !== "gratuit" ? "past_due" : r.planExpiresAt ? "active" : "trial";
+  // Back to what the plan says: the free plan is simply active; a paid plan past its end is late.
+  const to = suspended
+    ? "suspended"
+    : r.plan === "gratuit"
+      ? "active"
+      : r.planExpiresAt && r.planExpiresAt < new Date()
+        ? "past_due"
+        : r.planExpiresAt
+          ? "active"
+          : "trial";
   await ctx.db.transaction(async (tx) => {
     await tx
       .update(restaurants)

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { adminI18n } from "@/lib/admin/i18n";
 import type { Metadata } from "next";
 import { AuthProvider } from "@/components/auth-provider";
@@ -28,7 +29,9 @@ const NAV = [
  */
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const { t, locale } = await adminI18n();
+  // Anyone else gets the normal « page introuvable »: the console never says it exists.
   const sa = await getSuperadmin();
+  if (!sa) notFound();
   return (
     <AuthProvider>
       <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-border bg-nuit px-4 py-2 text-creme">
@@ -51,25 +54,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <UserMenu />
         </div>
       </header>
-      {sa ? (
-        <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col md:flex-row">
-          <nav aria-label={t("nav")} className="flex gap-1 overflow-x-auto border-b border-border bg-surface px-2 py-2 md:w-56 md:shrink-0 md:flex-col md:border-r md:border-b-0 md:py-4" data-testid="admin-nav">
-            {NAV.map((n) => (
-              <Link key={n.href} href={n.href} className="flex min-h-11 shrink-0 items-center gap-2 rounded-lg px-3 text-sm font-semibold whitespace-nowrap hover:bg-muted">
-                <span aria-hidden>{n.icon}</span>
-                {t(`navItems.${n.key}`)}
-              </Link>
-            ))}
-          </nav>
-          <main className="min-w-0 flex-1 px-4 py-6 md:px-8">{children}</main>
-        </div>
-      ) : (
-        <main className="mx-auto max-w-xl px-4 py-12">
-          <p role="alert" className="rounded-2xl border border-border bg-surface p-6 text-center text-muted-foreground" data-testid="admin-forbidden">
-            {t("forbidden")}
-          </p>
-        </main>
-      )}
+      <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col md:flex-row">
+        <nav aria-label={t("nav")} className="flex gap-1 overflow-x-auto border-b border-border bg-surface px-2 py-2 md:w-56 md:shrink-0 md:flex-col md:border-r md:border-b-0 md:py-4" data-testid="admin-nav">
+          {NAV.map((n) => (
+            <Link key={n.href} href={n.href} className="flex min-h-11 shrink-0 items-center gap-2 rounded-lg px-3 text-sm font-semibold whitespace-nowrap hover:bg-muted">
+              <span aria-hidden>{n.icon}</span>
+              {t(`navItems.${n.key}`)}
+            </Link>
+          ))}
+        </nav>
+        <main className="min-w-0 flex-1 px-4 py-6 md:px-8">{children}</main>
+      </div>
     </AuthProvider>
   );
 }

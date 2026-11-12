@@ -1,11 +1,12 @@
 import "server-only";
 import { cookies, headers } from "next/headers";
+import { notFound } from "next/navigation";
 import { sql } from "drizzle-orm";
 import { cache } from "react";
 import { getDb } from "@/db";
 import { findRestaurantBySlug, membershipsForUser, tenantRepo, type Membership, type TenantRepo } from "@/db/repos/tenant";
 import { env } from "@/lib/env";
-import { ForbiddenError, UnauthorizedError } from "@/lib/errors";
+import { ForbiddenError, NotFoundError, UnauthorizedError } from "@/lib/errors";
 import { sessionFromToken, STAFF_COOKIE } from "@/lib/devices";
 import { cleanAccess } from "./access";
 import { can, type Action, type Actor } from "./can";
@@ -141,10 +142,16 @@ export const getMemberContext = cache(async (): Promise<MemberContext | null> =>
   };
 });
 
+/** Dev bypass only (never production): « 1 » = the dev user is not super admin (tests of the refusal). */
+export const DEV_NOT_SUPERADMIN_COOKIE = "rc_dev_not_superadmin";
+
 /** Super admin = signed-in Clerk user with a verified email listed in SUPERADMIN_EMAILS. */
 export const getSuperadmin = cache(async (): Promise<SuperadminActor | null> => {
   if (!env.clerkConfigured()) {
-    return (await bypass()) ? { kind: "superadmin", userId: DEV_USER.userId, email: DEV_USER.email! } : null;
+    if (!(await bypass())) return null;
+    // Local development only: the cookie lets tests act as a signed-in person who is NOT super admin.
+    if ((await cookies()).get(DEV_NOT_SUPERADMIN_COOKIE)?.value === "1") return null;
+    return { kind: "superadmin", userId: DEV_USER.userId, email: DEV_USER.email! };
   }
   const { currentUser } = await import("@clerk/nextjs/server");
   const user = await currentUser();
@@ -165,9 +172,20 @@ export async function requireMember(action: Action): Promise<MemberContext> {
   return ctx;
 }
 
+/**
+ * The console answers « not found » to anyone who is not super admin (signed out, or signed in
+ * without an authorised verified email): it never confirms that it exists.
+ */
 export async function requireSuperadmin(): Promise<SuperadminActor> {
   const sa = await getSuperadmin();
-  if (!sa) throw new ForbiddenError();
+  if (!sa) throw new NotFoundError();
+  return sa;
+}
+
+/** Same, for console pages: renders the site's normal 404 page. */
+export async function requireSuperadminPage(): Promise<SuperadminActor> {
+  const sa = await getSuperadmin();
+  if (!sa) notFound();
   return sa;
 }
 

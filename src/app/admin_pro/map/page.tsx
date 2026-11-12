@@ -2,14 +2,14 @@ import Link from "next/link";
 import { adminI18n } from "@/lib/admin/i18n";
 import { PlatformMap, type MapPoint } from "@/components/admin/platform-map";
 import { getDb } from "@/db";
-import { requireSuperadmin } from "@/lib/auth/context";
+import { requireSuperadminPage } from "@/lib/auth/context";
 import { platformLocations } from "@/lib/platform/locations";
 
 export const dynamic = "force-dynamic";
 
 /** Where the businesses are: every business that saved its location (GPS or Google Maps link). */
 export default async function AdminMap() {
-  await requireSuperadmin();
+  await requireSuperadminPage();
   const [t, geo] = await Promise.all([adminI18n().then((x) => x.t), platformLocations(getDb())]);
   const points: MapPoint[] = geo.features.map((f) => ({
     id: f.properties.id,
