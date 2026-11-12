@@ -150,17 +150,17 @@ export const DEV_NOT_SUPERADMIN_COOKIE = "rc_dev_not_superadmin";
 /** Dev bypass only: act as this collaborator email (tests of permissions). */
 export const DEV_ADMIN_AS_COOKIE = "rc_dev_admin_as";
 
-export type AdminActor = SuperadminActor & AdminAccess & { name: string | null };
+export type AdminActor = SuperadminActor & AdminAccess & { name: string | null; role?: string };
 
 /** A collaborator's row, if this verified email is an active collaborator. Last seen kept fresh (5 min). */
-async function collaboratorAccess(email: string): Promise<(AdminAccess & { name: string | null }) | null> {
+async function collaboratorAccess(email: string): Promise<(AdminAccess & { name: string | null; role: string }) | null> {
   const db = getDb();
   const [c] = await db.select().from(adminCollaborators).where(and(eq(adminCollaborators.email, email), eq(adminCollaborators.active, true))).limit(1);
   if (!c) return null;
   if (!c.lastSeenAt || Date.now() - c.lastSeenAt.getTime() > 5 * 60_000) {
     void db.update(adminCollaborators).set({ lastSeenAt: new Date() }).where(eq(adminCollaborators.id, c.id)).catch(() => {});
   }
-  return { owner: false, perms: new Set(normalizePerms(c.perms)), name: c.name };
+  return { owner: false, perms: new Set(normalizePerms(c.perms)), name: c.name, role: c.role };
 }
 
 async function accessFor(userId: string, emails: string[], name: string | null): Promise<AdminActor | null> {

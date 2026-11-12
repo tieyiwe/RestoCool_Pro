@@ -50,6 +50,56 @@
   --ring: var(--rc-or);
 }
 
+/* Super admin console (TIBLOGICS): its own « Indigo » look, so it never feels like a business app.
+   Deep indigo sidebar, cool canvas, indigo actions, amber highlights. */
+[data-console] {
+  --background: #f4f5fb;
+  --surface: #ffffff;
+  --foreground: #14152b;
+  --muted: #eceef8;
+  --muted-foreground: #4b4f6b;
+  --border: #e1e3f0;
+  --primary: #4338ca;
+  --primary-foreground: #ffffff;
+  --ring: #6366f1;
+  --console-side: #15123a;
+  --console-side-2: #241f5c;
+  --console-side-fg: #e7e8ff;
+  --console-amber: #f5b83d;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) [data-console] {
+    --background: #0e0f1f;
+    --surface: #171932;
+    --foreground: #eef0ff;
+    --muted: #22254a;
+    --muted-foreground: #b9bde0;
+    --border: #2b2e57;
+    --primary: #a5b4fc;
+    --primary-foreground: #14152b;
+    --ring: #a5b4fc;
+    --console-side: #0a0918;
+    --console-side-2: #17143d;
+  }
+}
+:root[data-theme="dark"] [data-console] {
+  --background: #0e0f1f;
+  --surface: #171932;
+  --foreground: #eef0ff;
+  --muted: #22254a;
+  --muted-foreground: #b9bde0;
+  --border: #2b2e57;
+  --primary: #a5b4fc;
+  --primary-foreground: #14152b;
+  --ring: #a5b4fc;
+  --console-side: #0a0918;
+  --console-side-2: #17143d;
+}
+[data-console] .rc-card,
+[data-console] [class*="rounded-2xl"][class*="border-border"] {
+  box-shadow: 0 1px 2px rgb(20 21 43 / 0.04), 0 6px 20px -8px rgb(67 56 202 / 0.12);
+}
+
 /* Public menu themes, chosen per restaurant. Accent comes from restaurant.accent_color. */
 [data-menu-theme="light"] {
   --background: #ffffff;

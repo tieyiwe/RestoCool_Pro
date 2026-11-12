@@ -1179,6 +1179,17 @@
       "cities": "Villes, séparées par des virgules",
       "offersTitle": "Offres des établissements",
       "offersHint": "Offres créées par les propriétaires en formule Business sur leur page. Mettez-en une en pause si elle ne respecte pas les règles."
+    },
+    "navGroups": {
+      "pilot": "Pilotage",
+      "businesses": "Établissements",
+      "relation": "Clients et croissance",
+      "platform": "Plateforme"
+    },
+    "console": {
+      "badge": "Console",
+      "owner": "Propriétaire · tous les droits",
+      "search": "Trouver un établissement : nom, ville, RC-…"
     }
   },
   "demo": {

@@ -1179,6 +1179,17 @@
       "cities": "Towns, separated by commas",
       "offersTitle": "Businesses’ own offers",
       "offersHint": "Offers created by Business-plan owners on their pages. Pause one if it breaks the rules."
+    },
+    "navGroups": {
+      "pilot": "Overview",
+      "businesses": "Businesses",
+      "relation": "Customers & growth",
+      "platform": "Platform"
+    },
+    "console": {
+      "badge": "Console",
+      "owner": "Owner · all rights",
+      "search": "Find a business: name, town, RC-…"
     }
   },
   "demo": {
