@@ -87,8 +87,8 @@ test.describe("tenant isolation", () => {
 });
 
 test("admin lists restaurants", async ({ page }) => {
-  await page.goto("/admin");
-  await expect(page.getByRole("heading", { name: "Restaurants" })).toBeVisible();
+  await page.goto("/admin/businesses");
+  await expect(page.getByRole("heading", { name: "Businesses" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Restaurant Démo" })).toBeVisible();
 });
 
