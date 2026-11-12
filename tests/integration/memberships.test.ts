@@ -4,7 +4,8 @@ import { closeDb, getDb } from "@/db";
 import { membershipsForUser, tenantRepo } from "@/db/repos/tenant";
 import { auditLog, members, planEvents, restaurants } from "@/db/schema";
 import { isUniqueViolation } from "@/lib/errors";
-import { createRestaurantForUser } from "@/lib/restaurants/provision";
+import { NameTakenError, createRestaurantForUser } from "@/lib/restaurants/provision";
+import { checkBusinessName } from "@/lib/restaurants/name-check";
 
 vi.mock("server-only", () => ({}));
 
@@ -36,20 +37,31 @@ describe.skipIf(!hasDb)("app-managed tenants (database)", () => {
     expect(logs.map((l) => l.action)).toContain("restaurant.created");
   });
 
-  it("gives a unique slug to a second restaurant with the same name", async () => {
-    const r2 = await createRestaurantForUser(getDb(), { clerkUserId: USER }, { name: "Maquis Le Baobab", city: "Ouagadougou" });
+  it("refuses a second business with the same name and suggests 1 to 3 free names close to it", async () => {
+    const err = await createRestaurantForUser(getDb(), { clerkUserId: USER }, { name: "Maquis Le Baobab", city: "Ouagadougou" }).catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(NameTakenError);
+    const suggestions = (err as NameTakenError).suggestions;
+    expect(suggestions.length).toBeGreaterThanOrEqual(1);
+    expect(suggestions.length).toBeLessThanOrEqual(3);
+    for (const s of suggestions) expect(s.name).toContain("Baobab");
+    // Same name in other letters (case, accents) is the same name.
+    expect((await checkBusinessName(getDb(), "MAQUIS LE BAOBAB")).available).toBe(false);
+    // A suggestion is free: it can be created.
+    const r2 = await createRestaurantForUser(getDb(), { clerkUserId: USER }, { name: suggestions[0]!.name, city: "Ouagadougou" });
     created.push(r2.id);
     const [first] = await getDb().select().from(restaurants).where(eq(restaurants.id, created[0]!));
     expect(r2.slug).not.toBe(first!.slug);
   });
 
-  it("two restaurants created at the same time with the same name both get a slug", async () => {
+  it("two people creating the same name at the same time: one gets it, the others are asked to choose", async () => {
     const name = `Maquis Simultané ${Date.now()}`;
-    const rs = await Promise.all(
+    const rs = await Promise.allSettled(
       Array.from({ length: 3 }, (_, i) => createRestaurantForUser(getDb(), { clerkUserId: `${USER}-race-${i}` }, { name, city: "Ouagadougou" })),
     );
-    created.push(...rs.map((r) => r.id));
-    expect(new Set(rs.map((r) => r.slug)).size).toBe(3);
+    const ok = rs.filter((r) => r.status === "fulfilled");
+    expect(ok).toHaveLength(1);
+    created.push(...ok.map((r) => (r as PromiseFulfilledResult<{ id: string }>).value.id));
+    for (const r of rs) if (r.status === "rejected") expect(r.reason).toBeInstanceOf(NameTakenError);
   });
 
   it("isUniqueViolation recognises the slug unique index error", async () => {

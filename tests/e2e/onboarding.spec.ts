@@ -15,7 +15,21 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await page.getByLabel("Nom de l'établissement").fill("x");
   await page.getByRole("button", { name: "Créer mon établissement" }).click();
   await expect(page.getByRole("alert").filter({ hasText: "au moins 2 caractères" })).toBeVisible();
+  // A name another business already uses is refused, with close names that are free.
+  await page.getByLabel("Nom de l'établissement").fill("restaurant démo");
+  await expect(page.getByTestId("name-status")).toHaveAttribute("data-state", "taken");
+  await expect(page.getByTestId("name-status")).toContainText("déjà utilisé");
+  const suggestion = page.getByTestId("name-suggestion");
+  expect(await suggestion.count()).toBeGreaterThanOrEqual(1);
+  expect(await suggestion.count()).toBeLessThanOrEqual(3);
+  await expect(page.getByRole("button", { name: /Créer mon établissement/ })).toBeDisabled();
+  const proposed = (await suggestion.first().textContent())!;
+  expect(proposed).toMatch(/Démo/i);
+  await suggestion.first().click();
+  await expect(page.getByLabel("Nom de l'établissement")).toHaveValue(proposed);
+  await expect(page.getByTestId("name-status")).toContainText("✓ Nom disponible");
   await page.getByLabel("Nom de l'établissement").fill(name);
+  await expect(page.getByTestId("name-status")).toContainText("✓ Nom disponible");
   await expect(page.getByTestId("slug-preview")).toContainText("restocool.com/r/maquis-e2e-");
   // City: Burkina's towns in a list, or « Autre ville… » to type one that isn't there.
   await expect(page.getByTestId("city-select")).toHaveValue("Ouagadougou");
@@ -54,6 +68,13 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await expect(mainQr.locator("svg")).toBeVisible();
   await expect(mainQr).toContainText("Placez-le partout");
   await expect(page.getByTestId("main-qr-url")).toHaveText(/\/r\/maquis-e2e-/);
+  // The visual « Personnalisez votre page » guide: what is set and what to do next.
+  const guide = page.getByTestId("customize-guide");
+  await expect(guide).toContainText("Personnalisez votre page");
+  await expect(guide.getByTestId("customize-contacts")).toHaveAttribute("data-done", "true"); // WhatsApp typed in step 2
+  await expect(guide.getByTestId("customize-logo")).toHaveAttribute("data-done", "false");
+  await expect(guide.getByTestId("customize-logo")).toHaveAttribute("href", "/app/settings#appearance");
+  await expect(guide.getByTestId("customize-name")).toHaveAttribute("href", "/app/settings#profile");
   const mainCode = (await page.getByTestId("main-qr-code").textContent())!.trim();
   expect(mainCode).toMatch(/^RC-[A-Z2-9]{5}$/);
   await page.getByTestId("done-dishes").click();
@@ -120,6 +141,8 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
     .toMatchObject({ to: "dev@localhost", status: "skipped" }); // no SMTP password in tests: written to .data/outbox
   await page.goto("/app");
   await expect(page.getByTestId("free-launch")).toContainText("Offert pendant le lancement");
+  // The guide stays on the dashboard until the page is fully personalised.
+  await expect(page.getByTestId("customize-guide")).toBeVisible();
   // Even past the 30 days, nothing locks while the launch offer is on.
   await sql("update restaurants set plan_expires_at = now() - interval '1 day' where id = $1", [biz!.id]);
   await page.reload();

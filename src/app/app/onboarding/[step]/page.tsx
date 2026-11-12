@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CustomizeGuide } from "@/components/onboarding/customize-guide";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { MainQrCard } from "@/components/qr/main-qr-card";
@@ -65,6 +66,7 @@ export default async function OnboardingStep({ params }: { params: Promise<{ ste
               </Link>
             ))}
           </div>
+          <CustomizeGuide r={r} />
           <MainQrCard restaurantId={r.id} slug={r.slug} published={r.published} />
         </div>
       </SetupShell>

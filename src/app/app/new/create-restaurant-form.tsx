@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { slugify } from "@/lib/slug";
 import { CityField } from "@/components/forms/city-field";
@@ -13,7 +13,30 @@ export function CreateRestaurantForm() {
   const [state, action, pending] = useActionState<CreateRestaurantState, FormData>(createRestaurantAction, undefined);
   const [name, setName] = useState("");
   const [kind, setKind] = useState<"restaurant" | "transport">("restaurant");
-  const error = state?.error === "name" ? t("errorName") : state?.error === "limit" ? t("errorLimit") : state?.error ? tc("error") : null;
+  const [city, setCity] = useState("Ouagadougou");
+  // Live « Nom disponible ? »: checked shortly after typing stops; a taken name gets 1–3 suggestions.
+  const [check, setCheck] = useState<{ for: string; available: boolean; suggestions: Array<{ name: string; slug: string }> } | null>(null);
+  const [checking, setChecking] = useState(false);
+  const seq = useRef(0);
+  useEffect(() => {
+    const n = name.trim();
+    if (n.length < 2) return setCheck(null);
+    const id = ++seq.current;
+    setChecking(true);
+    const timer = window.setTimeout(async () => {
+      const res = await fetch(`/api/app/name-check?${new URLSearchParams({ name: n, city, kind })}`, { cache: "no-store" }).catch(() => null);
+      if (id !== seq.current) return;
+      setChecking(false);
+      if (res?.ok) setCheck({ for: n, ...((await res.json()) as { available: boolean; suggestions: Array<{ name: string; slug: string }> }) });
+    }, 350);
+    return () => window.clearTimeout(timer);
+  }, [name, city, kind]);
+  // The server's answer wins when it refused the name (someone took it in the meantime).
+  const taken = (check && check.for === name.trim() && !check.available) || (state?.error === "taken" && state.name === name.trim());
+  const suggestions = check && check.for === name.trim() && !check.available ? check.suggestions : state?.error === "taken" ? (state.suggestions ?? []) : [];
+  const free = check && check.for === name.trim() && check.available && !taken;
+  const error =
+    state?.error === "name" ? t("errorName") : state?.error === "limit" ? t("errorLimit") : state?.error === "taken" ? null : state?.error ? tc("error") : null;
   const slug = name.trim().length >= 2 ? slugify(name) : null;
   const input = "min-h-12 w-full rounded-xl border border-border bg-background px-4 text-base outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15";
 
@@ -52,14 +75,41 @@ export function CreateRestaurantForm() {
           onChange={(e) => setName(e.target.value)}
           placeholder={kind === "transport" ? t("namePlaceholderTransport") : t("namePlaceholder")}
           aria-invalid={state?.error === "name" || undefined}
-          aria-describedby="name-hint"
+          aria-describedby="name-hint name-status"
           className={input + " text-lg font-semibold"}
         />
         <span id="name-hint" className="text-xs text-muted-foreground">
           {t("nameHint")}
         </span>
+        <span id="name-status" role="status" aria-live="polite" data-testid="name-status" data-state={taken ? "taken" : free ? "free" : checking ? "checking" : "idle"}>
+          {taken ? (
+            <span className="text-sm font-bold text-red-700">✗ {t("nameTaken")}</span>
+          ) : free ? (
+            <span className="text-sm font-bold text-emerald-700">✓ {t("nameAvailable")}</span>
+          ) : checking && name.trim().length >= 2 ? (
+            <span className="text-sm text-muted-foreground">{t("nameChecking")}</span>
+          ) : null}
+        </span>
       </label>
-      <CityField label={t("city")} className={input} />
+      {taken && (
+        <div className="-mt-2 flex flex-col gap-2" data-testid="name-suggestions">
+          <p className="text-sm">{suggestions.length ? t("nameSuggest") : t("nameNoSuggest")}</p>
+          <div className="flex flex-wrap gap-2">
+            {suggestions.map((s) => (
+              <button
+                key={s.slug}
+                type="button"
+                onClick={() => setName(s.name)}
+                className="min-h-11 rounded-full border-2 border-primary/40 bg-primary/5 px-4 text-sm font-semibold hover:border-primary"
+                data-testid="name-suggestion"
+              >
+                {s.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      <CityField label={t("city")} className={input} onChange={setCity} />
 
       {/* Live preview of the menu address and the QR it will be printed on. */}
       <div className="flex items-center gap-3 rounded-2xl border border-dashed border-primary/40 bg-primary/5 p-4" data-testid="slug-preview" aria-live="polite">
@@ -79,7 +129,7 @@ export function CreateRestaurantForm() {
           {error}
         </p>
       )}
-      <Button type="submit" size="lg" disabled={pending} className="min-h-14 rounded-xl text-lg">
+      <Button type="submit" size="lg" disabled={pending || Boolean(taken)} className="min-h-14 rounded-xl text-lg">
         {pending ? t("submitting") : `${t("submit")} →`}
       </Button>
       <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-sm text-muted-foreground">

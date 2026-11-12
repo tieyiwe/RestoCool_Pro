@@ -1,6 +1,5 @@
 import { ensureMainCode } from "@/lib/access-codes";
 import { ensureJobRoles } from "@/lib/personnel/role-catalog";
-import { like } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
 import { members, planEvents, restaurants } from "@/db/schema";
@@ -8,7 +7,8 @@ import { TRIAL_DAYS, TRIAL_PLAN } from "@/config/plans";
 import { writeAudit } from "@/lib/audit";
 import { isUniqueViolation } from "@/lib/errors";
 import type { Actor } from "@/lib/auth/can";
-import { RESERVED_SLUGS, slugify } from "@/lib/slug";
+import { slugify } from "@/lib/slug";
+import { checkBusinessName } from "./name-check";
 
 /** Maximum restaurants one person can create themselves (branches come with the Business plan, M7). */
 export const MAX_OWNED_RESTAURANTS = 3;
@@ -21,15 +21,10 @@ export const CreateRestaurantInput = z.object({
 });
 export type CreateRestaurantInput = z.infer<typeof CreateRestaurantInput>;
 
-async function uniqueSlug(db: Pick<DB, "select">, name: string): Promise<string> {
-  const base = slugify(name);
-  const taken = new Set(
-    (await db.select({ slug: restaurants.slug }).from(restaurants).where(like(restaurants.slug, `${base}%`))).map((r) => r.slug),
-  );
-  if (!taken.has(base) && !RESERVED_SLUGS.has(base)) return base;
-  for (let i = 2; ; i++) {
-    const candidate = `${base}-${i}`;
-    if (!taken.has(candidate)) return candidate;
+/** A business name already used (same web address or same name): the owner picks another one. */
+export class NameTakenError extends Error {
+  constructor(public suggestions: Array<{ name: string; slug: string }>) {
+    super("name_taken");
   }
 }
 
@@ -43,24 +38,27 @@ export async function createRestaurantForUser(
   input: z.input<typeof CreateRestaurantInput>,
 ) {
   const data = CreateRestaurantInput.parse(input);
-  // Two sign-ups with the same name can pick the same free slug at once: retry on the unique index.
-  for (let attempt = 1; ; attempt++) {
-    try {
-      const restaurant = await insertRestaurant(db, user, data);
-      // The main QR (menu link) exists from the start; give it its typed code right away.
-      await ensureMainCode(db, restaurant.id);
-      // Ready-made job roles (server, cook, cleaner…) that the owner can edit.
-      await ensureJobRoles(db, restaurant.id);
-      return restaurant;
-    } catch (err) {
-      if (attempt >= 5 || !isUniqueViolation(err)) throw err;
-    }
+  // Each business has its own name and web address: a name already used is refused, with
+  // suggestions close to it (the form checks it live before this).
+  const check = await checkBusinessName(db, data.name, { city: data.city, kind: data.kind });
+  if (!check.available) throw new NameTakenError(check.suggestions);
+  try {
+    const restaurant = await insertRestaurant(db, user, data);
+    // The main QR (menu link) exists from the start; give it its typed code right away.
+    await ensureMainCode(db, restaurant.id);
+    // Ready-made job roles (server, cook, cleaner…) that the owner can edit.
+    await ensureJobRoles(db, restaurant.id);
+    return restaurant;
+  } catch (err) {
+    // Two people creating the same name at the same second: the unique address decides.
+    if (isUniqueViolation(err)) throw new NameTakenError((await checkBusinessName(db, data.name, { city: data.city, kind: data.kind })).suggestions);
+    throw err;
   }
 }
 
 async function insertRestaurant(db: DB, user: { clerkUserId: string; email?: string | null; name?: string | null }, data: CreateRestaurantInput) {
   return db.transaction(async (tx) => {
-    const slug = await uniqueSlug(tx, data.name);
+    const slug = slugify(data.name);
     const expires = new Date(Date.now() + TRIAL_DAYS * 86_400_000);
     const [restaurant] = await tx
       .insert(restaurants)

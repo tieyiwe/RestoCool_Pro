@@ -11,6 +11,7 @@ import { redirectWithoutMember } from "@/lib/auth/page";
 import { can } from "@/lib/auth/can";
 import { effectiveStatus } from "@/lib/plan";
 import { MainQrCard } from "@/components/qr/main-qr-card";
+import { CustomizeGuide, customizeSteps } from "@/components/onboarding/customize-guide";
 import { OrderAnalyticsPanel } from "@/components/analytics/order-analytics";
 import { LearnCard } from "@/components/guide/learn-card";
 import { getDb } from "@/db";
@@ -146,6 +147,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         r.planExpiresAt && <p className="text-sm text-muted-foreground">{t("plan.trialEnds", { date: format.dateTime(r.planExpiresAt, { dateStyle: "long" }) })}</p>
       )}
 
+      {/* Until the page is fully personalised: the visual guide (logo, photo, slogan, colours…). */}
+      {can(ctx.actor, "settings.write", { restaurantId: r.id }) && customizeSteps(r).some((s) => !s.done) && <CustomizeGuide r={r} />}
       {showSteps && (
         <Card data-testid="next-steps">
           <CardTitle className="mb-3">{t("nextSteps.title")}</CardTitle>

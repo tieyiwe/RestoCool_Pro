@@ -360,7 +360,12 @@
           "title": "Transport: VIP buses with food on board",
           "text": "Buses with a seat map, itineraries and hostesses. Travelers order from their seat."
         }
-      }
+      },
+      "nameAvailable": "Name available",
+      "nameTaken": "This name is already used by another business.",
+      "nameChecking": "Checking the name…",
+      "nameSuggest": "Each business has its own name and web address. Pick a close one, for example:",
+      "nameNoSuggest": "Each business has its own name and web address: add your district or town."
     },
     "switchRestaurant": "Switch business",
     "comingSoon": "This section is coming soon.",
@@ -389,7 +394,43 @@
       "trips": "Trips"
     },
     "buses": "Buses & itineraries",
-    "trips": "Trips"
+    "trips": "Trips",
+    "customize": {
+      "title": "Customise your page",
+      "intro": "This is your page as customers see it. Each number is a setting: tap a step to do it.",
+      "progress": "{done} of {total} done",
+      "sloganPlaceholder": "Your slogan here",
+      "mockCategory": "Our dishes",
+      "mockNew": "New",
+      "mockCaption": "Preview of your page",
+      "done": "done",
+      "todo": "to do",
+      "change": "Edit",
+      "doIt": "Do it",
+      "preview": "See my page as a customer",
+      "steps": {
+        "logo": {
+          "title": "Your logo",
+          "text": "Shown at the top of your page, on your QR codes and stickers."
+        },
+        "cover": {
+          "title": "A photo of your business",
+          "text": "The front or the inside: customers recognise you before they walk in."
+        },
+        "name": {
+          "title": "Your name and slogan",
+          "text": "A line that makes people want to come, e.g. “Grills and homemade juices since 2010”."
+        },
+        "colors": {
+          "title": "Your colours",
+          "text": "Pick a palette (main colour + accent colour) or your own colours."
+        },
+        "contacts": {
+          "title": "Your contacts",
+          "text": "WhatsApp, phone, Orange Money: customers reach you in one tap."
+        }
+      }
+    }
   },
   "admin": {
     "title": "RestoCool administration",
@@ -593,7 +634,7 @@
       "name": "Business name",
       "slug": "Menu address",
       "slugHint": "Your menu will be at: {url}",
-      "description": "Short presentation (optional)",
+      "description": "Slogan or short introduction (shown under your name)",
       "descriptionPlaceholder": "e.g. Grills and local dishes, shaded terrace.",
       "city": "City",
       "address": "Address",

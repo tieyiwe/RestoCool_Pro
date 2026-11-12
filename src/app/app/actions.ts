@@ -11,11 +11,11 @@ import { ACTIVE_RESTAURANT_COOKIE, getIdentityProfile, getMemberships, getVerifi
 import { sendWelcomeEmail } from "@/lib/email/welcome";
 import { publicBaseUrl } from "@/lib/urls";
 import { log } from "@/lib/log";
-import { CreateRestaurantInput, MAX_OWNED_RESTAURANTS, createRestaurantForUser } from "@/lib/restaurants/provision";
+import { CreateRestaurantInput, MAX_OWNED_RESTAURANTS, NameTakenError, createRestaurantForUser } from "@/lib/restaurants/provision";
 
 const COOKIE_OPTS = { path: "/", httpOnly: true, sameSite: "lax" as const, secure: process.env.NODE_ENV === "production", maxAge: 60 * 60 * 24 * 365 };
 
-export type CreateRestaurantState = { error?: "name" | "limit" | "unknown" } | undefined;
+export type CreateRestaurantState = { error?: "name" | "limit" | "taken" | "unknown"; suggestions?: Array<{ name: string; slug: string }>; name?: string } | undefined;
 
 export async function createRestaurantAction(_prev: CreateRestaurantState, formData: FormData): Promise<CreateRestaurantState> {
   const user = await getIdentityProfile();
@@ -35,6 +35,7 @@ export async function createRestaurantAction(_prev: CreateRestaurantState, formD
   try {
     restaurantId = (await createRestaurantForUser(db, { clerkUserId: user.userId, email: user.email, name: user.name }, parsed.data)).id;
   } catch (err) {
+    if (err instanceof NameTakenError) return { error: "taken", suggestions: err.suggestions, name: parsed.data.name };
     log.error("create_restaurant_failed", { err });
     return { error: "unknown" };
   }

@@ -360,7 +360,12 @@
           "title": "客运：车上供餐的 VIP 巴士",
           "text": "巴士座位图、线路和乘务员。旅客在座位上点餐。"
         }
-      }
+      },
+      "nameAvailable": "名称可用",
+      "nameTaken": "该名称已被其他店铺使用。",
+      "nameChecking": "正在检查名称…",
+      "nameSuggest": "每家店铺都有自己的名称和网址。可以选择一个相近的名称，例如：",
+      "nameNoSuggest": "每家店铺都有自己的名称和网址：请加上您的街区或城市。"
     },
     "switchRestaurant": "切换店铺",
     "comingSoon": "此功能即将推出。",
@@ -389,7 +394,43 @@
       "trips": "行程"
     },
     "buses": "巴士与线路",
-    "trips": "行程"
+    "trips": "行程",
+    "customize": {
+      "title": "个性化您的页面",
+      "intro": "这是顾客看到的您的页面。每个数字对应一项设置：点击步骤即可完成。",
+      "progress": "已完成 {done}/{total}",
+      "sloganPlaceholder": "在这里写您的标语",
+      "mockCategory": "我们的菜品",
+      "mockNew": "新品",
+      "mockCaption": "页面预览",
+      "done": "已完成",
+      "todo": "待完成",
+      "change": "修改",
+      "doIt": "去设置",
+      "preview": "以顾客身份查看我的页面",
+      "steps": {
+        "logo": {
+          "title": "您的标志",
+          "text": "显示在页面顶部、二维码和贴纸上。"
+        },
+        "cover": {
+          "title": "店铺照片",
+          "text": "门面或店内：顾客进门前就能认出您。"
+        },
+        "name": {
+          "title": "名称和标语",
+          "text": "一句吸引人的话，例如“自 2010 年起的烧烤和自制果汁”。"
+        },
+        "colors": {
+          "title": "您的颜色",
+          "text": "选择一个配色方案（主色 + 点缀色），或使用您自己的颜色。"
+        },
+        "contacts": {
+          "title": "联系方式",
+          "text": "WhatsApp、电话、Orange Money：顾客一键联系您。"
+        }
+      }
+    }
   },
   "admin": {
     "title": "RestoCool 管理后台",
@@ -593,7 +634,7 @@
       "name": "店铺名称",
       "slug": "菜单地址",
       "slugHint": "您的菜单地址为：{url}",
-      "description": "简短介绍（可选）",
+      "description": "标语或简短介绍（显示在名称下方）",
       "descriptionPlaceholder": "例如：烧烤和本地菜，带遮阳露台。",
       "city": "城市",
       "address": "地址",

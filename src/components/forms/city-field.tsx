@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BF_CITIES, BF_CITIES_OTHER, BF_CITIES_TOP } from "@/config/cities";
 
 const OTHER = "__other__";
@@ -18,6 +18,7 @@ export function CityField({
   required = false,
   name = "city",
   id = "city-select",
+  onChange,
 }: {
   defaultValue?: string;
   className: string;
@@ -26,12 +27,15 @@ export function CityField({
   /** Form field name (« city », or « origin » / « destination » for an itinerary). */
   name?: string;
   id?: string;
+  /** Called with the town each time it changes. */
+  onChange?: (city: string) => void;
 }) {
   const t = useTranslations("common.city");
   const known = BF_CITIES.find((c) => same(c, defaultValue));
   const [choice, setChoice] = useState(known ?? (defaultValue ? OTHER : BF_CITIES_TOP[0]));
   const [typed, setTyped] = useState(known ? "" : defaultValue);
   const value = choice === OTHER ? typed : choice;
+  useEffect(() => onChange?.(value), [value]); // eslint-disable-line react-hooks/exhaustive-deps -- report value changes only
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-sm font-bold">

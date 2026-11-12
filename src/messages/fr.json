@@ -360,7 +360,12 @@
           "title": "Transport : bus VIP avec repas à bord",
           "text": "Bus avec plan des sièges, itinéraires et hôtesses. Les voyageurs commandent depuis leur siège."
         }
-      }
+      },
+      "nameAvailable": "Nom disponible",
+      "nameTaken": "Ce nom est déjà utilisé par un autre établissement.",
+      "nameChecking": "Vérification du nom…",
+      "nameSuggest": "Chaque établissement a son propre nom et sa propre adresse. Choisissez-en un proche, par exemple :",
+      "nameNoSuggest": "Chaque établissement a son propre nom et sa propre adresse : ajoutez votre quartier ou votre ville."
     },
     "switchRestaurant": "Changer d'établissement",
     "comingSoon": "Cette section arrive bientôt.",
@@ -389,7 +394,43 @@
       "trips": "Voyages"
     },
     "buses": "Bus et itinéraires",
-    "trips": "Voyages"
+    "trips": "Voyages",
+    "customize": {
+      "title": "Personnalisez votre page",
+      "intro": "Voici votre page telle que vos clients la voient. Chaque numéro correspond à un réglage : touchez une étape pour la faire.",
+      "progress": "{done} sur {total} fait",
+      "sloganPlaceholder": "Votre slogan ici",
+      "mockCategory": "Nos plats",
+      "mockNew": "Nouveau",
+      "mockCaption": "Aperçu de votre page",
+      "done": "fait",
+      "todo": "à faire",
+      "change": "Modifier",
+      "doIt": "Faire",
+      "preview": "Voir ma page comme un client",
+      "steps": {
+        "logo": {
+          "title": "Votre logo",
+          "text": "Il apparaît en haut de votre page, sur vos QR codes et vos autocollants."
+        },
+        "cover": {
+          "title": "Une photo de votre établissement",
+          "text": "La façade ou l’intérieur : vos clients vous reconnaissent avant d’entrer."
+        },
+        "name": {
+          "title": "Votre nom et votre slogan",
+          "text": "Une phrase qui donne envie, par exemple « Grillades et jus maison depuis 2010 »."
+        },
+        "colors": {
+          "title": "Vos couleurs",
+          "text": "Choisissez une palette (couleur principale + couleur d’accent) ou vos propres couleurs."
+        },
+        "contacts": {
+          "title": "Vos contacts",
+          "text": "WhatsApp, téléphone, Orange Money : vos clients vous joignent en un geste."
+        }
+      }
+    }
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -593,7 +634,7 @@
       "name": "Nom de l'établissement",
       "slug": "Adresse du menu",
       "slugHint": "Votre menu sera à l’adresse : {url}",
-      "description": "Présentation courte (facultative)",
+      "description": "Slogan ou présentation courte (affiché sous votre nom)",
       "descriptionPlaceholder": "Ex. : Grillades et plats locaux, terrasse ombragée.",
       "city": "Ville",
       "address": "Adresse",
