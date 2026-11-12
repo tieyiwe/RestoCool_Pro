@@ -38,6 +38,7 @@ async function pickSeat(p: Page, seat: string) {
 }
 
 test("on the bus: the hostess starts the trip, travelers pick their seat on the map and order, she confirms her round", async ({ browser }, info) => {
+  test.setTimeout(90_000); // three devices (hostess + two travelers) in one test
   const tag = info.project.name.replace(/\W/g, "");
   await sql("update trips set status = 'closed', closed_at = now() where status = 'open' and restaurant_id = (select id from restaurants where slug = $1)", [SLUG]);
 
