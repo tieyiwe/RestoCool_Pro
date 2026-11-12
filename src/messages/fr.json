@@ -453,7 +453,8 @@
       "placeholder": "Tapez une section : menu, cuisine, personnel…",
       "empty": "Aucune section trouvée.",
       "hint": "↑ ↓ pour choisir · Entrée pour ouvrir · Échap pour fermer"
-    }
+    },
+    "promotions": "Promotions"
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -480,7 +481,8 @@
       "support": "Demandes",
       "messages": "Messages",
       "team": "Équipe",
-      "recovery": "Récupération d’accès"
+      "recovery": "Récupération d’accès",
+      "marketing": "Marketing"
     },
     "empty": "Rien pour l’instant.",
     "draft": "Brouillon",
@@ -592,7 +594,10 @@
       "supportSaved": "Enregistré. L’établissement voit votre réponse dans son application.",
       "messageSent": "Message envoyé : il apparaît maintenant dans l’application des établissements.",
       "messageWithdrawn": "Message retiré.",
-      "inviteResent": "Invitation renvoyée."
+      "inviteResent": "Invitation renvoyée.",
+      "promoCreated": "Campagne publiée.",
+      "promoSaved": "Campagne mise à jour.",
+      "promoDeleted": "Campagne supprimée."
     },
     "detail": {
       "orders30": "Commandes (30 jours)",
@@ -800,7 +805,8 @@
         "comms": "Messages et notifications",
         "activity": "Activité et erreurs",
         "settings": "Réglages de la plateforme",
-        "team": "Équipe et accès"
+        "team": "Équipe et accès",
+        "marketing": "Marketing et publicité"
       },
       "permsHint": {
         "dashboard": "Chiffres, trafic en direct, commandes en attente.",
@@ -813,7 +819,8 @@
         "comms": "Envoyer des messages et notifications dans l’app.",
         "activity": "Journal et erreurs serveur.",
         "settings": "Offre de lancement, réglages. Propriétaires seulement.",
-        "team": "Ajouter des collaborateurs et changer les accès. Propriétaires seulement."
+        "team": "Ajouter des collaborateurs et changer les accès. Propriétaires seulement.",
+        "marketing": "Campagnes sur l’accueil, bannières sur les menus gratuits, établissements à la une."
       },
       "owners": "Propriétaires",
       "ownersHint": "Accès complet, défini par le secret SUPERADMIN_EMAILS sur Replit (non modifiable ici).",
@@ -900,7 +907,12 @@
         "recovery_owner_email_set": "A confié un établissement à un nouvel e-mail",
         "recovery_signin_unlocked": "A débloqué une connexion",
         "support_answered": "A répondu à une demande",
-        "note_added": "A ajouté une note"
+        "note_added": "A ajouté une note",
+        "promo_created": "A créé une campagne",
+        "promo_updated": "A modifié une campagne",
+        "promo_paused": "A mis une promotion en pause",
+        "promo_resumed": "A relancé une promotion",
+        "promo_deleted": "A supprimé une promotion"
       }
     },
     "support": {
@@ -1102,6 +1114,71 @@
       "signIn": "J’ai déjà un compte",
       "then": "Ensuite, la console est toujours ici :",
       "private": "Cette invitation est personnelle : elle ne marche qu’avec votre adresse e-mail. Si vous ne l’attendiez pas, ignorez cet e-mail."
+    },
+    "marketing": {
+      "title": "Marketing et publicité",
+      "intro": "Faites la promotion sur l’accueil, sur les menus des établissements en formule gratuite, et choisissez les établissements « à la une ». Vues et clics comptés pour chaque campagne.",
+      "error": "Vérifiez la campagne : titre en français obligatoire, lien valide (/… ou https://…), fin après le début.",
+      "kpi": {
+        "live": "Campagnes en ligne",
+        "views": "Vues (toutes campagnes)",
+        "clicks": "Clics",
+        "ctr": "Taux de clic"
+      },
+      "featuredTitle": "Établissements à la une",
+      "featuredHint": "Jusqu’à 3 établissements montrés en premier sur l’accueil et l’annuaire. Choisir une place décale les autres.",
+      "chooseBusiness": "Choisir un établissement…",
+      "feature": "Mettre à la une",
+      "campaigns": "Campagnes ({n})",
+      "none": "Aucune campagne. Créez la première ci-dessous.",
+      "new": "Nouvelle campagne",
+      "create": "Publier la campagne",
+      "save": "Enregistrer",
+      "edit": "Modifier",
+      "pause": "Mettre en pause",
+      "resume": "Reprendre",
+      "delete": "Supprimer",
+      "deleteConfirm": "Supprimer cette campagne ?",
+      "now": "maintenant",
+      "noEnd": "sans fin",
+      "stats": "{views} vues · {clicks} clics · {ctr}",
+      "states": {
+        "live": "En ligne",
+        "scheduled": "Programmée",
+        "paused": "En pause",
+        "ended": "Terminée"
+      },
+      "placement": "Emplacement",
+      "placements": {
+        "home_hero": "Accueil, grande carte",
+        "home_strip": "Accueil, bandeau du haut",
+        "free_menu": "Menus gratuits, petite bannière"
+      },
+      "placementHints": {
+        "home_hero": "Sous le premier écran de l’accueil, grande et colorée.",
+        "home_strip": "Une fine barre tout en haut de l’accueil et de l’annuaire.",
+        "free_menu": "En bas de chaque menu en formule gratuite, marquée « Sponsorisé »."
+      },
+      "titleFr": "Titre (français)",
+      "titleEn": "Titre (anglais)",
+      "bodyFr": "Texte (français)",
+      "bodyEn": "Texte (anglais)",
+      "ctaFr": "Bouton (français)",
+      "ctaEn": "Bouton (anglais)",
+      "promoteBusiness": "Promouvoir un établissement",
+      "noBusiness": "Aucun : utiliser le lien",
+      "link": "Lien",
+      "linkHint": "Vide avec un établissement choisi : sa page.",
+      "badge": "Badge",
+      "priority": "Priorité (la plus haute d’abord)",
+      "startsAt": "Début",
+      "endsAt": "Fin",
+      "imageUrl": "Image (lien, facultatif)",
+      "theme": "Couleurs",
+      "targeting": "Ciblage (bannières des menus gratuits) : villes et types",
+      "cities": "Villes, séparées par des virgules",
+      "offersTitle": "Offres des établissements",
+      "offersHint": "Offres créées par les propriétaires en formule Business sur leur page. Mettez-en une en pause si elle ne respecte pas les règles."
     }
   },
   "demo": {
@@ -1644,7 +1721,14 @@
     "eatHere": "Sur place",
     "eatHereHint": "Choisir ma table ou mon salon",
     "takeawayQuick": "À emporter",
-    "takeawayQuickHint": "Je passe la récupérer"
+    "takeawayQuickHint": "Je passe la récupérer",
+    "offersTitle": "Offres du moment",
+    "offerSee": "Voir l’offre",
+    "offerTitle": "Offre",
+    "offerUntil": "Jusqu’au {date}",
+    "offerAdd": "Ajouter à ma sélection",
+    "promoBadge": "Promo",
+    "sponsored": "Sponsorisé"
   },
   "seating": {
     "title": "Tables et salles",
@@ -3005,5 +3089,87 @@
       "billing": "Abonnement",
       "message": "Message de RestoCool"
     }
+  },
+  "promos": {
+    "title": "Promotions",
+    "intro": "Mettez en avant une offre sur votre page ou un plat à prix réduit. Vos clients la voient tout en haut de votre menu, dans « Offres du moment », et peuvent l’ouvrir pour les détails. Jusqu’à {n} offres à la fois ; modifiez-les quand vous voulez.",
+    "seePage": "Voir ma page",
+    "current": "Vos offres ({n})",
+    "none": "Aucune offre pour l’instant. Créez la première ci-dessous.",
+    "new": "Nouvelle offre",
+    "whereShown": "Elle apparaît en haut de votre page (« Offres du moment ») ; une offre sur un plat met aussi un badge « Promo » et le prix barré sur ce plat.",
+    "kind": "Type d’offre",
+    "kinds": {
+      "item": "Promotion sur un plat",
+      "page": "Offre de l’établissement"
+    },
+    "kindsHint": {
+      "item": "Un plat à prix réduit ou mis en avant (« -20 % », « 2 achetés, 1 offert »…).",
+      "page": "Happy hour, soirée spéciale, menu du jour, livraison offerte…"
+    },
+    "item": "Plat concerné",
+    "itemHint": "Pour une promotion sur un plat.",
+    "titleFr": "Titre",
+    "titlePlaceholder": "Ex. : Poulet bicyclette à prix doux",
+    "bodyFr": "Détails",
+    "bodyPlaceholder": "Ce qu’il faut savoir : jours, conditions, quantité limitée…",
+    "translations": "Anglais et chinois (facultatif)",
+    "titleEn": "Titre (anglais)",
+    "titleZh": "Titre (chinois)",
+    "bodyEn": "Détails (anglais)",
+    "bodyZh": "Détails (chinois)",
+    "badge": "Badge court",
+    "promoPrice": "Prix promo (F CFA)",
+    "promoPriceHint": "Facultatif : remplace le prix du plat pendant l’offre (plats sans variantes). Les commandes l’appliquent.",
+    "startsAt": "Début",
+    "endsAt": "Fin",
+    "theme": "Couleur de l’offre",
+    "themes": {
+      "gold": "Or",
+      "green": "Vert",
+      "lacquer": "Laque",
+      "night": "Nuit",
+      "sunset": "Coucher de soleil",
+      "sky": "Ciel",
+      "cream": "Crème"
+    },
+    "imageUrl": "Photo (lien, facultatif)",
+    "create": "Publier l’offre",
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "pause": "Mettre en pause",
+    "resume": "Reprendre",
+    "delete": "Supprimer",
+    "deleteConfirm": "Supprimer cette offre ?",
+    "from": "Du {date}",
+    "fromNow": "Dès maintenant",
+    "until": "jusqu’au {date}",
+    "noEnd": "sans date de fin",
+    "stats": "{views} vues · {clicks} ouvertures",
+    "states": {
+      "live": "En ligne",
+      "scheduled": "Programmée",
+      "paused": "En pause",
+      "ended": "Terminée"
+    },
+    "ok": {
+      "created": "Offre publiée : elle est déjà sur votre page.",
+      "saved": "Offre mise à jour.",
+      "paused": "Offre en pause.",
+      "resumed": "Offre de nouveau en ligne.",
+      "deleted": "Offre supprimée."
+    },
+    "errors": {
+      "invalid": "Vérifiez l’offre : un titre, et un plat pour une promotion sur un plat ; la fin doit être après le début.",
+      "plan": "Les promotions sont réservées à la formule Business.",
+      "limit": "Vous avez déjà le nombre maximum d’offres. Supprimez-en une terminée.",
+      "notFound": "Offre ou plat introuvable."
+    },
+    "upsellTitle": "Disponible avec la formule Business",
+    "upsellText": "Attirez plus de clients avec des offres visibles tout en haut de votre menu.",
+    "upsell1": "Promotions sur vos plats, avec prix barré et prix promo appliqué aux commandes",
+    "upsell2": "Offres de l’établissement : happy hour, soirée, menu du jour…",
+    "upsell3": "Vues et ouvertures de chaque offre",
+    "upsellCta": "Passer à Business"
   }
 }

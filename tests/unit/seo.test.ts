@@ -26,6 +26,8 @@ const item = (over: Partial<PublicItem>): PublicItem => ({
 });
 
 const menu = (over: Partial<PublicMenuData> = {}): PublicMenuData => ({
+  promotions: [],
+  sponsor: null,
   slug: "chez-awa",
   name: "Chez Awa",
   description: { fr: "Grillades et jus maison." },

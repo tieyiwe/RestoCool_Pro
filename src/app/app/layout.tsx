@@ -57,6 +57,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
         ? ({ href: "/app/buses", label: t("buses"), icon: "🚌", need: "seats.write" } as const)
         : ({ href: "/app/seating", label: t("seating"), icon: "🪑", need: "seats.write" } as const),
       { href: "/app/staff", label: t("staff"), icon: "👥", need: "staff.write" },
+      { href: "/app/promotions", label: t("promotions"), icon: "🔥", need: "settings.write" },
       { href: "/app/settings", label: t("settings"), icon: "⚙️", need: "settings.write" },
       { href: "/app/guide", label: t("guide"), icon: "🎓", need: null },
       { href: "/app/support", label: t("supportNav"), icon: "🛟", need: null },
@@ -92,6 +93,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     "/app/seating": "manage",
     "/app/buses": "manage",
     "/app/staff": "manage",
+    "/app/promotions": "manage",
     "/app/settings": "manage",
     "/app/guide": "help",
     "/app/support": "help",

@@ -33,6 +33,8 @@ import { PLANS } from "@/config/plans";
 import { formatFCFA } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { CodeForm } from "@/components/code-entry/code-form";
+import { HomePromo } from "@/components/promo/home-promo";
+import { homePromo } from "@/lib/promotions/home";
 import { JsonLd } from "@/components/seo/json-ld";
 import { siteJsonLd } from "@/lib/seo/json-ld";
 import { OG_BASE, siteBase } from "@/lib/seo/site";
@@ -66,6 +68,8 @@ export default async function HomePage() {
   const locale = await getLocale();
   // Featured restaurants are optional: the page renders without a database (build) or with none chosen.
   const featured = await (async () => featuredRestaurants(getDb()))().catch(() => []);
+  // RestoCool campaigns (console → Marketing): a thin strip at the top and a big card.
+  const [promoStrip, promoHero] = await Promise.all([homePromo(getDb(), "home_strip", locale).catch(() => null), homePromo(getDb(), "home_hero", locale).catch(() => null)]);
   const year = new Date().getUTCFullYear();
 
   const ready = (k: string) => LANDING_FEATURES.some((f) => f.key === k && f.ready);
@@ -112,6 +116,7 @@ export default async function HomePage() {
   return (
     <div className="bg-creme text-encre">
       <JsonLd data={jsonLd} />
+      {promoStrip && <HomePromo p={promoStrip} variant="strip" />}
       {/* ---------------- Header ---------------- */}
       <header className="sticky top-0 z-40 border-b border-ligne/70 bg-creme/90 backdrop-blur">
         <div className={cn(section, "flex h-16 items-center justify-between gap-3")}>
@@ -208,6 +213,8 @@ export default async function HomePage() {
             </ul>
           </div>
         </section>
+
+        {promoHero && <HomePromo p={promoHero} variant="hero" />}
 
         {/* ---------------- Customers at a restaurant: type the code under the QR ---------------- */}
         <section id="code" className="border-b border-sable bg-creme" data-testid="home-code">

@@ -183,6 +183,13 @@
       "when": 1794503607873,
       "tag": "0025_collaborator_roles",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1794511038593,
+      "tag": "0026_promotions",
+      "breakpoints": true
     }
   ]
 }

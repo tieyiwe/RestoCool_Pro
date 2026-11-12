@@ -19,7 +19,9 @@ export type PlanFeature =
   | "reports"
   | "staffPerformance"
   | "multiBranch"
-  | "hideBadge";
+  | "hideBadge"
+  /** Promotions on the public page and on dishes (owner dashboard). */
+  | "promotions";
 
 export type PlanLimits = {
   menuItems: number;
@@ -64,6 +66,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
       "staffPerformance",
       "multiBranch",
       "hideBadge",
+      "promotions",
     ]),
     limits: { menuItems: UNLIMITED, staff: UNLIMITED, qrCodes: UNLIMITED },
   },

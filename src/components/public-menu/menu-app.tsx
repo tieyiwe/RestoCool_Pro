@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHiddenOrders, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
 import { deviceId, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
 import dynamic from "next/dynamic";
+import { PromoDetails, PromoStrip, SponsorBanner } from "./promos";
 import { rememberPlace } from "@/lib/public-menu/recent";
 
 // Bus companies only: the seat map code loads when the traveler opens it, not with every menu.
@@ -27,6 +28,7 @@ type Panel =
   | { type: "history" }
   | { type: "server"; orderId: string }
   | { type: "fortune"; index: number }
+  | { type: "promo"; id: string }
   | { type: "lightbox"; index: number };
 
 const LANG_LABEL: Record<Lang, string> = { fr: "FR", en: "EN", zh: "中文" };
@@ -492,6 +494,9 @@ export function MenuApp({
         </div>
       </header>
 
+      {/* ---------- « Offres du moment » (Business plan): first thing after the header ---------- */}
+      <PromoStrip promos={data.promotions} items={items} lang={lang} t={t} onOpen={(id) => openPanel({ type: "promo", id })} />
+
       {/* ---------- Sticky bar: search, filters, language, share + category tabs ---------- */}
       <div className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur" style={{ paddingTop: "env(safe-area-inset-top)" }}>
         <div className="mx-auto flex max-w-3xl items-center gap-2 px-3 pt-2">
@@ -620,6 +625,12 @@ export function MenuApp({
             >
               🥠 {t("fortune")}
             </button>
+          </div>
+        )}
+
+        {data.sponsor && (
+          <div className="px-3">
+            <SponsorBanner promo={data.sponsor} lang={lang} t={t} />
           </div>
         )}
 
@@ -902,6 +913,28 @@ export function MenuApp({
           </div>
         </Sheet>
       )}
+      {panel?.type === "promo" &&
+        (() => {
+          const promo = data.promotions.find((p) => p.id === panel.id);
+          if (!promo) return null;
+          const item = promo.itemId ? items.get(promo.itemId) : undefined;
+          return (
+            <Sheet title={t("offerTitle")} onClose={closePanel} t={t} testId="promo-sheet">
+              <PromoDetails
+                promo={promo}
+                item={item}
+                lang={lang}
+                t={t}
+                ordering={seating.enabled || data.features.takeawayWhatsapp}
+                onAdd={() => {
+                  if (!item) return;
+                  closePanel();
+                  add(item);
+                }}
+              />
+            </Sheet>
+          );
+        })()}
       {panel?.type === "fortune" && data.fortunes.length > 0 && (
         <Sheet title={`🥠 ${t("fortune")}`} onClose={closePanel} t={t} testId="fortune-sheet">
           <p className="font-display py-6 text-center text-xl leading-snug font-bold">« {pick(data.fortunes[panel.index % data.fortunes.length], lang)} »</p>
@@ -1042,7 +1075,15 @@ function DishCard({
           </div>
         )}
         <div className="mt-auto flex items-end justify-between gap-2 pt-2">
-          <p className="font-bold tabular-nums">{price}</p>
+          <p className="font-bold tabular-nums">
+            {item.promo && (
+              <span className="mr-1.5 inline-block rounded-full bg-red-600 px-2 py-0.5 align-middle text-[11px] font-extrabold text-white" data-testid="promo-badge">
+                {item.promo.badge || t("promoBadge")}
+              </span>
+            )}
+            {item.promo?.wasPrice != null && <s className="mr-1 text-sm font-normal text-muted-foreground">{formatFCFA(item.promo.wasPrice)}</s>}
+            {price}
+          </p>
           {!item.soldOut &&
             (qty > 0 && !chooser ? (
               <Stepper qty={qty} t={t} name={name} onMinus={onRemove} onPlus={onAdd} />

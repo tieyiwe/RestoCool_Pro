@@ -5,7 +5,9 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getDb } from "@/db";
 import { addNote, changePlan, recordPlanPayment, resolveErrors, setFeatured, setPublished, setSuspended, type AdminCtx } from "@/lib/admin/manage";
-import { requireSuperadmin } from "@/lib/auth/context";
+import { getSuperadmin, requireSuperadmin } from "@/lib/auth/context";
+import { hasPerm } from "@/lib/admin/access";
+import { deletePromo, savePlatformPromo, setPromoActive } from "@/lib/promotions";
 import { writeAudit } from "@/lib/audit";
 import { ForbiddenError, NotFoundError } from "@/lib/errors";
 import type { AdminPerm, AdminRole } from "@/lib/admin/access";
@@ -76,9 +78,12 @@ export async function publishAction(fd: FormData) {
 export async function featuredAction(fd: FormData) {
   const id = Id.parse(s(fd, "id"));
   const raw = s(fd, "rank");
-  const back = s(fd, "back") === "settings" ? "/admin_pro/settings" : `/admin_pro/businesses/${id}`;
+  const back = s(fd, "back") === "settings" ? "/admin_pro/settings" : s(fd, "back") === "marketing" ? "/admin_pro/marketing" : `/admin_pro/businesses/${id}`;
   await run(back, async () => {
-    await setFeatured(await ctx("businesses.write"), id, raw ? z.coerce.number().int().min(1).max(3).parse(raw) : null);
+    // Featuring is marketing work: either right is enough.
+    const actor = await getSuperadmin();
+    const perm = actor && hasPerm(actor, "marketing") && !hasPerm(actor, "businesses.write") ? "marketing" : "businesses.write";
+    await setFeatured(await ctx(perm), id, raw ? z.coerce.number().int().min(1).max(3).parse(raw) : null);
     return "featured";
   });
 }
@@ -248,5 +253,55 @@ export async function withdrawMessageAction(fd: FormData) {
   await run("/admin_pro/messages", async () => {
     await deleteMessage(getDb(), await requireSuperadmin("comms"), id);
     return "messageWithdrawn";
+  });
+}
+
+
+// ---- Marketing (platform campaigns) ----
+
+function promoInputFrom(fd: FormData) {
+  return {
+    placement: s(fd, "placement"),
+    title: { fr: s(fd, "titleFr"), en: s(fd, "titleEn") },
+    body: { fr: s(fd, "bodyFr"), en: s(fd, "bodyEn") },
+    ctaLabel: { fr: s(fd, "ctaFr"), en: s(fd, "ctaEn") },
+    link: s(fd, "link"),
+    restaurantId: s(fd, "restaurantId"),
+    imageUrl: s(fd, "imageUrl"),
+    badge: s(fd, "badge"),
+    theme: s(fd, "theme") || "gold",
+    priority: s(fd, "priority") || "0",
+    startsAt: s(fd, "startsAt"),
+    endsAt: s(fd, "endsAt"),
+    active: s(fd, "active") !== "0",
+    cities: s(fd, "cities")
+      .split(/[,;\n]/)
+      .map((x) => x.trim())
+      .filter(Boolean),
+    kinds: fd.getAll("kinds").map(String),
+  };
+}
+
+export async function savePlatformPromoAction(fd: FormData) {
+  const id = s(fd, "id") ? Id.parse(s(fd, "id")) : undefined;
+  await run("/admin_pro/marketing", async () => {
+    const row = await savePlatformPromo(getDb(), await requireSuperadmin("marketing"), promoInputFrom(fd), id);
+    return `${id ? "promoSaved" : "promoCreated"}#m-${row.id}`;
+  });
+}
+
+export async function togglePlatformPromoAction(fd: FormData) {
+  const id = Id.parse(s(fd, "id"));
+  await run("/admin_pro/marketing", async () => {
+    await setPromoActive(getDb(), await requireSuperadmin("marketing"), id, s(fd, "on") === "1");
+    return `promoSaved#m-${id}`;
+  });
+}
+
+export async function deletePlatformPromoAction(fd: FormData) {
+  const id = Id.parse(s(fd, "id"));
+  await run("/admin_pro/marketing", async () => {
+    await deletePromo(getDb(), await requireSuperadmin("marketing"), id);
+    return "promoDeleted";
   });
 }

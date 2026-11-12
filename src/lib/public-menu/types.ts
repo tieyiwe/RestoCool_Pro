@@ -18,6 +18,8 @@ export type PublicItem = {
   soldOut: boolean;
   /** Owner's short note while sold out (« De retour demain »), shown under « Épuisé ». */
   soldOutNote: string | null;
+  /** A running offer on this dish: its badge and, when the price changed, the usual price (struck through). */
+  promo?: { id: string; badge: string | null; wasPrice: number | null };
 };
 export type PublicCategory = { id: string; name: I18nText; items: PublicItem[] };
 export type PublicHours = { weekday: number; opens: string; closes: string };
@@ -52,6 +54,25 @@ export type PublicMenuData = {
   categories: PublicCategory[];
   fortunes: I18nText[];
   preview: boolean;
+  /** Running offers of the business (Business plan): « Offres du moment » and dish promotions. */
+  promotions: PublicPromo[];
+  /** Free plan only: one small RestoCool campaign shown near the bottom (« Sponsorisé »). */
+  sponsor: PublicPromo | null;
+};
+
+export type PublicPromo = {
+  id: string;
+  placement: string;
+  itemId: string | null;
+  title: I18nText;
+  body: I18nText | null;
+  ctaLabel: I18nText | null;
+  link: string | null;
+  imageUrl: string | null;
+  badge: string | null;
+  promoPrice: number | null;
+  theme: string;
+  endsAt: string | null;
 };
 
 /** `note`: the customer's remark for the kitchen (« sans piment »). */

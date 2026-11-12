@@ -1,4 +1,6 @@
 import "server-only";
+import { hasFeature } from "@/lib/plan";
+import { promoPrices } from "@/lib/promotions";
 import { businessInitials, orderCode } from "./code";
 import { and, asc, desc, eq, gt, inArray, isNull, notInArray, or, sql } from "drizzle-orm";
 import { z } from "zod";
@@ -89,7 +91,14 @@ type PricedLine = {
  * Prices every line from the database (never from the browser) and refuses dishes that are
  * hidden, sold out or from a hidden category. Variants/options must belong to the dish.
  */
-export async function priceLines(db: DB, restaurantId: string, lines: z.infer<typeof OrderLineInput>[], now = new Date()): Promise<{ lines: PricedLine[]; subtotal: number; hasOnRequest: boolean }> {
+export async function priceLines(
+  db: DB,
+  restaurantId: string,
+  lines: z.infer<typeof OrderLineInput>[],
+  now = new Date(),
+  /** Running dish offers (itemId → price): replace the dish's own price (dishes without variants). */
+  promos: Map<string, number> = new Map(),
+): Promise<{ lines: PricedLine[]; subtotal: number; hasOnRequest: boolean }> {
   const ids = [...new Set(lines.map((l) => l.itemId))];
   const [items, variants, options] = await Promise.all([
     db
@@ -128,7 +137,7 @@ export async function priceLines(db: DB, restaurantId: string, lines: z.infer<ty
     }
     if ([...perGroup.values()].some((g) => g.count > g.max)) throw new OrderError("invalid");
     const optionSnap = opts.map((o) => ({ id: o!.id, group: o!.group, name: o!.name, priceDelta: o!.priceDelta }));
-    const base = variant ? variant.price : item.price;
+    const base = variant ? variant.price : promos.has(item.id) ? promos.get(item.id)! : item.price;
     const unitPrice = base === null ? null : base + optionSnap.reduce((s, o) => s + o.priceDelta, 0);
     priced.push({
       itemId: item.id,
@@ -209,7 +218,9 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
     tripId = trip.id;
   }
 
-  const priced = await priceLines(db, r.id, input.lines, now);
+  // A running dish offer (Business plan) sets the price; decided here, never by the phone.
+  const promos = hasFeature(r, "promotions", now) ? await promoPrices(db, r.id, input.lines.map((l) => l.itemId)) : new Map<string, number>();
+  const priced = await priceLines(db, r.id, input.lines, now, promos);
   const mode = r.settings.orderValidation ?? "server_confirms";
   const actor: Actor = { kind: "customer", deviceId, restaurantId: r.id };
 

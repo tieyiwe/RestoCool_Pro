@@ -195,3 +195,47 @@ export const trafficVisitors = pgTable(
   },
   (t) => [uniqueIndex("traffic_visitors_uq").on(t.day, t.visitor, t.audience), index("traffic_visitors_restaurant_idx").on(t.restaurantId, t.day)],
 );
+
+/**
+ * Promotions. Two kinds share one table:
+ * - platform campaigns from the console (marketing): home page hero or strip, small banner on the
+ *   public menus of free-plan businesses;
+ * - a business's own promotions (Business plan): on its page (« Offres du moment ») or on a dish.
+ * Views and taps are counted (anonymous).
+ */
+export const promotions = pgTable(
+  "promotions",
+  {
+    id: id(),
+    /** platform | business */
+    scope: text("scope").notNull(),
+    /** Business promotions: whose page. Platform: the business promoted, if any. */
+    restaurantId: uuid("restaurant_id").references(() => restaurants.id, { onDelete: "cascade" }),
+    /** platform: home_hero | home_strip | free_menu · business: page | item */
+    placement: text("placement").notNull(),
+    itemId: uuid("item_id"),
+    title: jsonb("title").$type<I18nText>().notNull(),
+    body: jsonb("body").$type<I18nText>(),
+    ctaLabel: jsonb("cta_label").$type<I18nText>(),
+    /** Where a tap goes (platform): /r/<slug>, /restaurants, an https link… */
+    link: text("link"),
+    imageUrl: text("image_url"),
+    /** Short badge, « -20 % », « 2 achetés = 1 offert ». */
+    badge: text("badge"),
+    /** Dish promotions: the price during the offer (integer FCFA). */
+    promoPrice: integer("promo_price"),
+    /** Look: one of the promo themes (src/config/promo-themes.ts). */
+    theme: text("theme").notNull().default("gold"),
+    /** Platform targeting: plans, towns, kinds (empty = all). */
+    target: jsonb("target").$type<{ plans?: string[]; cities?: string[]; kinds?: string[] }>(),
+    priority: integer("priority").notNull().default(0),
+    active: boolean("active").notNull().default(true),
+    startsAt: timestamp("starts_at", { withTimezone: true }),
+    endsAt: timestamp("ends_at", { withTimezone: true }),
+    views: integer("views").notNull().default(0),
+    clicks: integer("clicks").notNull().default(0),
+    createdBy: text("created_by").notNull(),
+    ...timestamps,
+  },
+  (t) => [index("promotions_scope_idx").on(t.scope, t.placement, t.active), index("promotions_restaurant_idx").on(t.restaurantId)],
+);

@@ -24,6 +24,7 @@ const NAV = [
   { href: "/admin_pro/support", key: "support", icon: "🛟" },
   { href: "/admin_pro/recovery", key: "recovery", icon: "🔐" },
   { href: "/admin_pro/messages", key: "messages", icon: "📣" },
+  { href: "/admin_pro/marketing", key: "marketing", icon: "✨" },
   { href: "/admin_pro/billing", key: "billing", icon: "💳" },
   { href: "/admin_pro/map", key: "map", icon: "🗺️" },
   { href: "/admin_pro/activity", key: "activity", icon: "🧾" },

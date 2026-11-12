@@ -453,7 +453,8 @@
       "placeholder": "Type a section: menu, kitchen, staff…",
       "empty": "No section found.",
       "hint": "↑ ↓ to choose · Enter to open · Esc to close"
-    }
+    },
+    "promotions": "Promotions"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -480,7 +481,8 @@
       "support": "Requests",
       "messages": "Messages",
       "team": "Team",
-      "recovery": "Account recovery"
+      "recovery": "Account recovery",
+      "marketing": "Marketing"
     },
     "empty": "Nothing yet.",
     "draft": "Draft",
@@ -592,7 +594,10 @@
       "supportSaved": "Saved. The business sees your answer in its app.",
       "messageSent": "Message sent: it shows in the businesses’ app now.",
       "messageWithdrawn": "Message withdrawn.",
-      "inviteResent": "Invitation sent again."
+      "inviteResent": "Invitation sent again.",
+      "promoCreated": "Campaign published.",
+      "promoSaved": "Campaign updated.",
+      "promoDeleted": "Campaign deleted."
     },
     "detail": {
       "orders30": "Orders (30 days)",
@@ -800,7 +805,8 @@
         "comms": "Messages & notifications",
         "activity": "Activity & errors",
         "settings": "Platform settings",
-        "team": "Team & access"
+        "team": "Team & access",
+        "marketing": "Marketing & ads"
       },
       "permsHint": {
         "dashboard": "Overview figures, live traffic, orders waiting.",
@@ -813,7 +819,8 @@
         "comms": "Send messages and in-app notifications.",
         "activity": "Audit log and server errors.",
         "settings": "Launch offer, platform switches. Owners only.",
-        "team": "Add collaborators and change access. Owners only."
+        "team": "Add collaborators and change access. Owners only.",
+        "marketing": "Home-page campaigns, banners on free menus, featured businesses."
       },
       "owners": "Owners",
       "ownersHint": "Full access, set by the SUPERADMIN_EMAILS secret on Replit (not editable here).",
@@ -900,7 +907,12 @@
         "recovery_owner_email_set": "Handed a business to a new owner email",
         "recovery_signin_unlocked": "Unlocked a sign-in",
         "support_answered": "Answered a request",
-        "note_added": "Added a note"
+        "note_added": "Added a note",
+        "promo_created": "Created a campaign",
+        "promo_updated": "Updated a campaign",
+        "promo_paused": "Paused a promotion",
+        "promo_resumed": "Resumed a promotion",
+        "promo_deleted": "Deleted a promotion"
       }
     },
     "support": {
@@ -1102,6 +1114,71 @@
       "signIn": "I already have an account",
       "then": "Afterwards, the console is always here:",
       "private": "This invitation is personal: it only works with your email address. If you weren’t expecting it, ignore this email."
+    },
+    "marketing": {
+      "title": "Marketing & ads",
+      "intro": "Promote on the home page, on the menus of free-plan businesses, and choose the businesses « featured ». Views and taps are counted for each campaign.",
+      "error": "Check the campaign: French title required, valid link (/… or https://…), end after start.",
+      "kpi": {
+        "live": "Campaigns live",
+        "views": "Views (all campaigns)",
+        "clicks": "Taps",
+        "ctr": "Tap rate"
+      },
+      "featuredTitle": "Featured businesses (« À la une »)",
+      "featuredHint": "Up to 3 businesses shown first on the home page and the directory. Choosing a slot moves the others down.",
+      "chooseBusiness": "Choose a business…",
+      "feature": "Feature",
+      "campaigns": "Campaigns ({n})",
+      "none": "No campaigns yet. Create the first one below.",
+      "new": "New campaign",
+      "create": "Publish the campaign",
+      "save": "Save",
+      "edit": "Edit",
+      "pause": "Pause",
+      "resume": "Resume",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this campaign?",
+      "now": "now",
+      "noEnd": "no end",
+      "stats": "{views} views · {clicks} taps · {ctr}",
+      "states": {
+        "live": "Live",
+        "scheduled": "Scheduled",
+        "paused": "Paused",
+        "ended": "Ended"
+      },
+      "placement": "Where it shows",
+      "placements": {
+        "home_hero": "Home page, big card",
+        "home_strip": "Home page, top strip",
+        "free_menu": "Free-plan menus, small banner"
+      },
+      "placementHints": {
+        "home_hero": "Below the home page’s first screen, large and colourful.",
+        "home_strip": "A thin bar at the very top of the home page and directory.",
+        "free_menu": "Near the bottom of every free-plan menu, marked « Sponsorisé »."
+      },
+      "titleFr": "Title (French)",
+      "titleEn": "Title (English)",
+      "bodyFr": "Text (French)",
+      "bodyEn": "Text (English)",
+      "ctaFr": "Button (French)",
+      "ctaEn": "Button (English)",
+      "promoteBusiness": "Promote a business",
+      "noBusiness": "No business: use the link",
+      "link": "Link",
+      "linkHint": "Empty with a business chosen: its page.",
+      "badge": "Badge",
+      "priority": "Priority (higher first)",
+      "startsAt": "Start",
+      "endsAt": "End",
+      "imageUrl": "Image (link, optional)",
+      "theme": "Colours",
+      "targeting": "Targeting (free-plan banners): towns and kinds",
+      "cities": "Towns, separated by commas",
+      "offersTitle": "Businesses’ own offers",
+      "offersHint": "Offers created by Business-plan owners on their pages. Pause one if it breaks the rules."
     }
   },
   "demo": {
@@ -1644,7 +1721,14 @@
     "eatHere": "Eat in",
     "eatHereHint": "Choose my table or room",
     "takeawayQuick": "Takeaway",
-    "takeawayQuickHint": "I’ll pick it up"
+    "takeawayQuickHint": "I’ll pick it up",
+    "offersTitle": "Current offers",
+    "offerSee": "See the offer",
+    "offerTitle": "Offer",
+    "offerUntil": "Until {date}",
+    "offerAdd": "Add to my selection",
+    "promoBadge": "Promo",
+    "sponsored": "Sponsored"
   },
   "seating": {
     "title": "Tables and rooms",
@@ -3005,5 +3089,87 @@
       "billing": "Subscription",
       "message": "Message from RestoCool"
     }
+  },
+  "promos": {
+    "title": "Promotions",
+    "intro": "Feature an offer on your page or a dish at a lower price. Customers see it at the very top of your menu, in « Current offers », and can open it for details. Up to {n} offers at once; change them whenever you like.",
+    "seePage": "See my page",
+    "current": "Your offers ({n})",
+    "none": "No offers yet. Create the first one below.",
+    "new": "New offer",
+    "whereShown": "It shows at the top of your page (« Current offers »); a dish offer also puts a « Promo » badge and the struck-through price on that dish.",
+    "kind": "Type of offer",
+    "kinds": {
+      "item": "Dish promotion",
+      "page": "Business offer"
+    },
+    "kindsHint": {
+      "item": "A dish at a lower price or highlighted (« -20 % », « buy 2, get 1 free »…).",
+      "page": "Happy hour, special evening, menu of the day, free delivery…"
+    },
+    "item": "Dish",
+    "itemHint": "For a dish promotion.",
+    "titleFr": "Title",
+    "titlePlaceholder": "E.g. Free-range chicken at a sweet price",
+    "bodyFr": "Details",
+    "bodyPlaceholder": "What to know: days, conditions, limited quantity…",
+    "translations": "English and Chinese (optional)",
+    "titleEn": "Title (English)",
+    "titleZh": "Title (Chinese)",
+    "bodyEn": "Details (English)",
+    "bodyZh": "Details (Chinese)",
+    "badge": "Short badge",
+    "promoPrice": "Promo price (F CFA)",
+    "promoPriceHint": "Optional: replaces the dish’s price during the offer (dishes without variants). Orders apply it.",
+    "startsAt": "Start",
+    "endsAt": "End",
+    "theme": "Offer colour",
+    "themes": {
+      "gold": "Gold",
+      "green": "Green",
+      "lacquer": "Lacquer",
+      "night": "Night",
+      "sunset": "Sunset",
+      "sky": "Sky",
+      "cream": "Cream"
+    },
+    "imageUrl": "Photo (link, optional)",
+    "create": "Publish the offer",
+    "save": "Save",
+    "edit": "Edit",
+    "pause": "Pause",
+    "resume": "Resume",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this offer?",
+    "from": "From {date}",
+    "fromNow": "From now",
+    "until": "until {date}",
+    "noEnd": "no end date",
+    "stats": "{views} views · {clicks} opens",
+    "states": {
+      "live": "Live",
+      "scheduled": "Scheduled",
+      "paused": "Paused",
+      "ended": "Ended"
+    },
+    "ok": {
+      "created": "Offer published: it is already on your page.",
+      "saved": "Offer updated.",
+      "paused": "Offer paused.",
+      "resumed": "Offer live again.",
+      "deleted": "Offer deleted."
+    },
+    "errors": {
+      "invalid": "Check the offer: a title, and a dish for a dish promotion; the end must be after the start.",
+      "plan": "Promotions are part of the Business plan.",
+      "limit": "You already have the maximum number of offers. Delete an ended one.",
+      "notFound": "Offer or dish not found."
+    },
+    "upsellTitle": "Available with the Business plan",
+    "upsellText": "Bring in more customers with offers shown at the very top of your menu.",
+    "upsell1": "Dish promotions, with the old price struck through and the promo price applied to orders",
+    "upsell2": "Business offers: happy hour, evenings, menu of the day…",
+    "upsell3": "Views and opens for each offer",
+    "upsellCta": "Move to Business"
   }
 }

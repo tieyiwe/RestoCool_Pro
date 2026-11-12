@@ -1,3 +1,5 @@
+import { HomePromo } from "@/components/promo/home-promo";
+import { homePromo } from "@/lib/promotions/home";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -33,9 +35,11 @@ export default async function DirectoryPage({ searchParams }: { searchParams: Pr
   const [featured, initial] = await Promise.all([q ? Promise.resolve([]) : featuredRestaurants(getDb()), searchRestaurants(getDb(), q)]);
   const ts = await getTranslations("seo");
   const jsonLd = directoryJsonLd(await siteBase(), t("title"), [...featured, ...initial.filter((r) => !featured.some((f) => f.slug === r.slug))], { home: ts("home") });
+  const promoStrip = await homePromo(getDb(), "home_strip", await getLocale()).catch(() => null);
   return (
     <div className="min-h-dvh bg-creme text-encre">
       <JsonLd data={jsonLd} />
+      {promoStrip && <HomePromo p={promoStrip} variant="strip" />}
       <header className="border-b border-ligne bg-creme/90">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <Link href="/" aria-label="RestoCool">

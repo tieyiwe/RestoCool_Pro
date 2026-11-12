@@ -11,6 +11,7 @@ export const ADMIN_PERMS = [
   "support",
   "recovery",
   "comms",
+  "marketing",
   "activity",
   "settings",
   "team",
@@ -29,9 +30,9 @@ export type AdminRole = (typeof ADMIN_ROLES)[number] | "custom";
 
 export const ROLE_PERMS: Record<(typeof ADMIN_ROLES)[number], AdminPerm[]> = {
   superadmin: [...ADMIN_PERMS],
-  manager: ["dashboard", "businesses.read", "businesses.write", "billing.read", "billing.write", "support", "recovery", "comms", "activity"],
+  manager: ["dashboard", "businesses.read", "businesses.write", "billing.read", "billing.write", "support", "recovery", "comms", "marketing", "activity"],
   support: ["dashboard", "businesses.read", "support", "recovery"],
-  sales: ["dashboard", "businesses.read", "businesses.write", "billing.read", "billing.write", "comms"],
+  sales: ["dashboard", "businesses.read", "businesses.write", "billing.read", "billing.write", "comms", "marketing"],
   analyst: ["dashboard", "businesses.read", "billing.read", "activity"],
 };
 /** Kept for older callers: the roles without « superadmin ». */
@@ -51,6 +52,7 @@ const IMPLIES: Partial<Record<AdminPerm, AdminPerm[]>> = {
   recovery: ["businesses.read", "support"],
   support: ["businesses.read"],
   comms: ["businesses.read"],
+  marketing: ["businesses.read"],
 };
 
 export function normalizePerms(input: readonly string[]): AdminPerm[] {
@@ -80,6 +82,7 @@ export const PAGE_PERM: Record<string, AdminPerm | null> = {
   "/admin_pro/support": "support",
   "/admin_pro/recovery": "recovery",
   "/admin_pro/messages": "comms",
+  "/admin_pro/marketing": "marketing",
   "/admin_pro/activity": "activity",
   "/admin_pro/team": "team",
   "/admin_pro/settings": "settings",

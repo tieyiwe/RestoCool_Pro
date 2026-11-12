@@ -453,7 +453,8 @@
       "placeholder": "输入板块：菜单、厨房、员工…",
       "empty": "未找到板块。",
       "hint": "↑ ↓ 选择 · 回车打开 · Esc 关闭"
-    }
+    },
+    "promotions": "促销"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -480,7 +481,8 @@
       "support": "Requests",
       "messages": "Messages",
       "team": "Team",
-      "recovery": "Account recovery"
+      "recovery": "Account recovery",
+      "marketing": "Marketing"
     },
     "empty": "Nothing yet.",
     "draft": "Draft",
@@ -592,7 +594,10 @@
       "supportSaved": "Saved. The business sees your answer in its app.",
       "messageSent": "Message sent: it shows in the businesses’ app now.",
       "messageWithdrawn": "Message withdrawn.",
-      "inviteResent": "Invitation sent again."
+      "inviteResent": "Invitation sent again.",
+      "promoCreated": "Campaign published.",
+      "promoSaved": "Campaign updated.",
+      "promoDeleted": "Campaign deleted."
     },
     "detail": {
       "orders30": "Orders (30 days)",
@@ -800,7 +805,8 @@
         "comms": "Messages & notifications",
         "activity": "Activity & errors",
         "settings": "Platform settings",
-        "team": "Team & access"
+        "team": "Team & access",
+        "marketing": "Marketing & ads"
       },
       "permsHint": {
         "dashboard": "Overview figures, live traffic, orders waiting.",
@@ -813,7 +819,8 @@
         "comms": "Send messages and in-app notifications.",
         "activity": "Audit log and server errors.",
         "settings": "Launch offer, platform switches. Owners only.",
-        "team": "Add collaborators and change access. Owners only."
+        "team": "Add collaborators and change access. Owners only.",
+        "marketing": "Home-page campaigns, banners on free menus, featured businesses."
       },
       "owners": "Owners",
       "ownersHint": "Full access, set by the SUPERADMIN_EMAILS secret on Replit (not editable here).",
@@ -900,7 +907,12 @@
         "recovery_owner_email_set": "Handed a business to a new owner email",
         "recovery_signin_unlocked": "Unlocked a sign-in",
         "support_answered": "Answered a request",
-        "note_added": "Added a note"
+        "note_added": "Added a note",
+        "promo_created": "Created a campaign",
+        "promo_updated": "Updated a campaign",
+        "promo_paused": "Paused a promotion",
+        "promo_resumed": "Resumed a promotion",
+        "promo_deleted": "Deleted a promotion"
       }
     },
     "support": {
@@ -1102,6 +1114,71 @@
       "signIn": "I already have an account",
       "then": "Afterwards, the console is always here:",
       "private": "This invitation is personal: it only works with your email address. If you weren’t expecting it, ignore this email."
+    },
+    "marketing": {
+      "title": "Marketing & ads",
+      "intro": "Promote on the home page, on the menus of free-plan businesses, and choose the businesses « featured ». Views and taps are counted for each campaign.",
+      "error": "Check the campaign: French title required, valid link (/… or https://…), end after start.",
+      "kpi": {
+        "live": "Campaigns live",
+        "views": "Views (all campaigns)",
+        "clicks": "Taps",
+        "ctr": "Tap rate"
+      },
+      "featuredTitle": "Featured businesses (« À la une »)",
+      "featuredHint": "Up to 3 businesses shown first on the home page and the directory. Choosing a slot moves the others down.",
+      "chooseBusiness": "Choose a business…",
+      "feature": "Feature",
+      "campaigns": "Campaigns ({n})",
+      "none": "No campaigns yet. Create the first one below.",
+      "new": "New campaign",
+      "create": "Publish the campaign",
+      "save": "Save",
+      "edit": "Edit",
+      "pause": "Pause",
+      "resume": "Resume",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this campaign?",
+      "now": "now",
+      "noEnd": "no end",
+      "stats": "{views} views · {clicks} taps · {ctr}",
+      "states": {
+        "live": "Live",
+        "scheduled": "Scheduled",
+        "paused": "Paused",
+        "ended": "Ended"
+      },
+      "placement": "Where it shows",
+      "placements": {
+        "home_hero": "Home page, big card",
+        "home_strip": "Home page, top strip",
+        "free_menu": "Free-plan menus, small banner"
+      },
+      "placementHints": {
+        "home_hero": "Below the home page’s first screen, large and colourful.",
+        "home_strip": "A thin bar at the very top of the home page and directory.",
+        "free_menu": "Near the bottom of every free-plan menu, marked « Sponsorisé »."
+      },
+      "titleFr": "Title (French)",
+      "titleEn": "Title (English)",
+      "bodyFr": "Text (French)",
+      "bodyEn": "Text (English)",
+      "ctaFr": "Button (French)",
+      "ctaEn": "Button (English)",
+      "promoteBusiness": "Promote a business",
+      "noBusiness": "No business: use the link",
+      "link": "Link",
+      "linkHint": "Empty with a business chosen: its page.",
+      "badge": "Badge",
+      "priority": "Priority (higher first)",
+      "startsAt": "Start",
+      "endsAt": "End",
+      "imageUrl": "Image (link, optional)",
+      "theme": "Colours",
+      "targeting": "Targeting (free-plan banners): towns and kinds",
+      "cities": "Towns, separated by commas",
+      "offersTitle": "Businesses’ own offers",
+      "offersHint": "Offers created by Business-plan owners on their pages. Pause one if it breaks the rules."
     }
   },
   "demo": {
@@ -1644,7 +1721,14 @@
     "eatHere": "堂食",
     "eatHereHint": "选择我的桌位或包间",
     "takeawayQuick": "外带",
-    "takeawayQuickHint": "我来取餐"
+    "takeawayQuickHint": "我来取餐",
+    "offersTitle": "当前优惠",
+    "offerSee": "查看优惠",
+    "offerTitle": "优惠",
+    "offerUntil": "截止 {date}",
+    "offerAdd": "加入我的选择",
+    "promoBadge": "优惠",
+    "sponsored": "推广"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -3005,5 +3089,87 @@
       "billing": "订阅",
       "message": "RestoCool 消息"
     }
+  },
+  "promos": {
+    "title": "促销",
+    "intro": "在您的页面上推出优惠或特价菜品。顾客会在菜单最上方的「当前优惠」中看到，并可点开查看详情。最多同时 {n} 个优惠，随时可修改。",
+    "seePage": "查看我的页面",
+    "current": "您的优惠（{n}）",
+    "none": "暂无优惠。在下方创建第一个。",
+    "new": "新优惠",
+    "whereShown": "显示在页面顶部（「当前优惠」）；菜品优惠还会在该菜品上显示「优惠」标签和划线原价。",
+    "kind": "优惠类型",
+    "kinds": {
+      "item": "菜品优惠",
+      "page": "店铺优惠"
+    },
+    "kindsHint": {
+      "item": "特价或推荐菜品（「-20 %」「买二送一」…）。",
+      "page": "欢乐时光、特别晚会、每日套餐、免费外送…"
+    },
+    "item": "相关菜品",
+    "itemHint": "用于菜品优惠。",
+    "titleFr": "标题",
+    "titlePlaceholder": "例如：走地鸡特价",
+    "bodyFr": "详情",
+    "bodyPlaceholder": "须知：日期、条件、限量…",
+    "translations": "英文和中文（选填）",
+    "titleEn": "标题（英文）",
+    "titleZh": "标题（中文）",
+    "bodyEn": "详情（英文）",
+    "bodyZh": "详情（中文）",
+    "badge": "短标签",
+    "promoPrice": "优惠价（F CFA）",
+    "promoPriceHint": "选填：优惠期间替代菜品价格（无规格的菜品），订单会按此价格计算。",
+    "startsAt": "开始",
+    "endsAt": "结束",
+    "theme": "优惠颜色",
+    "themes": {
+      "gold": "金色",
+      "green": "绿色",
+      "lacquer": "漆红",
+      "night": "夜色",
+      "sunset": "日落",
+      "sky": "天蓝",
+      "cream": "奶油"
+    },
+    "imageUrl": "照片（链接，选填）",
+    "create": "发布优惠",
+    "save": "保存",
+    "edit": "修改",
+    "pause": "暂停",
+    "resume": "恢复",
+    "delete": "删除",
+    "deleteConfirm": "删除此优惠？",
+    "from": "{date} 起",
+    "fromNow": "即刻起",
+    "until": "至 {date}",
+    "noEnd": "无结束日期",
+    "stats": "{views} 次浏览 · {clicks} 次点开",
+    "states": {
+      "live": "进行中",
+      "scheduled": "已排期",
+      "paused": "已暂停",
+      "ended": "已结束"
+    },
+    "ok": {
+      "created": "优惠已发布，已显示在您的页面上。",
+      "saved": "优惠已更新。",
+      "paused": "优惠已暂停。",
+      "resumed": "优惠已恢复。",
+      "deleted": "优惠已删除。"
+    },
+    "errors": {
+      "invalid": "请检查：需要标题，菜品优惠需选择菜品；结束时间需晚于开始时间。",
+      "plan": "促销功能属于 Business 套餐。",
+      "limit": "优惠数量已达上限，请删除一个已结束的优惠。",
+      "notFound": "未找到优惠或菜品。"
+    },
+    "upsellTitle": "Business 套餐可用",
+    "upsellText": "在菜单最上方展示优惠，吸引更多顾客。",
+    "upsell1": "菜品优惠：划线原价，订单按优惠价计算",
+    "upsell2": "店铺优惠：欢乐时光、晚会、每日套餐…",
+    "upsell3": "每个优惠的浏览和点开次数",
+    "upsellCta": "升级到 Business"
   }
 }
