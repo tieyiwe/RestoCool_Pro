@@ -141,6 +141,11 @@ export const members = pgTable(
     pinHash: text("pin_hash"),
     pinFailures: smallint("pin_failures").notNull().default(0),
     lockedUntil: timestamp("locked_until", { withTimezone: true }),
+    /** Left the business: no access any more, kept in « Anciens employés » with their history. */
+    archivedAt: timestamp("archived_at", { withTimezone: true }),
+    archivedReason: text("archived_reason"),
+    /** Personal data erased on request (name, phone, email, PIN, login); matricule and history kept. */
+    erasedAt: timestamp("erased_at", { withTimezone: true }),
     /** Last time this person used the app (updated at most every 5 minutes), for activity ranking. */
     lastSeenAt: timestamp("last_seen_at", { withTimezone: true }),
     ...timestamps,

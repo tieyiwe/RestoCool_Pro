@@ -2165,13 +2165,27 @@
       "role": "Role updated.",
       "joined": "Request accepted: staff number {no} given.",
       "declined": "Request declined.",
-      "joinQr": "New invitation QR code created."
+      "joinQr": "New invitation QR code created.",
+      "archived": "Person archived: their access is closed.",
+      "restored": "Person brought back. Give them a new PIN if needed.",
+      "erased": "Personal data erased."
     },
     "err": {
       "invalid": "Check the name (at least 2 characters) and PIN (4 to 6 digits).",
       "forbidden": "Not allowed.",
       "notFound": "Not found."
-    }
+    },
+    "archive": "Left the business…",
+    "archiveReason": "Reason (optional)",
+    "archiveDo": "Archive",
+    "archiveConfirm": "Archive {name}? Their access is closed at once (PIN, account, tablets). Their history is kept and you can bring them back.",
+    "formerTitle": "Former employees ({n})",
+    "formerHint": "Access closed, history kept",
+    "leftOn": "Left on {date}",
+    "erased": "personal data erased",
+    "restore": "Bring back",
+    "erase": "Erase personal data",
+    "eraseConfirm": "Permanently erase {name}’s name, phone, email, PIN and login? Their staff number and anonymous history stay. This cannot be undone."
   },
   "guide": {
     "title": "RestoCool guide",

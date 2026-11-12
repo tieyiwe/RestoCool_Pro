@@ -3,7 +3,7 @@ import { asc, eq, sql } from "drizzle-orm";
 import type { DB } from "@/db";
 import { jobRoles, members, orders } from "@/db/schema";
 
-export type Person = { id: string; name: string; staffNo: number | null; role: string; jobRoleId: string | null; jobRoleKey: string | null; jobRoleName: string | null; active: boolean; email: string | null; hasPin: boolean; lockedUntil: Date | null; hasLogin: boolean };
+export type Person = { id: string; name: string; staffNo: number | null; role: string; jobRoleId: string | null; jobRoleKey: string | null; jobRoleName: string | null; active: boolean; email: string | null; hasPin: boolean; lockedUntil: Date | null; hasLogin: boolean; archivedAt: Date | null; archivedReason: string | null; erasedAt: Date | null };
 
 /** « Matricule » as printed: 001, 002 … */
 export const formatStaffNo = (n: number | null | undefined) => (n ? String(n).padStart(3, "0") : "—");
@@ -24,6 +24,9 @@ export async function personnel(db: DB, restaurantId: string): Promise<Person[]>
       hasPin: sql<boolean>`${members.pinHash} is not null`,
       lockedUntil: members.lockedUntil,
       hasLogin: sql<boolean>`${members.clerkUserId} is not null`,
+      archivedAt: members.archivedAt,
+      archivedReason: members.archivedReason,
+      erasedAt: members.erasedAt,
     })
     .from(members)
     .leftJoin(jobRoles, eq(jobRoles.id, members.jobRoleId))

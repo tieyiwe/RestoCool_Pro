@@ -31,6 +31,9 @@ type Panel =
   | { type: "promo"; id: string }
   | { type: "lightbox"; index: number };
 
+/** Away longer than this (screen off, app in the background, tab kept): the next visit starts fresh. */
+const VISIT_GAP_MS = 2 * 60 * 60 * 1000;
+
 const LANG_LABEL: Record<Lang, string> = { fr: "FR", en: "EN", zh: "中文" };
 
 /* ---------- storage helpers (private mode / blocked storage must not break the menu) ---------- */
@@ -118,6 +121,8 @@ export function MenuApp({
   const items = useMemo(() => indexItems(data), [data]);
   const baseItems = useMemo(() => indexItems(initialData), [initialData]);
   const cartKey = `rc-cart-${initialData.slug}`;
+  const lastSeenKey = `rc-lastseen-${initialData.slug}`;
+  const [freshVisit, setFreshVisit] = useState(false);
   const history = useHistory(initialData.slug, isCartLine);
   const { startVisit, rememberCart } = history;
 
@@ -131,6 +136,19 @@ export function MenuApp({
     const l = readStore("session", "rc-lang");
     if (l === "en" || l === "zh") setLang(data.locales.includes(l) ? l : "fr");
     setLowData(readStore("local", "rc-lowdata") === "1");
+    // A visit ends after VISIT_GAP_MS away, even if the phone kept the tab (or the installed
+    // app) open: the customer comes back to a fresh start. Nothing is lost: the cart goes to
+    // « Sélections précédentes », sent orders stay saved.
+    const lastSeen = Number(readStore("local", lastSeenKey) ?? 0);
+    const flagged = readStore("session", `rc-fresh-${initialData.slug}`) === "1";
+    writeStore("session", `rc-fresh-${initialData.slug}`, null);
+    const away = flagged || (lastSeen > 0 && Date.now() - lastSeen > VISIT_GAP_MS);
+    if (away) {
+      writeStore("session", cartKey, null);
+      writeStore("session", `rc-seat-${initialData.slug}`, null);
+      setFreshVisit(true);
+    }
+    writeStore("local", lastSeenKey, String(Date.now()));
     const stored = readStore("session", cartKey);
     // A new visit starts with an empty cart; last visit's cart goes to « Sélections précédentes ».
     startVisit(stored === null);
@@ -157,6 +175,29 @@ export function MenuApp({
   useEffect(() => {
     document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
   }, [lang]);
+
+  /* ---------- visit: « last seen » kept fresh; coming back after the gap starts fresh ---------- */
+  useEffect(() => {
+    const touch = () => writeStore("local", lastSeenKey, String(Date.now()));
+    const onVisibility = () => {
+      if (document.visibilityState === "hidden") return touch();
+      const last = Number(readStore("local", lastSeenKey) ?? 0);
+      if (last > 0 && Date.now() - last > VISIT_GAP_MS) {
+        // The reload itself must not count as « just seen »: mark the fresh start for the next load.
+        window.removeEventListener("pagehide", touch);
+        writeStore("session", `rc-fresh-${initialData.slug}`, "1");
+        window.location.reload();
+      } else touch();
+    };
+    const id = window.setInterval(() => document.visibilityState === "visible" && touch(), 60_000);
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("pagehide", touch);
+    return () => {
+      window.clearInterval(id);
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pagehide", touch);
+    };
+  }, [lastSeenKey, initialData.slug]);
 
   /* ---------- welcome screen: closes by itself after ~3 s ---------- */
   useEffect(() => {
@@ -307,6 +348,14 @@ export function MenuApp({
     };
   }, [cartOpen, seat, quickTakeaway, seating.enabled, seating.pickerAvailable, seating.transport, data.slug]);
   const hiddenOrders = useHiddenOrders(data.slug);
+  // Back after a while: last visit's finished orders leave the list (still saved by the business).
+  const freshDone = useRef(false);
+  useEffect(() => {
+    if (!freshVisit || freshDone.current || live.orders.length === 0) return;
+    freshDone.current = true;
+    const done = live.orders.filter((o) => o.mine && ["served", "paid", "cancelled"].includes(o.status)).map((o) => o.id);
+    if (done.length) hiddenOrders.hide(done);
+  }, [freshVisit, live.orders, hiddenOrders]);
   // Finished orders the customer removed from this phone stay with the restaurant, not on the list.
   const myOrders = useMemo(() => live.orders.filter((o) => !hiddenOrders.hidden.has(o.id)), [live.orders, hiddenOrders.hidden]);
   const activeOrders = myOrders.filter((o) => o.mine && ["sent", "confirmed", "preparing", "ready"].includes(o.status));

@@ -18,7 +18,7 @@ import { formatBfPhone } from "@/lib/format";
 import { acceptJoinAction, declineJoinAction } from "./actions";
 import { attendanceEnabled, attendanceLog, ensureAttendanceToken } from "@/lib/personnel/attendance";
 import { publicBaseUrl } from "@/lib/urls";
-import { addPersonAction, punchPersonAction, regenerateQrAction, setActivePersonAction, setPinAction } from "./actions";
+import { addPersonAction, archivePersonAction, erasePersonAction, punchPersonAction, regenerateQrAction, restorePersonAction, setActivePersonAction, setPinAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +39,7 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   const format = await getFormatter();
   const sp = await searchParams;
   // Messages come from the URL: only known ones are shown (no raw keys on screen).
-  const ok = sp.ok && ["added", "pin", "in", "out", "qr", "status", "role", "joined", "declined", "joinQr"].includes(sp.ok) ? sp.ok : null;
+  const ok = sp.ok && ["added", "pin", "in", "out", "qr", "status", "role", "joined", "declined", "joinQr", "archived", "restored", "erased"].includes(sp.ok) ? sp.ok : null;
   const error = sp.error && ["invalid", "forbidden", "notFound"].includes(sp.error) ? sp.error : null;
   const no = sp.no;
   // The owner and managers are changed by the owner only (managers.write).
@@ -51,13 +51,16 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
   const [jobRoles, pending] = await Promise.all([listJobRoles(db, rid), pendingJoinRequests(db, rid)]);
   const tj = await getTranslations("join.owner");
   const joinQr = brandedQrSvg(`${await publicBaseUrl()}/rejoindre/${await ensureJoinToken(db, r)}`);
-  const [people, counts, log] = await Promise.all([personnel(db, rid), handledCounts(db, rid, since), enabled ? attendanceLog(db, rid, 7) : Promise.resolve([])]);
+  const [everyone, counts, log] = await Promise.all([personnel(db, rid), handledCounts(db, rid, since), enabled ? attendanceLog(db, rid, 7) : Promise.resolve([])]);
+  // People who left are listed apart (« Anciens employés »), with their history kept.
+  const people = everyone.filter((p) => !p.archivedAt);
+  const former = everyone.filter((p) => p.archivedAt);
   const roleLabel = (r: { key: string | null; name: string | null }) => (r.key ? tro(`names.${r.key}` as "names.server") : (r.name ?? "—"));
   const personRole = (p: (typeof people)[number]) => (p.role === "owner" ? tr("owner") : p.jobRoleId ? roleLabel({ key: p.jobRoleKey, name: p.jobRoleName }) : tr(p.role as "server"));
   const open = new Map(log.filter((l) => !l.checkOutAt).map((l) => [l.memberId, l]));
   const totals = new Map<string, number>();
   for (const l of log) totals.set(l.memberId, (totals.get(l.memberId) ?? 0) + l.minutes);
-  const nameOf = new Map(people.map((p) => [p.id, `${p.name} · ${formatStaffNo(p.staffNo)}`]));
+  const nameOf = new Map(everyone.map((p) => [p.id, `${p.name} · ${formatStaffNo(p.staffNo)}`]));
   const hours = (m: number) => `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")}`;
   const time = (d: Date) => format.dateTime(d, { hour: "2-digit", minute: "2-digit", timeZone: TZ });
   const day = (d: Date) => format.dateTime(d, { weekday: "short", day: "numeric", month: "short", timeZone: TZ });
@@ -322,6 +325,20 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
                         <button className="min-h-11 text-xs text-muted-foreground underline-offset-2 hover:underline">{p.active ? tp("deactivate") : tp("activate")}</button>
                       </form>
                     )}
+                    {editable && p.role !== "owner" && (
+                      <details className="text-xs">
+                        <summary className="min-h-11 cursor-pointer content-center font-semibold text-red-800" data-testid="archive-open">
+                          {tp("archive")}
+                        </summary>
+                        <form action={archivePersonAction} className="mt-1 flex flex-col gap-1">
+                          <input type="hidden" name="id" value={p.id} />
+                          <input name="reason" maxLength={200} placeholder={tp("archiveReason")} aria-label={tp("archiveReason")} className="min-h-11 w-48 rounded-lg border border-border bg-surface px-2 text-base" />
+                          <ConfirmButton message={tp("archiveConfirm", { name: p.name })} className="min-h-11 rounded-lg bg-red-700 px-3 text-sm font-bold text-white" data-testid="archive-person">
+                            {tp("archiveDo")}
+                          </ConfirmButton>
+                        </form>
+                      </details>
+                    )}
                   </td>
                 </tr>
               );
@@ -329,6 +346,51 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
           </tbody>
         </table>
       </Card>
+
+      {former.length > 0 && (
+        <Card data-testid="former-staff">
+          <details>
+            <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 font-bold">
+              {tp("formerTitle", { n: former.length })}
+              <span className="text-xs font-normal text-muted-foreground">{tp("formerHint")}</span>
+            </summary>
+            <ul className="mt-2 flex flex-col divide-y divide-border">
+              {former.map((p) => (
+                <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm" data-testid="former-row">
+                  <span>
+                    <span className="font-mono font-bold">{formatStaffNo(p.staffNo)}</span> {p.name} · {personRole(p)}
+                    <span className="block text-xs text-muted-foreground">
+                      {tp("leftOn", { date: p.archivedAt!.toLocaleDateString("fr-FR", { timeZone: "Africa/Ouagadougou" }) })}
+                      {p.archivedReason ? ` · ${p.archivedReason}` : ""}
+                      {p.erasedAt ? ` · ${tp("erased")}` : ""}
+                    </span>
+                  </span>
+                  {(canLeads || (p.role !== "owner" && p.role !== "manager")) && (
+                    <span className="flex gap-2">
+                      {!p.erasedAt && (
+                        <form action={restorePersonAction}>
+                          <input type="hidden" name="id" value={p.id} />
+                          <button className="min-h-11 rounded-lg border border-border px-3 font-semibold" data-testid="restore-person">
+                            {tp("restore")}
+                          </button>
+                        </form>
+                      )}
+                      {!p.erasedAt && (
+                        <form action={erasePersonAction}>
+                          <input type="hidden" name="id" value={p.id} />
+                          <ConfirmButton message={tp("eraseConfirm", { name: p.name })} className="min-h-11 rounded-lg px-3 font-semibold text-red-800 hover:bg-red-50" data-testid="erase-person">
+                            {tp("erase")}
+                          </ConfirmButton>
+                        </form>
+                      )}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </details>
+        </Card>
+      )}
 
       {/* Add a person by hand (no phone at hand, or no smartphone) */}
       <Card id="add-manual" className="scroll-mt-20">

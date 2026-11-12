@@ -1189,7 +1189,7 @@
     "console": {
       "badge": "Console",
       "owner": "Propriétaire · tous les droits",
-      "search": "Trouver un établissement : nom, ville, RC-…"
+      "search": "Trouver un établissement : nom, ville, RC-…"
     }
   },
   "demo": {
@@ -2165,13 +2165,27 @@
       "role": "Rôle mis à jour.",
       "joined": "Demande acceptée : matricule {no} attribué.",
       "declined": "Demande refusée.",
-      "joinQr": "Nouveau QR code d'invitation créé."
+      "joinQr": "Nouveau QR code d'invitation créé.",
+      "archived": "Personne archivée : son accès est coupé.",
+      "restored": "Personne réintégrée. Donnez-lui un nouveau PIN si besoin.",
+      "erased": "Données personnelles supprimées."
     },
     "err": {
       "invalid": "Vérifiez le nom (2 caractères minimum) et le code PIN (4 à 6 chiffres).",
       "forbidden": "Action non autorisée.",
       "notFound": "Introuvable."
-    }
+    },
+    "archive": "A quitté l’établissement…",
+    "archiveReason": "Raison (facultatif)",
+    "archiveDo": "Archiver",
+    "archiveConfirm": "Archiver {name} ? Son accès est coupé tout de suite (PIN, compte, tablettes). Son historique est conservé et vous pourrez le réintégrer.",
+    "formerTitle": "Anciens employés ({n})",
+    "formerHint": "Accès coupé, historique conservé",
+    "leftOn": "Parti le {date}",
+    "erased": "données personnelles supprimées",
+    "restore": "Réintégrer",
+    "erase": "Supprimer ses données personnelles",
+    "eraseConfirm": "Supprimer définitivement le nom, le téléphone, l’e-mail, le PIN et la connexion de {name} ? Son matricule et l’historique anonyme restent. C’est irréversible."
   },
   "guide": {
     "title": "Guide RestoCool",

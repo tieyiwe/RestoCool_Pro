@@ -7,7 +7,7 @@ import { getDb } from "@/db";
 import { requireMember } from "@/lib/auth/context";
 import { AppError } from "@/lib/errors";
 import { acceptJoinRequest, declineJoinRequest, regenerateJoinToken } from "@/lib/personnel/join";
-import { addPerson, managerPunch, regenerateAttendanceToken, setActive, setPin, type PersonnelCtx } from "@/lib/personnel/attendance";
+import { addPerson, archivePerson, erasePerson, managerPunch, regenerateAttendanceToken, restorePerson, setActive, setPin, type PersonnelCtx } from "@/lib/personnel/attendance";
 
 async function ctx(): Promise<PersonnelCtx> {
   const m = await requireMember("staff.write");
@@ -82,5 +82,24 @@ export async function regenerateJoinQrAction() {
   await run(async (c) => {
     await regenerateJoinToken(c);
     return "joinQr";
+  });
+}
+
+export async function archivePersonAction(fd: FormData) {
+  await run(async (c) => {
+    await archivePerson(c, Id.parse(s(fd, "id")), s(fd, "reason") || undefined);
+    return "archived";
+  });
+}
+export async function restorePersonAction(fd: FormData) {
+  await run(async (c) => {
+    await restorePerson(c, Id.parse(s(fd, "id")));
+    return "restored";
+  });
+}
+export async function erasePersonAction(fd: FormData) {
+  await run(async (c) => {
+    await erasePerson(c, Id.parse(s(fd, "id")));
+    return "erased";
   });
 }

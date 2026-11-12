@@ -2165,13 +2165,27 @@
       "role": "角色已更新。",
       "joined": "已接受申请：已分配工号 {no}。",
       "declined": "已拒绝申请。",
-      "joinQr": "已创建新的邀请二维码。"
+      "joinQr": "已创建新的邀请二维码。",
+      "archived": "已归档：访问已关闭。",
+      "restored": "已恢复，如需要请设置新 PIN。",
+      "erased": "个人资料已删除。"
     },
     "err": {
       "invalid": "请检查姓名（至少 2 个字符）和 PIN 码（4 到 6 位数字）。",
       "forbidden": "无权操作。",
       "notFound": "找不到。"
-    }
+    },
+    "archive": "已离职…",
+    "archiveReason": "原因（选填）",
+    "archiveDo": "归档",
+    "archiveConfirm": "归档 {name}？其访问权限（PIN、账户、平板）将立即关闭，历史记录保留，可随时恢复。",
+    "formerTitle": "前员工（{n}）",
+    "formerHint": "访问已关闭，历史保留",
+    "leftOn": "{date} 离职",
+    "erased": "个人资料已删除",
+    "restore": "恢复",
+    "erase": "删除个人资料",
+    "eraseConfirm": "永久删除 {name} 的姓名、电话、邮箱、PIN 和登录？工号和匿名历史保留，此操作不可撤销。"
   },
   "guide": {
     "title": "RestoCool 指南",

@@ -3,7 +3,7 @@ import { and, desc, eq, gte, isNull, lte, or, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
 import type { TenantRepo } from "@/db/repos/tenant";
-import { accessCodes, attendance, members, restaurants } from "@/db/schema";
+import { accessCodes, attendance, members, restaurants, staffSessions } from "@/db/schema";
 import { normalizeCode } from "@/lib/access-codes";
 import { writeAudit } from "@/lib/audit";
 import { can, type Actor } from "@/lib/auth/can";
@@ -212,6 +212,47 @@ export async function setActive(ctx: PersonnelCtx, memberId: string, active: boo
   if (m.role === "owner") throw new ForbiddenError();
   await ctx.db.update(members).set({ active }).where(eq(members.id, m.id));
   await writeAudit(ctx.db, ctx.actor, { restaurantId: ctx.repo.restaurantId, action: active ? "personnel.activated" : "personnel.deactivated", entity: "member", entityId: m.id });
+}
+
+/**
+ * Someone left the business: access closed at once (PIN, account, tablet sessions), an open
+ * check-in is closed, and they move to « Anciens employés » with their history. Reversible.
+ */
+export async function archivePerson(ctx: PersonnelCtx, memberId: string, reason?: string) {
+  need(ctx);
+  const m = await managedMember(ctx, memberId);
+  if (m.role === "owner") throw new ForbiddenError();
+  const now = new Date();
+  await ctx.db.transaction(async (tx) => {
+    await tx.update(members).set({ active: false, archivedAt: now, archivedReason: reason?.trim().slice(0, 200) || null }).where(eq(members.id, m.id));
+    await tx.update(staffSessions).set({ endedAt: now }).where(and(eq(staffSessions.memberId, m.id), isNull(staffSessions.endedAt)));
+    await tx.update(attendance).set({ checkOutAt: now, outMethod: "manager", outBy: ctx.actor.kind === "member" ? (ctx.actor.memberId ?? null) : null }).where(and(eq(attendance.memberId, m.id), isNull(attendance.checkOutAt)));
+    await writeAudit(tx, ctx.actor, { restaurantId: ctx.repo.restaurantId, action: "personnel.archived", entity: "member", entityId: m.id, data: { reason: reason ?? null } });
+  });
+}
+
+/** Back in the team (same matricule); a new PIN may be needed. */
+export async function restorePerson(ctx: PersonnelCtx, memberId: string) {
+  need(ctx);
+  const m = await managedMember(ctx, memberId);
+  if (m.erasedAt) throw new ForbiddenError();
+  await ctx.db.update(members).set({ active: true, archivedAt: null, archivedReason: null }).where(eq(members.id, m.id));
+  await writeAudit(ctx.db, ctx.actor, { restaurantId: ctx.repo.restaurantId, action: "personnel.restored", entity: "member", entityId: m.id });
+}
+
+/**
+ * Erase a former employee's personal data (name, phone, email, PIN, login). The matricule and
+ * the anonymous history (orders handled, hours) stay, so reports remain right. Not reversible.
+ */
+export async function erasePerson(ctx: PersonnelCtx, memberId: string) {
+  need(ctx);
+  const m = await managedMember(ctx, memberId);
+  if (m.role === "owner" || !m.archivedAt) throw new ForbiddenError();
+  await ctx.db
+    .update(members)
+    .set({ name: `Ancien employé ${String(m.staffNo ?? 0).padStart(3, "0")}`, phone: null, email: null, pinHash: null, clerkUserId: null, archivedReason: null, erasedAt: new Date() })
+    .where(eq(members.id, m.id));
+  await writeAudit(ctx.db, ctx.actor, { restaurantId: ctx.repo.restaurantId, action: "personnel.erased", entity: "member", entityId: m.id });
 }
 
 /* ---------------------------------------------------------------- reading */
