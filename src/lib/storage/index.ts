@@ -37,6 +37,7 @@ class LocalStore implements ObjectStore {
     }
   }
   async delete(key: string) {
+    forgetMedia(key);
     await rm(this.file(key), { force: true });
   }
 }
@@ -60,6 +61,7 @@ class ReplitStore implements ObjectStore {
     return res.ok ? res.value[0] : null;
   }
   async delete(key: string) {
+    forgetMedia(key);
     if (!MEDIA_KEY_RE.test(key)) return;
     const res = await (await this.client()).delete(key);
     if (!res.ok) log.warn("object_storage_delete_failed", { key, error: res.error.message });
@@ -86,4 +88,43 @@ export function getStore(): ObjectStore {
 
 export function mediaUrl(key: string): string {
   return `/api/media/${key}`;
+}
+
+/**
+ * Photos never change once uploaded (random keys, never reused), so the server keeps the most
+ * recently served ones in memory: the second customer to open a menu gets its thumbnails without
+ * a round trip to Object Storage. Bounded (96 MB total, files up to 2 MB), least recently used out.
+ */
+const CACHE_MAX_BYTES = 96 * 1024 * 1024;
+const CACHE_MAX_FILE = 2 * 1024 * 1024;
+const cache = new Map<string, Buffer>();
+let cachedBytes = 0;
+
+export async function getMediaCached(key: string): Promise<Buffer | null> {
+  const hit = cache.get(key);
+  if (hit) {
+    cache.delete(key);
+    cache.set(key, hit); // most recently used last
+    return hit;
+  }
+  const bytes = await getStore().get(key);
+  if (bytes && bytes.length <= CACHE_MAX_FILE) {
+    cache.set(key, bytes);
+    cachedBytes += bytes.length;
+    for (const [k, b] of cache) {
+      if (cachedBytes <= CACHE_MAX_BYTES) break;
+      cache.delete(k);
+      cachedBytes -= b.length;
+    }
+  }
+  return bytes;
+}
+
+/** A deleted photo stops being served at once (also from memory). */
+export function forgetMedia(key: string) {
+  const b = cache.get(key);
+  if (b) {
+    cache.delete(key);
+    cachedBytes -= b.length;
+  }
 }

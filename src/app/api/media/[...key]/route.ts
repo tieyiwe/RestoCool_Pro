@@ -1,4 +1,4 @@
-import { getStore, MEDIA_KEY_RE } from "@/lib/storage";
+import { getMediaCached, MEDIA_KEY_RE } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
 
@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export async function GET(_req: Request, { params }: { params: Promise<{ key: string[] }> }) {
   const key = (await params).key.join("/");
   if (!MEDIA_KEY_RE.test(key)) return new Response("Not found", { status: 404 });
-  const bytes = await getStore().get(key);
+  const bytes = await getMediaCached(key);
   if (!bytes) return new Response("Not found", { status: 404 });
   return new Response(new Uint8Array(bytes), {
     headers: {

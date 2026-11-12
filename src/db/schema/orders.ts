@@ -67,6 +67,10 @@ export const orders = pgTable(
   (t) => [
     index("orders_restaurant_status_idx").on(t.restaurantId, t.status),
     index("orders_session_idx").on(t.sessionId),
+    // History, analytics and back office read orders of one business by date.
+    index("orders_restaurant_sent_idx").on(t.restaurantId, t.sentAt),
+    // The hostess trip board reads the orders of one trip.
+    index("orders_trip_idx").on(t.tripId),
     index("orders_device_idx").on(t.restaurantId, t.customerDeviceId),
     uniqueIndex("orders_restaurant_day_number_uq").on(t.restaurantId, t.businessDate, t.number),
     uniqueIndex("orders_restaurant_code_uq").on(t.restaurantId, t.code).where(sql`${t.code} is not null`),

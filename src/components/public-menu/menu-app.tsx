@@ -11,7 +11,10 @@ import type { CartLine, PublicItem, PublicMenuData } from "@/lib/public-menu/typ
 import { cn } from "@/lib/utils";
 import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
 import { deviceId, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
-import { BusPicker } from "./bus-picker";
+import dynamic from "next/dynamic";
+
+// Bus companies only: the seat map code loads when the traveler opens it, not with every menu.
+const BusPicker = dynamic(() => import("./bus-picker").then((m) => m.BusPicker), { ssr: false });
 
 type Lang = "fr" | "en" | "zh";
 type Panel =
