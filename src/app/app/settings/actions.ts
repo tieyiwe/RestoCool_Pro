@@ -46,6 +46,8 @@ export async function saveContactsAction(_p: SettingsResult, fd: FormData) {
     settings.saveContacts(ctx, {
       phones: [s(fd, "phone1"), s(fd, "phone2"), s(fd, "phone3")],
       whatsapp: s(fd, "whatsapp"),
+      takeawaySame: fd.get("takeawaySame") === "on",
+      takeawayWhatsapp: s(fd, "takeawayWhatsapp"),
       orangeMoney: s(fd, "orangeMoney"),
       moovMoney: s(fd, "moovMoney"),
     }),

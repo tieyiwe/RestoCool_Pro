@@ -43,6 +43,8 @@ export async function loadPublicMenu(db: DB, r: Restaurant, opts: { preview: boo
     location: r.latitude != null && r.longitude != null ? { lat: r.latitude, lng: r.longitude } : null,
     phones: r.phones,
     whatsapp: r.whatsapp,
+    // The number that receives takeaway orders: the one the owner chose, else the main WhatsApp.
+    takeawayWhatsapp: r.settings.takeawayWhatsapp ?? r.whatsapp,
     orangeMoney: r.orangeMoney,
     moovMoney: r.moovMoney,
     logoUrl: r.logoUrl,
@@ -57,7 +59,7 @@ export async function loadPublicMenu(db: DB, r: Restaurant, opts: { preview: boo
       welcomeScreen: f.welcomeScreen ?? true,
       fortuneCookie: f.fortuneCookie ?? true,
       share: f.share ?? true,
-      takeawayWhatsapp: (f.takeawayWhatsapp ?? true) && Boolean(r.whatsapp),
+      takeawayWhatsapp: (f.takeawayWhatsapp ?? true) && Boolean(r.settings.takeawayWhatsapp ?? r.whatsapp),
       localBadge: f.localBadge ?? false,
     },
     locales: (["fr", "en", "zh"] as const).filter((l) => l === "fr" || (r.settings.enabledLocales ?? ["fr", "en", "zh"]).includes(l)),

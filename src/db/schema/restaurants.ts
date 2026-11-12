@@ -22,6 +22,8 @@ export type RestaurantSettings = {
   ownerEmail?: string;
   /** Second brand colour (« couleur d’accent »): header band, « Nouveau » badges, titles. */
   accent2?: string;
+  /** WhatsApp that receives takeaway orders when it is not the main WhatsApp (absent = same). */
+  takeawayWhatsapp?: string;
   /** PIN sessions on authorised devices: end of shift (hours) and auto-lock when idle (minutes). */
   staffSessions?: { shiftHours: number; idleMinutes: number };
   /** Front desk timers: an open order turns orange, then red, after these many minutes. */

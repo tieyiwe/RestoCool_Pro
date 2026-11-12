@@ -33,6 +33,8 @@ export type PublicMenuData = {
   location: { lat: number; lng: number } | null;
   phones: string[];
   whatsapp: string | null;
+  /** WhatsApp that receives takeaway orders. */
+  takeawayWhatsapp: string | null;
   orangeMoney: string | null;
   moovMoney: string | null;
   logoUrl: string | null;

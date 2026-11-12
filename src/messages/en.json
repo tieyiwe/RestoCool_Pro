@@ -627,7 +627,8 @@
       "badge_plan": "Hiding the RestoCool badge requires the Business plan.",
       "publish_empty": "Add at least one visible dish before publishing your menu.",
       "unknown": "Something went wrong. Please try again in a moment.",
-      "qr_plan": "One QR code per table is included in the Pro plan. On the Free plan, use the single QR code."
+      "qr_plan": "One QR code per table is included in the Pro plan. On the Free plan, use the single QR code.",
+      "takeaway_whatsapp_missing": "Enter the WhatsApp that receives takeaway orders, or tick “Yes” to use your main WhatsApp."
     },
     "profile": {
       "title": "Profile",
@@ -648,7 +649,10 @@
       "whatsapp": "WhatsApp",
       "orangeMoney": "Orange Money number",
       "moovMoney": "Moov Money number",
-      "hint": "Burkina numbers, 8 digits. They appear on your menu to call, message or pay."
+      "hint": "Burkina numbers, 8 digits. They appear on your menu to call, message or pay.",
+      "takeawayQuestion": "Is this the WhatsApp that receives your takeaway orders?",
+      "takeawayHint": "When a customer picks “Takeaway”, their order opens in WhatsApp to this number.",
+      "takeawayOther": "WhatsApp for takeaway orders"
     },
     "hours": {
       "title": "Opening hours",

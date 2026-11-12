@@ -15,6 +15,7 @@ import { env } from "@/lib/env";
 import { formatBfPhone } from "@/lib/format";
 import { SEATING_MODES } from "@/lib/restaurants/settings";
 import { BrandingEditor } from "./branding-editor";
+import { WhatsappFields } from "./whatsapp-fields";
 import { CityField } from "@/components/forms/city-field";
 import { LocationField } from "./location-field";
 import { SettingsForm } from "./settings-form";
@@ -79,10 +80,13 @@ export async function ContactsSection({ r, next, submitLabel }: SectionProps) {
         ))}
       </fieldset>
       <div className="grid gap-3 sm:grid-cols-3">
-        <label>
-          <span className={label}>{t("whatsapp")}</span>
-          <input name="whatsapp" type="tel" inputMode="tel" defaultValue={phone(r.whatsapp)} className={input} />
-        </label>
+        <WhatsappFields
+          label={label}
+          input={input}
+          whatsapp={phone(r.whatsapp)}
+          takeaway={r.settings.takeawayWhatsapp ? phone(r.settings.takeawayWhatsapp) : ""}
+          t={{ whatsapp: t("whatsapp"), question: t("takeawayQuestion"), hint: t("takeawayHint"), other: t("takeawayOther") }}
+        />
         <label>
           <span className={label}>{t("orangeMoney")}</span>
           <input name="orangeMoney" type="tel" inputMode="tel" defaultValue={phone(r.orangeMoney)} className={input} />

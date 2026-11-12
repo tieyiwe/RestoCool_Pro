@@ -818,12 +818,12 @@ export function MenuApp({
         </Sheet>
       )}
       {served && <ServedCelebration t={t} onClose={() => setServed(false)} />}
-      {panel?.type === "takeaway" && data.whatsapp && (
+      {panel?.type === "takeaway" && data.takeawayWhatsapp && (
         <TakeawaySheet
           t={t}
           onClose={closePanel}
           onSend={(name, pickup) => {
-            const href = whatsappHref(data.whatsapp!, takeawayMessage(data, items, lines, { name, pickup }));
+            const href = whatsappHref(data.takeawayWhatsapp!, takeawayMessage(data, items, lines, { name, pickup }));
             if (href) window.open(href, "_blank", "noopener");
           }}
         />

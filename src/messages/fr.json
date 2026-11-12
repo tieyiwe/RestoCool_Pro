@@ -627,7 +627,8 @@
       "badge_plan": "Masquer le badge RestoCool est réservé à la formule Business.",
       "publish_empty": "Ajoutez au moins un plat visible avant de publier votre menu.",
       "unknown": "Une erreur est survenue. Réessayez dans un instant.",
-      "qr_plan": "Un QR code par table est inclus dans la formule Pro. Avec la formule Gratuit, utilisez le QR code unique."
+      "qr_plan": "Un QR code par table est inclus dans la formule Pro. Avec la formule Gratuit, utilisez le QR code unique.",
+      "takeaway_whatsapp_missing": "Indiquez le WhatsApp qui reçoit les commandes à emporter, ou cochez « Oui » pour utiliser votre WhatsApp principal."
     },
     "profile": {
       "title": "Profil",
@@ -648,7 +649,10 @@
       "whatsapp": "WhatsApp",
       "orangeMoney": "Numéro Orange Money",
       "moovMoney": "Numéro Moov Money",
-      "hint": "Numéros du Burkina, 8 chiffres. Ils s’affichent sur votre menu pour appeler, écrire ou payer."
+      "hint": "Numéros du Burkina, 8 chiffres. Ils s’affichent sur votre menu pour appeler, écrire ou payer.",
+      "takeawayQuestion": "Est-ce ce WhatsApp qui reçoit vos commandes à emporter ?",
+      "takeawayHint": "Quand un client choisit « À emporter », sa commande s’ouvre dans WhatsApp vers ce numéro.",
+      "takeawayOther": "WhatsApp pour les commandes à emporter"
     },
     "hours": {
       "title": "Horaires d’ouverture",

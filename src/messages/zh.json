@@ -627,7 +627,8 @@
       "badge_plan": "隐藏 RestoCool 标志需要商业版。",
       "publish_empty": "发布菜单前请至少添加一道可见菜品。",
       "unknown": "出现错误，请稍后重试。",
-      "qr_plan": "每桌一个二维码包含在专业版中。免费版请使用全店通用二维码。"
+      "qr_plan": "每桌一个二维码包含在专业版中。免费版请使用全店通用二维码。",
+      "takeaway_whatsapp_missing": "请填写接收外带订单的 WhatsApp，或勾选“是”使用您的主 WhatsApp。"
     },
     "profile": {
       "title": "资料",
@@ -648,7 +649,10 @@
       "whatsapp": "WhatsApp",
       "orangeMoney": "Orange Money 号码",
       "moovMoney": "Moov Money 号码",
-      "hint": "布基纳法索 8 位号码。显示在菜单上，方便顾客致电、发消息或付款。"
+      "hint": "布基纳法索 8 位号码。显示在菜单上，方便顾客致电、发消息或付款。",
+      "takeawayQuestion": "这个 WhatsApp 是否用于接收外带订单？",
+      "takeawayHint": "顾客选择“外带”时，订单会通过 WhatsApp 发送到这个号码。",
+      "takeawayOther": "接收外带订单的 WhatsApp"
     },
     "hours": {
       "title": "营业时间",

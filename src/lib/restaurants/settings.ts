@@ -19,6 +19,7 @@ export type SettingsError =
   | "slug_taken"
   | "slug_reserved"
   | "phone_invalid"
+  | "takeaway_whatsapp_missing"
   | "contrast"
   | "badge_plan"
   | "publish_empty"
@@ -45,6 +46,9 @@ export const ProfileInput = z.object({
 export const ContactsInput = z.object({
   phones: z.array(z.string().trim().max(30)).max(3).default([]),
   whatsapp: opt(30),
+  /** « Est-ce ce WhatsApp qui reçoit les commandes à emporter ? » Oui (default) or another number. */
+  takeawaySame: z.boolean().default(true),
+  takeawayWhatsapp: opt(30),
   orangeMoney: opt(30),
   moovMoney: opt(30),
 });
@@ -141,11 +145,21 @@ export async function saveContacts(ctx: SettingsCtx, input: z.input<typeof Conta
     if (!n) throw new SettingsValidationError("phone_invalid");
     return n;
   };
+  const whatsapp = norm(p.data.whatsapp);
+  // Takeaway orders go to the main WhatsApp unless the owner gave another number for them.
+  const settings = { ...(await current(ctx)).settings };
+  if (p.data.takeawaySame) delete settings.takeawayWhatsapp;
+  else {
+    const other = norm(p.data.takeawayWhatsapp);
+    if (!other) throw new SettingsValidationError("takeaway_whatsapp_missing");
+    settings.takeawayWhatsapp = other;
+  }
   await update(
     ctx,
     {
       phones: p.data.phones.filter(Boolean).map((v) => norm(v)!),
-      whatsapp: norm(p.data.whatsapp),
+      whatsapp,
+      settings,
       orangeMoney: norm(p.data.orangeMoney),
       moovMoney: norm(p.data.moovMoney),
     },
