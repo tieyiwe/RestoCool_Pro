@@ -8,7 +8,7 @@ import type { Audience, GuideId } from "@/components/guide/guide-scenes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("guide");
-  return { title: t("title"), description: t("introPublic") };
+  return { title: t("title"), description: t("introPublic"), alternates: { canonical: "/guide" } };
 }
 
 /** Public guide (restocool.com/guide): personnel without an account can learn too. */

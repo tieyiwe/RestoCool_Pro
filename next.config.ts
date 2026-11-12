@@ -40,7 +40,16 @@ const nextConfig: NextConfig = {
     ];
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    // Private areas, APIs and token links (table / bus QR) never appear in search results, even
+    // when a link leaks: robots.txt closes them and this header covers non-HTML answers too.
+    // Dish photos (/api/media) stay indexable.
+    const noindex = [{ key: "X-Robots-Tag", value: "noindex, nofollow" }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      ...["/app/:path*", "/admin/:path*", "/api/:path((?!media/).*)", "/poste/:path*", "/pointage/:path*", "/rejoindre/:path*", "/r/:slug/t/:path*", "/r/:slug/b/:path*"].map(
+        (source) => ({ source, headers: noindex }),
+      ),
+    ];
   },
 };
 

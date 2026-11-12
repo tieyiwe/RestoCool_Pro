@@ -4,6 +4,11 @@ import { AuthProvider } from "@/components/auth-provider";
 import { Logo } from "@/components/brand/logo";
 import { UserMenu } from "@/components/user-menu";
 import { getSuperadmin } from "@/lib/auth/context";
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/seo/site";
+
+/** Private area: never in search results (robots.txt closes it too). */
+export const metadata: Metadata = { robots: NOINDEX };
 
 export const dynamic = "force-dynamic";
 

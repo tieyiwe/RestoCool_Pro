@@ -26,11 +26,18 @@ export const loadRestaurant = cache(async (slug: string) => {
   return null;
 });
 
-export async function PublicMenu({ slug, seatToken, busToken = null }: { slug: string; seatToken: string | null; busToken?: string | null }) {
+/** The menu payload, once per request (the page's structured data and the menu share it). */
+export const loadMenuData = cache(async (slug: string) => {
   const found = await loadRestaurant(slug);
+  if (!found) return null;
+  return { ...found, data: await loadPublicMenu(getDb(), found.restaurant, { preview: found.preview }) };
+});
+
+export async function PublicMenu({ slug, seatToken, busToken = null }: { slug: string; seatToken: string | null; busToken?: string | null }) {
+  const found = await loadMenuData(slug);
   if (!found) notFound();
   const r = found.restaurant;
-  const data = await loadPublicMenu(getDb(), r, { preview: found.preview });
+  const data = found.data;
   const wa = data.whatsapp ? whatsappHref(data.whatsapp) : null;
   const whatsappQr = wa ? await QRCode.toString(wa, { type: "svg", margin: 1, color: { dark: "#17231C", light: "#FFFFFF" } }) : null;
   // Only the public-menu strings, in the three languages (the visitor switches client-side).

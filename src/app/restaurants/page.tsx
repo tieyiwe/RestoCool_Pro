@@ -6,12 +6,23 @@ import { DirectorySearch } from "@/components/directory/directory-search";
 import { RestaurantCard } from "@/components/directory/restaurant-card";
 import { getDb } from "@/db";
 import { featuredRestaurants, searchRestaurants } from "@/lib/directory";
+import { JsonLd } from "@/components/seo/json-ld";
+import { directoryJsonLd } from "@/lib/seo/json-ld";
+import { OG_BASE, siteBase } from "@/lib/seo/site";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ q?: string }> }): Promise<Metadata> {
   const t = await getTranslations("directory");
-  return { title: t("title"), description: t("intro") };
+  // Search results (?q=) are not pages of their own: followed, not indexed; the canonical is the directory.
+  const searching = Boolean((await searchParams).q?.trim());
+  return {
+    title: { absolute: t("title") },
+    description: t("intro"),
+    alternates: { canonical: "/restaurants" },
+    robots: searching ? { index: false, follow: true } : undefined,
+    openGraph: { ...OG_BASE, title: t("title"), description: t("intro"), url: "/restaurants" },
+  };
 }
 
 /** Public directory of restaurants on RestoCool (published only). */
@@ -20,8 +31,11 @@ export default async function DirectoryPage({ searchParams }: { searchParams: Pr
   const locale = await getLocale();
   const q = ((await searchParams).q ?? "").slice(0, 60);
   const [featured, initial] = await Promise.all([q ? Promise.resolve([]) : featuredRestaurants(getDb()), searchRestaurants(getDb(), q)]);
+  const ts = await getTranslations("seo");
+  const jsonLd = directoryJsonLd(await siteBase(), t("title"), [...featured, ...initial.filter((r) => !featured.some((f) => f.slug === r.slug))], { home: ts("home") });
   return (
     <div className="min-h-dvh bg-creme text-encre">
+      <JsonLd data={jsonLd} />
       <header className="border-b border-ligne bg-creme/90">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <Link href="/" aria-label="RestoCool">

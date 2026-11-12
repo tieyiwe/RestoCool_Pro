@@ -33,13 +33,17 @@ import { PLANS } from "@/config/plans";
 import { formatFCFA } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { CodeForm } from "@/components/code-entry/code-form";
+import { JsonLd } from "@/components/seo/json-ld";
+import { siteJsonLd } from "@/lib/seo/json-ld";
+import { OG_BASE, siteBase } from "@/lib/seo/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("landing");
   return {
     title: { absolute: `RestoCool · ${t("hero.title")} ${t("hero.titleAccent")}` },
     description: t("hero.subtitle"),
-    openGraph: { title: "RestoCool", description: t("hero.subtitle"), siteName: "RestoCool", type: "website" },
+    alternates: { canonical: "/" },
+    openGraph: { ...OG_BASE, title: "RestoCool", description: t("hero.subtitle"), url: "/" },
   };
 }
 
@@ -93,8 +97,20 @@ export default async function HomePage() {
     ["🛍️", "shop"],
   ] as const;
 
+  // Structured data for search engines and AI assistants: only what this page shows.
+  const base = await siteBase();
+  const jsonLd = siteJsonLd({
+    base,
+    description: t("hero.subtitle"),
+    slogan: tb("tagline"),
+    languages: ["fr", "en", "zh"],
+    plans: plans.map((p) => ({ id: p.id, name: t(`pricing.${p.id}.name`), description: t(`pricing.${p.id}.desc`), price: p.price })),
+    faq: ([1, 2, 3, 4, 5, 6] as const).map((n) => ({ q: t(`faq.q${n}`), a: t(`faq.a${n}`) })),
+  });
+
   return (
     <div className="bg-creme text-encre">
+      <JsonLd data={jsonLd} />
       {/* ---------------- Header ---------------- */}
       <header className="sticky top-0 z-40 border-b border-ligne/70 bg-creme/90 backdrop-blur">
         <div className={cn(section, "flex h-16 items-center justify-between gap-3")}>

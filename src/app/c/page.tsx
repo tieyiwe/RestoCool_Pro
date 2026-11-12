@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("codeEntry");
-  return { title: t("pageTitle"), robots: { index: true, follow: true } };
+  return { title: t("pageTitle"), description: t("intro"), robots: { index: true, follow: true }, alternates: { canonical: "/c" } };
 }
 
 /** restocool.com/c: type the code printed under a QR to open the same menu as scanning it. */
