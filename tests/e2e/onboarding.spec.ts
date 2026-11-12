@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { pngBuffer, sql } from "./helpers";
+import { freeDevOwnerSlots, pngBuffer, sql } from "./helpers";
 
 test.describe.configure({ mode: "serial" });
 
 test("owner creates a restaurant, goes through the wizard, builds a menu with a photo and publishes it", async ({ page }, info) => {
+  await freeDevOwnerSlots();
   // Long end-to-end path; on a cold `next dev` the first visit to each route compiles it,
   // which pushed this test past the default 30 s on the first project.
   test.setTimeout(180_000);
@@ -137,7 +138,7 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await expect(phone.getByTestId("my-order").first()).toHaveAttribute("data-status", /sent|confirmed/);
   await page.goto("/app/service");
   const card = page.getByTestId("order-card").filter({ hasText: "Riz gras" });
-  await expect(card).toContainText("2\u202F500\u202FF");
+  await expect(card).toContainText("2\u202F500\u202FF", { timeout: 30_000 }); // first visit compiles the board
   for (let i = 0; i < 4 && (await card.getAttribute("data-status")) !== "served"; i++) {
     const before = (await card.getAttribute("data-status"))!;
     await card.locator("[data-testid=action-confirmed], [data-testid=action-ready], [data-testid=action-served]").first().click();

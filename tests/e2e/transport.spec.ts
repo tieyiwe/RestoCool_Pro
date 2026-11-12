@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { sql } from "./helpers";
+import { sql, freeDevOwnerSlots } from "./helpers";
 
 test("a VIP bus company: create it, add a bus from rows and columns, an itinerary with its hostess, print the seat QR codes", async ({ page }, info) => {
+  await freeDevOwnerSlots();
   const name = `Express Bus E2E ${info.project.name}`;
   try {
     await page.goto("/app/new");

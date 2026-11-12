@@ -75,3 +75,13 @@ export async function resetDemoOrders() {
   await sql("update menu_items set sold_out_until = null where restaurant_id = (select id from restaurants where slug = 'restaurant-demo')");
   await resetDemoSessions();
 }
+
+/**
+ * The dev owner may own 3 businesses: remove the ones earlier creation tests left (never the demo),
+ * so each creation test starts with room for a new one.
+ */
+export async function freeDevOwnerSlots() {
+  await sql(
+    "delete from restaurants where slug <> 'restaurant-demo' and id in (select restaurant_id from members where clerk_user_id = 'dev-owner' and role = 'owner')",
+  );
+}

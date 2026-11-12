@@ -37,8 +37,9 @@ export default async function DirectoryPage({ searchParams }: { searchParams: Pr
           <h1 className="font-display text-3xl font-extrabold sm:text-4xl">{t("title")}</h1>
           <p className="mt-2 text-lg text-encre-2">{t("intro")}</p>
         </div>
+        {/* « À la une » steps aside while the visitor types a search. */}
         {featured.length > 0 && (
-          <section aria-labelledby="featured-title" data-testid="directory-featured">
+          <section aria-labelledby="featured-title" data-testid="directory-featured" className="[body:has(#dir-q:not(:placeholder-shown))_&]:hidden">
             <h2 id="featured-title" className="mb-4 text-xl font-extrabold">
               {t("featured")}
             </h2>

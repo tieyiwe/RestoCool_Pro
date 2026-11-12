@@ -17,8 +17,8 @@ test("the directory narrows results as you type, by name or by numéro RC; unpub
     "select a.code from access_codes a join restaurants r on r.id = a.restaurant_id where r.slug = 'restaurant-demo' and a.seat_id is null",
   );
   await input.fill(`rc-${row!.code.toLowerCase()}`);
-  await expect(page.getByTestId("directory-card")).toHaveCount(1);
-  await expect(page.getByTestId("directory-card")).toContainText(`RC-${row!.code}`);
+  await expect(page.getByTestId("directory-card").locator("visible=true")).toHaveCount(1);
+  await expect(page.getByTestId("directory-card").locator("visible=true")).toContainText(`RC-${row!.code}`);
 
   // The test tenant is unpublished: not found by name.
   await input.fill("Témoin");

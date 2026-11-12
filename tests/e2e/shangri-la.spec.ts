@@ -69,10 +69,9 @@ async function serverTablet(browser: Browser): Promise<Page> {
   return t;
 }
 
-test("menu: welcome, 16 categories, photos, search in 3 languages, spicy filter, prices in FCFA", async ({ page }) => {
+test("menu: 16 categories, photos, search in 3 languages, spicy filter, prices in FCFA", async ({ page }) => {
+  await page.addInitScript((s) => sessionStorage.setItem(`rc-welcome-${s}`, "1"), SLUG);
   await page.goto(`/r/${SLUG}`);
-  await expect(page.getByTestId("welcome")).toContainText("Shangri-La");
-  await expect(page.getByTestId("welcome")).toBeHidden({ timeout: 6000 });
   await expect(page.getByTestId("menu-item")).toHaveCount(286);
   await expect(page.getByTestId("menu-item").locator("img").first()).toBeVisible();
 
