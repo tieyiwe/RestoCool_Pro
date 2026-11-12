@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
 import { deviceId, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
 import dynamic from "next/dynamic";
+import { rememberPlace } from "@/lib/public-menu/recent";
 
 // Bus companies only: the seat map code loads when the traveler opens it, not with every menu.
 const BusPicker = dynamic(() => import("./bus-picker").then((m) => m.BusPicker), { ssr: false });
@@ -117,6 +118,11 @@ export function MenuApp({
   const cartKey = `rc-cart-${initialData.slug}`;
   const history = useHistory(initialData.slug, isCartLine);
   const { startVisit, rememberCart } = history;
+
+  /* ---------- « Vus récemment » on this phone (not for an owner's preview) ---------- */
+  useEffect(() => {
+    if (!initialData.preview) rememberPlace({ slug: initialData.slug, name: initialData.name, city: initialData.city || null, logo: initialData.logoUrl });
+  }, [initialData.preview, initialData.slug, initialData.name, initialData.city, initialData.logoUrl]);
 
   /* ---------- restore per-visit state ---------- */
   useEffect(() => {

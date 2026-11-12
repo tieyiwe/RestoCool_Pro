@@ -20,6 +20,11 @@ export type RestaurantSettings = {
    * in with this verified email becomes its owner. Lower case; removed once claimed.
    */
   ownerEmail?: string;
+  /**
+   * Account recovery (verified by TIBLOGICS): the ownerEmail account replaces the current owner,
+   * whose account is switched off (kept for history).
+   */
+  ownerTransfer?: boolean;
   /** Why the platform suspended this business (shown to the super admin). */
   suspendedReason?: string;
   /** Second brand colour (« couleur d’accent »): header band, « Nouveau » badges, titles. */

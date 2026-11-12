@@ -431,7 +431,29 @@
         }
       }
     },
-    "superadmin": "Super admin"
+    "superadmin": "Super admin",
+    "supportNav": "Aide et signalement",
+    "notificationsNav": "Notifications",
+    "navGroups": {
+      "service": "Service",
+      "manage": "Gestion",
+      "help": "Aide"
+    },
+    "install": {
+      "title": "Installer RestoCool",
+      "text": "Ouvrez RestoCool comme un logiciel, dans sa propre fenêtre, en un clic.",
+      "install": "Installer",
+      "later": "Plus tard",
+      "safariMac": "Dans Safari : menu Fichier › « Ajouter au Dock ».",
+      "ios": "Touchez Partager ⬆️ puis « Sur l’écran d’accueil ».",
+      "done": "RestoCool est installé."
+    },
+    "palette": {
+      "open": "Aller à…",
+      "placeholder": "Tapez une section : menu, cuisine, personnel…",
+      "empty": "Aucune section trouvée.",
+      "hint": "↑ ↓ pour choisir · Entrée pour ouvrir · Échap pour fermer"
+    }
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -453,7 +475,12 @@
       "billing": "Abonnements",
       "map": "Carte",
       "activity": "Activité et erreurs",
-      "settings": "Réglages"
+      "settings": "Réglages",
+      "live": "En direct",
+      "support": "Demandes",
+      "messages": "Messages",
+      "team": "Équipe",
+      "recovery": "Récupération d’accès"
     },
     "empty": "Rien pour l’instant.",
     "draft": "Brouillon",
@@ -504,7 +531,9 @@
       "top": "Les plus actifs (30 jours)",
       "ordersN": "{n} commandes",
       "expiring": "Fin d’abonnement dans les 14 jours",
-      "expiringNone": "Aucune fin d’abonnement proche."
+      "expiringNone": "Aucune fin d’abonnement proche.",
+      "liveStrip": "En ce moment : {online} en ligne · {pending} commandes en attente · {processed} traitées aujourd’hui",
+      "liveOpen": "Ouvrir le direct"
     },
     "businesses": {
       "title": "Établissements",
@@ -556,7 +585,13 @@
       "featured": "« À la une » mis à jour.",
       "note": "Note ajoutée.",
       "resolved": "Erreur(s) marquée(s) comme réglée(s).",
-      "saved": "Réglage enregistré."
+      "saved": "Réglage enregistré.",
+      "collabAdded": "Collaborateur ajouté. Il se connecte avec cet e-mail pour ouvrir la console.",
+      "collabSaved": "Accès mis à jour.",
+      "collabRemoved": "Collaborateur retiré.",
+      "supportSaved": "Enregistré. L’établissement voit votre réponse dans son application.",
+      "messageSent": "Message envoyé : il apparaît maintenant dans l’application des établissements.",
+      "messageWithdrawn": "Message retiré."
     },
     "detail": {
       "orders30": "Commandes (30 jours)",
@@ -588,7 +623,14 @@
       "notes": "Notes internes",
       "notePlaceholder": "Appel, promesse de paiement, besoin…",
       "noteAdd": "Ajouter la note",
-      "activity": "Activité de l’établissement"
+      "activity": "Activité de l’établissement",
+      "liveTitle": "En direct et aujourd’hui",
+      "liveTeam": "Équipe en ligne",
+      "liveCustomers": "Clients sur le menu",
+      "livePending": "Commandes en attente",
+      "liveProcessed": "Traitées aujourd’hui",
+      "liveCancelled": "Annulées aujourd’hui",
+      "liveApp": "Usage de l’app aujourd’hui"
     },
     "fields": {
       "plan": "Formule",
@@ -614,7 +656,8 @@
       "manager": "Gérant",
       "server": "Service",
       "kitchen": "Cuisine",
-      "cashier": "Caisse"
+      "cashier": "Caisse",
+      "staff": "Personnel"
     },
     "billing": {
       "title": "Abonnements et paiements",
@@ -663,6 +706,315 @@
       "title": "Carte des établissements",
       "intro": "{n} établissement(s) ont enregistré leur position.",
       "missing": "Les autres n’ont pas encore indiqué leur position"
+    },
+    "denied": "Votre accès n’inclut pas cette page. Demandez-la à un propriétaire de la console.",
+    "welcomeLimited": "Bienvenue {name}. Voici ce que votre accès vous permet d’ouvrir :",
+    "live": {
+      "title": "En direct",
+      "intro": "Qui est sur RestoCool en ce moment, sur quel appareil, et où en sont les commandes.",
+      "updated": "En direct, mis à jour",
+      "kpi": {
+        "online": "En ligne maintenant",
+        "onlineSub": "Pic du jour {peak} · {today} personnes aujourd’hui",
+        "team": "Équipes des établissements",
+        "teamSub": "{owners, plural, one {# propriétaire} other {# propriétaires}} · {managers, plural, one {# gérant} other {# gérants}} · {staff} personnel",
+        "customers": "Clients sur les menus",
+        "customersSub": "+ {n} visiteurs sur le site",
+        "devices": "Appareils maintenant",
+        "devicesSub": "{tablet} tablettes · {installed} dans l’app installée",
+        "pending": "Commandes en attente",
+        "pendingSub": "{sent} nouvelles · {confirmed} confirmées · {preparing} en préparation · {ready} prêtes",
+        "late": "En attente > 15 min",
+        "lateSub": "Tous établissements",
+        "processed": "Traitées aujourd’hui",
+        "processedSub": "servies ou payées · {n} annulées",
+        "serve": "Temps moyen de service",
+        "serveSub": "De l’envoi au service, aujourd’hui"
+      },
+      "lastHour": "Personnes en ligne, 60 dernières minutes",
+      "last24h": "Pic par heure, dernières 24 h",
+      "daily": "Personnes différentes par jour (30 jours)",
+      "dailyHint": "Chaque personne compte une fois par jour et par public ; survolez une barre pour le détail.",
+      "dailyTitle": "propriétaires {owner}, gérants {manager}, personnel {staff}, clients {customer}, visiteurs {visitor}",
+      "nowByDevice": "En ligne maintenant par appareil",
+      "devices7": "Appareils, 7 derniers jours",
+      "os7": "Systèmes, 7 derniers jours",
+      "installed7": "{n} ont utilisé l’app installée cette semaine.",
+      "devices": {
+        "phone": "Téléphone",
+        "tablet": "Tablette",
+        "desktop": "Ordinateur"
+      },
+      "os": {
+        "android": "Android",
+        "ios": "iPhone / iPad",
+        "windows": "Windows",
+        "mac": "Mac",
+        "linux": "Linux",
+        "other": "Autre"
+      },
+      "perBusiness": "Par établissement, aujourd’hui",
+      "perBusinessHint": "Établissements avec du monde en ligne, des commandes en attente ou de l’activité aujourd’hui. En attente d’abord.",
+      "nothing": "Rien en cours pour l’instant.",
+      "cols": {
+        "business": "Établissement",
+        "team": "Équipe en ligne",
+        "customers": "Clients",
+        "pending": "En attente",
+        "processed": "Traitées",
+        "cancelled": "Annulées",
+        "appTime": "Usage de l’app",
+        "lastOrder": "Dernière commande"
+      },
+      "lateN": "{n} en retard",
+      "minutes": "{n} min · {people, plural, one {# personne} other {# personnes}}",
+      "privacy": "Comptages anonymes uniquement : une clé d’appareil hachée, jamais de nom, de numéro ni d’adresse IP. Conservés 120 jours (minutes) et 400 jours (comptes par jour)."
+    },
+    "team": {
+      "title": "Équipe",
+      "intro": "Les personnes de TIBLOGICS qui aident à faire tourner RestoCool. Donnez à chacun seulement ce dont il a besoin ; chaque changement est enregistré.",
+      "forbidden": "Vous ne pouvez pas donner des droits que vous n’avez pas, modifier votre propre accès, ni modifier un collaborateur de niveau propriétaire.",
+      "add": "Ajouter un collaborateur",
+      "addHint": "Il se connecte à RestoCool avec cet e-mail (vérifié), puis ouvre /admin_pro. Rien ne lui est envoyé : prévenez-le vous-même.",
+      "email": "E-mail",
+      "name": "Nom",
+      "preset": "Accès prêt à l’emploi",
+      "presetCustom": "Sur mesure : cochez ci-dessous",
+      "permsTitle": "Permissions",
+      "addSubmit": "Ajouter le collaborateur",
+      "presets": {
+        "support": "Agent support",
+        "sales": "Ventes et abonnements",
+        "analyst": "Analyste (lecture seule)",
+        "manager": "Responsable des opérations"
+      },
+      "perms": {
+        "dashboard": "Tableau de bord et direct",
+        "businesses_read": "Voir les établissements",
+        "businesses_write": "Gérer les établissements",
+        "billing_read": "Voir les abonnements",
+        "billing_write": "Paiements et formules",
+        "support": "Demandes d’aide",
+        "recovery": "Récupération d’accès",
+        "comms": "Messages et notifications",
+        "activity": "Activité et erreurs",
+        "settings": "Réglages de la plateforme",
+        "team": "Équipe et accès"
+      },
+      "permsHint": {
+        "dashboard": "Chiffres, trafic en direct, commandes en attente.",
+        "businesses_read": "Liste, fiches, carte, notes (lire et ajouter).",
+        "businesses_write": "Mettre en ligne, suspendre, mettre à la une.",
+        "billing_read": "Revenus et historique des formules.",
+        "billing_write": "Enregistrer un paiement, changer formule et échéance.",
+        "support": "Lire et répondre aux demandes des établissements.",
+        "recovery": "Vérifier l’identité, débloquer ou réinitialiser un accès.",
+        "comms": "Envoyer des messages et notifications dans l’app.",
+        "activity": "Journal et erreurs serveur.",
+        "settings": "Offre de lancement, réglages. Propriétaires seulement.",
+        "team": "Ajouter des collaborateurs et changer les accès. Propriétaires seulement."
+      },
+      "owners": "Propriétaires",
+      "ownersHint": "Accès complet, défini par le secret SUPERADMIN_EMAILS sur Replit (non modifiable ici).",
+      "you": "vous",
+      "collaborators": "Collaborateurs ({n})",
+      "none": "Aucun collaborateur pour l’instant.",
+      "disabled": "désactivé",
+      "meta": "Ajouté par {by} le {date}",
+      "lastSeen": "vu {when}",
+      "neverSeen": "jamais connecté",
+      "disable": "Désactiver",
+      "enable": "Réactiver",
+      "remove": "Retirer",
+      "removeConfirm": "Retirer {email} de la console ?",
+      "save": "Enregistrer l’accès"
+    },
+    "support": {
+      "title": "Demandes",
+      "intro": "{open} ouvertes · {fresh} nouvelles · {urgent} bloquantes. Bloquantes d’abord, puis les plus anciennes.",
+      "search": "Chercher : établissement, personne, sujet, D-000123, RC…",
+      "status": "Statut",
+      "statusOpen": "Ouvertes (non résolues)",
+      "statusAll": "Toutes",
+      "urgency": "Urgence",
+      "urgencyAll": "Toute urgence",
+      "filter": "Filtrer",
+      "none": "Aucune demande ici. 🎉",
+      "statuses": {
+        "new": "Nouvelle",
+        "in_progress": "En cours",
+        "waiting": "En attente de l’établissement",
+        "resolved": "Résolue"
+      },
+      "urgencies": {
+        "low": "Peut attendre",
+        "medium": "Gênant",
+        "high": "Bloquant"
+      },
+      "categories": {
+        "bug": "Quelque chose ne marche pas",
+        "orders": "Commandes",
+        "menu": "Menu et photos",
+        "access": "Connexion / PIN",
+        "billing": "Abonnement",
+        "question": "Question",
+        "idea": "Suggestion"
+      },
+      "cols": {
+        "urgency": "Urgence",
+        "request": "Demande",
+        "business": "Établissement",
+        "from": "De",
+        "received": "Reçue",
+        "status": "Statut"
+      },
+      "public": "formulaire « accès bloqué »",
+      "app": "application",
+      "noMatch": "Le RC {rc} ne correspond à aucun établissement",
+      "waHello": "Bonjour {name}, ici l’équipe RestoCool au sujet de votre demande {ref}.",
+      "startRecovery": "Vérifier l’identité et rétablir l’accès",
+      "conversation": "Conversation",
+      "answer": "Votre réponse",
+      "answerPlaceholder": "Écrivez à l’établissement (affiché dans son application)…",
+      "answerHint": "La réponse et le statut apparaissent dans l’application de l’établissement (« Aide »), avec une notification.",
+      "assignMe": "M’attribuer",
+      "send": "Envoyer / enregistrer",
+      "details": "Détails",
+      "contact": "Contact",
+      "source": "Envoyée depuis",
+      "screen": "Écran",
+      "device": "Appareil",
+      "firstAnswer": "Première réponse",
+      "after": "après {n} min",
+      "notYet": "pas encore",
+      "resolvedAt": "Résolue",
+      "assigned": "Attribuée à"
+    },
+    "recovery": {
+      "title": "Récupération d’accès",
+      "intro": "Pour quelqu’un de bloqué ou qui a oublié son PIN ou son e-mail. Vérifiez d’abord qui appelle : le numéro RC et au moins {n} réponses justes. Une vérification réussie autorise les actions pendant {min} minutes, pour vous seul. Tout est enregistré.",
+      "noMatch": "Aucun établissement n’a ce numéro RC.",
+      "fromRequest": "Depuis la demande",
+      "step1": "Trouver l’établissement par son numéro RC",
+      "rc": "Numéro RC",
+      "find": "Chercher",
+      "business": "Établissement",
+      "other": "Autre établissement",
+      "step2": "Posez les questions et tapez ce que la personne répond",
+      "step2Hint": "Ne lui lisez rien : c’est elle qui doit donner les réponses. Les données de l’établissement ne sont volontairement pas affichées ici.",
+      "callerName": "Nom de la personne",
+      "callerPhone": "Téléphone de la personne",
+      "q": {
+        "name": "Nom de l’établissement",
+        "city": "Ville",
+        "phone": "Un numéro de l’établissement ou de son équipe",
+        "owner": "E-mail ou nom complet du propriétaire",
+        "callback": "J’ai rappelé un numéro que nous avons déjà pour cet établissement, et j’ai eu cette personne."
+      },
+      "note": "Note (facultatif)",
+      "check": "Vérifier les réponses",
+      "verified": "Identité vérifiée",
+      "notVerified": "Non vérifiée",
+      "notVerifiedHint": "Le numéro RC et au moins {n} autres réponses doivent correspondre. N’aidez pas : demandez de vérifier les informations, ou rappelez le numéro connu de l’établissement.",
+      "expired": "Cette vérification a expiré (ou a été faite par quelqu’un d’autre) : vérifiez à nouveau.",
+      "until": "Actions autorisées jusqu’à {time}.",
+      "checks": {
+        "rc": "Numéro RC",
+        "name": "Nom de l’établissement",
+        "city": "Ville",
+        "phone": "Numéro de téléphone",
+        "owner": "Propriétaire",
+        "callback": "Rappel sur un numéro connu"
+      },
+      "history": "Vérifications récentes pour cet établissement",
+      "actions": {
+        "pin_unlocked": "PIN débloqué",
+        "pin_reset": "nouveau PIN",
+        "owner_email_set": "nouvel e-mail propriétaire",
+        "signin_unlocked": "connexion débloquée"
+      },
+      "labels": {
+        "newPin": "Nouveau PIN pour {name} :",
+        "newPinHint": "Dictez-le maintenant : il ne sera plus affiché. Demandez de le changer. Ses sessions ouvertes sur les tablettes ont été fermées.",
+        "ok_unlocked": "{name} peut réessayer son PIN.",
+        "ok_reset": "PIN changé.",
+        "ok_signin": "Connexion débloquée pour {name}. Il peut utiliser « Mot de passe oublié » sur la page de connexion.",
+        "ok_owner": "En attente de {name} : la première connexion avec cet e-mail vérifié devient propriétaire ; l’ancien compte propriétaire est désactivé.",
+        "err_expired": "Cette vérification a expiré : vérifiez à nouveau la personne.",
+        "err_invalid": "Ça n’a pas marché. Vérifiez et réessayez.",
+        "err_signinUnavailable": "Le déblocage n’est pas disponible pour ce compte. Dites-lui d’utiliser « Mot de passe oublié » sur la page de connexion.",
+        "inactive": "inactif",
+        "locked": "bloqué",
+        "unlock": "Débloquer le PIN",
+        "resetPin": "Nouveau PIN",
+        "setPin": "Donner un PIN",
+        "resetConfirm": "Donner un nouveau PIN à {name} ? Son PIN actuel ne marchera plus.",
+        "unlockSignIn": "Débloquer la connexion",
+        "ownerTitle": "Le propriétaire n’a plus accès à son e-mail",
+        "ownerHint": "Tapez le nouvel e-mail avec lequel il se connectera. La première connexion avec cet e-mail vérifié devient propriétaire ; le compte actuel est désactivé (gardé pour l’historique).",
+        "ownerSubmit": "Confier à cet e-mail",
+        "ownerConfirm": "Confier l’établissement à cet e-mail ? Seulement après une vérification réussie."
+      }
+    },
+    "messages": {
+      "title": "Messages et notifications",
+      "intro": "Écrivez aux propriétaires et aux équipes : nouveautés, actualités, maintenance, abonnement. Le message apparaît dans leur application (cloche 🔔, et en fenêtre si vous le choisissez), en direct, et par e-mail si vous cochez.",
+      "error": "Vérifiez le message : titre et texte en français obligatoires ; les numéros RC doivent exister.",
+      "new": "Nouveau message",
+      "toOne": "Message à {name}",
+      "sendTo": "Envoyer un message",
+      "kind": "Type",
+      "kinds": {
+        "feature": "Nouvelle fonction",
+        "news": "Actualité",
+        "maintenance": "Maintenance",
+        "billing": "Abonnement",
+        "message": "Message personnel"
+      },
+      "to": "Qui le voit dans chaque établissement",
+      "toOptions": {
+        "owners": "Propriétaires",
+        "managers": "Propriétaires et gérants",
+        "everyone": "Toute l’équipe"
+      },
+      "titleFr": "Titre (français)",
+      "bodyFr": "Message (français)",
+      "translations": "Anglais et chinois (facultatif, sinon le français s’affiche)",
+      "titleEn": "Titre (anglais)",
+      "titleZh": "Titre (chinois)",
+      "bodyEn": "Message (anglais)",
+      "bodyZh": "Message (chinois)",
+      "link": "Lien (facultatif)",
+      "expires": "Ne plus afficher après",
+      "never": "Jamais",
+      "days": "{n, plural, one {# jour} other {# jours}}",
+      "targeting": "Quels établissements (vide = tous)",
+      "targetingHint": "Cochez des formules, des types, ajoutez des villes ou des numéros RC pour cibler. Combinés : un établissement doit tous les remplir.",
+      "plans": {
+        "gratuit": "Gratuit",
+        "pro": "Pro",
+        "business": "Business"
+      },
+      "kindsBiz": {
+        "restaurant": "Restaurants et commerces",
+        "transport": "Transport"
+      },
+      "cities": "Villes, séparées par des virgules (ex. Ouagadougou, Bobo-Dioulasso)",
+      "rcCodes": "Numéros RC, séparés par des virgules (ex. RC-K7M3P, RC-…)",
+      "popup": "Afficher en fenêtre",
+      "popupHint": "Pour une nouveauté : s’ouvre une fois, à la prochaine ouverture de l’application.",
+      "email": "Envoyer aussi par e-mail aux propriétaires",
+      "emailHint": "À leur e-mail de connexion vérifié (nécessite le secret SMTP_PASS).",
+      "confirm": "Envoyer ce message maintenant ?",
+      "send": "Envoyer",
+      "sent": "Messages envoyés",
+      "popupTag": "fenêtre",
+      "nBusinesses": "{n, plural, one {# établissement} other {# établissements}}",
+      "reads": "Lu par {read} sur {total} ({pct} %)",
+      "emailed": "{n} e-mails envoyés",
+      "withdraw": "Retirer",
+      "withdrawConfirm": "Ne plus afficher ce message ?",
+      "withdrawn": "retiré"
     }
   },
   "demo": {
@@ -1315,8 +1667,12 @@
     "tooMany": "Trop d’essais. Patientez une minute, puis réessayez.",
     "orScan": "Vous pouvez aussi scanner le QR code avec l’appareil photo de votre téléphone.",
     "homeTitle": "Vous êtes sur place ?",
-    "homeText": "Tapez le numéro RC écrit sous le QR code pour ouvrir le menu.",
-    "short": "Entrer un numéro RC"
+    "homeText": "Scannez le QR code de l’établissement, ou tapez le numéro RC écrit juste en dessous, pour ouvrir le menu.",
+    "short": "Entrer un numéro RC",
+    "suggestions": "Établissements correspondants",
+    "recent": "Vus récemment",
+    "remove": "Retirer",
+    "open": "Ouvrir"
   },
   "service": {
     "frontDesk": "Service en salle",
@@ -2452,5 +2808,101 @@
     "unknownTitle": "Commande introuvable",
     "unknownText": "Ce QR ne correspond à aucune commande. Demandez au client de rouvrir « Montrer au serveur ».",
     "customer": "Vous êtes client ? Ce QR est pour le serveur : montrez simplement l’écran de votre téléphone."
+  },
+  "support": {
+    "title": "Aide et signalement",
+    "intro": "Quelque chose ne marche pas ? Dites-le à l’équipe RestoCool : nous vous répondons ici.",
+    "formTitle": "Signaler un problème",
+    "urgency": "Urgence",
+    "urgencies": {
+      "low": "Peut attendre",
+      "medium": "Gênant",
+      "high": "Bloquant"
+    },
+    "urgencyHints": {
+      "low": "Une question ou un petit souci.",
+      "medium": "Ça gêne le travail, mais on peut continuer.",
+      "high": "Le service est bloqué : on ne peut plus travailler."
+    },
+    "category": "Type de problème",
+    "categories": {
+      "bug": "Quelque chose ne marche pas",
+      "orders": "Commandes",
+      "menu": "Menu et photos",
+      "access": "Connexion ou code PIN",
+      "billing": "Abonnement",
+      "question": "Question",
+      "idea": "Suggestion"
+    },
+    "contact": "Pour vous joindre (facultatif)",
+    "contactPlaceholder": "+226 70 00 00 00",
+    "subject": "En quelques mots",
+    "subjectPlaceholder": "Ex. : les commandes n’arrivent plus en cuisine",
+    "body": "Que se passe-t-il ?",
+    "bodyPlaceholder": "Ce que vous faisiez, ce qui s’est passé, depuis quand…",
+    "fromPage": "Envoyé depuis : {page}",
+    "submit": "Envoyer à l’équipe RestoCool",
+    "privacy": "Nous recevons votre nom, votre établissement, l’écran et l’heure, pour vous aider plus vite.",
+    "sent": "Demande {ref} envoyée. Nous vous répondons ici, le plus vite possible.",
+    "replied": "Message envoyé.",
+    "tooMany": "Trop de demandes d’un coup. Réessayez dans quelques minutes.",
+    "invalid": "Vérifiez les champs et réessayez.",
+    "allTitle": "Demandes de l’établissement",
+    "mineTitle": "Mes demandes",
+    "none": "Aucune demande pour l’instant.",
+    "newAnswer": "Nouvelle réponse",
+    "statuses": {
+      "new": "Envoyée",
+      "in_progress": "En cours",
+      "waiting": "En attente de vous",
+      "resolved": "Résolue"
+    },
+    "reply": "Répondre",
+    "replyPlaceholder": "Votre message…",
+    "navLabel": "Aide",
+    "help": "Aide / signaler"
+  },
+  "aide": {
+    "title": "Accès bloqué ?",
+    "intro": "PIN oublié, compte bloqué après plusieurs essais, adresse e-mail perdue… Envoyez-nous ce formulaire : l’équipe RestoCool vous rappelle.",
+    "rc": "Numéro RC de l’établissement",
+    "rcHint": "Il est écrit sous le QR code de l’établissement (ex. RC-K7M3P).",
+    "businessName": "Nom de l’établissement",
+    "name": "Votre nom complet",
+    "phone": "Votre téléphone (WhatsApp)",
+    "role": "Vous êtes",
+    "roles": {
+      "owner": "Propriétaire",
+      "manager": "Gérant·e",
+      "staff": "Personnel"
+    },
+    "body": "Que se passe-t-il ?",
+    "bodyPlaceholder": "Ex. : j’ai oublié mon code PIN / mon compte est bloqué / je n’ai plus accès à mon e-mail",
+    "submit": "Envoyer la demande",
+    "sent": "Demande {ref} reçue.",
+    "sentNext": "Pour votre sécurité, nous vous rappellerons et vous poserons des questions sur votre établissement (numéro RC, nom, ville, téléphone…) avant toute action.",
+    "neverPin": "RestoCool ne vous demandera jamais votre code PIN ni votre mot de passe.",
+    "signedIn": "Vous pouvez vous connecter ?",
+    "signedInLink": "Signalez le problème depuis l’application.",
+    "link": "Accès bloqué ? PIN ou e-mail oublié ?"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "intro": "Les messages de l’équipe RestoCool : nouveautés, actualités, maintenance.",
+    "none": "Rien de nouveau pour l’instant.",
+    "supportAnswers": "{n, plural, one {Une nouvelle réponse} other {# nouvelles réponses}} à vos demandes d’aide",
+    "new": "Nouveau",
+    "open": "Ouvrir",
+    "bell": "Notifications",
+    "newTitle": "Nouveau sur RestoCool",
+    "later": "Plus tard",
+    "see": "Voir",
+    "kinds": {
+      "feature": "Nouveau sur RestoCool",
+      "news": "Actualité",
+      "maintenance": "Maintenance",
+      "billing": "Abonnement",
+      "message": "Message de RestoCool"
+    }
   }
 }

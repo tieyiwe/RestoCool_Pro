@@ -1,10 +1,12 @@
 import "server-only";
 import { cookies, headers } from "next/headers";
-import { notFound } from "next/navigation";
-import { sql } from "drizzle-orm";
+import { notFound, redirect } from "next/navigation";
+import { and, eq, sql } from "drizzle-orm";
 import { cache } from "react";
 import { getDb } from "@/db";
 import { findRestaurantBySlug, membershipsForUser, tenantRepo, type Membership, type TenantRepo } from "@/db/repos/tenant";
+import { adminCollaborators } from "@/db/schema";
+import { ADMIN_PERMS, hasPerm, normalizePerms, type AdminAccess, type AdminPerm } from "@/lib/admin/access";
 import { env } from "@/lib/env";
 import { ForbiddenError, NotFoundError, UnauthorizedError } from "@/lib/errors";
 import { sessionFromToken, STAFF_COOKIE } from "@/lib/devices";
@@ -144,24 +146,56 @@ export const getMemberContext = cache(async (): Promise<MemberContext | null> =>
 
 /** Dev bypass only (never production): « 1 » = the dev user is not super admin (tests of the refusal). */
 export const DEV_NOT_SUPERADMIN_COOKIE = "rc_dev_not_superadmin";
+/** Dev bypass only: act as this collaborator email (tests of permissions). */
+export const DEV_ADMIN_AS_COOKIE = "rc_dev_admin_as";
 
-/** Super admin = signed-in Clerk user with a verified email listed in SUPERADMIN_EMAILS. */
-export const getSuperadmin = cache(async (): Promise<SuperadminActor | null> => {
+export type AdminActor = SuperadminActor & AdminAccess & { name: string | null };
+
+/** A collaborator's row, if this verified email is an active collaborator. Last seen kept fresh (5 min). */
+async function collaboratorAccess(email: string): Promise<(AdminAccess & { name: string | null }) | null> {
+  const db = getDb();
+  const [c] = await db.select().from(adminCollaborators).where(and(eq(adminCollaborators.email, email), eq(adminCollaborators.active, true))).limit(1);
+  if (!c) return null;
+  if (!c.lastSeenAt || Date.now() - c.lastSeenAt.getTime() > 5 * 60_000) {
+    void db.update(adminCollaborators).set({ lastSeenAt: new Date() }).where(eq(adminCollaborators.id, c.id)).catch(() => {});
+  }
+  return { owner: false, perms: new Set(normalizePerms(c.perms)), name: c.name };
+}
+
+async function accessFor(userId: string, emails: string[], name: string | null): Promise<AdminActor | null> {
+  const owners = env.superadminEmails();
+  const owner = emails.find((e) => owners.has(e));
+  if (owner) return { kind: "superadmin", userId, email: owner, owner: true, perms: new Set(ADMIN_PERMS), name };
+  for (const email of emails) {
+    const c = await collaboratorAccess(email);
+    if (c) return { kind: "superadmin", userId, email, ...c, name: c.name ?? name };
+  }
+  return null;
+}
+
+/**
+ * Console access: a signed-in Clerk user whose verified email is listed in SUPERADMIN_EMAILS
+ * (owner: everything) or is an active collaborator (their permissions only).
+ */
+export const getSuperadmin = cache(async (): Promise<AdminActor | null> => {
   if (!env.clerkConfigured()) {
     if (!(await bypass())) return null;
-    // Local development only: the cookie lets tests act as a signed-in person who is NOT super admin.
-    if ((await cookies()).get(DEV_NOT_SUPERADMIN_COOKIE)?.value === "1") return null;
-    return { kind: "superadmin", userId: DEV_USER.userId, email: DEV_USER.email! };
+    // Local development only: the cookies let tests act as someone else.
+    const jar = await cookies();
+    if (jar.get(DEV_NOT_SUPERADMIN_COOKIE)?.value === "1") return null;
+    const as = jar.get(DEV_ADMIN_AS_COOKIE)?.value?.toLowerCase();
+    if (as) {
+      const c = await collaboratorAccess(as);
+      return c ? { kind: "superadmin", userId: DEV_USER.userId, email: as, ...c } : null;
+    }
+    return { kind: "superadmin", userId: DEV_USER.userId, email: DEV_USER.email!, owner: true, perms: new Set(ADMIN_PERMS), name: DEV_USER.name };
   }
   const { currentUser } = await import("@clerk/nextjs/server");
   const user = await currentUser();
   if (!user) return null;
-  const allowed = env.superadminEmails();
-  const email = user.emailAddresses
-    .filter((e) => e.verification?.status === "verified")
-    .map((e) => e.emailAddress.toLowerCase())
-    .find((e) => allowed.has(e));
-  return email ? { kind: "superadmin", userId: user.id, email } : null;
+  const emails = user.emailAddresses.filter((e) => e.verification?.status === "verified").map((e) => e.emailAddress.toLowerCase());
+  const name = [user.firstName, user.lastName].filter(Boolean).join(" ") || null;
+  return accessFor(user.id, emails, name);
 });
 
 /** For route handlers / server actions: authenticated member allowed to do `action` in their restaurant. */
@@ -173,19 +207,22 @@ export async function requireMember(action: Action): Promise<MemberContext> {
 }
 
 /**
- * The console answers « not found » to anyone who is not super admin (signed out, or signed in
- * without an authorised verified email): it never confirms that it exists.
+ * The console answers « not found » to anyone who is not in it (signed out, or signed in
+ * without an authorised verified email): it never confirms that it exists. A collaborator
+ * without the permission gets « forbidden ».
  */
-export async function requireSuperadmin(): Promise<SuperadminActor> {
+export async function requireSuperadmin(perm?: AdminPerm): Promise<AdminActor> {
   const sa = await getSuperadmin();
   if (!sa) throw new NotFoundError();
+  if (perm && !hasPerm(sa, perm)) throw new ForbiddenError();
   return sa;
 }
 
-/** Same, for console pages: renders the site's normal 404 page. */
-export async function requireSuperadminPage(): Promise<SuperadminActor> {
+/** Same, for console pages: the site's normal 404 page; a missing permission goes to the overview. */
+export async function requireSuperadminPage(perm?: AdminPerm): Promise<AdminActor> {
   const sa = await getSuperadmin();
   if (!sa) notFound();
+  if (perm && !hasPerm(sa, perm)) redirect("/admin_pro?denied=1");
   return sa;
 }
 

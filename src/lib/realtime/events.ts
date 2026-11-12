@@ -13,7 +13,9 @@ export type RtEvent =
   | { k: "session"; r: string; s: string }
   | { k: "menu"; r: string }
   /** Someone asked to join the team, or a request was decided (staff screens only). */
-  | { k: "join"; r: string };
+  | { k: "join"; r: string }
+  /** A message from the RestoCool team (r = a restaurant id, or « * » for many): staff screens only. */
+  | { k: "notice"; r: string };
 
 type Executor = Pick<DB, "execute">;
 
@@ -26,7 +28,7 @@ export function parseEvent(payload: string | undefined): RtEvent | null {
   if (!payload) return null;
   try {
     const ev = JSON.parse(payload) as RtEvent;
-    return typeof ev?.r === "string" && (ev.k === "order" || ev.k === "session" || ev.k === "menu" || ev.k === "join") ? ev : null;
+    return typeof ev?.r === "string" && (ev.k === "order" || ev.k === "session" || ev.k === "menu" || ev.k === "join" || ev.k === "notice") ? ev : null;
   } catch {
     return null;
   }

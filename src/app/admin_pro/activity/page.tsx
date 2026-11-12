@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 /** Platform health: server errors (grouped, counted, resolvable) and the platform-wide activity log. */
 export default async function AdminActivity({ searchParams }: { searchParams: Promise<{ q?: string; ok?: string }> }) {
-  await requireSuperadminPage();
+  await requireSuperadminPage("activity");
   const sp = await searchParams;
   const db = getDb();
   const q = (sp.q ?? "").trim().slice(0, 60);

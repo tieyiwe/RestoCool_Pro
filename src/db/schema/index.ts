@@ -11,3 +11,4 @@ export * from "./join";
 export * from "./devices";
 export * from "./trips";
 export * from "./email";
+export * from "./admin";

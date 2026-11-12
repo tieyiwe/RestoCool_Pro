@@ -20,6 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function PostePage({ searchParams }: { searchParams: Promise<{ locked?: string; who?: string }> }) {
   const t = await getTranslations("poste");
+  const ta = await getTranslations("aide");
   const tr = await getTranslations("roles");
   const tl = await getTranslations("app.role");
   const db = getDb();
@@ -64,6 +65,9 @@ export default async function PostePage({ searchParams }: { searchParams: Promis
         <PinPad people={people} selected={sp.who ?? null} />
       )}
       <p className="text-center text-xs text-muted-foreground">{t("footer")}</p>
+      <Link href="/aide" className="mx-auto text-sm font-semibold text-primary underline" data-testid="poste-help">
+        {ta("link")}
+      </Link>
     </main>
   );
 }

@@ -431,7 +431,29 @@
         }
       }
     },
-    "superadmin": "超级管理员"
+    "superadmin": "超级管理员",
+    "supportNav": "帮助与反馈",
+    "notificationsNav": "通知",
+    "navGroups": {
+      "service": "服务",
+      "manage": "管理",
+      "help": "帮助"
+    },
+    "install": {
+      "title": "安装 RestoCool",
+      "text": "像桌面软件一样在独立窗口中打开 RestoCool，一键完成。",
+      "install": "安装",
+      "later": "稍后",
+      "safariMac": "在 Safari 中：文件菜单 › “添加到程序坞”。",
+      "ios": "点按分享 ⬆️，然后“添加到主屏幕”。",
+      "done": "RestoCool 已安装。"
+    },
+    "palette": {
+      "open": "前往…",
+      "placeholder": "输入板块：菜单、厨房、员工…",
+      "empty": "未找到板块。",
+      "hint": "↑ ↓ 选择 · 回车打开 · Esc 关闭"
+    }
   },
   "admin": {
     "title": "RestoCool administration",
@@ -453,7 +475,12 @@
       "billing": "Subscriptions",
       "map": "Map",
       "activity": "Activity & errors",
-      "settings": "Settings"
+      "settings": "Settings",
+      "live": "Live",
+      "support": "Requests",
+      "messages": "Messages",
+      "team": "Team",
+      "recovery": "Account recovery"
     },
     "empty": "Nothing yet.",
     "draft": "Draft",
@@ -504,7 +531,9 @@
       "top": "Most active (30 days)",
       "ordersN": "{n} orders",
       "expiring": "Plans ending within 14 days",
-      "expiringNone": "No plan ending soon."
+      "expiringNone": "No plan ending soon.",
+      "liveStrip": "Right now: {online} online · {pending} orders waiting · {processed} processed today",
+      "liveOpen": "Open live view"
     },
     "businesses": {
       "title": "Businesses",
@@ -556,7 +585,13 @@
       "featured": "Featured list updated.",
       "note": "Note added.",
       "resolved": "Error(s) marked as resolved.",
-      "saved": "Setting saved."
+      "saved": "Setting saved.",
+      "collabAdded": "Collaborator added. They sign in with that email to open the console.",
+      "collabSaved": "Access updated.",
+      "collabRemoved": "Collaborator removed.",
+      "supportSaved": "Saved. The business sees your answer in its app.",
+      "messageSent": "Message sent: it shows in the businesses’ app now.",
+      "messageWithdrawn": "Message withdrawn."
     },
     "detail": {
       "orders30": "Orders (30 days)",
@@ -588,7 +623,14 @@
       "notes": "Internal notes",
       "notePlaceholder": "Call, payment promise, need…",
       "noteAdd": "Add the note",
-      "activity": "Business activity"
+      "activity": "Business activity",
+      "liveTitle": "Live & today",
+      "liveTeam": "Team online",
+      "liveCustomers": "Customers on the menu",
+      "livePending": "Orders waiting",
+      "liveProcessed": "Processed today",
+      "liveCancelled": "Cancelled today",
+      "liveApp": "App use today"
     },
     "fields": {
       "plan": "Plan",
@@ -614,7 +656,8 @@
       "manager": "Manager",
       "server": "Service",
       "kitchen": "Kitchen",
-      "cashier": "Cashier"
+      "cashier": "Cashier",
+      "staff": "Staff"
     },
     "billing": {
       "title": "Subscriptions and payments",
@@ -663,6 +706,315 @@
       "title": "Business map",
       "intro": "{n} business(es) saved their location.",
       "missing": "The others have not given their location yet"
+    },
+    "denied": "Your access does not include that page. Ask an owner of the console if you need it.",
+    "welcomeLimited": "Welcome {name}. Here is what your access lets you open:",
+    "live": {
+      "title": "Live",
+      "intro": "Who is on RestoCool right now, on which device, and what is happening with orders.",
+      "updated": "Live, updated",
+      "kpi": {
+        "online": "Online now",
+        "onlineSub": "Peak today {peak} · {today} people today",
+        "team": "Business teams",
+        "teamSub": "{owners, plural, one {# owner} other {# owners}} · {managers, plural, one {# manager} other {# managers}} · {staff} staff",
+        "customers": "Customers on menus",
+        "customersSub": "+ {n} visitors on the site",
+        "devices": "Devices now",
+        "devicesSub": "{tablet} tablets · {installed} in the installed app",
+        "pending": "Orders waiting",
+        "pendingSub": "{sent} new · {confirmed} confirmed · {preparing} preparing · {ready} ready",
+        "late": "Waiting > 15 min",
+        "lateSub": "Across all businesses",
+        "processed": "Processed today",
+        "processedSub": "served or paid · {n} cancelled",
+        "serve": "Average time to serve",
+        "serveSub": "From sent to served, today"
+      },
+      "lastHour": "People online, last 60 minutes",
+      "last24h": "Peak per hour, last 24 hours",
+      "daily": "Different people per day (30 days)",
+      "dailyHint": "Each person counts once a day per audience; hover a bar for the split.",
+      "dailyTitle": "owners {owner}, managers {manager}, staff {staff}, customers {customer}, visitors {visitor}",
+      "nowByDevice": "Online now by device",
+      "devices7": "Devices, last 7 days",
+      "os7": "Systems, last 7 days",
+      "installed7": "{n} used the installed app this week.",
+      "devices": {
+        "phone": "Phone",
+        "tablet": "Tablet",
+        "desktop": "Computer"
+      },
+      "os": {
+        "android": "Android",
+        "ios": "iPhone / iPad",
+        "windows": "Windows",
+        "mac": "Mac",
+        "linux": "Linux",
+        "other": "Other"
+      },
+      "perBusiness": "Per business, today",
+      "perBusinessHint": "Businesses with people online, orders waiting or activity today. Waiting first.",
+      "nothing": "Nothing happening right now.",
+      "cols": {
+        "business": "Business",
+        "team": "Team online",
+        "customers": "Customers",
+        "pending": "Waiting",
+        "processed": "Processed",
+        "cancelled": "Cancelled",
+        "appTime": "App use today",
+        "lastOrder": "Last order"
+      },
+      "lateN": "{n} late",
+      "minutes": "{n} min · {people, plural, one {# person} other {# people}}",
+      "privacy": "Anonymous counts only: a hashed device key, never a name, phone number or IP address is stored. Kept 120 days (minutes) and 400 days (daily counts)."
+    },
+    "team": {
+      "title": "Team",
+      "intro": "People from TIBLOGICS who help run RestoCool. Give each one only what they need; every change is recorded.",
+      "forbidden": "You can’t give rights you don’t have, change your own access, or change an owner-level collaborator.",
+      "add": "Add a collaborator",
+      "addHint": "They sign in on RestoCool with this email (it must be verified), then open /admin_pro. Nothing is sent to them: tell them yourself.",
+      "email": "Email",
+      "name": "Name",
+      "preset": "Ready-made access",
+      "presetCustom": "Custom: tick below",
+      "permsTitle": "Permissions",
+      "addSubmit": "Add collaborator",
+      "presets": {
+        "support": "Support agent",
+        "sales": "Sales & billing",
+        "analyst": "Analyst (read only)",
+        "manager": "Operations manager"
+      },
+      "perms": {
+        "dashboard": "Dashboard & live",
+        "businesses_read": "See businesses",
+        "businesses_write": "Manage businesses",
+        "billing_read": "See subscriptions",
+        "billing_write": "Record payments & plans",
+        "support": "Support requests",
+        "recovery": "Account recovery",
+        "comms": "Messages & notifications",
+        "activity": "Activity & errors",
+        "settings": "Platform settings",
+        "team": "Team & access"
+      },
+      "permsHint": {
+        "dashboard": "Overview figures, live traffic, orders waiting.",
+        "businesses_read": "List, details, map, notes (read and add).",
+        "businesses_write": "Publish, suspend, feature.",
+        "billing_read": "Income and plan history.",
+        "billing_write": "Record a payment, change plan and end date.",
+        "support": "Read and answer requests from businesses.",
+        "recovery": "Verify identity and unlock or reset access.",
+        "comms": "Send messages and in-app notifications.",
+        "activity": "Audit log and server errors.",
+        "settings": "Launch offer, platform switches. Owners only.",
+        "team": "Add collaborators and change access. Owners only."
+      },
+      "owners": "Owners",
+      "ownersHint": "Full access, set by the SUPERADMIN_EMAILS secret on Replit (not editable here).",
+      "you": "you",
+      "collaborators": "Collaborators ({n})",
+      "none": "No collaborators yet.",
+      "disabled": "disabled",
+      "meta": "Added by {by} on {date}",
+      "lastSeen": "last seen {when}",
+      "neverSeen": "never signed in",
+      "disable": "Disable",
+      "enable": "Enable",
+      "remove": "Remove",
+      "removeConfirm": "Remove {email} from the console?",
+      "save": "Save access"
+    },
+    "support": {
+      "title": "Requests",
+      "intro": "{open} open · {fresh} new · {urgent} blocking. Blocking first, then the oldest.",
+      "search": "Search: business, person, subject, D-000123, RC…",
+      "status": "Status",
+      "statusOpen": "Open (not resolved)",
+      "statusAll": "All",
+      "urgency": "Urgency",
+      "urgencyAll": "Any urgency",
+      "filter": "Filter",
+      "none": "No requests here. 🎉",
+      "statuses": {
+        "new": "New",
+        "in_progress": "In progress",
+        "waiting": "Waiting for the business",
+        "resolved": "Resolved"
+      },
+      "urgencies": {
+        "low": "Can wait",
+        "medium": "Annoying",
+        "high": "Blocking"
+      },
+      "categories": {
+        "bug": "Something doesn’t work",
+        "orders": "Orders",
+        "menu": "Menu & photos",
+        "access": "Sign-in / PIN",
+        "billing": "Subscription",
+        "question": "Question",
+        "idea": "Suggestion"
+      },
+      "cols": {
+        "urgency": "Urgency",
+        "request": "Request",
+        "business": "Business",
+        "from": "From",
+        "received": "Received",
+        "status": "Status"
+      },
+      "public": "locked-out form",
+      "app": "business app",
+      "noMatch": "RC {rc} did not match a business",
+      "waHello": "Hello {name}, this is the RestoCool team about your request {ref}.",
+      "startRecovery": "Verify identity & recover access",
+      "conversation": "Conversation",
+      "answer": "Your answer",
+      "answerPlaceholder": "Write to the business (shown in their app)…",
+      "answerHint": "The answer and the status appear in the business’s app (« Aide »), with a notification.",
+      "assignMe": "Assign to me",
+      "send": "Send / save",
+      "details": "Details",
+      "contact": "Contact",
+      "source": "Sent from",
+      "screen": "Screen",
+      "device": "Device",
+      "firstAnswer": "First answer",
+      "after": "after {n} min",
+      "notYet": "not yet",
+      "resolvedAt": "Resolved",
+      "assigned": "Assigned to"
+    },
+    "recovery": {
+      "title": "Account recovery",
+      "intro": "For someone locked out or who forgot their PIN or email. Check who is calling first: the numéro RC plus at least {n} matching answers. A successful check allows actions for {min} minutes, for you only. Everything is recorded.",
+      "noMatch": "No business has this numéro RC.",
+      "fromRequest": "From request",
+      "step1": "Find the business by its numéro RC",
+      "rc": "Numéro RC",
+      "find": "Find",
+      "business": "Business",
+      "other": "Another business",
+      "step2": "Ask the caller and type what they say",
+      "step2Hint": "Don’t read anything out to them: they must give the answers. The business’s records are not shown on this page on purpose.",
+      "callerName": "Caller’s name",
+      "callerPhone": "Caller’s phone",
+      "q": {
+        "name": "Business name",
+        "city": "Town",
+        "phone": "A phone number of the business or of their team",
+        "owner": "Owner’s email or full name",
+        "callback": "I called back a number we already have for this business, and reached this person."
+      },
+      "note": "Note (optional)",
+      "check": "Check the answers",
+      "verified": "Identity verified",
+      "notVerified": "Not verified",
+      "notVerifiedHint": "The numéro RC and at least {n} other answers must match. Do not help: ask them to check their information, or call back the business’s known number.",
+      "expired": "This check has expired (or was done by someone else): check again.",
+      "until": "Actions allowed until {time}.",
+      "checks": {
+        "rc": "Numéro RC",
+        "name": "Business name",
+        "city": "Town",
+        "phone": "Phone number",
+        "owner": "Owner",
+        "callback": "Call-back on a known number"
+      },
+      "history": "Recent checks for this business",
+      "actions": {
+        "pin_unlocked": "PIN unlocked",
+        "pin_reset": "new PIN",
+        "owner_email_set": "new owner email",
+        "signin_unlocked": "sign-in unlocked"
+      },
+      "labels": {
+        "newPin": "New PIN for {name}:",
+        "newPinHint": "Read it to the person now: it won’t be shown again. Ask them to change it. Their open sessions on tablets have been closed.",
+        "ok_unlocked": "{name} can try their PIN again.",
+        "ok_reset": "PIN changed.",
+        "ok_signin": "Sign-in unlocked for {name}. They can use « Forgot password » on the sign-in page.",
+        "ok_owner": "Waiting for {name}: the first sign-in with this verified email becomes the owner; the old owner account is switched off.",
+        "err_expired": "This check has expired: check the caller again.",
+        "err_invalid": "That didn’t work. Check and try again.",
+        "err_signinUnavailable": "Sign-in unlock is not available for this account. Tell them to use « Forgot password » on the sign-in page.",
+        "inactive": "inactive",
+        "locked": "locked",
+        "unlock": "Unlock PIN",
+        "resetPin": "New PIN",
+        "setPin": "Give a PIN",
+        "resetConfirm": "Give {name} a new PIN? Their current PIN stops working.",
+        "unlockSignIn": "Unlock sign-in",
+        "ownerTitle": "Owner lost access to their email",
+        "ownerHint": "Type the new email the owner will sign in with. The first sign-in with this verified email becomes the owner; the current owner account is switched off (kept for history).",
+        "ownerSubmit": "Hand over to this email",
+        "ownerConfirm": "Hand the business over to this email? Only do this after a verified check."
+      }
+    },
+    "messages": {
+      "title": "Messages & notifications",
+      "intro": "Write to business owners and teams: new features, news, maintenance, billing. It appears in their app (bell 🔔, and as a pop-up if you choose), live, and by email if you tick it.",
+      "error": "Check the message: French title and text are required; RC numbers must exist.",
+      "new": "New message",
+      "toOne": "Message to {name}",
+      "sendTo": "Send a message",
+      "kind": "Type",
+      "kinds": {
+        "feature": "New feature",
+        "news": "News",
+        "maintenance": "Maintenance",
+        "billing": "Subscription",
+        "message": "Personal message"
+      },
+      "to": "Who sees it in each business",
+      "toOptions": {
+        "owners": "Owners",
+        "managers": "Owners & managers",
+        "everyone": "Whole team"
+      },
+      "titleFr": "Title (French)",
+      "bodyFr": "Message (French)",
+      "translations": "English and Chinese (optional, French is shown otherwise)",
+      "titleEn": "Title (English)",
+      "titleZh": "Title (Chinese)",
+      "bodyEn": "Message (English)",
+      "bodyZh": "Message (Chinese)",
+      "link": "Link (optional)",
+      "expires": "Stop showing after",
+      "never": "Never",
+      "days": "{n, plural, one {# day} other {# days}}",
+      "targeting": "Which businesses (empty = all)",
+      "targetingHint": "Tick plans, kinds, add towns or numéros RC to narrow it down. Combined: a business must match all of them.",
+      "plans": {
+        "gratuit": "Free plan",
+        "pro": "Pro",
+        "business": "Business"
+      },
+      "kindsBiz": {
+        "restaurant": "Restaurants & shops",
+        "transport": "Transport"
+      },
+      "cities": "Towns, separated by commas (e.g. Ouagadougou, Bobo-Dioulasso)",
+      "rcCodes": "Numéros RC, separated by commas (e.g. RC-K7M3P, RC-…)",
+      "popup": "Show as a pop-up",
+      "popupHint": "For a new feature: opens once the next time they open the app.",
+      "email": "Also email the owners",
+      "emailHint": "To their verified sign-in email (needs the SMTP_PASS secret).",
+      "confirm": "Send this message now?",
+      "send": "Send",
+      "sent": "Sent messages",
+      "popupTag": "pop-up",
+      "nBusinesses": "{n, plural, one {# business} other {# businesses}}",
+      "reads": "Read by {read} of {total} ({pct} %)",
+      "emailed": "{n} emails sent",
+      "withdraw": "Withdraw",
+      "withdrawConfirm": "Stop showing this message?",
+      "withdrawn": "withdrawn"
     }
   },
   "demo": {
@@ -1315,8 +1667,12 @@
     "tooMany": "尝试次数过多，请等一分钟后再试。",
     "orScan": "您也可以用手机相机扫描二维码。",
     "homeTitle": "在店里吗？",
-    "homeText": "输入二维码下方的 RC 号即可打开菜单。",
-    "short": "输入 RC 号"
+    "homeText": "扫描店铺的二维码，或输入二维码下方的 RC 号码，即可打开菜单。",
+    "short": "输入 RC 号",
+    "suggestions": "匹配的店铺",
+    "recent": "最近浏览",
+    "remove": "移除",
+    "open": "打开"
   },
   "service": {
     "frontDesk": "前台服务",
@@ -2452,5 +2808,101 @@
     "unknownTitle": "找不到订单",
     "unknownText": "此二维码不对应任何订单。请顾客重新打开“出示给服务员”。",
     "customer": "您是顾客吗？此二维码是给服务员的：只需出示手机屏幕。"
+  },
+  "support": {
+    "title": "帮助与反馈",
+    "intro": "有功能出问题？告诉 RestoCool 团队，我们会在这里回复您。",
+    "formTitle": "报告问题",
+    "urgency": "紧急程度",
+    "urgencies": {
+      "low": "可以等",
+      "medium": "有影响",
+      "high": "无法工作"
+    },
+    "urgencyHints": {
+      "low": "一个问题或小毛病。",
+      "medium": "影响工作，但还能继续。",
+      "high": "服务中断，无法工作。"
+    },
+    "category": "问题类型",
+    "categories": {
+      "bug": "功能无法使用",
+      "orders": "订单",
+      "menu": "菜单和照片",
+      "access": "登录或 PIN",
+      "billing": "订阅",
+      "question": "咨询",
+      "idea": "建议"
+    },
+    "contact": "联系方式（选填）",
+    "contactPlaceholder": "+226 70 00 00 00",
+    "subject": "简短描述",
+    "subjectPlaceholder": "例如：订单不再传到厨房",
+    "body": "发生了什么？",
+    "bodyPlaceholder": "您当时在做什么、发生了什么、从什么时候开始…",
+    "fromPage": "发送页面：{page}",
+    "submit": "发送给 RestoCool 团队",
+    "privacy": "我们会收到您的姓名、店铺、页面和时间，以便更快帮助您。",
+    "sent": "请求 {ref} 已发送。我们会尽快在这里回复。",
+    "replied": "消息已发送。",
+    "tooMany": "请求过多，请几分钟后再试。",
+    "invalid": "请检查后重试。",
+    "allTitle": "本店的请求",
+    "mineTitle": "我的请求",
+    "none": "暂无请求。",
+    "newAnswer": "新回复",
+    "statuses": {
+      "new": "已发送",
+      "in_progress": "处理中",
+      "waiting": "等待您回复",
+      "resolved": "已解决"
+    },
+    "reply": "回复",
+    "replyPlaceholder": "您的消息…",
+    "navLabel": "帮助",
+    "help": "帮助 / 反馈"
+  },
+  "aide": {
+    "title": "无法登录？",
+    "intro": "忘记 PIN、多次尝试后账户被锁、无法访问邮箱… 请提交此表单，RestoCool 团队会回电给您。",
+    "rc": "店铺 RC 号码",
+    "rcHint": "写在店铺二维码下方（例如 RC-K7M3P）。",
+    "businessName": "店铺名称",
+    "name": "您的全名",
+    "phone": "您的电话（WhatsApp）",
+    "role": "您的身份",
+    "roles": {
+      "owner": "店主",
+      "manager": "经理",
+      "staff": "员工"
+    },
+    "body": "发生了什么？",
+    "bodyPlaceholder": "例如：忘记 PIN / 账户被锁 / 无法访问邮箱",
+    "submit": "发送请求",
+    "sent": "已收到请求 {ref}。",
+    "sentNext": "为了您的安全，我们会回电并询问店铺信息（RC 号码、名称、城市、电话…）后再进行操作。",
+    "neverPin": "RestoCool 绝不会向您索要 PIN 或密码。",
+    "signedIn": "能登录吗？",
+    "signedInLink": "请在应用中报告问题。",
+    "link": "无法登录？忘记 PIN 或邮箱？"
+  },
+  "notifications": {
+    "title": "通知",
+    "intro": "来自 RestoCool 团队的消息：新功能、动态、维护。",
+    "none": "暂无新消息。",
+    "supportAnswers": "您的帮助请求有 {n} 条新回复",
+    "new": "新",
+    "open": "打开",
+    "bell": "通知",
+    "newTitle": "RestoCool 新功能",
+    "later": "稍后",
+    "see": "查看",
+    "kinds": {
+      "feature": "RestoCool 新功能",
+      "news": "动态",
+      "maintenance": "维护",
+      "billing": "订阅",
+      "message": "RestoCool 消息"
+    }
   }
 }

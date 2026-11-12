@@ -4,6 +4,9 @@ import { Bars, Funnel } from "@/components/admin/charts";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getDb } from "@/db";
 import { platformOverview } from "@/lib/admin/metrics";
+import { hasPerm, PAGE_PERM } from "@/lib/admin/access";
+import { ordersNow } from "@/lib/admin/live";
+import { livePresence } from "@/lib/usage/presence";
 import { requireSuperadminPage } from "@/lib/auth/context";
 import { formatFCFA } from "@/lib/format";
 import { getPlatformSettings } from "@/lib/platform/settings";
@@ -21,9 +24,34 @@ function Kpi({ label, value, sub, testId, tone }: { label: string; value: string
 }
 
 /** Platform overview for TIBLOGICS: growth, usage, money, health — and what needs attention. */
-export default async function AdminOverview() {
-  await requireSuperadminPage();
-  const [t, tp, format, o, platform] = await Promise.all([adminI18n().then((x) => x.t), adminI18n().then((x) => x.tp), adminI18n().then((x) => x.format), platformOverview(getDb()), getPlatformSettings()]);
+export default async function AdminOverview({ searchParams }: { searchParams: Promise<{ denied?: string }> }) {
+  const sa = await requireSuperadminPage();
+  const denied = (await searchParams).denied === "1";
+  if (!hasPerm(sa, "dashboard")) {
+    const { t } = await adminI18n();
+    const pages = Object.entries(PAGE_PERM).filter(([href, perm]) => href !== "/admin_pro" && perm && hasPerm(sa, perm));
+    return (
+      <div className="flex flex-col gap-4" data-testid="admin-limited">
+        {denied && (
+          <p role="alert" className="rounded-lg bg-amber-50 p-3 text-amber-900" data-testid="admin-denied">
+            {t("denied")}
+          </p>
+        )}
+        <p className="text-lg font-semibold">{t("welcomeLimited", { name: sa.name ?? sa.email })}</p>
+        <ul className="grid gap-2 sm:grid-cols-2">
+          {pages.map(([href]) => (
+            <li key={href}>
+              <Link href={href} className="flex min-h-12 items-center rounded-xl border border-border bg-surface px-4 font-semibold hover:bg-muted">
+                {t(`navItems.${href.split("/")[2]}` as "navItems.live")} →
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+  const presence = livePresence();
+  const [t, tp, format, o, platform, now] = await Promise.all([adminI18n().then((x) => x.t), adminI18n().then((x) => x.tp), adminI18n().then((x) => x.format), platformOverview(getDb()), getPlatformSettings(), ordersNow(getDb())]);
   const F = (n: number) => formatFCFA(n) ?? "0 F";
   const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)} %` : "—");
   const days = o.series.ordersPerDay.map((d) => ({ k: d.d.slice(5), v: d.n, title: `${d.d} · ${d.n} · ${F(d.gmv)}` }));
@@ -41,6 +69,18 @@ export default async function AdminOverview() {
         </div>
         {platform.freeLaunch && <span className="rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-900">🎁 {t("overview.freeLaunchOn")}</span>}
       </div>
+      {denied && (
+        <p role="alert" className="rounded-lg bg-amber-50 p-3 text-amber-900" data-testid="admin-denied">
+          {t("denied")}
+        </p>
+      )}
+      <Link href="/admin_pro/live" className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-emerald-300 bg-emerald-50 px-4 py-3 font-semibold text-emerald-950 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:text-emerald-100" data-testid="admin-live-strip">
+        <span className="flex items-center gap-2">
+          <span className="size-2.5 animate-pulse rounded-full bg-emerald-600 motion-reduce:animate-none" aria-hidden />
+          {t("overview.liveStrip", { online: presence.total, pending: now.pending, processed: now.processedToday })}
+        </span>
+        <span className="text-sm">{t("overview.liveOpen")} →</span>
+      </Link>
 
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Kpi label={t("overview.kpi.businesses")} value={o.businesses.total} sub={t("overview.kpi.businessesSub", { published: o.businesses.published, transport: o.businesses.transport })} testId="kpi-businesses" />

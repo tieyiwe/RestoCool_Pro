@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 /** Where the businesses are: every business that saved its location (GPS or Google Maps link). */
 export default async function AdminMap() {
-  await requireSuperadminPage();
+  await requireSuperadminPage("businesses.read");
   const [t, geo] = await Promise.all([adminI18n().then((x) => x.t), platformLocations(getDb())]);
   const points: MapPoint[] = geo.features.map((f) => ({
     id: f.properties.id,

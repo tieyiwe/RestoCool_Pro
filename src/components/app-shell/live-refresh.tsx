@@ -18,6 +18,8 @@ export function LiveRefresh({ events = ["order"], every = 20_000 }: { events?: s
     };
     const es = typeof EventSource === "undefined" ? null : new EventSource("/api/app/stream");
     for (const e of events) es?.addEventListener(e, refresh);
+    // A message from the RestoCool team: the bell checks right away.
+    es?.addEventListener("notice", () => window.dispatchEvent(new Event("rc:notice")));
     const id = setInterval(() => document.visibilityState === "visible" && router.refresh(), every);
     return () => {
       es?.close();

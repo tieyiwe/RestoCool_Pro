@@ -1,6 +1,7 @@
 import { setErrorSink } from "./lib/log";
 import { recordError } from "./lib/platform/errors";
 import { getPlatformSettings } from "./lib/platform/settings";
+import { startTrafficClock } from "./lib/usage/presence";
 
 /** Node-only start-up work (database access): never bundled for the edge runtime. */
 export function startNode() {
@@ -9,6 +10,7 @@ export function startNode() {
     void recordError(err instanceof Error ? `${msg}: ${err.message}` : msg, null, data ? { keys: Object.keys(data) } : undefined);
   });
   void getPlatformSettings().catch(() => {});
+  startTrafficClock();
 }
 
 export async function reportRequestError(err: unknown, path: string, context: { routePath?: string; routeType?: string }, method: string) {

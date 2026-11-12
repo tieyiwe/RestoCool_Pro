@@ -8,9 +8,18 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "RestoCool",
     description: "Votre menu, vos commandes, vos tables. Simple.",
     lang: "fr",
+    id: "/app",
     start_url: "/app",
     scope: "/",
     display: "standalone",
+    // On a computer it opens in its own window, like desktop software.
+    display_override: ["window-controls-overlay", "standalone"],
+    categories: ["business", "food", "productivity"],
+    shortcuts: [
+      { name: "Service", short_name: "Service", url: "/app/service", icons: [{ src: "/brand/png/app-icon-192.png", sizes: "192x192" }] },
+      { name: "Cuisine", short_name: "Cuisine", url: "/app/kitchen", icons: [{ src: "/brand/png/app-icon-192.png", sizes: "192x192" }] },
+      { name: "Commandes", short_name: "Commandes", url: "/app/orders", icons: [{ src: "/brand/png/app-icon-192.png", sizes: "192x192" }] },
+    ],
     background_color: BRAND.creme,
     theme_color: BRAND.vert,
     icons: [

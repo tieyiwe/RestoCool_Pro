@@ -8,6 +8,6 @@ export const dynamic = "force-dynamic";
 
 /** GeoJSON of all located businesses, for the platform map in the admin console (super admin only). */
 export const GET = handle(async () => {
-  await requireSuperadmin();
+  await requireSuperadmin("businesses.read");
   return NextResponse.json(await platformLocations(getDb()), { headers: { "Cache-Control": "private, no-store" } });
 });

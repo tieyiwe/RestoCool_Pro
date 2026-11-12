@@ -17,7 +17,7 @@ const field = "min-h-11 w-full rounded-lg border border-border bg-surface px-3 t
 
 /** Every business on the platform: search (name, address, town, owner email, numéro RC), filters, export. */
 export default async function AdminBusinesses({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
-  await requireSuperadminPage();
+  await requireSuperadminPage("businesses.read");
   const sp = await searchParams;
   const f = BusinessFilter.parse(Object.fromEntries(Object.entries(sp).filter(([, v]) => v)));
   const [t, tp, format, rows] = await Promise.all([adminI18n().then((x) => x.t), adminI18n().then((x) => x.tp), adminI18n().then((x) => x.format), listBusinesses(getDb(), f)]);

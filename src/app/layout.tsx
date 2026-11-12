@@ -1,3 +1,4 @@
+import { Beat } from "@/components/usage/beat";
 import type { Metadata, Viewport } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Baloo_2, Manrope } from "next/font/google";
@@ -35,7 +36,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const locale = await getLocale();
   return (
     <html lang={locale} className={`${baloo.variable} ${manrope.variable}`}>
-      <body className="min-h-dvh antialiased">{children}</body>
+      <body className="min-h-dvh antialiased">
+        {children}
+        <Beat />
+      </body>
     </html>
   );
 }

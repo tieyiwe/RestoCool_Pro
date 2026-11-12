@@ -10,5 +10,5 @@ export const GET = handle(async (req: Request) => {
   const ctx = await serviceCtx("orders.read");
   const rid = ctx.repo.restaurantId;
   const who = ctx.actor.kind === "member" ? (ctx.actor.memberId ?? ctx.actor.userId) : "x";
-  return sseResponse(req, (ev) => (ev.r === rid ? ev.k : null), { key: `s:${who}`, max: SSE_LIMITS.staffPerPerson });
+  return sseResponse(req, (ev) => (ev.r === rid || (ev.k === "notice" && ev.r === "*") ? ev.k : null), { key: `s:${who}`, max: SSE_LIMITS.staffPerPerson });
 });

@@ -13,7 +13,7 @@ const field = "min-h-11 w-full rounded-lg border border-border bg-surface px-3 t
 
 /** Platform switches: launch offer, announcement to every business, « À la une ». */
 export default async function AdminSettings({ searchParams }: { searchParams: Promise<{ ok?: string }> }) {
-  await requireSuperadminPage();
+  await requireSuperadminPage("settings");
   const sp = await searchParams;
   const [t, platform, featured] = await Promise.all([
     adminI18n().then((x) => x.t),

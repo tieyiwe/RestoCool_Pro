@@ -102,3 +102,18 @@ export async function searchRestaurants(db: DB, raw: string, limit = 24): Promis
     .limit(limit);
   return rows.map(toEntry);
 }
+
+/**
+ * « RC number » typeahead: businesses whose main numéro RC starts with what was typed so far
+ * (« K », « K7 », « RC-K7M »…). Published only; at most a few.
+ */
+export async function suggestByRc(db: DB, raw: string, limit = 5): Promise<DirectoryEntry[]> {
+  let s = raw.toUpperCase().replace(/[\s\-_.#]/g, "");
+  if (s.startsWith("RC")) s = s.slice(2);
+  if (!s || s.length > 5 || !/^[ABCDEFGHJKMNPQRSTWXYZ23456789]+$/.test(s)) return [];
+  const rows = await base(db)
+    .where(and(eq(restaurants.published, true), ilike(accessCodes.code, `${s}%`)))
+    .orderBy(asc(accessCodes.code))
+    .limit(limit);
+  return rows.map(toEntry);
+}

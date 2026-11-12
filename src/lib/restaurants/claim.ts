@@ -21,14 +21,26 @@ export async function claimBusinessesByEmail(db: DB, user: { clerkUserId: string
       const [r] = await tx.select().from(restaurants).where(eq(restaurants.id, id)).for("update");
       if (!r || (r.settings.ownerEmail ?? "").toLowerCase() !== email) return false;
       const [owner] = await tx.select({ id: members.id }).from(members).where(and(eq(members.restaurantId, id), eq(members.role, "owner"))).limit(1);
-      if (!owner) {
+      const transfer = r.settings.ownerTransfer === true;
+      if (owner && transfer) {
+        // Recovery: the verified new account takes over; the old owner account is switched off.
+        await tx.update(members).set({ active: false, role: "manager" }).where(eq(members.id, owner.id));
+      }
+      const [already] = await tx.select({ id: members.id }).from(members).where(and(eq(members.restaurantId, id), eq(members.clerkUserId, user.clerkUserId))).limit(1);
+      if (already && (!owner || transfer)) {
+        await tx.update(members).set({ role: "owner", active: true, email }).where(eq(members.id, already.id));
+      } else if (!owner || transfer) {
         const staffNo = await nextStaffNo(tx, id);
         await tx.insert(members).values({ restaurantId: id, clerkUserId: user.clerkUserId, role: "owner", staffNo, email, name: user.name ?? null });
       }
       await tx
         .update(restaurants)
-        .set({ settings: sql`${restaurants.settings} - 'ownerEmail'` })
+        .set({ settings: sql`${restaurants.settings} - 'ownerEmail' - 'ownerTransfer'` })
         .where(eq(restaurants.id, id));
+      if (transfer) {
+        await writeAudit(tx, { kind: "member", userId: user.clerkUserId, restaurantId: id, role: "owner" }, { restaurantId: id, action: "restaurant.owner_recovered", entity: "restaurant", entityId: id, data: { email, previousOwner: owner?.id ?? null } });
+        return true;
+      }
       await writeAudit(tx, { kind: "member", userId: user.clerkUserId, restaurantId: id, role: "owner" }, { restaurantId: id, action: "restaurant.claimed", entity: "restaurant", entityId: id, data: { email } });
       return !owner;
     });

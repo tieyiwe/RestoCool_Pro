@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 /** CSV of the businesses list (same filters as the page), for the super admin only. */
 export const GET = handle(async (req: Request) => {
-  await requireSuperadmin();
+  await requireSuperadmin("businesses.read");
   const f = BusinessFilter.parse(Object.fromEntries(new URL(req.url).searchParams));
   const rows = await listBusinesses(getDb(), f);
   const head = ["name", "slug", "rc", "kind", "city", "owner", "owner_email", "plan", "status", "until", "published", "items", "orders_30d", "gmv_30d_fcfa", "last_order", "created"];

@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 /** Plans and money: income per month, every payment and plan change, renewals coming up. */
 export default async function AdminBilling() {
-  await requireSuperadminPage();
+  await requireSuperadminPage("billing.read");
   const db = getDb();
   const [t, tp, format, o, events, months] = await Promise.all([
     adminI18n().then((x) => x.t),
