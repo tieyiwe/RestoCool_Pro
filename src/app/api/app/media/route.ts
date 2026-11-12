@@ -38,8 +38,10 @@ export const POST = handle(async (req: Request) => {
   // Authenticate and bound the body size BEFORE buffering the multipart form in memory.
   // Every role that may upload anything has menu.write (logo/cover additionally need settings.write).
   await requireMember("menu.write");
-  const declared = Number(req.headers.get("content-length") ?? "0");
-  if (!Number.isFinite(declared) || declared > MAX_BODY_BYTES) throw new AppError("image_too_large", 413);
+  // A body without a declared size (chunked) could be any size: refuse it before reading.
+  const declared = Number(req.headers.get("content-length") ?? "NaN");
+  if (!Number.isFinite(declared) || declared <= 0) throw new AppError("length_required", 411);
+  if (declared > MAX_BODY_BYTES) throw new AppError("image_too_large", 413);
 
   const form = await req.formData();
   const meta = Meta.parse({ kind: form.get("kind"), width: form.get("width"), height: form.get("height") });

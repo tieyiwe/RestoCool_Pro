@@ -13,12 +13,15 @@ const isProd = process.env.NODE_ENV === "production";
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self)" },
+  { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self), payment=(), usb=(), bluetooth=(), serial=(), interest-cohort=()" },
+  { key: "X-DNS-Prefetch-Control", value: "on" },
   ...(isProd
     ? [
         { key: "X-Frame-Options", value: "SAMEORIGIN" },
         { key: "Content-Security-Policy", value: "frame-ancestors 'self'; base-uri 'self'; object-src 'none'" },
-        { key: "Strict-Transport-Security", value: "max-age=31536000" },
+        { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
+        // Other sites can't get a handle on our windows (sign-in popups stay allowed).
+        { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
       ]
     : []),
 ];

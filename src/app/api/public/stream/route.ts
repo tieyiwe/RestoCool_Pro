@@ -4,7 +4,8 @@ import { getDb } from "@/db";
 import { findRestaurantBySlug } from "@/db/repos/tenant";
 import { customerSession, GROUP_SEATS } from "@/lib/orders/service";
 import { allow, DeviceId, notFound, publicRestaurant, Slug, tooMany } from "@/lib/public-api";
-import { sseResponse } from "@/lib/realtime/sse";
+import { SSE_LIMITS, sseResponse } from "@/lib/realtime/sse";
+import { clientIp } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -20,19 +21,23 @@ export async function GET(req: Request) {
   if (!q.success) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
   if (!allow(req, q.data.deviceId)) return tooMany();
   const db = getDb();
-  // Published menus, or a member previewing their unpublished one.
+  // Published menus, or a member previewing their unpublished one (never any other draft).
   const r = (await findRestaurantBySlug(db, q.data.slug)) ?? (await publicRestaurant(q.data.slug));
   if (!r) return notFound();
   const s = q.data.sessionId ? await customerSession(db, r.id, q.data.sessionId, q.data.deviceId) : null;
   const sessionId = s?.session.id ?? null;
   const shared = s && GROUP_SEATS.has(s.seat.type) ? sessionId : null;
   const deviceId = q.data.deviceId;
-  return sseResponse(req, (ev) => {
+  return sseResponse(
+    req,
+    (ev) => {
     if (ev.r !== r.id) return null;
     if (ev.k === "menu") return "menu";
     if (ev.k === "session") return ev.s === sessionId ? "session" : null;
     // Team requests are for staff screens only.
     if (ev.k !== "order") return null;
     return ev.d === deviceId || (shared !== null && ev.s === shared) ? "order" : null;
-  });
+    },
+    { key: `c:${clientIp(req)}`, max: SSE_LIMITS.customerPerIp },
+  );
 }

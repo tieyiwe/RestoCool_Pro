@@ -4,11 +4,29 @@ import { listening, subscribe } from "./listener";
 
 const HEARTBEAT_MS = 25_000;
 
+/** Open streams per key (an IP for customers, a person for staff): one machine can't exhaust the server. */
+const open = new Map<string, number>();
+export const SSE_LIMITS = { customerPerIp: 40, staffPerPerson: 8 } as const;
+
+function tooManyStreams() {
+  return new Response("Too many live connections", { status: 429, headers: { "Retry-After": "15", "Cache-Control": "no-store" } });
+}
+
 /**
  * Server-Sent Events response. `pick` decides which events this client gets and what it is told
  * (a small hint only; the page then re-fetches through the permission-checked API).
  */
-export function sseResponse(req: Request, pick: (ev: RtEvent) => string | null): Response {
+export function sseResponse(req: Request, pick: (ev: RtEvent) => string | null, limit?: { key: string; max: number }): Response {
+  if (limit && (open.get(limit.key) ?? 0) >= limit.max) return tooManyStreams();
+  if (limit) open.set(limit.key, (open.get(limit.key) ?? 0) + 1);
+  let released = false;
+  const release = () => {
+    if (!limit || released) return;
+    released = true;
+    const n = (open.get(limit.key) ?? 1) - 1;
+    if (n <= 0) open.delete(limit.key);
+    else open.set(limit.key, n);
+  };
   const enc = new TextEncoder();
   let cleanup = () => {};
   const stream = new ReadableStream<Uint8Array>({
@@ -32,6 +50,7 @@ export function sseResponse(req: Request, pick: (ev: RtEvent) => string | null):
       function close() {
         if (closed) return;
         closed = true;
+        release();
         clearInterval(beat);
         unsubscribe();
         try {
@@ -53,6 +72,7 @@ export function sseResponse(req: Request, pick: (ev: RtEvent) => string | null):
     },
     cancel() {
       cleanup();
+      release();
     },
   });
   return new Response(stream, {
