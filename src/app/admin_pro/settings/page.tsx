@@ -98,7 +98,7 @@ export default async function AdminSettings({ searchParams }: { searchParams: Pr
           <ol className="flex flex-col divide-y divide-border">
             {featured.map((f) => (
               <li key={f.id} className="flex items-center justify-between gap-2 py-2">
-                <Link href={`/admin/businesses/${f.id}`} className="font-semibold hover:underline">
+                <Link href={`/admin_pro/businesses/${f.id}`} className="font-semibold hover:underline">
                   ★ {f.rank}. {f.name}
                 </Link>
                 <form action={featuredAction}>

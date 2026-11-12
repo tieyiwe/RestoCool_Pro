@@ -33,7 +33,7 @@ export default async function AdminBusiness({ params, searchParams }: { params: 
   const date = (x: Date | null) => (x ? format.dateTime(x, { dateStyle: "medium" }) : "—");
   return (
     <div className="flex flex-col gap-5" data-testid="admin-business">
-      <Link href="/admin/businesses" className="text-sm font-semibold text-primary">
+      <Link href="/admin_pro/businesses" className="text-sm font-semibold text-primary">
         ← {t("businesses.title")}
       </Link>
       {sp.ok && OK.includes(sp.ok) && (

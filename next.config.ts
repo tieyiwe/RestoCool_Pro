@@ -46,7 +46,7 @@ const nextConfig: NextConfig = {
     const noindex = [{ key: "X-Robots-Tag", value: "noindex, nofollow" }];
     return [
       { source: "/:path*", headers: securityHeaders },
-      ...["/app/:path*", "/admin/:path*", "/api/:path((?!media/).*)", "/poste/:path*", "/pointage/:path*", "/rejoindre/:path*", "/o/:path*", "/r/:slug/t/:path*", "/r/:slug/b/:path*"].map(
+      ...["/app/:path*", "/admin_pro/:path*", "/api/:path((?!media/).*)", "/poste/:path*", "/pointage/:path*", "/rejoindre/:path*", "/o/:path*", "/r/:slug/t/:path*", "/r/:slug/b/:path*"].map(
         (source) => ({ source, headers: noindex }),
       ),
     ];

@@ -63,7 +63,7 @@ export default async function AdminBilling() {
           <ul className="flex flex-col divide-y divide-border text-sm">
             {o.expiring.map((b) => (
               <li key={b.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
-                <Link href={`/admin/businesses/${b.id}#plan`} className="font-semibold hover:underline">
+                <Link href={`/admin_pro/businesses/${b.id}#plan`} className="font-semibold hover:underline">
                   {b.name}
                 </Link>
                 <span className="text-xs">
@@ -93,7 +93,7 @@ export default async function AdminBilling() {
                 <tr key={e.id}>
                   <td className="py-2 text-xs">{format.dateTime(e.createdAt, { dateStyle: "short", timeStyle: "short" })}</td>
                   <td className="py-2">
-                    <Link href={`/admin/businesses/${e.restaurantId}`} className="font-semibold hover:underline">
+                    <Link href={`/admin_pro/businesses/${e.restaurantId}`} className="font-semibold hover:underline">
                       {name}
                     </Link>
                   </td>

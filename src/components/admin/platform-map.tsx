@@ -23,7 +23,7 @@ export function PlatformMap({ points, labels }: { points: MapPoint[]; labels: { 
         const color = p.published ? "#0f6b3e" : "#e9b530";
         const marker = L.circleMarker([p.lat, p.lng], { radius: 9, color: "#ffffff", weight: 2, fillColor: color, fillOpacity: 0.95 }).addTo(map);
         const a = document.createElement("a");
-        a.href = `/admin/businesses/${p.id}`;
+        a.href = `/admin_pro/businesses/${p.id}`;
         a.textContent = `${p.name}${p.city ? ` · ${p.city}` : ""}${p.rc ? ` · ${p.rc}` : ""}${p.published ? "" : ` (${labels.draft})`}`;
         a.style.fontWeight = "700";
         marker.bindPopup(a);

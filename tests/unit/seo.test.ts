@@ -172,7 +172,7 @@ describe("siteJsonLd", () => {
 
 describe("robots rules", () => {
   it("close private areas and token links, keep dish photos and AI crawlers", () => {
-    for (const p of ["/app/", "/admin", "/api/", "/poste", "/pointage", "/rejoindre", "/sign-in", "/sign-up", "/r/*/t/", "/r/*/b/"]) expect(DISALLOW).toContain(p);
+    for (const p of ["/app/", "/api/", "/poste", "/pointage", "/rejoindre", "/sign-in", "/sign-up", "/r/*/t/", "/r/*/b/"]) expect(DISALLOW).toContain(p);
     // « /app » alone would also block /apple-icon.png.
     expect(DISALLOW).not.toContain("/app");
     expect(ALLOW).toContain("/api/media/");

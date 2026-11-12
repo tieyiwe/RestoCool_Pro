@@ -1,7 +1,7 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server";
 
-const PROTECTED = [/^\/app(\/|$)/, /^\/admin(\/|$)/, /^\/api\/app(\/|$)/, /^\/api\/admin(\/|$)/];
+const PROTECTED = [/^\/app(\/|$)/, /^\/admin_pro(\/|$)/, /^\/api\/app(\/|$)/, /^\/api\/admin(\/|$)/];
 const isProtected = (req: NextRequest) => PROTECTED.some((re) => re.test(req.nextUrl.pathname));
 /**
  * A PIN session on an authorised device (cookie rc_staff) has no account: let it through the

@@ -14,12 +14,12 @@ export const metadata: Metadata = { robots: NOINDEX, title: "RestoCool · Super 
 export const dynamic = "force-dynamic";
 
 const NAV = [
-  { href: "/admin", key: "overview", icon: "📊" },
-  { href: "/admin/businesses", key: "businesses", icon: "🏪" },
-  { href: "/admin/billing", key: "billing", icon: "💳" },
-  { href: "/admin/map", key: "map", icon: "🗺️" },
-  { href: "/admin/activity", key: "activity", icon: "🧾" },
-  { href: "/admin/settings", key: "settings", icon: "⚙️" },
+  { href: "/admin_pro", key: "overview", icon: "📊" },
+  { href: "/admin_pro/businesses", key: "businesses", icon: "🏪" },
+  { href: "/admin_pro/billing", key: "billing", icon: "💳" },
+  { href: "/admin_pro/map", key: "map", icon: "🗺️" },
+  { href: "/admin_pro/activity", key: "activity", icon: "🧾" },
+  { href: "/admin_pro/settings", key: "settings", icon: "⚙️" },
 ] as const;
 
 /**
@@ -32,13 +32,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <AuthProvider>
       <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-border bg-nuit px-4 py-2 text-creme">
-        <Link href="/admin" className="flex items-center gap-2 font-bold">
+        <Link href="/admin_pro" className="flex items-center gap-2 font-bold">
           <Logo onDark />
           <span className="rounded-full bg-or px-2 py-0.5 text-xs font-extrabold text-encre">{t("badge")}</span>
         </Link>
         <div className="flex items-center gap-3">
           <form action={adminLangAction} className="flex overflow-hidden rounded-full border border-creme/30 text-xs font-bold" data-testid="admin-lang">
-            <input type="hidden" name="back" value="/admin" />
+            <input type="hidden" name="back" value="/admin_pro" />
             {(["en", "fr"] as const).map((l) => (
               <button key={l} name="lang" value={l} aria-pressed={locale === l} className="min-h-9 px-3 uppercase aria-pressed:bg-creme aria-pressed:text-encre">
                 {l}

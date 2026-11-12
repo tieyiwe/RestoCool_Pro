@@ -79,7 +79,7 @@ export default async function AdminBusinesses({ searchParams }: { searchParams: 
               {rows.map((b) => (
                 <tr key={b.id} className="hover:bg-muted/50" data-testid="admin-business-row">
                   <td className="p-3">
-                    <Link href={`/admin/businesses/${b.id}`} className="font-bold hover:underline">
+                    <Link href={`/admin_pro/businesses/${b.id}`} className="font-bold hover:underline">
                       {b.kind === "transport" ? "🚌 " : ""}
                       {b.name}
                     </Link>

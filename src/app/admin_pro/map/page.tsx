@@ -29,7 +29,7 @@ export default async function AdminMap() {
       <PlatformMap points={points} labels={{ open: t("map.title"), draft: t("draft") }} />
       <p className="text-sm text-muted-foreground">
         🟢 {t("published")} · 🟡 {t("draft")} ·{" "}
-        <Link href="/admin/businesses" className="font-semibold text-primary">
+        <Link href="/admin_pro/businesses" className="font-semibold text-primary">
           {t("map.missing")}
         </Link>
       </p>

@@ -85,7 +85,7 @@ export default async function AdminActivity({ searchParams }: { searchParams: Pr
               <span className="min-w-0">
                 <span className="font-mono text-xs">{a.action}</span>
                 {name && (
-                  <Link href={`/admin/businesses/${a.restaurantId}`} className="ml-2 text-xs font-semibold hover:underline">
+                  <Link href={`/admin_pro/businesses/${a.restaurantId}`} className="ml-2 text-xs font-semibold hover:underline">
                     {name}
                   </Link>
                 )}

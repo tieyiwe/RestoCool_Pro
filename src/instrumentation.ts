@@ -1,6 +1,6 @@
 /**
  * Server start-up (Next.js instrumentation): load the platform settings (launch offer…) and send
- * every server error to the super admin's error list (/admin/activity). The database code lives
+ * every server error to the super admin's error list (/admin_pro/activity). The database code lives
  * in instrumentation-node.ts, imported only on the Node runtime (never bundled for the edge).
  */
 export async function register() {

@@ -14,7 +14,9 @@ test("robots.txt opens public pages to every crawler (AI included) and closes pr
   const res = await request.get("/robots.txt");
   expect(res.status()).toBe(200);
   const txt = await res.text();
-  for (const line of ["User-Agent: *", "Allow: /", "Disallow: /app/", "Disallow: /admin", "Disallow: /api/", "Disallow: /poste", "Disallow: /pointage", "Disallow: /rejoindre", "Disallow: /sign-in", "Disallow: /sign-up", "Disallow: /r/*/t/", "Disallow: /r/*/b/"])
+  // The super admin console is never listed: robots.txt is public and would reveal its address.
+  expect(txt).not.toContain("admin");
+  for (const line of ["User-Agent: *", "Allow: /", "Disallow: /app/", "Disallow: /api/", "Disallow: /poste", "Disallow: /pointage", "Disallow: /rejoindre", "Disallow: /sign-in", "Disallow: /sign-up", "Disallow: /r/*/t/", "Disallow: /r/*/b/"])
     expect(txt).toContain(line);
   for (const bot of ["GPTBot", "OAI-SearchBot", "ClaudeBot", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Bingbot"]) expect(txt).toContain(`User-Agent: ${bot}`);
   expect(txt).toMatch(/Sitemap: https?:\/\/[^\s]+\/sitemap\.xml/);

@@ -56,7 +56,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     ] as const
   ).filter((n) => allowed(n.need));
   // The RestoCool team (super admin) also gets the platform console.
-  if (await getSuperadmin().catch(() => null)) nav.push({ href: "/admin" as "/app/guide", label: t("superadmin"), icon: "🛡️" as "🎓", need: null });
+  if (await getSuperadmin().catch(() => null)) nav.push({ href: "/admin_pro" as "/app/guide", label: t("superadmin"), icon: "🛡️" as "🎓", need: null });
   // Phones: the 4 most used screens for this role as tabs, the rest under « Plus ».
   const kitchenOnly = allowed("orders.prepare") && !allowed("orders.confirm");
   const order = transport

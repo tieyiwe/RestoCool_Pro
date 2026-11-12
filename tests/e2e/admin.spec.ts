@@ -9,7 +9,7 @@ test("super admin: overview, find a business by name, record a payment, suspend 
     "select id, plan, plan_status, plan_expires_at, settings from restaurants where slug = 'maquis-temoin'",
   );
   try {
-    await page.goto("/admin");
+    await page.goto("/admin_pro");
     await expect(page.getByTestId("admin-overview")).toBeVisible();
     await expect(page.getByTestId("kpi-businesses")).toContainText(/\d/);
     // English by default, French on demand (remembered), never Chinese.
@@ -51,9 +51,9 @@ test("super admin: overview, find a business by name, record a payment, suspend 
     await expect(page.getByTestId("admin-notes")).toContainText("Rappeler vendredi");
 
     // Billing lists the payment; activity logs the admin actions.
-    await page.goto("/admin/billing");
+    await page.goto("/admin_pro/billing");
     await expect(page.getByTestId("admin-billing-events")).toContainText("OM-E2E-1");
-    await page.goto("/admin/activity?q=admin.");
+    await page.goto("/admin_pro/activity?q=admin.");
     await expect(page.getByTestId("admin-audit")).toContainText("admin.payment_recorded");
   } finally {
     await sql("update restaurants set plan = $2, plan_status = $3, plan_expires_at = $4, settings = $5::jsonb where id = $1", [before!.id, before!.plan, before!.plan_status, before!.plan_expires_at, JSON.stringify(before!.settings)]);
@@ -63,10 +63,10 @@ test("super admin: overview, find a business by name, record a payment, suspend 
 
 test("super admin: an announcement shows on every business's app; the launch offer can be switched", async ({ page }) => {
   try {
-    await page.goto("/admin/settings");
+    await page.goto("/admin_pro/settings");
     await page.getByTestId("admin-lang").getByRole("button", { name: "fr" }).click();
     await expect(page.getByTestId("admin-lang").getByRole("button", { name: "fr" })).toHaveAttribute("aria-pressed", "true");
-    await page.goto("/admin/settings");
+    await page.goto("/admin_pro/settings");
     const form = page.getByTestId("admin-announcement-form");
     await page.getByTestId("admin-announcement-fr").fill("Maintenance ce soir à 23 h : l’app reste disponible.");
     await page.getByTestId("admin-announcement-save").click();
@@ -75,7 +75,7 @@ test("super admin: an announcement shows on every business's app; the launch off
     await expect(page.getByTestId("platform-announcement")).toContainText("Maintenance ce soir");
     await expect(form).toHaveCount(0);
 
-    await page.goto("/admin/settings");
+    await page.goto("/admin_pro/settings");
     await expect(page.getByTestId("admin-free-launch-state")).toContainText("Active");
     await page.getByTestId("admin-free-launch").click();
     await expect(page.getByTestId("admin-free-launch-state")).toContainText("Désactivée");
@@ -87,7 +87,7 @@ test("super admin: an announcement shows on every business's app; the launch off
 });
 
 test("only the RestoCool team: the console lists businesses on the map page and exports CSV", async ({ page }) => {
-  await page.goto("/admin/map");
+  await page.goto("/admin_pro/map");
   await expect(page.getByTestId("admin-map")).toBeVisible();
   const csv = await page.request.get("/api/admin/businesses?q=Restaurant");
   expect(csv.headers()["content-type"]).toContain("text/csv");

@@ -1,12 +1,12 @@
 /**
  * robots.txt rules (src/app/robots.ts). Private areas and secret links are never crawled: table
  * and bus QR links carry a token (« /r/x/t/<token> », « /r/x/b/<token> ») and their pages also
- * say noindex. « /app$ » + « /app/ » rather than « /app », which would also block /apple-icon.png.
+ * say noindex. The super admin console is deliberately NOT listed (robots.txt is public and
+ * would reveal its address); it is protected by sign-in and says noindex itself. « /app$ » + « /app/ » rather than « /app », which would also block /apple-icon.png.
  */
 export const DISALLOW = [
   "/app$",
   "/app/",
-  "/admin",
   "/api/",
   "/poste",
   "/pointage",

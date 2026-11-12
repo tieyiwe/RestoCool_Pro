@@ -86,7 +86,7 @@ export default async function AdminOverview() {
                 <span className="flex flex-wrap gap-1">
                   {p.counts.length === 0 && <span className="text-muted-foreground">0</span>}
                   {p.counts.map(([s, n]) => (
-                    <Link key={s} href={`/admin/businesses?plan=${p.plan}&status=${s}`} className="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold hover:bg-primary/10">
+                    <Link key={s} href={`/admin_pro/businesses?plan=${p.plan}&status=${s}`} className="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold hover:bg-primary/10">
                       {tp(s)} · {n}
                     </Link>
                   ))}
@@ -117,7 +117,7 @@ export default async function AdminOverview() {
             <ol className="flex flex-col divide-y divide-border text-sm" data-testid="admin-top">
               {o.top.map((b, i) => (
                 <li key={b.id} className="flex items-center justify-between gap-2 py-2">
-                  <Link href={`/admin/businesses/${b.id}`} className="font-semibold hover:underline">
+                  <Link href={`/admin_pro/businesses/${b.id}`} className="font-semibold hover:underline">
                     {i + 1}. {b.name} <span className="font-normal text-muted-foreground">· {b.city}</span>
                   </Link>
                   <span className="text-right tabular-nums">
@@ -136,7 +136,7 @@ export default async function AdminOverview() {
             <ul className="flex flex-col divide-y divide-border text-sm" data-testid="admin-expiring">
               {o.expiring.map((b) => (
                 <li key={b.id} className="flex items-center justify-between gap-2 py-2">
-                  <Link href={`/admin/businesses/${b.id}#plan`} className="font-semibold hover:underline">
+                  <Link href={`/admin_pro/businesses/${b.id}#plan`} className="font-semibold hover:underline">
                     {b.name}
                   </Link>
                   <span className="text-xs">
