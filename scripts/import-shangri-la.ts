@@ -59,6 +59,75 @@ function arg(name: string): string | undefined {
   return hit?.slice(name.length + 3);
 }
 
+/** Uploads a photo (and its thumbnail) to the store and records it in `media`. */
+function uploader(db: ReturnType<typeof getDb>, store: ReturnType<typeof getStore>, rid: string) {
+  return async function upload(file: string, thumb: string | null, kind: "item" | "logo") {
+    const full = readFileSync(file);
+    const id = randomBytes(18).toString("base64url");
+    const ext = file.endsWith(".png") ? "png" : "jpg";
+    const fullKey = `r/${rid}/${id}.${ext}`;
+    const thumbKey = `r/${rid}/${id}-t.${ext}`;
+    const small = thumb ? readFileSync(thumb) : full;
+    await store.put(fullKey, full);
+    await store.put(thumbKey, small);
+    const { width, height } = imageSize(full);
+    await db.insert(media).values({ restaurantId: rid, kind, fullKey, thumbKey, bytes: full.length + small.length, width, height, uploadedBy: "import" });
+    return { photoUrl: mediaUrl(fullKey), thumbUrl: mediaUrl(thumbKey) };
+  };
+}
+
+/** The source photo of a dish (the fondue photo serves both portions). */
+function photoFor(data: Data, name: string): string | undefined {
+  return data.PHOTOS[name] ?? (name.startsWith("Fondue chinoise") ? data.PHOTOS["Fondue chinoise"] : undefined);
+}
+
+/**
+ * Makes sure Shangri-La shows every photo of its menu: a dish with a source photo but no picture
+ * (only while nobody owns the restaurant: after that it is the owner's choice), or whose picture
+ * file is missing from the storage (never intended), gets it uploaded again. Same for the logo.
+ * Runs on every deploy start; does nothing when all is in place.
+ */
+async function repairPhotos(db: ReturnType<typeof getDb>, store: ReturnType<typeof getStore>, data: Data, r: { id: string; logoUrl: string | null }, owned: boolean) {
+  const upload = uploader(db, store, r.id);
+  const exists = async (url: string | null) => {
+    const key = url?.startsWith("/api/media/") ? url.slice("/api/media/".length) : null;
+    return key ? (await store.get(key).catch(() => null)) !== null : false;
+  };
+  let fixed = 0;
+  let failed = 0;
+  if ((!r.logoUrl && !owned) || (r.logoUrl && r.logoUrl.includes(`/r/${r.id}/`) && !(await exists(r.logoUrl)))) {
+    const logo = await upload(path.join(DIR, "logo.png"), null, "logo");
+    await db.update(restaurants).set({ logoUrl: logo.photoUrl }).where(eq(restaurants.id, r.id));
+    fixed++;
+  }
+  const rows = await db.select({ id: menuItems.id, name: menuItems.name, photoUrl: menuItems.photoUrl }).from(menuItems).where(eq(menuItems.restaurantId, r.id));
+  const cache = new Map<string, { photoUrl: string; thumbUrl: string }>();
+  for (const row of rows) {
+    const file = photoFor(data, row.name.fr);
+    if (!file) continue;
+    const missing = row.photoUrl ? !(await exists(row.photoUrl)) : !owned;
+    if (!missing) continue;
+    const base = path.basename(file);
+    let pic = cache.get(base);
+    if (!pic) {
+      try {
+        pic = await upload(path.join(DIR, "img", base), path.join(DIR, "img", "t", base), "item");
+      } catch (err) {
+        // Visible in the deploy logs: the storage refused the photo (bucket missing, no access…).
+        console.error(`✗ Shangri-La: photo « ${row.name.fr} » could not be stored: ${err instanceof Error ? err.message : err}`);
+        failed++;
+        continue;
+      }
+      cache.set(base, pic);
+    }
+    await db.update(menuItems).set({ photoUrl: pic.photoUrl, thumbUrl: pic.thumbUrl }).where(eq(menuItems.id, row.id));
+    fixed++;
+  }
+  if (failed) console.error(`✗ Shangri-La: ${failed} photo(s) could not be stored. Check Object Storage (bucket in .replit) then restart.`);
+  const withPhoto = rows.filter((x) => photoFor(data, x.name.fr)).length;
+  console.log(fixed ? `✓ Shangri-La: ${fixed} photo(s) restored (${withPhoto} dishes have a photo).` : `✓ Shangri-La: all ${withPhoto} dish photos in place.`);
+}
+
 /** Width × height of a JPEG or PNG (for the media table). */
 function imageSize(b: Buffer): { width: number; height: number } {
   if (b[0] === 0x89 && b[1] === 0x50) return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
@@ -116,6 +185,7 @@ async function main() {
         .where(eq(restaurants.id, existing.id));
       console.log("✓ Shangri-La: table/room picker from the main QR, lacquer red accent.");
     }
+    await repairPhotos(db, store, data, fresh, Boolean(anyOwner));
     if (ifMissing) {
       console.log("✓ Shangri-La already exists.");
       return;
@@ -169,19 +239,7 @@ async function main() {
     .returning();
   const rid = r!.id;
 
-  async function upload(file: string, thumb: string | null, kind: "item" | "logo") {
-    const full = readFileSync(file);
-    const id = randomBytes(18).toString("base64url");
-    const ext = file.endsWith(".png") ? "png" : "jpg";
-    const fullKey = `r/${rid}/${id}.${ext}`;
-    const thumbKey = `r/${rid}/${id}-t.${ext}`;
-    const small = thumb ? readFileSync(thumb) : full;
-    await store.put(fullKey, full);
-    await store.put(thumbKey, small);
-    const { width, height } = imageSize(full);
-    await db.insert(media).values({ restaurantId: rid, kind, fullKey, thumbKey, bytes: full.length + small.length, width, height, uploadedBy: "import" });
-    return { photoUrl: mediaUrl(fullKey), thumbUrl: mediaUrl(thumbKey) };
-  }
+  const upload = uploader(db, store, rid);
 
   // Logo (the restaurant's own app icon).
   const logo = await upload(path.join(DIR, "logo.png"), null, "logo");
@@ -223,7 +281,7 @@ async function main() {
       if (it.g || it.parent) continue;
       const [en, enDesc] = tr(data.EN, it.name);
       const [zh, zhDesc] = tr(data.ZH, it.name);
-      const photoFile = data.PHOTOS[it.name] ?? (it.name.startsWith("Fondue chinoise") ? data.PHOTOS["Fondue chinoise"] : undefined);
+      const photoFile = photoFor(data, it.name);
       let pic: { photoUrl: string; thumbUrl: string } | null = null;
       if (photoFile) {
         const base = path.basename(photoFile);
