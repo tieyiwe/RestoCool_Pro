@@ -51,7 +51,7 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
   await expect(page.getByText("Étape 2 sur 6")).toBeVisible();
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/\/onboarding\/2$/);
-  await page.getByLabel("WhatsApp").fill("70 12 34 56");
+  await page.getByTestId("whatsapp-input").fill("70 12 34 56");
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/\/onboarding\/3$/);
   await page.getByRole("button", { name: "Continuer" }).click();

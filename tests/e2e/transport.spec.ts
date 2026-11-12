@@ -2,6 +2,8 @@ import { expect, test } from "@playwright/test";
 import { sql, freeDevOwnerSlots } from "./helpers";
 
 test("a VIP bus company: create it, add a bus from rows and columns, an itinerary with its hostess, print the seat QR codes", async ({ page }, info) => {
+  // Long path (creation, setup, buses, itineraries, print); the dev server compiles each page once.
+  test.setTimeout(150_000);
   await freeDevOwnerSlots();
   const name = `Express Bus E2E ${info.project.name}`;
   try {
@@ -9,7 +11,7 @@ test("a VIP bus company: create it, add a bus from rows and columns, an itinerar
     await page.getByTestId("kind-transport").click();
     await page.getByLabel("Nom de l'établissement").fill(name);
     await page.getByRole("button", { name: "Créer mon établissement" }).click();
-    await expect(page).toHaveURL(/\/app\/onboarding\/1$/);
+    await expect(page).toHaveURL(/\/app\/onboarding\/1$/, { timeout: 30_000 }); // dev server compiles the setup on first use
 
     // The « service » step asks for the first bus: the seat map draws itself from the numbers.
     await page.goto("/app/onboarding/4");
@@ -40,13 +42,13 @@ test("a VIP bus company: create it, add a bus from rows and columns, an itinerar
     const route = page.getByTestId("route-form");
     await route.getByTestId("route-destination").selectOption("Koudougou");
     await route.getByRole("button", { name: "Ajouter" }).click();
-    await expect(page.getByTestId("buses-ok")).toContainText("Itinéraire ajouté");
+    await expect(page.getByTestId("buses-ok")).toContainText("Itinéraire ajouté", { timeout: 60_000 });
     await expect(page.getByTestId("route-card").filter({ hasText: "Ouagadougou → Koudougou" })).toBeVisible();
 
     // Seat-back cards: one per seat, plus the bus's own QR.
     await page.goto("/app/buses");
     await page.getByTestId("bus-card").filter({ hasText: "Bus 12" }).getByTestId("bus-print").click();
-    await expect(page.getByTestId("seat-card")).toHaveCount(50);
+    await expect(page.getByTestId("seat-card")).toHaveCount(50, { timeout: 60_000 });
     await expect(page.getByTestId("seat-card").first()).toContainText("Siège 1");
     await expect(page.getByTestId("seat-card").first()).toContainText(/RC-[A-Z2-9]{5}/);
     await expect(page.getByTestId("bus-qr-card")).toContainText("Bus 12");

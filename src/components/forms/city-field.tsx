@@ -41,7 +41,9 @@ export function CityField({
       <label htmlFor={id} className="text-sm font-bold">
         {label}
       </label>
-      <select id={id} value={choice} onChange={(e) => setChoice(e.target.value)} className={className} data-testid={id}>
+      {/* The visible field itself carries the value (no hidden copy): what the form sends is always
+          what is on screen, even if the person chose before the page finished loading. */}
+      <select id={id} name={choice === OTHER ? undefined : name} value={choice} onChange={(e) => setChoice(e.target.value)} className={className} data-testid={id}>
         <optgroup label={t("main")}>
           {BF_CITIES_TOP.map((c) => (
             <option key={c} value={c}>
@@ -60,6 +62,7 @@ export function CityField({
       </select>
       {choice === OTHER && (
         <input
+          name={name}
           aria-label={t("typeLabel")}
           value={typed}
           onChange={(e) => setTyped(e.target.value)}
@@ -72,7 +75,6 @@ export function CityField({
           data-testid={`${id}-other`}
         />
       )}
-      <input type="hidden" name={name} value={value} />
     </div>
   );
 }
