@@ -1,4 +1,5 @@
 import "server-only";
+import { LANDING_FEATURES } from "@/config/marketing";
 import { PLANS, TRIAL_DAYS, type PlanId } from "@/config/plans";
 import { formatRc } from "@/lib/access-codes";
 import { plainFCFA } from "./json-ld";
@@ -14,17 +15,7 @@ import fr from "@/messages/fr.json";
 export type LlmsBusiness = { slug: string; name: string; kind: "restaurant" | "transport"; city: string; description: unknown; rc: string | null };
 
 const L = en.landing;
-const FEATURES = [
-  ["menu", true],
-  ["photos", true],
-  ["qr", true],
-  ["seats", true],
-  ["whatsapp", true],
-  ["offline", true],
-  ["orders", false],
-  ["staff", false],
-  ["reservations", false],
-] as const;
+const FEATURES = LANDING_FEATURES.map((f) => [f.key, f.ready] as const);
 const PLAN_IDS: PlanId[] = ["gratuit", "pro", "business"];
 const FAQ = [1, 2, 3, 4, 5, 6] as const;
 

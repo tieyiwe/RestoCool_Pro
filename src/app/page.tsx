@@ -28,7 +28,7 @@ import { DemoShowcase } from "@/components/demo/demo-showcase";
 import { PhoneMock } from "@/components/landing/phone-mock";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { LEGAL } from "@/config/legal";
-import { LOCAL_CLAIMS } from "@/config/marketing";
+import { LANDING_FEATURES, LOCAL_CLAIMS } from "@/config/marketing";
 import { PLANS } from "@/config/plans";
 import { formatFCFA } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -68,16 +68,17 @@ export default async function HomePage() {
   const featured = await (async () => featuredRestaurants(getDb()))().catch(() => []);
   const year = new Date().getUTCFullYear();
 
+  const ready = (k: string) => LANDING_FEATURES.some((f) => f.key === k && f.ready);
   const features = [
-    { key: "menu", icon: Languages, ready: true },
-    { key: "photos", icon: Camera, ready: true },
-    { key: "qr", icon: QrCode, ready: true },
-    { key: "seats", icon: Armchair, ready: true },
-    { key: "whatsapp", icon: MessageCircle, ready: true },
-    { key: "offline", icon: WifiOff, ready: true },
-    { key: "orders", icon: BellRing, ready: false },
-    { key: "staff", icon: Users, ready: false },
-    { key: "reservations", icon: CalendarCheck, ready: false },
+    { key: "menu", icon: Languages, ready: ready("menu") },
+    { key: "photos", icon: Camera, ready: ready("photos") },
+    { key: "qr", icon: QrCode, ready: ready("qr") },
+    { key: "seats", icon: Armchair, ready: ready("seats") },
+    { key: "whatsapp", icon: MessageCircle, ready: ready("whatsapp") },
+    { key: "offline", icon: WifiOff, ready: ready("offline") },
+    { key: "orders", icon: BellRing, ready: ready("orders") },
+    { key: "staff", icon: Users, ready: ready("staff") },
+    { key: "reservations", icon: CalendarCheck, ready: ready("reservations") },
   ] as const;
 
   const plans = [
