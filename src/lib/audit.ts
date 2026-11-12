@@ -22,7 +22,8 @@ export function actorRef(actor: Actor | null): ActorRef {
     case "staff":
       return { type: "staff", id: actor.staffId };
     case "superadmin":
-      return { type: "superadmin", id: actor.userId };
+      // Console people are recorded by their (verified) email: their activity log follows it.
+      return { type: "superadmin", id: actor.email ? actor.email.toLowerCase() : actor.userId };
     case "customer":
       return { type: "customer", id: actor.deviceId };
   }

@@ -12,6 +12,14 @@ const isProtected = (req: NextRequest) => PROTECTED.some((re) => re.test(req.nex
  */
 const hasStaffSession = (req: NextRequest) => Boolean(req.cookies.get("rc_staff")?.value);
 
+/** Console pages get their path in a request header, for the console activity log. */
+function withConsolePath(req: NextRequest): NextResponse | undefined {
+  if (!req.nextUrl.pathname.startsWith("/admin_pro")) return undefined;
+  const headers = new Headers(req.headers);
+  headers.set("x-rc-path", `${req.nextUrl.pathname}${req.nextUrl.search}`.slice(0, 300));
+  return NextResponse.next({ request: { headers } });
+}
+
 const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY || "";
 const proxyUrl = process.env.NEXT_PUBLIC_CLERK_PROXY_URL || process.env.CLERK_PROXY_URL || "";
 const clerkConfigured = Boolean(process.env.CLERK_SECRET_KEY && publishableKey);
@@ -28,6 +36,7 @@ const withClerk = clerkConfigured
   ? clerkMiddleware(
       async (auth, req) => {
         if (isProtected(req) && !hasStaffSession(req)) await auth.protect();
+        return withConsolePath(req);
       },
       {
         publishableKey,
@@ -50,7 +59,7 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
     if (req.nextUrl.pathname.startsWith("/api/")) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
-  return NextResponse.next();
+  return withConsolePath(req) ?? NextResponse.next();
 }
 
 export const config = {

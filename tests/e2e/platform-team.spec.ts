@@ -11,9 +11,30 @@ test("collaborators: an owner gives limited access; the collaborator sees only t
   await sql("delete from admin_collaborators where email = $1", [email]);
   await page.goto("/admin_pro/team");
   await page.getByTestId("collab-email").fill(email);
-  await page.getByTestId("collab-preset").selectOption("support");
+  await page.getByTestId("collab-name").fill("Agent Test");
+  await page.getByTestId("collab-role-support").check();
   await page.getByTestId("collab-add").click();
   await expect(page.getByTestId("admin-ok")).toBeVisible();
+  // No SMTP password in tests: the invitation is written to the outbox, and the page says so.
+  await expect(page.getByTestId("invite-status")).toContainText("NOT sent");
+  const card = page.getByTestId("admin-collab").filter({ hasText: email });
+  await expect(card.getByTestId("collab-role")).toContainText("Support agent");
+  await expect(card.getByTestId("collab-invite")).toContainText("not sent");
+  // The role can be changed later: Sales & billing replaces the rights.
+  await card.getByTestId("collab-role-select").selectOption("sales");
+  await card.getByTestId("collab-save").click();
+  await page.waitForURL(/ok=collabSaved/);
+  const [changed] = await sql<{ role: string; perms: string[] }>("select role, perms from admin_collaborators where email = $1", [email]);
+  expect(changed!.role).toBe("sales");
+  expect(changed!.perms).toContain("billing.write");
+  // Back to support for the rest of the test.
+  await page.getByTestId("admin-collab").filter({ hasText: email }).getByTestId("collab-role-select").selectOption("support");
+  await page.getByTestId("admin-collab").filter({ hasText: email }).getByTestId("collab-save").click();
+  await expect.poll(async () => (await sql<{ role: string }>("select role from admin_collaborators where email = $1", [email]))[0]!.role).toBe("support");
+  // The owner's own actions are in the activity log.
+  await page.goto(`/admin_pro/team/activity?type=changes`);
+  await expect(page.getByTestId("activity-table")).toContainText("Changed a collaborator’s access");
+  await expect(page.getByTestId("activity-table")).toContainText("Sent an invitation");
   const [row] = await sql<{ perms: string[] }>("select perms from admin_collaborators where email = $1", [email]);
   expect(row!.perms).toEqual(expect.arrayContaining(["support", "recovery", "businesses.read", "dashboard"]));
   expect(row!.perms).not.toContain("billing.write");
@@ -37,6 +58,11 @@ test("collaborators: an owner gives limited access; the collaborator sees only t
   await expect(page.getByTestId("admin-payment-form")).toHaveCount(0);
   await expect(page.getByTestId("admin-suspend-form")).toHaveCount(0);
   await expect(page.getByTestId("admin-business-live")).toBeVisible();
+  // What they opened is in their activity log (seen by the owner).
+  await context.clearCookies({ name: "rc_dev_admin_as" });
+  await page.goto(`/admin_pro/team/activity?who=${encodeURIComponent(email)}&type=visits`);
+  await expect(page.getByTestId("activity-table")).toContainText("Opened a page");
+  await context.addCookies([{ name: "rc_dev_admin_as", value: email, domain: "localhost", path: "/" }]);
   // Disabled by the owner: the console is « not found » for them.
   await sql("update admin_collaborators set active = false where email = $1", [email]);
   expect((await page.goto("/admin_pro"))?.status()).toBe(404);

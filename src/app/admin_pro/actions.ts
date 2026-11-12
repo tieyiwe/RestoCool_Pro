@@ -8,12 +8,13 @@ import { addNote, changePlan, recordPlanPayment, resolveErrors, setFeatured, set
 import { requireSuperadmin } from "@/lib/auth/context";
 import { writeAudit } from "@/lib/audit";
 import { ForbiddenError, NotFoundError } from "@/lib/errors";
-import { PERM_PRESETS, type AdminPerm } from "@/lib/admin/access";
+import type { AdminPerm, AdminRole } from "@/lib/admin/access";
 import { STATUSES, adminReply } from "@/lib/support/requests";
 import { deleteMessage, emailPlatformMessage, sendPlatformMessage } from "@/lib/platform/messages";
 import { publicBaseUrl } from "@/lib/urls";
 import { after } from "next/server";
-import { addCollaborator, removeCollaborator, updateCollaborator } from "@/lib/admin/team";
+import { addCollaborator, getCollaborator, markInvited, removeCollaborator, updateCollaborator } from "@/lib/admin/team";
+import { sendCollaboratorInvite } from "@/lib/email/collaborator-invite";
 import { Announcement, clearPlatformSetting, savePlatformSetting } from "@/lib/platform/settings";
 
 const s = (fd: FormData, k: string) => String(fd.get(k) ?? "");
@@ -148,10 +149,28 @@ const permsFrom = (fd: FormData) => fd.getAll("perms").map(String);
 export async function addCollaboratorAction(fd: FormData) {
   await run("/admin_pro/team", async () => {
     const c = await teamCtx();
-    const preset = s(fd, "preset");
-    const perms = preset && PERM_PRESETS[preset] ? PERM_PRESETS[preset]! : permsFrom(fd);
-    await addCollaborator(c, c.actor.perms, { email: s(fd, "email"), name: s(fd, "name"), perms });
-    return "collabAdded";
+    const row = await addCollaborator(c, c.actor.perms, { email: s(fd, "email"), name: s(fd, "name"), role: s(fd, "role") || "custom", perms: permsFrom(fd) });
+    // The invitation leaves now, so the page can say whether it was sent.
+    const status = await inviteCollaborator(c, row);
+    return `collabAdded&invite=${status}#c-${row.id}`;
+  });
+}
+
+async function inviteCollaborator(c: Awaited<ReturnType<typeof teamCtx>>, row: { id: string; email: string; name: string | null; role: string; perms: string[] }) {
+  const baseUrl = await publicBaseUrl();
+  const r = await sendCollaboratorInvite({ to: row.email, name: row.name, role: row.role as AdminRole, perms: row.perms as AdminPerm[], invitedBy: c.actor.name ?? c.actor.email, baseUrl });
+  await markInvited(c.db, row.id, r.status);
+  await writeAudit(c.db, c.actor, { restaurantId: null, action: "admin.collaborator_invited", entity: "admin_collaborator", entityId: row.id, data: { email: row.email, status: r.status } });
+  return r.status;
+}
+
+export async function resendInviteAction(fd: FormData) {
+  const id = Id.parse(s(fd, "id"));
+  await run("/admin_pro/team", async () => {
+    const c = await teamCtx();
+    const row = await getCollaborator(c.db, id);
+    if (!row) throw new NotFoundError();
+    return `inviteResent&invite=${await inviteCollaborator(c, row)}#c-${id}`;
   });
 }
 
@@ -160,15 +179,16 @@ export async function updateCollaboratorAction(fd: FormData) {
   await run("/admin_pro/team", async () => {
     const c = await teamCtx();
     const active = s(fd, "active");
-    await updateCollaborator(c, c.actor.perms, id, active ? { active: active === "1" } : { perms: permsFrom(fd) });
-    return "collabSaved";
+    await updateCollaborator(c, c.actor.perms, id, active ? { active: active === "1" } : { role: s(fd, "role") || "custom", perms: permsFrom(fd) });
+    return `collabSaved#c-${id}`;
   });
 }
 
 export async function removeCollaboratorAction(fd: FormData) {
   const id = Id.parse(s(fd, "id"));
   await run("/admin_pro/team", async () => {
-    await removeCollaborator(await teamCtx(), id);
+    const c = await teamCtx();
+    await removeCollaborator(c, c.actor.perms, id);
     return "collabRemoved";
   });
 }

@@ -51,7 +51,7 @@
       "signIn": "Se connecter",
       "cta": "Essayer gratuitement",
       "menu": "Menu",
-      "restaurants": "Bonnes adresses"
+      "restaurants": "Explorer"
     },
     "hero": {
       "eyebrow": "Pour les restaurants, maquis, bars, cafés, hôtels et commerces du Burkina",
@@ -591,7 +591,8 @@
       "collabRemoved": "Collaborateur retiré.",
       "supportSaved": "Enregistré. L’établissement voit votre réponse dans son application.",
       "messageSent": "Message envoyé : il apparaît maintenant dans l’application des établissements.",
-      "messageWithdrawn": "Message retiré."
+      "messageWithdrawn": "Message retiré.",
+      "inviteResent": "Invitation renvoyée."
     },
     "detail": {
       "orders30": "Commandes (30 jours)",
@@ -775,13 +776,13 @@
       "intro": "Les personnes de TIBLOGICS qui aident à faire tourner RestoCool. Donnez à chacun seulement ce dont il a besoin ; chaque changement est enregistré.",
       "forbidden": "Vous ne pouvez pas donner des droits que vous n’avez pas, modifier votre propre accès, ni modifier un collaborateur de niveau propriétaire.",
       "add": "Ajouter un collaborateur",
-      "addHint": "Il se connecte à RestoCool avec cet e-mail (vérifié), puis ouvre /admin_pro. Rien ne lui est envoyé : prévenez-le vous-même.",
+      "addHint": "Choisissez son rôle : la personne reçoit un e-mail avec un lien pour créer son compte (ou se connecter) avec cette adresse, puis la console s’ouvre. Vous pouvez changer son rôle et ses droits à tout moment.",
       "email": "E-mail",
       "name": "Nom",
       "preset": "Accès prêt à l’emploi",
       "presetCustom": "Sur mesure : cochez ci-dessous",
       "permsTitle": "Permissions",
-      "addSubmit": "Ajouter le collaborateur",
+      "addSubmit": "Ajouter et envoyer l’invitation",
       "presets": {
         "support": "Agent support",
         "sales": "Ventes et abonnements",
@@ -827,7 +828,80 @@
       "enable": "Réactiver",
       "remove": "Retirer",
       "removeConfirm": "Retirer {email} de la console ?",
-      "save": "Enregistrer l’accès"
+      "save": "Enregistrer l’accès",
+      "roleTitle": "Rôle",
+      "roleCustomHint": "Cochez vous-même les droits ci-dessous.",
+      "permsCustomHint": "Utilisé seulement avec le rôle « Sur mesure ».",
+      "roleChangeHint": "Choisir un autre rôle remplace ses droits par ceux du rôle. Cocher des droits à la main passe le rôle en « Sur mesure ».",
+      "roles": {
+        "superadmin": "Super admin (tous les droits)",
+        "manager": "Responsable des opérations",
+        "support": "Agent support",
+        "sales": "Ventes et abonnements",
+        "analyst": "Analyste (lecture seule)",
+        "custom": "Sur mesure"
+      },
+      "inviteSent": "L’e-mail d’invitation est parti.",
+      "inviteSkipped": "L’e-mail d’invitation n’est PAS parti : l’envoi d’e-mails n’est pas encore configuré (secret SMTP_PASS). Envoyez-lui les liens affichés sur sa fiche.",
+      "inviteFailed": "L’e-mail d’invitation n’a pas pu partir. Essayez « Renvoyer », ou envoyez-lui les liens de sa fiche.",
+      "inviteState": {
+        "sent": "Invitation envoyée {date} ({n, plural, one {# fois} other {# fois}})",
+        "skipped": "Invitation non envoyée {date} : e-mail non configuré",
+        "failed": "Échec de l’invitation {date}",
+        "none": "Aucune invitation envoyée"
+      },
+      "resend": "Renvoyer l’invitation",
+      "shareLinks": "Liens à lui envoyer vous-même",
+      "activity": "Activité ({n} changements, 30 jours)",
+      "activityAll": "Journal d’activité",
+      "activityTitle": "Journal d’activité de la console",
+      "activityIntro": "Tout ce que chacun a fait dans la console : changements (formules, paiements, établissements, messages, récupération, accès), connexions et pages ouvertes. Conservé avec le journal d’audit.",
+      "activityWho": "Personne",
+      "activityEveryone": "Tout le monde",
+      "activityType": "Type",
+      "activityTypes": {
+        "all": "Tout",
+        "changes": "Changements seulement",
+        "visits": "Connexions et pages"
+      },
+      "activityDays": "Période",
+      "activityDaysN": "{n, plural, one {Dernières 24 heures} other {# derniers jours}}",
+      "activityCols": {
+        "when": "Quand",
+        "who": "Qui",
+        "what": "Quoi",
+        "where": "Établissement"
+      },
+      "actions": {
+        "viewed": "A ouvert une page",
+        "signed_in": "S’est connecté à la console",
+        "collaborator_added": "A ajouté un collaborateur",
+        "collaborator_updated": "A modifié l’accès d’un collaborateur",
+        "collaborator_disabled": "A désactivé un collaborateur",
+        "collaborator_enabled": "A réactivé un collaborateur",
+        "collaborator_removed": "A retiré un collaborateur",
+        "collaborator_invited": "A envoyé une invitation",
+        "announcement": "A modifié l’annonce",
+        "errors_resolved": "A résolu des erreurs",
+        "featured": "A modifié « à la une »",
+        "free_launch": "A changé l’offre de lancement",
+        "message_sent": "A envoyé un message",
+        "message_withdrawn": "A retiré un message",
+        "payment_recorded": "A enregistré un paiement",
+        "plan_changed": "A changé une formule",
+        "published": "A mis un menu en ligne",
+        "unpublished": "A retiré un menu",
+        "suspended": "A suspendu un établissement",
+        "reactivated": "A réactivé un établissement",
+        "recovery_verified": "A vérifié l’identité d’une personne",
+        "recovery_failed": "Vérification d’identité échouée",
+        "recovery_pin_unlocked": "A débloqué un PIN",
+        "recovery_pin_reset": "A donné un nouveau PIN",
+        "recovery_owner_email_set": "A confié un établissement à un nouvel e-mail",
+        "recovery_signin_unlocked": "A débloqué une connexion",
+        "support_answered": "A répondu à une demande",
+        "note_added": "A ajouté une note"
+      }
     },
     "support": {
       "title": "Demandes",
@@ -1015,6 +1089,19 @@
       "withdraw": "Retirer",
       "withdrawConfirm": "Ne plus afficher ce message ?",
       "withdrawn": "retiré"
+    },
+    "invite": {
+      "subject": "Invitation à la console RestoCool",
+      "hello": "Bonjour {name},",
+      "helloNoName": "Bonjour,",
+      "intro": "{by} vous a ajouté à la console de l’équipe RestoCool (TIBLOGICS).",
+      "role": "Votre rôle :",
+      "access": "Ce que vous pouvez faire :",
+      "how": "Créez votre compte avec cette adresse e-mail ({email}), confirmez-la, et la console s’ouvre. Si vous avez déjà un compte RestoCool avec cette adresse, connectez-vous simplement.",
+      "signUp": "Créer mon compte",
+      "signIn": "J’ai déjà un compte",
+      "then": "Ensuite, la console est toujours ici :",
+      "private": "Cette invitation est personnelle : elle ne marche qu’avec votre adresse e-mail. Si vous ne l’attendiez pas, ignorez cet e-mail."
     }
   },
   "demo": {

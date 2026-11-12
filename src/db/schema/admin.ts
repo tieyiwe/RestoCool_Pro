@@ -12,7 +12,13 @@ export const adminCollaborators = pgTable("admin_collaborators", {
   email: text("email").notNull().unique(),
   name: text("name"),
   perms: text("perms").array().notNull().default([]),
+  /** Role chosen when inviting (superadmin, manager, support, sales, analyst) or « custom » once rights are edited by hand. */
+  role: text("role").notNull().default("custom"),
   active: boolean("active").notNull().default(true),
+  /** Last invitation email: when, and whether it left (sent | skipped | failed). */
+  invitedAt: timestamp("invited_at", { withTimezone: true }),
+  inviteStatus: text("invite_status"),
+  inviteCount: integer("invite_count").notNull().default(0),
   addedBy: text("added_by").notNull(),
   lastSeenAt: timestamp("last_seen_at", { withTimezone: true }),
   ...timestamps,

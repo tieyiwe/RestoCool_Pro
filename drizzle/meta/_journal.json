@@ -176,6 +176,13 @@
       "when": 1794498595417,
       "tag": "0024_traffic",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1794503607873,
+      "tag": "0025_collaborator_roles",
+      "breakpoints": true
     }
   ]
 }

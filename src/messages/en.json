@@ -591,7 +591,8 @@
       "collabRemoved": "Collaborator removed.",
       "supportSaved": "Saved. The business sees your answer in its app.",
       "messageSent": "Message sent: it shows in the businesses’ app now.",
-      "messageWithdrawn": "Message withdrawn."
+      "messageWithdrawn": "Message withdrawn.",
+      "inviteResent": "Invitation sent again."
     },
     "detail": {
       "orders30": "Orders (30 days)",
@@ -775,13 +776,13 @@
       "intro": "People from TIBLOGICS who help run RestoCool. Give each one only what they need; every change is recorded.",
       "forbidden": "You can’t give rights you don’t have, change your own access, or change an owner-level collaborator.",
       "add": "Add a collaborator",
-      "addHint": "They sign in on RestoCool with this email (it must be verified), then open /admin_pro. Nothing is sent to them: tell them yourself.",
+      "addHint": "Choose their role: they receive an email with a link to create their account (or sign in) with this address, then the console opens. You can change their role and rights at any time.",
       "email": "Email",
       "name": "Name",
       "preset": "Ready-made access",
       "presetCustom": "Custom: tick below",
       "permsTitle": "Permissions",
-      "addSubmit": "Add collaborator",
+      "addSubmit": "Add and send the invitation",
       "presets": {
         "support": "Support agent",
         "sales": "Sales & billing",
@@ -827,7 +828,80 @@
       "enable": "Enable",
       "remove": "Remove",
       "removeConfirm": "Remove {email} from the console?",
-      "save": "Save access"
+      "save": "Save access",
+      "roleTitle": "Role",
+      "roleCustomHint": "Tick the rights yourself below.",
+      "permsCustomHint": "Used only with the « Custom » role.",
+      "roleChangeHint": "Choosing another role replaces their rights with that role’s. Ticking rights by hand makes the role « Custom ».",
+      "roles": {
+        "superadmin": "Super admin (all rights)",
+        "manager": "Operations manager",
+        "support": "Support agent",
+        "sales": "Sales & billing",
+        "analyst": "Analyst (read only)",
+        "custom": "Custom"
+      },
+      "inviteSent": "The invitation email was sent.",
+      "inviteSkipped": "The invitation email was NOT sent: email isn’t set up yet (SMTP_PASS secret). Send them the links shown on their card.",
+      "inviteFailed": "The invitation email could not be sent. Try « Resend », or send them the links on their card.",
+      "inviteState": {
+        "sent": "Invitation sent {date} ({n, plural, one {# time} other {# times}})",
+        "skipped": "Invitation not sent {date}: email not set up",
+        "failed": "Invitation failed {date}",
+        "none": "No invitation sent yet"
+      },
+      "resend": "Resend invitation",
+      "shareLinks": "Links to send them yourself",
+      "activity": "Activity ({n} changes, 30 days)",
+      "activityAll": "Activity log",
+      "activityTitle": "Console activity log",
+      "activityIntro": "Everything people did in the console: changes (plans, payments, businesses, messages, recovery, access), sign-ins and pages opened. Kept with the audit log.",
+      "activityWho": "Person",
+      "activityEveryone": "Everyone",
+      "activityType": "Type",
+      "activityTypes": {
+        "all": "Everything",
+        "changes": "Changes only",
+        "visits": "Sign-ins and pages"
+      },
+      "activityDays": "Period",
+      "activityDaysN": "{n, plural, one {Last 24 hours} other {Last # days}}",
+      "activityCols": {
+        "when": "When",
+        "who": "Who",
+        "what": "What",
+        "where": "Business"
+      },
+      "actions": {
+        "viewed": "Opened a page",
+        "signed_in": "Signed in to the console",
+        "collaborator_added": "Added a collaborator",
+        "collaborator_updated": "Changed a collaborator’s access",
+        "collaborator_disabled": "Disabled a collaborator",
+        "collaborator_enabled": "Re-enabled a collaborator",
+        "collaborator_removed": "Removed a collaborator",
+        "collaborator_invited": "Sent an invitation",
+        "announcement": "Changed the announcement",
+        "errors_resolved": "Resolved errors",
+        "featured": "Changed « featured »",
+        "free_launch": "Switched the launch offer",
+        "message_sent": "Sent a message",
+        "message_withdrawn": "Withdrew a message",
+        "payment_recorded": "Recorded a payment",
+        "plan_changed": "Changed a plan",
+        "published": "Put a menu online",
+        "unpublished": "Took a menu offline",
+        "suspended": "Suspended a business",
+        "reactivated": "Reactivated a business",
+        "recovery_verified": "Verified a caller’s identity",
+        "recovery_failed": "Identity check failed",
+        "recovery_pin_unlocked": "Unlocked a PIN",
+        "recovery_pin_reset": "Gave a new PIN",
+        "recovery_owner_email_set": "Handed a business to a new owner email",
+        "recovery_signin_unlocked": "Unlocked a sign-in",
+        "support_answered": "Answered a request",
+        "note_added": "Added a note"
+      }
     },
     "support": {
       "title": "Requests",
@@ -1015,6 +1089,19 @@
       "withdraw": "Withdraw",
       "withdrawConfirm": "Stop showing this message?",
       "withdrawn": "withdrawn"
+    },
+    "invite": {
+      "subject": "You’re invited to the RestoCool console",
+      "hello": "Hello {name},",
+      "helloNoName": "Hello,",
+      "intro": "{by} has added you to the RestoCool team console (TIBLOGICS).",
+      "role": "Your role:",
+      "access": "What you can do:",
+      "how": "Create your account with this email address ({email}), confirm it, and the console opens. If you already have a RestoCool account with this address, just sign in.",
+      "signUp": "Create my account",
+      "signIn": "I already have an account",
+      "then": "Afterwards, the console is always here:",
+      "private": "This invitation is personal: it only works with your email address. If you weren’t expecting it, ignore this email."
     }
   },
   "demo": {

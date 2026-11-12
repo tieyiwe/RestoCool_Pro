@@ -20,13 +20,29 @@ export type AdminPerm = (typeof ADMIN_PERMS)[number];
 /** Permissions only an owner may hand out (they let someone give themselves more). */
 export const OWNER_ONLY_PERMS: ReadonlySet<AdminPerm> = new Set(["team", "settings"]);
 
-/** Ready-made sets for the « add a collaborator » form. */
-export const PERM_PRESETS: Record<string, AdminPerm[]> = {
+/**
+ * Roles chosen when inviting someone. « superadmin » = every right, like the owners (only an
+ * owner gives it). Rights can be changed afterwards; the role then reads « custom ».
+ */
+export const ADMIN_ROLES = ["superadmin", "manager", "support", "sales", "analyst"] as const;
+export type AdminRole = (typeof ADMIN_ROLES)[number] | "custom";
+
+export const ROLE_PERMS: Record<(typeof ADMIN_ROLES)[number], AdminPerm[]> = {
+  superadmin: [...ADMIN_PERMS],
+  manager: ["dashboard", "businesses.read", "businesses.write", "billing.read", "billing.write", "support", "recovery", "comms", "activity"],
   support: ["dashboard", "businesses.read", "support", "recovery"],
   sales: ["dashboard", "businesses.read", "businesses.write", "billing.read", "billing.write", "comms"],
   analyst: ["dashboard", "businesses.read", "billing.read", "activity"],
-  manager: ["dashboard", "businesses.read", "businesses.write", "billing.read", "billing.write", "support", "recovery", "comms", "activity"],
 };
+/** Kept for older callers: the roles without « superadmin ». */
+export const PERM_PRESETS: Record<string, AdminPerm[]> = { manager: ROLE_PERMS.manager, support: ROLE_PERMS.support, sales: ROLE_PERMS.sales, analyst: ROLE_PERMS.analyst };
+
+/** The role whose rights are exactly these, else « custom ». */
+export function roleFor(perms: readonly string[]): AdminRole {
+  const set = [...normalizePerms(perms)].sort().join(",");
+  for (const r of ADMIN_ROLES) if ([...ROLE_PERMS[r]].sort().join(",") === set) return r;
+  return "custom";
+}
 
 /** Some permissions only make sense with another (writing businesses needs reading them…). */
 const IMPLIES: Partial<Record<AdminPerm, AdminPerm[]>> = {

@@ -7,6 +7,7 @@ import { getDb } from "@/db";
 import { findRestaurantBySlug, membershipsForUser, tenantRepo, type Membership, type TenantRepo } from "@/db/repos/tenant";
 import { adminCollaborators } from "@/db/schema";
 import { ADMIN_PERMS, hasPerm, normalizePerms, type AdminAccess, type AdminPerm } from "@/lib/admin/access";
+import { writeAudit } from "@/lib/audit";
 import { env } from "@/lib/env";
 import { ForbiddenError, NotFoundError, UnauthorizedError } from "@/lib/errors";
 import { sessionFromToken, STAFF_COOKIE } from "@/lib/devices";
@@ -218,10 +219,35 @@ export async function requireSuperadmin(perm?: AdminPerm): Promise<AdminActor> {
   return sa;
 }
 
+/**
+ * Console activity log: « signed in » after 30 min without activity, and each page opened (the
+ * same page counts once per 10 min). In memory throttling (one long-lived process); never blocks.
+ */
+const consoleSeen = (globalThis as unknown as { __rcConsoleSeen?: Map<string, number> }).__rcConsoleSeen ?? new Map<string, number>();
+(globalThis as unknown as { __rcConsoleSeen?: Map<string, number> }).__rcConsoleSeen = consoleSeen;
+async function logConsoleVisit(sa: AdminActor) {
+  try {
+    const path = (await headers()).get("x-rc-path");
+    const now = Date.now();
+    if (consoleSeen.size > 5000) consoleSeen.clear();
+    const db = getDb();
+    const last = consoleSeen.get(`s:${sa.email}`) ?? 0;
+    consoleSeen.set(`s:${sa.email}`, now);
+    if (now - last > 30 * 60_000) await writeAudit(db, sa, { restaurantId: null, action: "admin.signed_in", entity: "console", data: { owner: sa.owner } });
+    if (path && now - (consoleSeen.get(`v:${sa.email}:${path}`) ?? 0) > 10 * 60_000) {
+      consoleSeen.set(`v:${sa.email}:${path}`, now);
+      await writeAudit(db, sa, { restaurantId: null, action: "admin.viewed", entity: "console", entityId: path.split("?")[0]!.slice(0, 200), data: { path } });
+    }
+  } catch {
+    /* never block a page for the log */
+  }
+}
+
 /** Same, for console pages: the site's normal 404 page; a missing permission goes to the overview. */
 export async function requireSuperadminPage(perm?: AdminPerm): Promise<AdminActor> {
   const sa = await getSuperadmin();
   if (!sa) notFound();
+  await logConsoleVisit(sa);
   if (perm && !hasPerm(sa, perm)) redirect("/admin_pro?denied=1");
   return sa;
 }
