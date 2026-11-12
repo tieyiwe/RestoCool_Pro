@@ -10,6 +10,14 @@ type I18n = { fr: string } & Partial<Record<string, string>>;
 const pick = (x: I18n | null | undefined, locale: string) => (x ? x[locale]?.trim() || x.fr : "");
 export type Delays = { warnMin: number; lateMin: number };
 
+/** « 12/11 · 19:42 » in Ouagadougou time. */
+function sentLabel(iso: string, locale: string) {
+  const d = new Date(iso);
+  const tz = "Africa/Ouagadougou";
+  const loc = locale === "zh" ? "zh-CN" : locale;
+  return `${new Intl.DateTimeFormat(loc, { day: "2-digit", month: "2-digit", timeZone: tz }).format(d)} · ${new Intl.DateTimeFormat(loc, { hour: "2-digit", minute: "2-digit", timeZone: tz }).format(d)}`;
+}
+
 /** What the signed-in person may do to an order (from can() on the server): buttons follow it. */
 export type OrderPerms = { confirm: boolean; prepare: boolean; serve: boolean; cancel: boolean };
 const ALL: OrderPerms = { confirm: true, prepare: true, serve: true, cancel: true };
@@ -67,7 +75,8 @@ export function useServiceOrders(onNew: (o: StaffOrder, before: StaffOrder["stat
     setError(null);
     if (seen.current) for (const o of body.orders) if (seen.current.get(o.id) !== o.status) onNewRef.current(o, seen.current.get(o.id));
     seen.current = new Map(body.orders.map((o) => [o.id, o.status]));
-    setOrders(body.orders);
+    // First received first: the oldest order is always at the top of each column (priority).
+    setOrders([...body.orders].sort((a, b) => Date.parse(a.sentAt) - Date.parse(b.sentAt)));
   }, []);
 
   useEffect(() => {
@@ -232,7 +241,7 @@ function CancelForm({ onCancel, onClose }: { onCancel: (reason: string) => void;
 }
 
 /** One order on the front desk (or the detail page opened from the customer's QR). */
-export function OrderCard({ order, now, delays, onChanged, big = false }: { order: StaffOrder; now: number; delays: Delays; onChanged: () => void; big?: boolean }) {
+export function OrderCard({ order, now, delays, onChanged, big = false, rank }: { order: StaffOrder; now: number; delays: Delays; onChanged: () => void; big?: boolean; /** Place in its column, oldest first (1 = to handle first). */ rank?: number }) {
   const t = useTranslations("service");
   const locale = useLocale();
   const [busy, setBusy] = useState(false);
@@ -263,11 +272,34 @@ export function OrderCard({ order, now, delays, onChanged, big = false }: { orde
       <header className="flex items-start justify-between gap-2">
         <SeatBadgeLarge seat={order.seat} name={order.customerName} />
         <div className="flex flex-col items-end gap-1">
-          <span className="text-sm font-bold">{t("number", { n: order.number })}</span>
+          <span className="flex items-center gap-1.5 text-sm font-bold">
+            {rank !== undefined && (
+              <span className={cn("rounded-full px-1.5 text-[11px] font-extrabold", rank === 1 ? "bg-[#E9B530] text-[#17231C]" : "bg-muted text-muted-foreground")} data-testid="order-rank" title={t("rankTitle")}>
+                {t("rank", { n: rank })}
+              </span>
+            )}
+            {t("number", { n: order.number })}
+          </span>
           {!done && <Elapsed since={order.sentAt} now={now} delays={delays} />}
         </div>
       </header>
+      {/* Full order number and when it arrived: easy to find again in the history. */}
+      <p className="flex flex-wrap gap-x-2 text-xs text-muted-foreground" data-testid="order-meta">
+        {order.code && <span className="font-mono font-semibold text-foreground" data-testid="order-code">{order.code}</span>}
+        <span>{sentLabel(order.sentAt, locale)}</span>
+      </p>
       {order.area && <p className="text-xs font-semibold text-muted-foreground">{pick(order.area.name, locale)}</p>}
+      {/* Takeaway: who comes to pick it up, a number to call, and when. */}
+      {order.seat?.type === "takeaway" && (order.customerPhone || order.pickupTime) && (
+        <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm" data-testid="takeaway-contact">
+          {order.customerPhone && (
+            <a href={`tel:${order.customerPhone.replace(/\s/g, "")}`} className="font-semibold text-primary underline-offset-2 hover:underline">
+              📞 {order.customerPhone}
+            </a>
+          )}
+          {order.pickupTime && <span>🕒 {t("pickupAt", { time: order.pickupTime })}</span>}
+        </p>
+      )}
       {order.deliveryAddress && (
         <p className="text-sm">
           📍 {order.deliveryAddress} · {order.customerPhone}
@@ -530,9 +562,10 @@ export function FrontDesk({ delays }: { delays: Delays }) {
               <h2 id={`col-${c.key}`} className="flex items-center justify-between px-1 font-bold">
                 {c.title} <span className="rounded-full bg-surface px-2 text-sm">{c.list.length}</span>
               </h2>
+              {c.key !== "served" && c.list.length > 1 && <p className="-mt-2 px-1 text-xs text-muted-foreground">↓ {t("oldestFirst")}</p>}
               {c.list.length === 0 && <p className="px-1 py-4 text-center text-sm text-muted-foreground">{t("emptyColumn")}</p>}
-              {c.list.map((o) => (
-                <OrderCard key={o.id} order={o} now={now} delays={delays} onChanged={() => void refresh()} />
+              {c.list.map((o, i) => (
+                <OrderCard key={o.id} order={o} now={now} delays={delays} onChanged={() => void refresh()} rank={c.key === "served" ? undefined : i + 1} />
               ))}
             </section>
           ))}

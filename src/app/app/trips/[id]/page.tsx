@@ -173,7 +173,7 @@ export default async function TripPage({ params, searchParams }: { params: Promi
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant={o.status === "sent" ? "warning" : o.status === "cancelled" ? "muted" : "outline"}>{ts(o.status)}</Badge>
                 <span className="text-xs text-muted-foreground">
-                  n° {o.number} · {format.dateTime(o.sentAt, { timeStyle: "short", timeZone: TZ })}
+                  {o.code ?? `n° ${o.number}`} · {format.dateTime(o.sentAt, { dateStyle: "short", timeStyle: "short", timeZone: TZ })}
                 </span>
                 {o.double && o.status !== "cancelled" && <span className="text-xs font-bold text-red-700">⚠️ {t("doubleTag")}</span>}
               </div>

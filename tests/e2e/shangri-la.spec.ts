@@ -122,7 +122,7 @@ test("selection: Champagne variants, « sur demande » never 0 F, contact and fo
   // Takeaway by WhatsApp to the restaurant's number.
   await context.route("https://wa.me/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "ok" }));
   await page.getByTestId("cart-bar").click();
-  await page.getByRole("button", { name: /Commander à emporter/ }).click();
+  await page.getByRole("button", { name: /ommander à emporter/ }).click();
   await page.getByLabel("Votre nom").fill("Awa");
   await page.getByLabel("Heure de retrait").fill("19:30");
   const popup = context.waitForEvent("page");

@@ -137,6 +137,7 @@ export default async function OrderHistoryPage({ searchParams }: { searchParams:
                   </span>
                   <span className="text-right font-bold tabular-nums">{o.hasOnRequest && !o.subtotal ? t("onRequest") : formatFCFA(o.subtotal)}</span>
                   <span className="min-w-0 truncate text-xs text-muted-foreground">
+                    {o.code && <b className="font-mono text-foreground" data-testid="history-code">{o.code} · </b>}
                     {day(o.sentAt)} · {time(o.sentAt)}
                     {handled.map(([k, p]) => ` · ${t(`by.${k}`)} ${p!.name} (${p!.staffNo})`).join("")}
                     {o.cancelledReason ? ` · ${o.cancelledReason}` : ""}

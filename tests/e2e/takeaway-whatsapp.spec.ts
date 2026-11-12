@@ -25,7 +25,7 @@ test("the owner chooses which WhatsApp receives takeaway orders; « À emporter 
     await page.getByTestId("menu-search").fill("bissap");
     await page.getByTestId("add-button").click();
     await page.getByTestId("cart-bar").click();
-    await page.getByRole("button", { name: /Commander à emporter/ }).click();
+    await page.getByRole("button", { name: /ommander à emporter/ }).click();
     await page.getByLabel("Votre nom").fill("Awa");
     await page.getByLabel("Heure de retrait").fill("12:30");
     const popup = context.waitForEvent("page");

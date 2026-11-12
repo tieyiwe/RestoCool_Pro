@@ -26,6 +26,8 @@ export const orders = pgTable(
     tripId: uuid("trip_id").references((): AnyPgColumn => trips.id, { onDelete: "set null" }),
     businessDate: date("business_date", { mode: "string" }).notNull(),
     number: integer("number").notNull(),
+    /** Full order number « SL-261112-007 » (initials, date, number of the day): unique per business, for searching. */
+    code: text("code"),
     source: orderSourceEnum("source").notNull().default("customer"),
     customerDeviceId: text("customer_device_id"),
     /** Random id the phone sends with an order: a resend (lost answer on a bad network) returns the same order. */
@@ -33,6 +35,8 @@ export const orders = pgTable(
     customerName: text("customer_name"),
     customerPhone: text("customer_phone"),
     deliveryAddress: text("delivery_address"),
+    /** Takeaway: when the customer comes to pick it up (« 12:30 »), optional. */
+    pickupTime: text("pickup_time"),
     status: orderStatusEnum("status").notNull().default("sent"),
     /** Validation mode in force when the order was sent: direct | server_confirms. */
     validationMode: text("validation_mode").$type<"direct" | "server_confirms">().notNull(),
@@ -65,6 +69,7 @@ export const orders = pgTable(
     index("orders_session_idx").on(t.sessionId),
     index("orders_device_idx").on(t.restaurantId, t.customerDeviceId),
     uniqueIndex("orders_restaurant_day_number_uq").on(t.restaurantId, t.businessDate, t.number),
+    uniqueIndex("orders_restaurant_code_uq").on(t.restaurantId, t.code).where(sql`${t.code} is not null`),
     uniqueIndex("orders_client_request_uq").on(t.restaurantId, t.clientRequestId).where(sql`${t.clientRequestId} is not null`),
   ],
 );

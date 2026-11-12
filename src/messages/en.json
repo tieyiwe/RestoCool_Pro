@@ -967,7 +967,11 @@
     "busTakenTitle": "Seat {label} is already chosen",
     "busTakenText": "Another phone already chose this seat. Check the number on your ticket.",
     "busTakenYes": "This is my seat",
-    "busTakenNo": "Choose another seat"
+    "busTakenNo": "Choose another seat",
+    "takeawayDetailsHint": "For your takeaway order: your name and a number where the business can reach you.",
+    "pickupTimeOptional": "Pickup time (optional)",
+    "takeawayDetailsMissing": "For a takeaway order, enter your name and phone number.",
+    "takeawayByWhatsapp": "Or order takeaway by WhatsApp"
   },
   "seating": {
     "title": "Tables and rooms",
@@ -1187,7 +1191,11 @@
     "notePlaceholder": "E.g. back tomorrow",
     "noteTomorrow": "Back tomorrow",
     "noteTonight": "Back tonight",
-    "noteSoon": "Available soon"
+    "noteSoon": "Available soon",
+    "pickupAt": "Pickup at {time}",
+    "oldestFirst": "Oldest first",
+    "rank": "{n, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
+    "rankTitle": "Order of arrival: oldest first"
   },
   "personnel": {
     "title": "Personnel",
@@ -1830,7 +1838,7 @@
       "person": "Personnel",
       "everyone": "Everyone",
       "search": "Number or table",
-      "searchPlaceholder": "27 or Table 4",
+      "searchPlaceholder": "RD-261112-007, 27, Table 4, name or phone",
       "filter": "Filter",
       "count": "Orders",
       "total": "Total served",
@@ -1860,7 +1868,8 @@
       "prepared": "Prepared by",
       "served": "Served by",
       "cancelled": "Cancelled by",
-      "reason": "Cancellation reason"
+      "reason": "Cancellation reason",
+      "code": "Order no."
     }
   },
   "scan": {

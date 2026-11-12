@@ -22,10 +22,10 @@ export const GET = handle(async (req: Request) => {
     const p = who(id);
     return p ? `${p.name} (${p.staffNo})` : "";
   };
-  const head = ["date", "time", "number", "status", "seat", "customer", "items", "total", "taken", "confirmed", "prepared", "served", "cancelled", "reason"].map((k) => t(k));
+  const head = ["date", "time", "code", "number", "status", "seat", "customer", "items", "total", "taken", "confirmed", "prepared", "served", "cancelled", "reason"].map((k) => t(k));
   const lines = rows.map((r) => {
     const iso = r.sentAt.toISOString();
-    return [r.businessDate, iso.slice(11, 16), r.number, ts(r.status), r.seatLabel ?? "", r.customerName ?? "", r.items, r.subtotal, name(r.takenBy), name(r.confirmedBy), name(r.preparedBy), name(r.servedBy), name(r.cancelledBy), r.cancelledReason ?? ""]
+    return [r.businessDate, iso.slice(11, 16), r.code ?? "", r.number, ts(r.status), r.seatLabel ?? "", r.customerName ?? "", r.items, r.subtotal, name(r.takenBy), name(r.confirmedBy), name(r.preparedBy), name(r.servedBy), name(r.cancelledBy), r.cancelledReason ?? ""]
       .map(csvCell)
       .join(",");
   });

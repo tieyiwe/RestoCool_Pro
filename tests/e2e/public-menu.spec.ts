@@ -109,7 +109,7 @@ test("takeaway by WhatsApp sends a prefilled French message with numbers and tot
   await page.getByTestId("menu-search").fill("bissap");
   await page.getByTestId("add-button").click();
   await page.getByTestId("cart-bar").click();
-  await page.getByRole("button", { name: /Commander à emporter/ }).click();
+  await page.getByRole("button", { name: /ommander à emporter/ }).click();
   await page.getByRole("button", { name: "Envoyer sur WhatsApp" }).click();
   await expect(page.getByText("Indiquez votre nom.")).toBeVisible();
   await page.getByLabel("Votre nom").fill("Awa");

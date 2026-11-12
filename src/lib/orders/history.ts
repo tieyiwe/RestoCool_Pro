@@ -1,4 +1,5 @@
 import "server-only";
+import { parseOrderCode } from "./code";
 import { and, desc, eq, gte, inArray, sql, type SQL } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
@@ -25,11 +26,16 @@ const STATUS_SETS: Record<(typeof HISTORY_STATUSES)[number], ("sent" | "confirme
 
 /** Orders of one restaurant for the back office, newest first (at most `limit`). */
 export async function orderHistory(db: DB, restaurantId: string, f: HistoryFilter, limit = 300, now = new Date()) {
-  const where: SQL[] = [eq(orders.restaurantId, restaurantId), gte(orders.sentAt, rangeStart(f.range as Range, now))];
+  // A full order number (« SL-261112-007 ») finds that order whatever the period.
+  const code = f.q ? parseOrderCode(f.q) : null;
+  const where: SQL[] = [eq(orders.restaurantId, restaurantId)];
+  if (code) where.push(eq(orders.businessDate, code.businessDate), eq(orders.number, code.number));
+  else where.push(gte(orders.sentAt, rangeStart(f.range as Range, now)));
   if (f.status !== "all") where.push(inArray(orders.status, STATUS_SETS[f.status]));
-  if (f.q) {
+  if (f.q && !code) {
     const num = /^#?\d{1,5}$/.test(f.q) ? Number(f.q.replace("#", "")) : null;
-    where.push(num !== null ? eq(orders.number, num) : sql`${orders.seatLabel} ilike ${`%${f.q.replace(/[%_\\]/g, "\\$&")}%`}`);
+    const like = `%${f.q.replace(/[%_\\]/g, "\\$&")}%`;
+    where.push(num !== null ? eq(orders.number, num) : sql`(${orders.seatLabel} ilike ${like} or ${orders.customerName} ilike ${like} or ${orders.customerPhone} ilike ${like} or ${orders.code} ilike ${like})`);
   }
   if (f.staff) {
     const s = f.staff;
@@ -39,6 +45,7 @@ export async function orderHistory(db: DB, restaurantId: string, f: HistoryFilte
     .select({
       id: orders.id,
       number: orders.number,
+      code: orders.code,
       businessDate: orders.businessDate,
       status: orders.status,
       source: orders.source,

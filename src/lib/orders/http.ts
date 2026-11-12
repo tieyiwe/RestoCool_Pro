@@ -6,6 +6,7 @@ const STATUS: Record<OrderError["code"], number> = {
   no_seat: 409,
   name_required: 400,
   delivery_required: 400,
+  takeaway_required: 400,
   unavailable: 409,
   empty: 400,
   conflict: 409,

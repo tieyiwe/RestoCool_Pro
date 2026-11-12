@@ -11,6 +11,7 @@ export function publicOrder(o: OrderWithItems, deviceId: string, currentSessionI
   return {
     id: o.id,
     number: o.number,
+    code: o.code,
     status: o.status,
     mine,
     current: currentSessionId !== null && o.sessionId === currentSessionId,
@@ -55,6 +56,7 @@ export function staffOrder(
     area: areaOf ? areaOf(o.seatId) : null,
     id: o.id,
     number: o.number,
+    code: o.code,
     status: o.status,
     validationMode: o.validationMode,
     source: o.source,
@@ -64,6 +66,7 @@ export function staffOrder(
     customerName: o.customerName,
     customerPhone: o.customerPhone,
     deliveryAddress: o.deliveryAddress,
+    pickupTime: o.pickupTime,
     subtotal: o.subtotal,
     hasOnRequest: o.hasOnRequest,
     note: o.note,

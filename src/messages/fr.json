@@ -967,7 +967,11 @@
     "busTakenTitle": "Le siège {label} est déjà choisi",
     "busTakenText": "Un autre téléphone a déjà choisi ce siège. Vérifiez le numéro sur votre billet.",
     "busTakenYes": "C'est bien mon siège",
-    "busTakenNo": "Choisir un autre siège"
+    "busTakenNo": "Choisir un autre siège",
+    "takeawayDetailsHint": "Pour votre commande à emporter : votre nom et un numéro où l’établissement peut vous joindre.",
+    "pickupTimeOptional": "Heure de retrait (facultatif)",
+    "takeawayDetailsMissing": "Pour une commande à emporter, indiquez votre nom et votre numéro de téléphone.",
+    "takeawayByWhatsapp": "Ou commander à emporter par WhatsApp"
   },
   "seating": {
     "title": "Tables et salles",
@@ -1187,7 +1191,11 @@
     "notePlaceholder": "Ex. : de retour demain",
     "noteTomorrow": "De retour demain",
     "noteTonight": "De retour ce soir",
-    "noteSoon": "Bientôt disponible"
+    "noteSoon": "Bientôt disponible",
+    "pickupAt": "Retrait à {time}",
+    "oldestFirst": "Du plus ancien au plus récent",
+    "rank": "{n, selectordinal, one {#er} other {#e}}",
+    "rankTitle": "Ordre d’arrivée : la plus ancienne d’abord"
   },
   "personnel": {
     "title": "Personnel",
@@ -1830,7 +1838,7 @@
       "person": "Personnel",
       "everyone": "Tout le monde",
       "search": "Numéro ou table",
-      "searchPlaceholder": "27 ou Table 4",
+      "searchPlaceholder": "RD-261112-007, 27, Table 4, nom ou téléphone",
       "filter": "Filtrer",
       "count": "Commandes",
       "total": "Total servi",
@@ -1860,7 +1868,8 @@
       "prepared": "Préparée par",
       "served": "Servie par",
       "cancelled": "Annulée par",
-      "reason": "Motif d'annulation"
+      "reason": "Motif d'annulation",
+      "code": "N° de commande"
     }
   },
   "scan": {

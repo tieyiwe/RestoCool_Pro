@@ -187,7 +187,7 @@ describe.skipIf(!hasDb)("orders (database)", () => {
     expect(s?.status).toBe("open");
   });
 
-  it("direct mode sends orders straight to the kitchen; takeaway needs a name", async () => {
+  it("direct mode sends orders straight to the kitchen; takeaway needs a name and a phone", async () => {
     await getDb().update(restaurants).set({ settings: { ...r.settings, orderValidation: "direct", seatingModes: ["table", "takeaway"] } }).where(eq(restaurants.id, r.id));
     await admin.syncSingletonSeats(getDb(), r.id, ["table", "takeaway"]);
     const fresh = await reload(r.id);
@@ -195,8 +195,14 @@ describe.skipIf(!hasDb)("orders (database)", () => {
     const j = await sessions.joinSession(getDb(), fresh, { seat: { id: take.id, type: take.type, label: take.label }, deviceId: PHONE_C, source: "picker" });
     if (!j.ok) throw new Error("join");
     const line = [{ itemId: bissapId, variantId: null, optionIds: [], qty: 1 }];
-    await expect(svc.placeCustomerOrder(getDb(), fresh, PHONE_C, { sessionId: j.sessionId, lines: line })).rejects.toMatchObject({ code: "name_required" });
-    const o = await svc.placeCustomerOrder(getDb(), fresh, PHONE_C, { sessionId: j.sessionId, lines: line, customerName: "Awa" });
+    // Takeaway: name and phone, so the business can call back (pickup time is optional).
+    await expect(svc.placeCustomerOrder(getDb(), fresh, PHONE_C, { sessionId: j.sessionId, lines: line })).rejects.toMatchObject({ code: "takeaway_required" });
+    await expect(svc.placeCustomerOrder(getDb(), fresh, PHONE_C, { sessionId: j.sessionId, lines: line, customerName: "Awa" })).rejects.toMatchObject({ code: "takeaway_required" });
+    const o = await svc.placeCustomerOrder(getDb(), fresh, PHONE_C, { sessionId: j.sessionId, lines: line, customerName: "Awa", customerPhone: "70 11 22 33", pickupTime: "12:30" });
+    expect(o.customerPhone).toBe("70 11 22 33");
+    expect(o.pickupTime).toBe("12:30");
+    // Every order gets its full number: initials, date, number of the day.
+    expect(o.code).toMatch(/^[A-Z]{1,3}-\d{6}-\d{3}$/);
     expect(o.status).toBe("confirmed");
     expect(o.confirmedAt).not.toBeNull();
     // Takeaway customers share the seat but never see each other's orders.

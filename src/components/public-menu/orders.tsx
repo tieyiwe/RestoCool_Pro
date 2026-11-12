@@ -25,6 +25,8 @@ const otherNames = (x: I18n, lang: Lang) => {
 export type CustomerOrder = {
   id: string;
   number: number;
+  /** Full order number « SL-261112-007 ». */
+  code: string | null;
   status: "sent" | "confirmed" | "preparing" | "ready" | "served" | "paid" | "cancelled";
   mine: boolean;
   /** Sent from the session this phone is seated at now (not an earlier visit). */
@@ -162,7 +164,7 @@ export async function sendOrder(
   slug: string,
   seat: MySeat,
   lines: CartLine[],
-  extra: { customerName?: string; customerPhone?: string; deliveryAddress?: string },
+  extra: { customerName?: string; customerPhone?: string; deliveryAddress?: string; pickupTime?: string },
   requestId: string,
 ): Promise<SendResult> {
   const res = await fetch("/api/public/orders", {
@@ -244,6 +246,7 @@ export function OrdersList({
             <div className="mb-2 flex items-center justify-between gap-2">
               <p className="font-bold">
                 {t("orderNumber", { n: o.number })}
+                {o.code && <span className="ml-1 font-mono text-xs font-normal text-muted-foreground" data-testid="my-order-code">{o.code}</span>}
                 {!o.mine && <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-xs font-semibold">{t("fromTable")}</span>}
               </p>
               <p className="font-bold tabular-nums">{orderTotal(o, t)}</p>
@@ -287,6 +290,11 @@ export function ShowToServer({ order, slug, lang, t, onClose }: { order: Custome
       <div className="mx-auto flex min-h-full max-w-lg flex-col gap-4 p-5" style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))" }}>
         <div className="flex items-start justify-between gap-3">
           <p className="text-lg font-semibold text-white/80">{t("orderNumber", { n: order.number })}</p>
+          {order.code && (
+            <p className="font-mono text-base text-white/70" data-testid="server-code">
+              {order.code}
+            </p>
+          )}
           <button ref={closeRef} type="button" onClick={onClose} className="min-h-11 rounded-full bg-white px-4 font-bold text-black">
             {t("close")}
           </button>
@@ -366,18 +374,31 @@ export function OrderDetailsFields({
 }: {
   seat: MySeat;
   t: T;
-  values: { customerName: string; customerPhone: string; deliveryAddress: string };
-  onChange: (v: Partial<{ customerName: string; customerPhone: string; deliveryAddress: string }>) => void;
+  values: { customerName: string; customerPhone: string; deliveryAddress: string; pickupTime: string };
+  onChange: (v: Partial<{ customerName: string; customerPhone: string; deliveryAddress: string; pickupTime: string }>) => void;
 }) {
   const type = seat.seat.type;
   if (type !== "takeaway" && type !== "delivery" && !(type === "counter" && !seat.name)) return null;
   const input = "min-h-11 w-full rounded-lg border border-border bg-surface px-3 text-base";
   return (
     <div className="mt-3 grid gap-2" data-testid="order-details">
+      {type === "takeaway" && <p className="text-sm text-muted-foreground">🛍️ {t("takeawayDetailsHint")}</p>}
       <label className="text-sm font-semibold">
         {t("yourName")}
-        <input value={values.customerName} onChange={(e) => onChange({ customerName: e.target.value })} maxLength={40} autoComplete="given-name" className={input} />
+        <input value={values.customerName} onChange={(e) => onChange({ customerName: e.target.value })} maxLength={40} autoComplete="name" required className={input} data-testid="details-name" />
       </label>
+      {type === "takeaway" && (
+        <>
+          <label className="text-sm font-semibold">
+            {t("phone")}
+            <input value={values.customerPhone} onChange={(e) => onChange({ customerPhone: e.target.value })} inputMode="tel" autoComplete="tel" required placeholder="70 12 34 56" className={input} data-testid="details-phone" />
+          </label>
+          <label className="text-sm font-semibold">
+            {t("pickupTimeOptional")}
+            <input type="time" value={values.pickupTime} onChange={(e) => onChange({ pickupTime: e.target.value })} className={input} data-testid="details-pickup" />
+          </label>
+        </>
+      )}
       {type === "delivery" && (
         <>
           <label className="text-sm font-semibold">

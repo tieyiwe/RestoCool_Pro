@@ -1,4 +1,5 @@
 import "server-only";
+import { businessInitials, orderCode } from "./code";
 import { and, asc, desc, eq, gt, inArray, isNull, notInArray, or, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
@@ -31,7 +32,7 @@ export type ItemStatus = OrderItem["status"];
 
 export class OrderError extends Error {
   constructor(
-    public readonly code: "no_seat" | "name_required" | "delivery_required" | "unavailable" | "empty" | "conflict" | "invalid" | "reason_required" | "no_trip",
+    public readonly code: "no_seat" | "name_required" | "delivery_required" | "takeaway_required" | "unavailable" | "empty" | "conflict" | "invalid" | "reason_required" | "no_trip",
     public readonly itemIds: string[] = [],
   ) {
     super(code);
@@ -59,6 +60,7 @@ export const CustomerOrderInput = z.object({
   customerName: z.string().trim().min(1).max(40).optional(),
   customerPhone: z.string().trim().regex(/^\+?[0-9 ]{8,16}$/).optional(),
   deliveryAddress: z.string().trim().min(3).max(200).optional(),
+  pickupTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/).optional(),
   note: z.string().trim().max(200).optional(),
   /** Idempotency key generated on the phone (same key = same order, never a duplicate). */
   requestId: z.string().regex(/^[A-Za-z0-9_-]{16,64}$/).optional(),
@@ -195,7 +197,9 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
   if (!s) throw new OrderError("no_seat");
   const type = s.seat.type;
   const name = input.customerName ?? s.device.customerName ?? null;
-  if ((type === "counter" || type === "takeaway") && !name) throw new OrderError("name_required");
+  if (type === "counter" && !name) throw new OrderError("name_required");
+  // Takeaway: the business must be able to call the customer back.
+  if (type === "takeaway" && (!name || !input.customerPhone)) throw new OrderError("takeaway_required");
   if (type === "delivery" && (!name || !input.customerPhone || !input.deliveryAddress)) throw new OrderError("delivery_required");
   // On a bus, orders are taken during a trip only (the hostess starts it), and belong to it.
   let tripId: string | null = null;
@@ -223,12 +227,14 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
         tripId,
         businessDate: day,
         number,
+        code: orderCode(businessInitials(r.name), day, number),
         source: "customer",
         customerDeviceId: deviceId,
         clientRequestId: input.requestId ?? null,
         customerName: name,
-        customerPhone: type === "delivery" ? (input.customerPhone ?? null) : null,
+        customerPhone: type === "delivery" || type === "takeaway" ? (input.customerPhone ?? null) : null,
         deliveryAddress: type === "delivery" ? (input.deliveryAddress ?? null) : null,
+        pickupTime: type === "takeaway" ? (input.pickupTime ?? null) : null,
         // Direct mode: the order goes straight to the kitchen.
         status: mode === "direct" ? "confirmed" : "sent",
         validationMode: mode,

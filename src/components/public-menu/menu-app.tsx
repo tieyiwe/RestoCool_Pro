@@ -242,7 +242,7 @@ export function MenuApp({
   }, [trackKey]);
   const [served, setServed] = useState(false);
   const [sending, setSending] = useState(false);
-  const [details, setDetails] = useState({ customerName: "", customerPhone: "", deliveryAddress: "" });
+  const [details, setDetails] = useState({ customerName: "", customerPhone: "", deliveryAddress: "", pickupTime: "" });
   const [noteFor, setNoteFor] = useState<string | null>(null);
   const [heldSeat, setHeldSeat] = useState(false);
   const requestIdRef = useRef<string | null>(null);
@@ -303,6 +303,7 @@ export function MenuApp({
       customerName: details.customerName || seat.name,
       customerPhone: details.customerPhone,
       deliveryAddress: details.deliveryAddress,
+      pickupTime: details.pickupTime,
     }, requestIdRef.current);
     setSending(false);
     if (res.ok) {
@@ -326,6 +327,7 @@ export function MenuApp({
       forget();
       flash(t(seating.pickerAvailable ? "chooseSeatFirst" : "scanTableFirst"));
     } else if (res.error === "no_trip") flash(t("busNotStarted"));
+    else if (res.error === "takeaway_required") flash(t("takeawayDetailsMissing"));
     else if (res.error === "name_required" || res.error === "delivery_required") flash(t("orderDetailsMissing"));
     else if (res.error === "network") flash(t("orderOffline"));
     else flash(t("orderError"));
@@ -770,7 +772,7 @@ export function MenuApp({
                     className={cn("min-h-12 rounded-xl font-bold", seating.enabled && "border border-border")}
                     style={seating.enabled ? undefined : { background: "var(--accent)", color: "var(--on-accent)" }}
                   >
-                    🛍️ {t("takeaway")}
+                    {seating.enabled ? `💬 ${t("takeawayByWhatsapp")}` : `🛍️ ${t("takeaway")}`}
                   </button>
                 )}
                 <button type="button" onClick={() => setLines([])} className="min-h-11 rounded-xl border border-border font-semibold">
