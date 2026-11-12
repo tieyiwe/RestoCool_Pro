@@ -10,7 +10,8 @@ export const dynamic = "force-dynamic";
 const Query = z.object({ slug: Slug, deviceId: DeviceId });
 
 /**
- * QR of « Montrer au serveur »: the staff link of this order (/app/orders/{id}), which only a
+  * QR of « Montrer au serveur »: /o/{id}, which opens the order for a member of the restaurant (the
+ * in-app scanner or the phone camera) and explains how to sign in or join the team otherwise; only a
  * signed-in member of the restaurant can open. Made on the server: no QR library on the phone.
  */
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -22,6 +23,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   if (!r) return notFound();
   const { orders } = await ordersForCustomer(getDb(), r.id, q.data.deviceId, null);
   if (!orders.some((o) => o.id === id.data)) return notFound();
-  const svg = await QRCode.toString(`${await publicBaseUrl()}/app/orders/${id.data}`, { type: "svg", margin: 1, errorCorrectionLevel: "M", color: { dark: "#000000", light: "#FFFFFF" } });
+  const svg = await QRCode.toString(`${await publicBaseUrl()}/o/${id.data}`, { type: "svg", margin: 1, errorCorrectionLevel: "M", color: { dark: "#000000", light: "#FFFFFF" } });
   return new Response(svg, { headers: { "Content-Type": "image/svg+xml", "Cache-Control": "private, max-age=3600" } });
 }

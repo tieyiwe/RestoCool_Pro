@@ -2214,5 +2214,23 @@
     "ogFooter": "Menu on restocool.com",
     "ogHome": "Digital menu, QR code ordering and dining room management",
     "menuDescriptionOwn": "{name} in {city}: {text} Menu and prices in CFA francs."
+  },
+  "orderLink": {
+    "subtitle": "A customer’s order",
+    "signInTitle": "Do you work at {name}?",
+    "signInText": "Sign in: the order opens right away and you can take care of the customer.",
+    "signIn": "Sign in and open the order",
+    "tablet": "Use the restaurant tablet (PIN code)",
+    "notMemberTitle": "This account is not part of {name}’s team",
+    "notMemberText": "Only team members can open this business’s orders. If you have another account for this restaurant, sign in with it.",
+    "otherAccount": "Sign in with another account",
+    "joinTitle": "Not on the team yet?",
+    "joinText": "A manager must add you to the team first.",
+    "join1": "Ask your boss or manager for the “Join the team” QR.",
+    "join2": "Scan it, then enter your name, phone and a PIN code.",
+    "join3": "As soon as the manager accepts, you get your staff number and can scan orders.",
+    "unknownTitle": "Order not found",
+    "unknownText": "This QR does not match any order. Ask the customer to open “Show to the server” again.",
+    "customer": "Are you the customer? This QR is for the server: just show your phone screen."
   }
 }

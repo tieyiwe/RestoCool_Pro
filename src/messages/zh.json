@@ -2214,5 +2214,23 @@
     "ogFooter": "菜单见 restocool.com",
     "ogHome": "数字菜单、扫码点餐和餐厅管理",
     "menuDescriptionOwn": "{name}（{city}）：{text} 菜单和价格以西非法郎计。"
+  },
+  "orderLink": {
+    "subtitle": "顾客订单",
+    "signInTitle": "您在 {name} 工作吗？",
+    "signInText": "请登录：订单会立即打开，您可以为顾客服务。",
+    "signIn": "登录并打开订单",
+    "tablet": "使用餐厅平板（PIN 码）",
+    "notMemberTitle": "此账户不属于 {name} 的团队",
+    "notMemberText": "只有团队成员才能打开本店的订单。如果您有该餐厅的其他账户，请用它登录。",
+    "otherAccount": "使用其他账户登录",
+    "joinTitle": "还不是团队成员？",
+    "joinText": "需要经理先将您加入团队。",
+    "join1": "向老板或经理索取“加入团队”二维码。",
+    "join2": "扫描后填写姓名、电话和 PIN 码。",
+    "join3": "经理同意后，您会获得工号，即可扫描订单。",
+    "unknownTitle": "找不到订单",
+    "unknownText": "此二维码不对应任何订单。请顾客重新打开“出示给服务员”。",
+    "customer": "您是顾客吗？此二维码是给服务员的：只需出示手机屏幕。"
   }
 }

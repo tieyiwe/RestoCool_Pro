@@ -2214,5 +2214,23 @@
     "ogFooter": "Menu sur restocool.com",
     "ogHome": "Menu digital, commandes par QR code et gestion de salle",
     "menuDescriptionOwn": "{name} à {city} : {text} Menu et prix en FCFA."
+  },
+  "orderLink": {
+    "subtitle": "Commande d’un client",
+    "signInTitle": "Vous travaillez chez {name} ?",
+    "signInText": "Connectez-vous : la commande s’ouvre aussitôt et vous pouvez vous occuper du client.",
+    "signIn": "Me connecter et ouvrir la commande",
+    "tablet": "Utiliser la tablette du restaurant (code PIN)",
+    "notMemberTitle": "Ce compte ne fait pas partie de l’équipe de {name}",
+    "notMemberText": "Seuls les membres de l’équipe peuvent ouvrir les commandes de cet établissement. Si vous avez un autre compte pour ce restaurant, connectez-vous avec.",
+    "otherAccount": "Me connecter avec un autre compte",
+    "joinTitle": "Pas encore dans l’équipe ?",
+    "joinText": "Un gérant doit d’abord vous ajouter à l’équipe.",
+    "join1": "Demandez à votre patron ou à votre gérant le QR « Rejoindre l’équipe ».",
+    "join2": "Scannez-le, puis indiquez votre nom, votre téléphone et un code PIN.",
+    "join3": "Dès que le gérant accepte, vous recevez votre matricule et pouvez scanner les commandes.",
+    "unknownTitle": "Commande introuvable",
+    "unknownText": "Ce QR ne correspond à aucune commande. Demandez au client de rouvrir « Montrer au serveur ».",
+    "customer": "Vous êtes client ? Ce QR est pour le serveur : montrez simplement l’écran de votre téléphone."
   }
 }
