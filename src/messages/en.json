@@ -2201,5 +2201,18 @@
       "local": "100% local · Proudly Burkinabè",
       "footer": "RestoCool, a TIBLOGICS product · restocool.com. You are receiving this email because you just created a business on RestoCool."
     }
+  },
+  "seo": {
+    "menuTitle": "{name} · Menu and prices in {city}",
+    "transportTitle": "{name} · On-board menu",
+    "menuDescription": "{name} in {city}: the online menu with prices in CFA francs, photos, contacts and opening hours.",
+    "transportDescription": "{name}: the on-board menu with prices in CFA francs. Order from your seat.",
+    "menu": "Menu",
+    "home": "Home",
+    "ogMenu": "Online menu",
+    "ogTransport": "On-board menu",
+    "ogFooter": "Menu on restocool.com",
+    "ogHome": "Digital menu, QR code ordering and dining room management",
+    "menuDescriptionOwn": "{name} in {city}: {text} Menu and prices in CFA francs."
   }
 }

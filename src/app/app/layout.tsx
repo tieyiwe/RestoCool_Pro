@@ -18,6 +18,11 @@ import { env } from "@/lib/env";
 import { setupState } from "@/lib/auth/setup";
 import { can, type Action } from "@/lib/auth/can";
 import { getMemberContext } from "@/lib/auth/context";
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/seo/site";
+
+/** Private area: never in search results (robots.txt closes it too). */
+export const metadata: Metadata = { robots: NOINDEX };
 
 export const dynamic = "force-dynamic";
 

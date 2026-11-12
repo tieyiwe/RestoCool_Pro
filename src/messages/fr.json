@@ -1195,7 +1195,7 @@
     "pickupAt": "Retrait à {time}",
     "oldestFirst": "Du plus ancien au plus récent",
     "rank": "{n, selectordinal, one {#er} other {#e}}",
-    "rankTitle": "Ordre d’arrivée : la plus ancienne d’abord"
+    "rankTitle": "Ordre d’arrivée : la plus ancienne d’abord"
   },
   "personnel": {
     "title": "Personnel",
@@ -2201,5 +2201,18 @@
       "local": "100 % local · Fièrement burkinabè",
       "footer": "RestoCool, un produit TIBLOGICS · restocool.com. Vous recevez cet e-mail parce que vous venez de créer un établissement sur RestoCool."
     }
+  },
+  "seo": {
+    "menuTitle": "{name} · Menu et prix à {city}",
+    "transportTitle": "{name} · Menu à bord",
+    "menuDescription": "{name} à {city} : le menu en ligne avec les prix en FCFA, les photos, les contacts et les horaires.",
+    "transportDescription": "{name} : le menu à bord avec les prix en FCFA. Commandez depuis votre siège.",
+    "menu": "Menu",
+    "home": "Accueil",
+    "ogMenu": "Menu en ligne",
+    "ogTransport": "Menu à bord",
+    "ogFooter": "Menu sur restocool.com",
+    "ogHome": "Menu digital, commandes par QR code et gestion de salle",
+    "menuDescriptionOwn": "{name} à {city} : {text} Menu et prix en FCFA."
   }
 }

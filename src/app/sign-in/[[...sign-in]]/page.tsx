@@ -5,6 +5,11 @@ import { ClerkStatus } from "@/components/auth/clerk-status";
 import { Logo } from "@/components/brand/logo";
 import { env } from "@/lib/env";
 import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/seo/site";
+
+/** Private area: never in search results (robots.txt closes it too). */
+export const metadata: Metadata = { robots: NOINDEX };
 
 export const dynamic = "force-dynamic";
 

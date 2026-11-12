@@ -2201,5 +2201,18 @@
       "local": "100% 本地 · 布基纳法索骄傲出品",
       "footer": "RestoCool 是 TIBLOGICS 旗下产品 · restocool.com。您收到此邮件是因为您刚刚在 RestoCool 上创建了店铺。"
     }
+  },
+  "seo": {
+    "menuTitle": "{name} · {city} 菜单和价格",
+    "transportTitle": "{name} · 车上菜单",
+    "menuDescription": "{name}（{city}）：在线菜单，价格以西非法郎计，附照片、联系方式和营业时间。",
+    "transportDescription": "{name}：车上菜单，价格以西非法郎计。在座位上即可点餐。",
+    "menu": "菜单",
+    "home": "首页",
+    "ogMenu": "在线菜单",
+    "ogTransport": "车上菜单",
+    "ogFooter": "菜单见 restocool.com",
+    "ogHome": "数字菜单、扫码点餐和餐厅管理",
+    "menuDescriptionOwn": "{name}（{city}）：{text} 菜单和价格以西非法郎计。"
   }
 }

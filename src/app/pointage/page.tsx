@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/seo/site";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/brand/logo";
@@ -7,7 +8,7 @@ import { KioskForm } from "./kiosk-form";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return { title: (await getTranslations("pointage"))("title"), robots: { index: false } };
+  return { title: (await getTranslations("pointage"))("title"), robots: NOINDEX };
 }
 
 /** restocool.com/pointage: check in or out with the restaurant's numéro RC, matricule and PIN. */
