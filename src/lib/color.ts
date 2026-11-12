@@ -39,3 +39,8 @@ export function accentIsReadable(accent: string, theme: MenuTheme): boolean {
 export function onAccent(theme: MenuTheme): string {
   return theme === "lacquer" ? "#17231C" : "#FFFFFF";
 }
+
+/** Black or white, whichever reads best on a background (for badges on the accent colour). */
+export function textOn(bg: string): string {
+  return contrastRatio(bg, "#17231C") >= contrastRatio(bg, "#FFFFFF") ? "#17231C" : "#FFFFFF";
+}

@@ -677,7 +677,31 @@
       "previewDish": "Riz gras · 2 000 F",
       "noLogoYet": "Pas encore de logo : nous affichons la première lettre de votre nom en attendant.",
       "coverReminderTitle": "Ajoutez une photo de votre établissement.",
-      "coverReminderText": "La façade aide les clients à vous reconnaître en arrivant ; l'intérieur ou la terrasse leur donne envie de venir. Une vraie photo inspire confiance."
+      "coverReminderText": "La façade aide les clients à vous reconnaître en arrivant ; l'intérieur ou la terrasse leur donne envie de venir. Une vraie photo inspire confiance.",
+      "palettes": "Palettes de couleurs",
+      "palettesHint": "Choisissez une palette toute prête, ou réglez chaque couleur ci-dessous. Elles s’affichent sur votre menu public.",
+      "accent2": "Couleur d’accent",
+      "accent2Hint": "Bandeau sous la photo, badges « Nouveau », traits sous les catégories.",
+      "previewNew": "Nouveau",
+      "previewCategory": "Grillades",
+      "palette": {
+        "savane": "Savane",
+        "bissap": "Bissap",
+        "karite": "Karité",
+        "danfani": "Faso Dan Fani",
+        "mangue": "Mangue",
+        "hibiscus": "Hibiscus",
+        "indigo": "Indigo",
+        "ocean": "Océan",
+        "piment": "Piment",
+        "gingembre": "Gingembre",
+        "charbon": "Charbon",
+        "laque": "Laque d’or",
+        "safran": "Safran",
+        "menthe": "Menthe",
+        "corail": "Corail",
+        "ciel": "Ciel"
+      }
     },
     "features": {
       "title": "Fonctions du menu",

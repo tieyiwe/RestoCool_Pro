@@ -89,6 +89,7 @@ export async function saveAppearanceAction(_p: SettingsResult, fd: FormData) {
     settings.saveAppearance(ctx, {
       theme: s(fd, "theme") as never,
       accentColor: s(fd, "accentColor"),
+      accent2: s(fd, "accent2"),
       logoUrl: s(fd, "logoUrl"),
       coverUrl: s(fd, "coverUrl"),
     }),

@@ -677,7 +677,31 @@
       "previewDish": "Riz gras · 2,000 F",
       "noLogoYet": "No logo yet: we show the first letter of your name meanwhile.",
       "coverReminderTitle": "Add a photo of your business.",
-      "coverReminderText": "The front helps customers recognise you when they arrive; the interior or terrace makes them want to come. A real photo builds trust."
+      "coverReminderText": "The front helps customers recognise you when they arrive; the interior or terrace makes them want to come. A real photo builds trust.",
+      "palettes": "Colour palettes",
+      "palettesHint": "Pick a ready-made palette, or set each colour below. They show on your public menu.",
+      "accent2": "Accent colour",
+      "accent2Hint": "Band under the photo, « New » badges, lines under the categories.",
+      "previewNew": "New",
+      "previewCategory": "Grills",
+      "palette": {
+        "savane": "Savanna",
+        "bissap": "Bissap",
+        "karite": "Shea",
+        "danfani": "Faso Dan Fani",
+        "mangue": "Mango",
+        "hibiscus": "Hibiscus",
+        "indigo": "Indigo",
+        "ocean": "Ocean",
+        "piment": "Chili",
+        "gingembre": "Ginger",
+        "charbon": "Charcoal",
+        "laque": "Gold lacquer",
+        "safran": "Saffron",
+        "menthe": "Mint",
+        "corail": "Coral",
+        "ciel": "Sky"
+      }
     },
     "features": {
       "title": "Menu features",

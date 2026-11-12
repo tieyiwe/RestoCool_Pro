@@ -108,9 +108,13 @@ async function main() {
     // Table/room QRs keep working. The owner can change it in Paramètres.
     const fresh = (await db.query.restaurants.findFirst({ where: eq(restaurants.id, existing.id) }))!;
     const [anyOwner] = await db.select({ id: members.id }).from(members).where(and(eq(members.restaurantId, existing.id), eq(members.role, "owner"))).limit(1);
-    if (!anyOwner && fresh.settings.qrStrategy !== "generic") {
-      await db.update(restaurants).set({ settings: { ...fresh.settings, qrStrategy: "generic" } }).where(eq(restaurants.id, existing.id));
-      console.log("✓ Shangri-La: customers can now pick their table or room from the main QR.");
+    if (!anyOwner && (fresh.settings.qrStrategy !== "generic" || !fresh.settings.accent2)) {
+      // …and the « Laque d'or » palette's accent (lacquer red) next to its gold.
+      await db
+        .update(restaurants)
+        .set({ settings: { ...fresh.settings, qrStrategy: "generic", accent2: fresh.settings.accent2 ?? "#C0392B" } })
+        .where(eq(restaurants.id, existing.id));
+      console.log("✓ Shangri-La: table/room picker from the main QR, lacquer red accent.");
     }
     if (ifMissing) {
       console.log("✓ Shangri-La already exists.");
@@ -155,6 +159,7 @@ async function main() {
         onboardedAt: new Date().toISOString(),
         seatingModes: ["table", "room", "takeaway"],
         qrStrategy: "generic",
+        accent2: "#C0392B",
         orderValidation: "server_confirms",
         enabledLocales: ["fr", "en", "zh"],
         features: { welcomeScreen: true, fortuneCookie: true, takeawayWhatsapp: true, share: true, localBadge: false },

@@ -40,6 +40,9 @@ export type PublicMenuData = {
   theme: "lacquer" | "light" | "warm";
   accent: string;
   onAccent: string;
+  /** Second brand colour and the text that reads on it. */
+  accent2: string;
+  onAccent2: string;
   poweredBadge: boolean;
   features: { welcomeScreen: boolean; fortuneCookie: boolean; share: boolean; takeawayWhatsapp: boolean; localBadge: boolean };
   locales: Array<"fr" | "en" | "zh">;

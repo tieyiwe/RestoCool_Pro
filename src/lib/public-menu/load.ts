@@ -1,9 +1,10 @@
 import "server-only";
 import { DEFAULT_FORTUNES } from "@/config/fortunes";
+import { DEFAULT_ACCENT2 } from "@/config/palettes";
 import type { DB } from "@/db";
 import type { restaurants } from "@/db/schema";
 import { tenantRepo } from "@/db/repos/tenant";
-import { onAccent } from "@/lib/color";
+import { onAccent, textOn } from "@/lib/color";
 import type { PublicMenuData } from "./types";
 
 type Restaurant = typeof restaurants.$inferSelect;
@@ -49,6 +50,8 @@ export async function loadPublicMenu(db: DB, r: Restaurant, opts: { preview: boo
     theme: r.theme,
     accent: r.accentColor,
     onAccent: onAccent(r.theme),
+    accent2: r.settings.accent2 ?? DEFAULT_ACCENT2,
+    onAccent2: textOn(r.settings.accent2 ?? DEFAULT_ACCENT2),
     poweredBadge: r.poweredBadge,
     features: {
       welcomeScreen: f.welcomeScreen ?? true,

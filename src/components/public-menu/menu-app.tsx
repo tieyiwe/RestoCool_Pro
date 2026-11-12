@@ -355,7 +355,12 @@ export function MenuApp({
   const totals = cartTotals(items, lines);
   // No opening hours entered: say nothing rather than « Fermé ».
   const status = now && data.hours.length ? openStatus(data.hours, now) : null;
-  const accentStyle = { ["--accent" as string]: data.accent, ["--on-accent" as string]: data.onAccent } as React.CSSProperties;
+  const accentStyle = {
+    ["--accent" as string]: data.accent,
+    ["--on-accent" as string]: data.onAccent,
+    ["--accent-2" as string]: data.accent2,
+    ["--on-accent-2" as string]: data.onAccent2,
+  } as React.CSSProperties;
 
   function add(item: PublicItem) {
     if (item.soldOut) return;
@@ -407,6 +412,8 @@ export function MenuApp({
           // eslint-disable-next-line @next/next/no-img-element -- compressed WebP from our media route
           <img src={data.coverUrl} alt="" className="h-40 w-full object-cover sm:h-56" fetchPriority="high" />
         )}
+        {/* The business's two brand colours, as a band under the photo. */}
+        <div aria-hidden className="h-1.5 w-full" style={{ background: "linear-gradient(90deg, var(--accent) 0 55%, var(--accent-2) 55%)" }} data-testid="brand-band" />
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 pt-5 pb-3">
           {data.logoUrl && !lowData && (
             // eslint-disable-next-line @next/next/no-img-element -- small logo
@@ -546,6 +553,7 @@ export function MenuApp({
           <section key={c.id} id={`cat-${c.id}`} data-cat={c.id} className="scroll-mt-40 pt-5">
             <h2 className="font-display mb-2 px-1 text-xl font-extrabold" style={{ color: "var(--accent)" }}>
               {pick(c.name, lang)}
+              <span aria-hidden className="mt-1 block h-1 w-10 rounded-full" style={{ background: "var(--accent-2)" }} />
             </h2>
             <ul className="flex flex-col gap-2">
               {c.items.map((item) => (
@@ -971,7 +979,11 @@ function DishCard({
               </span>
             )}
             {badges.map((b) => (
-              <span key={b} className={cn("rounded-full px-2 py-0.5 text-[11px] font-bold", b === "new" ? "bg-amber-100 text-amber-900" : "bg-muted text-muted-foreground")}>
+              <span
+                key={b}
+                className={cn("rounded-full px-2 py-0.5 text-[11px] font-bold", b === "new" ? "bg-[var(--accent-2)] text-[var(--on-accent-2)]" : "bg-muted text-muted-foreground")}
+                data-testid={b === "new" ? "new-badge" : undefined}
+              >
                 {t(b)}
               </span>
             ))}
@@ -1245,14 +1257,14 @@ function Welcome({ name, t, onClose }: { name: string; t: ReturnType<typeof make
             className="demo-confetti"
             style={{
               left: `${(i * 29) % 100}%`,
-              background: ["#E9B530", "#0F6B3E", "#B24A26", "#FFF8EC", "#2F7DD1"][i % 5],
+              background: ["var(--accent)", "var(--accent-2)", "#FFF8EC", "var(--accent-2)", "var(--accent)"][i % 5],
               animationDelay: `${(i % 9) * 0.1}s`,
               animationDuration: `${1.8 + (i % 5) * 0.3}s`,
             }}
           />
         ))}
       </div>
-      <div className="demo-pop relative max-w-sm rounded-3xl bg-background p-8 text-center shadow-2xl">
+      <div className="demo-pop relative max-w-sm rounded-3xl border-t-8 bg-background p-8 text-center shadow-2xl" style={{ borderTopColor: "var(--accent-2)" }}>
         <p className="text-5xl" aria-hidden>
           🍽️
         </p>

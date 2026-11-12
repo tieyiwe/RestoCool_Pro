@@ -71,6 +71,7 @@ const OwnMedia = z.union([z.literal(""), z.string().regex(/^\/api\/media\/r\/[0-
 export const AppearanceInput = z.object({
   theme: z.enum(["lacquer", "light", "warm"]),
   accentColor: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+  accent2: z.union([z.literal(""), z.string().regex(/^#[0-9a-fA-F]{6}$/)]).default(""),
   logoUrl: OwnMedia,
   coverUrl: OwnMedia,
 });
@@ -190,9 +191,13 @@ export async function saveAppearance(ctx: SettingsCtx, input: z.input<typeof App
   if (!accentIsReadable(p.data.accentColor, p.data.theme)) throw new SettingsValidationError("contrast");
   const own = `/api/media/r/${ctx.repo.restaurantId}/`;
   for (const u of [p.data.logoUrl, p.data.coverUrl]) if (u && !u.startsWith(own)) throw new SettingsValidationError("invalid");
+  const r = await current(ctx);
+  const settings = { ...r.settings };
+  if (p.data.accent2) settings.accent2 = p.data.accent2.toUpperCase();
+  else delete settings.accent2;
   await update(
     ctx,
-    { theme: p.data.theme, accentColor: p.data.accentColor.toUpperCase(), logoUrl: p.data.logoUrl || null, coverUrl: p.data.coverUrl || null },
+    { theme: p.data.theme, accentColor: p.data.accentColor.toUpperCase(), logoUrl: p.data.logoUrl || null, coverUrl: p.data.coverUrl || null, settings },
     "settings.appearance",
   );
 }

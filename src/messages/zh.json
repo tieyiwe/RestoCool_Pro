@@ -677,7 +677,31 @@
       "previewDish": "Riz gras · 2 000 F",
       "noLogoYet": "还没有标志：暂时显示您名称的首字母。",
       "coverReminderTitle": "请添加店铺照片。",
-      "coverReminderText": "门面照片帮助顾客到店时认出您；店内或露台照片让顾客更想光临。真实照片更能赢得信任。"
+      "coverReminderText": "门面照片帮助顾客到店时认出您；店内或露台照片让顾客更想光临。真实照片更能赢得信任。",
+      "palettes": "配色方案",
+      "palettesHint": "选择现成的配色，或在下方分别设置每种颜色。它们会显示在您的公开菜单上。",
+      "accent2": "点缀色",
+      "accent2Hint": "照片下方的色条、“新品”标签、分类标题下的线条。",
+      "previewNew": "新品",
+      "previewCategory": "烧烤",
+      "palette": {
+        "savane": "草原",
+        "bissap": "洛神花",
+        "karite": "乳木果",
+        "danfani": "法索丹法尼",
+        "mangue": "芒果",
+        "hibiscus": "木槿",
+        "indigo": "靛蓝",
+        "ocean": "海洋",
+        "piment": "辣椒",
+        "gingembre": "生姜",
+        "charbon": "炭黑",
+        "laque": "金漆",
+        "safran": "藏红花",
+        "menthe": "薄荷",
+        "corail": "珊瑚",
+        "ciel": "天空"
+      }
     },
     "features": {
       "title": "菜单功能",

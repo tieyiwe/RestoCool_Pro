@@ -231,7 +231,7 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
 export async function AppearanceSection({ r, next, submitLabel }: SectionProps) {
   return (
     <SettingsForm action={saveAppearanceAction} next={next} submitLabel={submitLabel} testId="appearance-form">
-      <BrandingEditor name={r.name} initial={{ logoUrl: r.logoUrl, coverUrl: r.coverUrl, accentColor: r.accentColor, theme: r.theme }} />
+      <BrandingEditor name={r.name} initial={{ logoUrl: r.logoUrl, coverUrl: r.coverUrl, accentColor: r.accentColor, accent2: r.settings.accent2 ?? null, theme: r.theme }} />
     </SettingsForm>
   );
 }

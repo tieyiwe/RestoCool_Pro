@@ -20,6 +20,8 @@ export type RestaurantSettings = {
    * in with this verified email becomes its owner. Lower case; removed once claimed.
    */
   ownerEmail?: string;
+  /** Second brand colour (« couleur d’accent »): header band, « Nouveau » badges, titles. */
+  accent2?: string;
   /** PIN sessions on authorised devices: end of shift (hours) and auto-lock when idle (minutes). */
   staffSessions?: { shiftHours: number; idleMinutes: number };
   /** Front desk timers: an open order turns orange, then red, after these many minutes. */
