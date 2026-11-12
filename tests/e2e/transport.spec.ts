@@ -57,7 +57,7 @@ test("a VIP bus company: create it, add a bus from rows and columns, an itinerar
   }
   // Back to the demo for the other tests.
   await page.goto("/app");
-  const switcher = page.getByLabel("Changer d'établissement");
+  const switcher = page.getByLabel("Changer d'établissement").locator("visible=true");
   if (await switcher.count()) {
     await switcher.selectOption({ label: "Restaurant Démo" });
     await page.getByRole("button", { name: "Valider" }).click();

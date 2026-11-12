@@ -127,7 +127,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
             </Link>
             {!ctx?.pin && (
               <div className="px-1">
-                <RestaurantSwitcher />
+                <RestaurantSwitcher id="restaurant-switcher-side" />
               </div>
             )}
             <SideNav groups={groups} label={t("title")} />

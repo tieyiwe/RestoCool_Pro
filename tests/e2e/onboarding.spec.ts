@@ -172,7 +172,7 @@ test("owner creates a restaurant, goes through the wizard, builds a menu with a 
 
   // 6. Switch back to the demo restaurant with the header selector.
   await page.goto("/app");
-  await page.getByLabel("Changer d'établissement").selectOption({ label: "Restaurant Démo" });
+  await page.getByLabel("Changer d'établissement").locator("visible=true").selectOption({ label: "Restaurant Démo" });
   await page.getByRole("button", { name: "Valider" }).click();
   await expect(page.getByTestId("restaurant-name")).toHaveText("Restaurant Démo");
 });
