@@ -213,6 +213,11 @@ export function useSeat({ slug, token, config, onToast, t, hold = false }: { slu
       }
       lastActivity.current = Date.now();
       setSeat({ sessionId: body.sessionId, seat: body.seat, source: "picker", name: opts.customerName });
+      // Came from a table QR (/r/slug/t/<token>): drop the token from the address, so reloading the
+      // page keeps the new place instead of going back to the scanned table.
+      try {
+        if (/\/t\/[^/]+\/?$/.test(window.location.pathname)) window.history.replaceState(window.history.state, "", `/r/${slug}${window.location.search}`);
+      } catch {}
       if (body.joined) onToast(t("joinedTable"));
       return "ok";
     },

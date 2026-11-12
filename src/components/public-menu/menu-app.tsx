@@ -335,8 +335,9 @@ export function MenuApp({
     else if (res.error === "network") flash(t("orderOffline"));
     else flash(t("orderError"));
   }
-  // A seat set by scanning the table's own QR stays (the phone is at that table); picker seats can change.
-  const canChangeSeat = seating.pickerAvailable && seat?.source !== "qr";
+  // The customer can always correct their place (wrong table scanned, moved to a room…), like in the
+  // original Shangri-La menu. Per-seat QR restaurants only offer the places their picker lists.
+  const canChangeSeat = seating.pickerAvailable;
 
   /* ---------- derived ---------- */
   const filtering = query.trim() !== "" || filters.spicy || filters.local || filters.isNew;

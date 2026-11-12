@@ -57,7 +57,8 @@ test("scanning a table QR seats the phone; a second phone joins the same table",
   const pa = await a.newPage();
   await pa.goto(`/r/restaurant-demo/t/${token}`);
   await expect(pa.getByTestId("seat-badge")).toContainText("Table 7");
-  await expect(pa.getByTestId("seat-badge").getByRole("button", { name: "Changer" })).toHaveCount(0);
+  // The customer can still correct their place (wrong table scanned).
+  await expect(pa.getByTestId("seat-badge").getByRole("button", { name: "Changer" })).toBeVisible();
 
   const b = await browser.newContext();
   await b.addInitScript(skipWelcome);

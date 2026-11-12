@@ -221,6 +221,22 @@ test("main QR (numéro RC): the customer picks a table; a table already taken as
   for (const x of [a, b]) await x.context().close();
 });
 
+test("a customer who scanned table 7 can change to table 8; a reload keeps table 8", async ({ browser }) => {
+  const p = await phone(browser, `/r/${SLUG}/t/${await seatToken("table", "7")}`);
+  await expect(p.getByTestId("seat-badge")).toContainText("Table 7", { timeout: 25_000 });
+  await p.getByTestId("seat-badge").getByRole("button", { name: "Changer" }).click();
+  await p.getByTestId("seat-picker").getByRole("button", { name: "Table 8", exact: true }).click();
+  await expect(p.getByTestId("seat-badge")).toContainText("Table 8");
+  await expect(p).toHaveURL(new RegExp(`/r/${SLUG}$`));
+  await p.reload();
+  await expect(p.getByTestId("seat-badge")).toContainText("Table 8");
+  // Table 7 was released: another phone can take it without the « déjà prise » warning.
+  const q = await phone(browser);
+  await q.getByTestId("choose-seat").click();
+  await expect(q.getByTestId("seat-picker").getByRole("button", { name: "Table 7", exact: true })).toBeVisible();
+  for (const x of [p, q]) await x.context().close();
+});
+
 test("the RC code typed at /c opens Shangri-La; the directory lists it « À la une »", async ({ page }) => {
   const [c] = await sql<{ code: string }>("select code from access_codes where restaurant_id = $1 and seat_id is null", [await rid()]);
   await page.goto(`/c/${c!.code}`);
