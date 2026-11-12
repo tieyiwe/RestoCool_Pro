@@ -9,4 +9,5 @@ export function slugify(input: string): string {
     .slice(0, 48) || "restaurant";
 }
 
-export const RESERVED_SLUGS = new Set(["app", "admin", "api", "r", "www", "restocool", "tiblogics", "demo", "new"]);
+/** Addresses no business may take: app routes, the brand, and the demo businesses (the seed recreates those). */
+export const RESERVED_SLUGS = new Set(["app", "admin", "api", "r", "c", "www", "restocool", "tiblogics", "demo", "new", "restaurant-demo", "express-demo", "maquis-temoin", "restaurants", "guide", "privacy", "terms", "poste", "pointage", "rejoindre", "sign-in", "sign-up"]);

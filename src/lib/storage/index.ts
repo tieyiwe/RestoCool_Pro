@@ -75,6 +75,10 @@ const g = globalThis as unknown as { __rcStore?: ObjectStore };
 export function getStore(): ObjectStore {
   if (!g.__rcStore) {
     const driver = process.env.STORAGE_DRIVER ?? (process.env.REPL_ID ? "replit" : "local");
+    // Local disk is wiped on every republish: photos would be lost. Say it loudly in production.
+    if (driver === "local" && process.env.NODE_ENV === "production") {
+      log.error("storage_local_in_production", { hint: "Uploads are stored on the local disk and will be lost on republish. Use Replit Object Storage (REPL_ID set, bucket in .replit) or STORAGE_DRIVER=replit." });
+    }
     g.__rcStore = driver === "replit" ? new ReplitStore() : new LocalStore(path.join(process.cwd(), ".data", "uploads"));
   }
   return g.__rcStore;

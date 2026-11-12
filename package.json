@@ -17,7 +17,9 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed.ts",
     "db:studio": "drizzle-kit studio",
-    "import:shangri-la": "tsx --conditions=react-server scripts/import-shangri-la.ts"
+    "import:shangri-la": "tsx --conditions=react-server scripts/import-shangri-la.ts",
+    "db:backup": "tsx scripts/backup.ts",
+    "db:restore": "tsx scripts/restore.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

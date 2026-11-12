@@ -45,13 +45,25 @@ function placeholderSvg(code: string, _label: string, color: string): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${color}"/><stop offset="1" stop-color="#1c1917"/></linearGradient></defs><rect width="400" height="400" fill="url(#g)"/><circle cx="200" cy="175" r="105" fill="#fff" opacity=".14"/><circle cx="200" cy="175" r="78" fill="#fff" opacity=".18"/><text x="200" y="198" font-family="system-ui,sans-serif" font-size="72" font-weight="800" fill="#fff" text-anchor="middle">${escapeXml(code)}</text></svg>`;
 }
 
-async function resetRestaurant(db: DB, slug: string) {
-  // Cascades to every tenant table.
-  await db.delete(restaurants).where(eq(restaurants.slug, slug));
+/**
+ * Safe by default: a demo that already exists is kept as is (its orders, settings, photos), so
+ * running the seed on a live platform never wipes anything. `--reset` recreates the demos
+ * (tests and local development only); it only ever touches the demo slugs, which are reserved.
+ */
+const RESET = process.argv.includes("--reset");
+async function resetRestaurant(db: DB, slug: string): Promise<boolean> {
+  const existing = await db.query.restaurants.findFirst({ where: eq(restaurants.slug, slug) });
+  if (existing && !RESET) {
+    console.log(`✓ ${existing.name} already exists: kept as is (use --reset to recreate it).`);
+    return false;
+  }
+  // Cascades to every tenant table of this demo only.
+  if (existing) await db.delete(restaurants).where(eq(restaurants.slug, slug));
+  return true;
 }
 
 async function seedDemo(db: DB) {
-  await resetRestaurant(db, DEMO_SLUG);
+  if (!(await resetRestaurant(db, DEMO_SLUG))) return;
   await mkdir(IMG_DIR, { recursive: true });
 
   const [r] = await db
@@ -204,7 +216,7 @@ async function seedDemo(db: DB) {
 
 /** A second, unpublished tenant used only by the tenant-isolation tests. */
 async function seedTestTenant(db: DB) {
-  await resetRestaurant(db, TEST_SLUG);
+  if (!(await resetRestaurant(db, TEST_SLUG))) return;
   const [r] = await db
     .insert(restaurants)
     .values({ slug: TEST_SLUG, name: "Maquis Témoin (test)", plan: "gratuit", planStatus: "active", published: false })
@@ -223,7 +235,7 @@ async function seedTestTenant(db: DB) {
  * Not featured. Fictional names only.
  */
 async function seedTransportDemo(db: DB) {
-  await resetRestaurant(db, TRANSPORT_SLUG);
+  if (!(await resetRestaurant(db, TRANSPORT_SLUG))) return;
   const [r] = await db
     .insert(restaurants)
     .values({

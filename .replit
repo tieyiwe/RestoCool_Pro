@@ -6,7 +6,8 @@
 #   3. Shell: npm run db:migrate && npm run db:seed
 #
 # Deployment: Reserved VM (one long-lived process, needed for live order
-# updates over SSE + Postgres LISTEN/NOTIFY from M4). Migrations run on start.
+# updates over SSE + Postgres LISTEN/NOTIFY from M4). On start: database backup to Object
+# Storage (last 14 kept, docs/BACKUP.md), then migrations (additive only), then the app.
 
 modules = ["nodejs-22", "postgresql-16"]
 run = "npm run dev"
@@ -17,7 +18,7 @@ channel = "stable-24_05"
 [deployment]
 deploymentTarget = "gce"
 build = ["sh", "-c", "npm ci && npm run build"]
-run = ["sh", "-c", "npm run db:migrate && (npm run import:shangri-la -- --if-missing || true) && npm run start"]
+run = ["sh", "-c", "(npm run db:backup || true) && npm run db:migrate && (npm run import:shangri-la -- --if-missing || true) && npm run start"]
 
 [[ports]]
 localPort = 5000
