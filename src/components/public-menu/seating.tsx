@@ -247,8 +247,8 @@ export function SeatBadge({ seat, t, onChange }: { seat: MySeat; t: T; onChange:
 }
 
 /** Distinctive designs: gold coin (tables), red lacquer plate (rooms), green tag (everything else). */
-function SeatToken({ s, t, lang }: { s: PickerSeat; t: T; lang: string }) {
-  const area = s.area ? s.area[lang] || s.area.fr : null;
+function SeatToken({ s, t, lang, showArea }: { s: PickerSeat; t: T; lang: string; showArea: boolean }) {
+  const area = showArea && s.area ? s.area[lang] || s.area.fr : null;
   if (s.type === "table") {
     return (
       <span className="flex flex-col items-center gap-1">
@@ -380,7 +380,11 @@ export function SeatPicker({ slug, lang, t, onChoose, onClose }: { slug: string;
           <p className="py-8 text-center text-muted-foreground">{t("noSeats")}</p>
         ) : (
           <div className="flex flex-col gap-5">
-            {groups.map((g) => (
+            {groups.map((g) => {
+              // The area under each place only helps when places of this kind are in different areas
+              // (« Terrasse » / « Salle »); all in one area, it is noise.
+              const showArea = new Set(g.list.map((x) => x.area?.fr ?? "")).size > 1;
+              return (
               <section key={g.type}>
                 <h3 className="mb-2 font-semibold">{t(`group_${g.type}`)}</h3>
                 <div className="flex flex-wrap gap-3">
@@ -394,7 +398,7 @@ export function SeatPicker({ slug, lang, t, onChoose, onClose }: { slug: string;
                       aria-label={`${t(`seat_${s.type}`)} ${s.label}${s.occupied ? ` (${t("occupied")})` : ""}`}
                       data-testid="picker-seat"
                     >
-                      <SeatToken s={s} t={t} lang={lang} />
+                      <SeatToken s={s} t={t} lang={lang} showArea={showArea} />
                       {s.occupied && (
                         <span className="absolute -top-1 -right-1 rounded-full bg-laterite px-2 py-0.5 text-[10px] font-bold text-creme">{t("occupied")}</span>
                       )}
@@ -402,7 +406,8 @@ export function SeatPicker({ slug, lang, t, onChoose, onClose }: { slug: string;
                   ))}
                 </div>
               </section>
-            ))}
+              );
+            })}
           </div>
         )}
         {error && (
