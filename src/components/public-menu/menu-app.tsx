@@ -549,6 +549,17 @@ export function MenuApp({
       {/* ---------- Sticky bar: search, filters, language, share + category tabs ---------- */}
       <div className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur" style={{ paddingTop: "env(safe-area-inset-top)" }}>
         <div className="mx-auto flex max-w-3xl items-center gap-2 px-3 pt-2">
+          {/* Small RestoCool button: back to the platform (home page, other businesses). */}
+          <a
+            href="/"
+            aria-label={t("backToPlatform")}
+            title={t("backToPlatform")}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border bg-surface"
+            data-testid="back-to-platform"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element -- tiny static icon, no image optimisation needed */}
+            <img src="/brand/png/app-icon-192.png" alt="" width={28} height={28} className="h-7 w-7 rounded-md" />
+          </a>
           <label className="relative min-w-0 flex-1">
             <span className="sr-only">{t("search")}</span>
             <input
