@@ -204,6 +204,13 @@
       "when": 1794515323338,
       "tag": "0028_business_deletion",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1794600245968,
+      "tag": "0029_reviews",
+      "breakpoints": true
     }
   ]
 }

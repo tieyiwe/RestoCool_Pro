@@ -106,6 +106,7 @@ export async function loadPublicMenu(
         (f.takeawayWhatsapp ?? true) &&
         Boolean(r.settings.takeawayWhatsapp ?? r.whatsapp),
       localBadge: f.localBadge ?? false,
+      reviews: f.reviews ?? true,
     },
     locales: (["fr", "en", "zh"] as const).filter(
       (l) =>

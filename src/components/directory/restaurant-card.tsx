@@ -19,6 +19,21 @@ export function RestaurantCard({ r, locale, cta, featuredLabel }: { r: Directory
           {featuredLabel && <span className="mb-0.5 inline-block rounded-full bg-or/20 px-2 text-xs font-bold text-encre">★ {featuredLabel}</span>}
           <span className="font-display block truncate text-lg leading-tight font-extrabold">{r.name}</span>
           <span className="block text-sm text-encre-2">{r.city}</span>
+          {/* Star rating from the customers' visible reviews. */}
+          {r.rating != null && r.reviewCount > 0 && (
+            <span className="mt-0.5 flex items-center gap-1 text-sm" data-testid="directory-rating" aria-label={`${r.rating.toFixed(1)}/5 (${r.reviewCount})`}>
+              <span className="text-[#E9B530]" aria-hidden>
+                {"★".repeat(Math.round(r.rating))}
+                <span className="text-encre-2/30">{"★".repeat(5 - Math.round(r.rating))}</span>
+              </span>
+              <span className="font-bold tabular-nums" aria-hidden>
+                {r.rating.toFixed(1)}
+              </span>
+              <span className="text-encre-2" aria-hidden>
+                ({r.reviewCount})
+              </span>
+            </span>
+          )}
         </span>
       </span>
       {desc && <span className="line-clamp-2 text-sm text-encre-2">{desc}</span>}

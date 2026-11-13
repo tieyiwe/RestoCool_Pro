@@ -12,7 +12,13 @@ export type DirectoryEntry = {
   accent: string;
   description: { fr: string } & Partial<Record<string, string>>;
   rc: string | null;
+  /** Average of the visible reviews and their number (null when reviews are off or none yet). */
+  rating: number | null;
+  reviewCount: number;
 };
+
+// Written out in full: inside a select list Drizzle would print columns without their table.
+const reviewsOn = sql.raw(`coalesce(("restaurants"."settings"->'features'->>'reviews')::boolean, true)`);
 
 const columns = {
   id: restaurants.id,
@@ -23,9 +29,11 @@ const columns = {
   accent: restaurants.accentColor,
   description: restaurants.description,
   rc: accessCodes.code,
+  rating: sql<number | null>`case when ${reviewsOn} then (select round(avg(v.rating)::numeric, 1)::float from reviews v where v.restaurant_id = "restaurants"."id" and v.status = 'visible') end`,
+  reviewCount: sql<number>`case when ${reviewsOn} then (select count(*)::int from reviews v where v.restaurant_id = "restaurants"."id" and v.status = 'visible') else 0 end`,
 };
 
-type Row = { slug: string; name: string; city: string | null; logoUrl: string | null; accent: string; description: unknown; rc: string | null };
+type Row = { slug: string; name: string; city: string | null; logoUrl: string | null; accent: string; description: unknown; rc: string | null; rating: number | null; reviewCount: number };
 const toEntry = (r: Row): DirectoryEntry => ({
   slug: r.slug,
   name: r.name,
@@ -34,6 +42,8 @@ const toEntry = (r: Row): DirectoryEntry => ({
   accent: r.accent,
   description: (r.description as DirectoryEntry["description"] | null) ?? { fr: "" },
   rc: r.rc ? formatRc(r.rc) : null,
+  rating: r.reviewCount > 0 ? r.rating : null,
+  reviewCount: r.reviewCount ?? 0,
 });
 
 const FROM = "ÀÁÂÄÃÉÈÊËÍÌÎÏÓÒÔÖÕÚÙÛÜÇàáâäãéèêëíìîïóòôöõúùûüçŒœ’";

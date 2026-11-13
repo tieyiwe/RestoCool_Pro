@@ -48,7 +48,7 @@ export type PublicMenuData = {
   accent2: string;
   onAccent2: string;
   poweredBadge: boolean;
-  features: { welcomeScreen: boolean; fortuneCookie: boolean; share: boolean; takeawayWhatsapp: boolean; localBadge: boolean };
+  features: { welcomeScreen: boolean; fortuneCookie: boolean; share: boolean; takeawayWhatsapp: boolean; localBadge: boolean; reviews: boolean };
   locales: Array<"fr" | "en" | "zh">;
   hours: PublicHours[];
   categories: PublicCategory[];

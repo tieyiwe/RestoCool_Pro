@@ -11,6 +11,7 @@ import { requireSuperadminPage } from "@/lib/auth/context";
 import { hasPerm } from "@/lib/admin/access";
 import { businessesLive, ordersNow } from "@/lib/admin/live";
 import { livePresence } from "@/lib/usage/presence";
+import { platformReviews, reviewsEnabled } from "@/lib/reviews";
 import { formatBfPhone, formatFCFA, telHref, whatsappHref } from "@/lib/format";
 import {
   changePlanAction,
@@ -55,6 +56,7 @@ export default async function AdminBusiness({
   const sp = await searchParams;
   const [liveRow] = await businessesLive(getDb(), livePresence(), { restaurantId: d.r.id });
   const now = await ordersNow(getDb(), d.r.id);
+  const rv = await platformReviews(getDb(), { restaurantId: d.r.id, limit: 5 });
   const [t, tp, format, locale] = await Promise.all([
     adminI18n().then((x) => x.t),
     adminI18n().then((x) => x.tp),
@@ -215,6 +217,47 @@ export default async function AdminBusiness({
             <p className="mt-1 text-xl font-extrabold tabular-nums">{v}</p>
           </div>
         ))}
+      </section>
+
+      {/* Customer reviews: everything left, including what the business hid or deleted. */}
+      <section className="rounded-2xl border border-border bg-surface p-4" data-testid="admin-business-reviews">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-bold">⭐ {t("reviews.section")}</h2>
+          <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${reviewsEnabled(r) ? "bg-emerald-100 text-emerald-900" : "bg-muted"}`}>
+            {reviewsEnabled(r) ? t("reviews.enabled") : t("reviews.disabled")}
+          </span>
+        </div>
+        <p className="mb-3 text-xs text-muted-foreground">{t("reviews.sectionHint")}</p>
+        <dl className="mb-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-5">
+          {(
+            [
+              ["total", rv.totals.total],
+              ["average", rv.totals.average ?? "—"],
+              ["hidden", rv.totals.hidden],
+              ["deleted", rv.totals.deleted],
+              ["lowRemoved", rv.totals.lowRemoved],
+            ] as const
+          ).map(([k, v]) => (
+            <div key={k} className="rounded-xl bg-muted px-3 py-2">
+              <dt className="text-xs text-muted-foreground">{t(`reviews.kpi.${k}`)}</dt>
+              <dd className="text-lg font-extrabold tabular-nums">{v}</dd>
+            </div>
+          ))}
+        </dl>
+        {rv.list.length > 0 && (
+          <ul className="flex flex-col gap-1.5 text-sm">
+            {rv.list.map((x) => (
+              <li key={x.id} className="flex flex-wrap items-baseline gap-2">
+                <span className="text-[#E9B530]">{"★".repeat(x.rating)}</span>
+                <span className="min-w-0 flex-1 truncate">{x.comment ?? "—"}</span>
+                <span className="text-xs text-muted-foreground">{t(`reviews.status.${x.status}`)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <Link href={`/admin_pro/reviews?b=${r.id}`} className="mt-2 inline-block text-sm font-semibold text-primary hover:underline">
+          {t("reviews.seeAll")} →
+        </Link>
       </section>
 
       {(canBill || canEdit) && (

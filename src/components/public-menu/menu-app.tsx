@@ -10,6 +10,7 @@ import { makeT, type Messages } from "@/lib/public-menu/translate";
 import type { CartLine, PublicItem, PublicMenuData } from "@/lib/public-menu/types";
 import { cn } from "@/lib/utils";
 import { useOrderOutbox, type QueuedOrder } from "./outbox";
+import { ReviewsSection, Stars, useReviews } from "./reviews";
 import { OfflineBanner } from "@/components/offline/offline-banner";
 import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHiddenOrders, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
 import { deviceId, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
@@ -327,6 +328,8 @@ export function MenuApp({
     onSessionChange,
     onServed,
   });
+  // Customer reviews (the business may switch them off): visible ones + which of my orders I reviewed.
+  const reviewsState = useReviews(data.slug, data.features.reviews && !data.preview);
   // Orders confirmed without network wait on the phone and leave by themselves when it comes back.
   const outbox = useOrderOutbox(
     data.slug,
@@ -540,6 +543,14 @@ export function MenuApp({
             {data.description && <p className="text-sm text-muted-foreground">{pick(data.description, lang)}</p>}
             <p className="mt-1 flex flex-wrap items-center gap-2 text-sm">
               <span className="text-muted-foreground">{data.city}</span>
+              {/* Star rating (visible reviews): one tap goes down to the reviews. */}
+              {reviewsState.data && reviewsState.data.summary.count > 0 && (
+                <a href="#reviews" className="inline-flex items-center gap-1 rounded-full bg-[#E9B530]/20 px-2 py-0.5 text-xs font-bold" data-testid="header-rating">
+                  <Stars value={reviewsState.data.summary.average ?? 0} size="text-sm" label={t("reviewsCount", { n: reviewsState.data.summary.count })} />
+                  <span className="tabular-nums">{reviewsState.data.summary.average?.toFixed(1)}</span>
+                  <span className="font-normal text-muted-foreground">({reviewsState.data.summary.count})</span>
+                </a>
+              )}
               {status && (
                 <a href="#contact" className={cn("rounded-full px-2 py-0.5 text-xs font-bold", status.open ? "bg-emerald-100 text-emerald-900" : "bg-red-100 text-red-900")} data-testid="open-status">
                   {status.open ? t("openNow") : t("closedNow")}
@@ -712,6 +723,7 @@ export function MenuApp({
         ))}
 
         {/* ---------- Contact ---------- */}
+        {reviewsState.data && <ReviewsSection data={reviewsState.data} t={t} lang={lang} onMore={() => void reviewsState.more()} />}
         <Contact data={data} dayNames={(messages[lang].days as string[] | undefined) ?? []} t={t} status={status} now={now} whatsappQr={lowData ? null : whatsappQr} onCopy={copy} />
 
         {data.features.fortuneCookie && (
@@ -956,6 +968,11 @@ export function MenuApp({
             online={outbox.online}
             onRetry={(id) => void outbox.flush(id)}
             onDiscard={outbox.remove}
+            review={
+              data.features.reviews && !data.preview
+                ? { slug: data.slug, reviewed: new Set(reviewsState.data?.reviewed ?? []), onDone: () => void reviewsState.reload() }
+                : undefined
+            }
           />
         </Sheet>
       )}

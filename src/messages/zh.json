@@ -467,7 +467,8 @@
       "queued": "离线：操作已保存，网络恢复后发送。",
       "skipped": "一个等待中的操作未执行：订单已被更改。",
       "waiting": "等待中"
-    }
+    },
+    "reviewsNav": "顾客评价"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -496,7 +497,8 @@
       "team": "Team",
       "recovery": "Account recovery",
       "marketing": "Marketing",
-      "deletions": "Deletion requests"
+      "deletions": "Deletion requests",
+      "reviews": "Reviews"
     },
     "empty": "Nothing yet.",
     "draft": "Draft",
@@ -1248,6 +1250,38 @@
         "refuse": "Request closed.",
         "restore": "Business restored."
       }
+    },
+    "reviews": {
+      "title": "Reviews",
+      "intro": "Every customer review on the platform, including the ones businesses hid or deleted (they only disappear from the business's own page and list).",
+      "kpi": {
+        "total": "Reviews",
+        "average": "Real average (all reviews)",
+        "hidden": "Hidden by businesses",
+        "deleted": "Deleted by businesses",
+        "low": "1–2 star reviews",
+        "lowRemoved": "1–2 stars hidden or deleted",
+        "visible": "Visible on pages"
+      },
+      "all": "All",
+      "status": {
+        "visible": "Visible",
+        "hidden": "Hidden",
+        "deleted": "Deleted by the business"
+      },
+      "business": "Business",
+      "onlyThis": "only this business",
+      "noComment": "No comment.",
+      "anonymous": "Customer",
+      "changed": {
+        "hidden": "hidden on",
+        "deleted": "deleted on"
+      },
+      "section": "Customer reviews",
+      "sectionHint": "Everything the customers left, including what the business hid or deleted.",
+      "enabled": "Reviews on",
+      "disabled": "Reviews switched off by the business",
+      "seeAll": "See all of this business's reviews"
     }
   },
   "demo": {
@@ -1562,7 +1596,8 @@
       "localBadge": "突出本地食材（“本地食材”筛选）",
       "poweredBadge": "显示“菜单由 RestoCool 提供”标志",
       "poweredBadgeHint": "商业版可隐藏。",
-      "attendance": "员工打卡（到岗和离岗）"
+      "attendance": "员工打卡（到岗和离岗）",
+      "reviews": "顾客评价（已用餐的顾客可以评分和评论）"
     },
     "publish": {
       "title": "发布",
@@ -1817,7 +1852,20 @@
     "queuedRefusedTitle": "订单被拒绝",
     "queuedRefusedHint": "可能有菜品已售罄，或桌位已被释放。请修改您的选择或询问服务员。",
     "queuedSendAnyway": "仍然发送",
-    "queuedDiscard": "删除"
+    "queuedDiscard": "删除",
+    "reviewsTitle": "顾客评价",
+    "reviewsCount": "{n} 条评价",
+    "reviewsMore": "查看更多评价",
+    "reviewAnonymous": "顾客",
+    "reviewVerified": "已用餐顾客",
+    "reviewAsk": "给出评价",
+    "reviewStars": "您的评分",
+    "reviewStarN": "{n} 星",
+    "reviewCommentPh": "您的评论（可选）",
+    "reviewNamePh": "您的名字（可选）",
+    "reviewSend": "发送评价",
+    "reviewThanks": "感谢您的评价！",
+    "reviewError": "评价发送失败，请重试。"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -3362,5 +3410,41 @@
     "body": "RestoCool 刚刚发布了更新。请更新以使用新版本：您正在做的事情不会丢失。",
     "update": "更新",
     "later": "稍后"
+  },
+  "reviews": {
+    "title": "顾客评价",
+    "intro": "已用餐顾客对您的评价：1 到 5 星评分和评论。",
+    "onTitle": "评价已开启",
+    "offTitle": "评价已关闭",
+    "onHint": "已用餐的顾客可以评分和评论。可见的评价会显示在您的页面上。",
+    "offHint": "不再请求新评价，评价栏目从您的页面移除。已有评价会保留。",
+    "turnOff": "关闭评价",
+    "turnOn": "开启评价",
+    "publicAverage": "顾客看到的评分",
+    "publicCount": "{n} 条可见评价",
+    "allAverage": "真实评分（含已隐藏评价）",
+    "counts": "{visible} 条可见 · {hidden} 条已隐藏",
+    "filterLabel": "筛选评价",
+    "filters": {
+      "all": "全部",
+      "visible": "可见",
+      "hidden": "已隐藏"
+    },
+    "none": "暂无评价。",
+    "noComment": "无评论。",
+    "anonymous": "顾客",
+    "hiddenBadge": "已隐藏",
+    "hide": "隐藏",
+    "show": "重新显示",
+    "delete": "删除",
+    "deleteConfirm": "删除这条评价？它将从您的页面和此列表中消失。此操作对您不可撤销。",
+    "footnote": "只有真正用过餐的顾客才能评价（每个订单一次）。隐藏会把评价从您的页面移除，之后可以重新显示。删除会把它从您的页面和此列表中移除。RestoCool 为平台安全保留所有评价。",
+    "ok": {
+      "hidden": "评价已隐藏。",
+      "shown": "评价已重新显示。",
+      "deleted": "评价已删除。",
+      "enabled": "评价已开启。",
+      "disabled": "评价已关闭。"
+    }
   }
 }

@@ -9,6 +9,7 @@ import { deviceId, type MySeat } from "./seating";
 import { OUTBOX_AUTO_MS } from "./outbox-config";
 import { reportNetwork } from "@/components/offline/offline-banner";
 import type { QueuedOrder } from "./outbox";
+import { ReviewForm } from "./reviews";
 
 type T = ReturnType<typeof makeT>;
 type Lang = "fr" | "en" | "zh";
@@ -250,6 +251,7 @@ export function OrdersList({
   online = true,
   onRetry,
   onDiscard,
+  review,
 }: {
   orders: CustomerOrder[];
   shared: boolean;
@@ -263,6 +265,8 @@ export function OrdersList({
   online?: boolean;
   onRetry?: (requestId: string) => void;
   onDiscard?: (requestId: string) => void;
+  /** Reviews on: served orders of this phone get « Donnez votre avis » (once each). */
+  review?: { slug: string; reviewed: Set<string>; onDone: () => void };
 }) {
   if (orders.length === 0 && pending.length === 0) return <p className="py-6 text-center text-muted-foreground">{t("noOrders")}</p>;
   const when = new Intl.DateTimeFormat(lang === "zh" ? "zh-CN" : lang, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Africa/Ouagadougou" });
@@ -333,6 +337,9 @@ export function OrdersList({
             📱 {t("showToServer")}
           </button>
         )
+      )}
+      {review && o.mine && (o.status === "served" || o.status === "paid") && !review.reviewed.has(o.id) && (
+        <ReviewForm slug={review.slug} orderId={o.id} t={t} lang={lang} onDone={review.onDone} />
       )}
       {o.mine && FINISHED.has(o.status) && onHide && (
         <button type="button" onClick={() => onHide([o.id])} className="mt-2 min-h-11 w-full rounded-xl border border-border text-sm font-semibold" data-testid="hide-order">

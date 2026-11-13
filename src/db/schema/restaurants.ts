@@ -37,7 +37,7 @@ export type RestaurantSettings = {
   serviceDelays?: { warnMin: number; lateMin: number };
 };
 
-export const FEATURE_FLAGS = ["welcomeScreen", "fortuneCookie", "takeawayWhatsapp", "share", "localBadge", "attendance"] as const;
+export const FEATURE_FLAGS = ["welcomeScreen", "fortuneCookie", "takeawayWhatsapp", "share", "localBadge", "attendance", "reviews"] as const;
 export type FeatureFlag = (typeof FEATURE_FLAGS)[number];
 
 export const restaurants = pgTable(

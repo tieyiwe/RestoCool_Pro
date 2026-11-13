@@ -30,6 +30,7 @@ const NAV = [
   { href: "/admin_pro/billing", key: "billing", icon: "💳" },
   { href: "/admin_pro/map", key: "map", icon: "🗺️" },
   { href: "/admin_pro/deletions", key: "deletions", icon: "🗑️" },
+  { href: "/admin_pro/reviews", key: "reviews", icon: "⭐" },
   { href: "/admin_pro/activity", key: "activity", icon: "🧾" },
   { href: "/admin_pro/team", key: "team", icon: "🧑‍🤝‍🧑" },
   { href: "/admin_pro/settings", key: "settings", icon: "⚙️" },
@@ -50,7 +51,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   };
   const GROUPS: Array<[string, string[]]> = [
     ["pilot", ["/admin_pro", "/admin_pro/live"]],
-    ["businesses", ["/admin_pro/businesses", "/admin_pro/map", "/admin_pro/billing", "/admin_pro/deletions"]],
+    ["businesses", ["/admin_pro/businesses", "/admin_pro/map", "/admin_pro/billing", "/admin_pro/reviews", "/admin_pro/deletions"]],
     ["relation", ["/admin_pro/support", "/admin_pro/recovery", "/admin_pro/messages", "/admin_pro/marketing"]],
     ["platform", ["/admin_pro/activity", "/admin_pro/team", "/admin_pro/settings"]],
   ];

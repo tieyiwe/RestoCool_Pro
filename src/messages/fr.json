@@ -467,7 +467,8 @@
       "queued": "Hors ligne : action gardée, elle sera envoyée au retour du réseau.",
       "skipped": "Une action en attente n’a pas été appliquée : la commande avait déjà changé.",
       "waiting": "en attente"
-    }
+    },
+    "reviewsNav": "Avis clients"
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -496,7 +497,8 @@
       "team": "Équipe",
       "recovery": "Récupération d’accès",
       "marketing": "Marketing",
-      "deletions": "Demandes de suppression"
+      "deletions": "Demandes de suppression",
+      "reviews": "Avis"
     },
     "empty": "Rien pour l’instant.",
     "draft": "Brouillon",
@@ -1248,6 +1250,38 @@
         "refuse": "Demande close.",
         "restore": "Établissement restauré."
       }
+    },
+    "reviews": {
+      "title": "Avis",
+      "intro": "Tous les avis clients de la plateforme, y compris ceux que les établissements ont masqués ou supprimés (ils ne disparaissent que de la page et de la liste de l’établissement).",
+      "kpi": {
+        "total": "Avis",
+        "average": "Moyenne réelle (tous les avis)",
+        "hidden": "Masqués par les établissements",
+        "deleted": "Supprimés par les établissements",
+        "low": "Avis à 1–2 étoiles",
+        "lowRemoved": "1–2 étoiles masqués ou supprimés",
+        "visible": "Visibles sur les pages"
+      },
+      "all": "Tous",
+      "status": {
+        "visible": "Visible",
+        "hidden": "Masqué",
+        "deleted": "Supprimé par l’établissement"
+      },
+      "business": "Établissement",
+      "onlyThis": "seulement cet établissement",
+      "noComment": "Pas de commentaire.",
+      "anonymous": "Client",
+      "changed": {
+        "hidden": "masqué le",
+        "deleted": "supprimé le"
+      },
+      "section": "Avis clients",
+      "sectionHint": "Tout ce que les clients ont laissé, y compris ce que l’établissement a masqué ou supprimé.",
+      "enabled": "Avis activés",
+      "disabled": "Avis désactivés par l’établissement",
+      "seeAll": "Voir tous les avis de cet établissement"
     }
   },
   "demo": {
@@ -1562,7 +1596,8 @@
       "localBadge": "Mettre en avant les produits locaux (filtre « Produits locaux »)",
       "poweredBadge": "Afficher le badge « Menu par RestoCool »",
       "poweredBadgeHint": "Le masquer est possible avec la formule Business.",
-      "attendance": "Pointage du personnel (arrivée et départ)"
+      "attendance": "Pointage du personnel (arrivée et départ)",
+      "reviews": "Avis clients (les clients servis peuvent noter et commenter)"
     },
     "publish": {
       "title": "Publication",
@@ -1817,7 +1852,20 @@
     "queuedRefusedTitle": "Commande refusée",
     "queuedRefusedHint": "Un plat est peut-être épuisé ou la table a été libérée. Modifiez votre sélection ou demandez au serveur.",
     "queuedSendAnyway": "Envoyer quand même",
-    "queuedDiscard": "Supprimer"
+    "queuedDiscard": "Supprimer",
+    "reviewsTitle": "Avis clients",
+    "reviewsCount": "{n, plural, one {# avis} other {# avis}}",
+    "reviewsMore": "Voir plus d’avis",
+    "reviewAnonymous": "Client",
+    "reviewVerified": "Client servi",
+    "reviewAsk": "Donnez votre avis",
+    "reviewStars": "Votre note",
+    "reviewStarN": "{n, plural, one {# étoile} other {# étoiles}}",
+    "reviewCommentPh": "Votre commentaire (facultatif)",
+    "reviewNamePh": "Votre prénom (facultatif)",
+    "reviewSend": "Envoyer mon avis",
+    "reviewThanks": "Merci pour votre avis !",
+    "reviewError": "L’avis n’a pas pu être envoyé. Réessayez."
   },
   "seating": {
     "title": "Tables et salles",
@@ -3362,5 +3410,41 @@
     "body": "Une mise à jour de RestoCool vient d’être publiée. Mettez à jour pour en profiter : rien de ce que vous faites n’est perdu.",
     "update": "Mettre à jour",
     "later": "Plus tard"
+  },
+  "reviews": {
+    "title": "Avis clients",
+    "intro": "Ce que vos clients servis pensent de vous : notes de 1 à 5 étoiles et commentaires.",
+    "onTitle": "Les avis sont activés",
+    "offTitle": "Les avis sont désactivés",
+    "onHint": "Vos clients servis peuvent laisser une note et un commentaire. Les avis visibles apparaissent sur votre page.",
+    "offHint": "Aucun nouvel avis n’est demandé et la section est retirée de votre page. Vos avis sont conservés.",
+    "turnOff": "Désactiver les avis",
+    "turnOn": "Activer les avis",
+    "publicAverage": "Note affichée aux clients",
+    "publicCount": "{n, plural, =0 {Aucun avis visible} one {# avis visible} other {# avis visibles}}",
+    "allAverage": "Note réelle (avis masqués compris)",
+    "counts": "{visible} visibles · {hidden} masqués",
+    "filterLabel": "Filtrer les avis",
+    "filters": {
+      "all": "Tous",
+      "visible": "Visibles",
+      "hidden": "Masqués"
+    },
+    "none": "Aucun avis pour le moment.",
+    "noComment": "Pas de commentaire.",
+    "anonymous": "Client",
+    "hiddenBadge": "Masqué",
+    "hide": "Masquer",
+    "show": "Afficher à nouveau",
+    "delete": "Supprimer",
+    "deleteConfirm": "Supprimer cet avis ? Il disparaît de votre page et de cette liste. Cette action est définitive pour vous.",
+    "footnote": "Seuls les clients réellement servis peuvent laisser un avis (un par commande). Masquer retire un avis de votre page ; vous pouvez l’afficher à nouveau. Supprimer le retire de votre page et de cette liste. RestoCool conserve tous les avis pour la sécurité de la plateforme.",
+    "ok": {
+      "hidden": "Avis masqué.",
+      "shown": "Avis affiché à nouveau.",
+      "deleted": "Avis supprimé.",
+      "enabled": "Les avis sont activés.",
+      "disabled": "Les avis sont désactivés."
+    }
   }
 }

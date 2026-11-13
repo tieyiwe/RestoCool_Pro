@@ -467,7 +467,8 @@
       "queued": "Offline: action kept, it will be sent when the network is back.",
       "skipped": "A waiting action was not applied: the order had already changed.",
       "waiting": "waiting"
-    }
+    },
+    "reviewsNav": "Reviews"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -496,7 +497,8 @@
       "team": "Team",
       "recovery": "Account recovery",
       "marketing": "Marketing",
-      "deletions": "Deletion requests"
+      "deletions": "Deletion requests",
+      "reviews": "Reviews"
     },
     "empty": "Nothing yet.",
     "draft": "Draft",
@@ -1248,6 +1250,38 @@
         "refuse": "Request closed.",
         "restore": "Business restored."
       }
+    },
+    "reviews": {
+      "title": "Reviews",
+      "intro": "Every customer review on the platform, including the ones businesses hid or deleted (they only disappear from the business's own page and list).",
+      "kpi": {
+        "total": "Reviews",
+        "average": "Real average (all reviews)",
+        "hidden": "Hidden by businesses",
+        "deleted": "Deleted by businesses",
+        "low": "1–2 star reviews",
+        "lowRemoved": "1–2 stars hidden or deleted",
+        "visible": "Visible on pages"
+      },
+      "all": "All",
+      "status": {
+        "visible": "Visible",
+        "hidden": "Hidden",
+        "deleted": "Deleted by the business"
+      },
+      "business": "Business",
+      "onlyThis": "only this business",
+      "noComment": "No comment.",
+      "anonymous": "Customer",
+      "changed": {
+        "hidden": "hidden on",
+        "deleted": "deleted on"
+      },
+      "section": "Customer reviews",
+      "sectionHint": "Everything the customers left, including what the business hid or deleted.",
+      "enabled": "Reviews on",
+      "disabled": "Reviews switched off by the business",
+      "seeAll": "See all of this business's reviews"
     }
   },
   "demo": {
@@ -1562,7 +1596,8 @@
       "localBadge": "Highlight local produce (“Local produce” filter)",
       "poweredBadge": "Show the “Menu by RestoCool” badge",
       "poweredBadgeHint": "Hiding it is possible with the Business plan.",
-      "attendance": "Staff check-in (arrival and departure)"
+      "attendance": "Staff check-in (arrival and departure)",
+      "reviews": "Customer reviews (served customers can rate and comment)"
     },
     "publish": {
       "title": "Publishing",
@@ -1817,7 +1852,20 @@
     "queuedRefusedTitle": "Order refused",
     "queuedRefusedHint": "A dish may be sold out or the table was freed. Change your selection or ask the server.",
     "queuedSendAnyway": "Send anyway",
-    "queuedDiscard": "Delete"
+    "queuedDiscard": "Delete",
+    "reviewsTitle": "Customer reviews",
+    "reviewsCount": "{n, plural, one {# review} other {# reviews}}",
+    "reviewsMore": "See more reviews",
+    "reviewAnonymous": "Customer",
+    "reviewVerified": "Served customer",
+    "reviewAsk": "Leave a review",
+    "reviewStars": "Your rating",
+    "reviewStarN": "{n, plural, one {# star} other {# stars}}",
+    "reviewCommentPh": "Your comment (optional)",
+    "reviewNamePh": "Your first name (optional)",
+    "reviewSend": "Send my review",
+    "reviewThanks": "Thank you for your review!",
+    "reviewError": "The review could not be sent. Try again."
   },
   "seating": {
     "title": "Tables and rooms",
@@ -3362,5 +3410,41 @@
     "body": "An update of RestoCool was just published. Update to get it: nothing you are doing is lost.",
     "update": "Update",
     "later": "Later"
+  },
+  "reviews": {
+    "title": "Customer reviews",
+    "intro": "What your served customers think of you: 1 to 5 star ratings and comments.",
+    "onTitle": "Reviews are on",
+    "offTitle": "Reviews are off",
+    "onHint": "Your served customers can leave a rating and a comment. Visible reviews show on your page.",
+    "offHint": "No new reviews are asked for and the section is removed from your page. Your reviews are kept.",
+    "turnOff": "Turn reviews off",
+    "turnOn": "Turn reviews on",
+    "publicAverage": "Rating shown to customers",
+    "publicCount": "{n, plural, =0 {No visible review} one {# visible review} other {# visible reviews}}",
+    "allAverage": "Real rating (hidden reviews included)",
+    "counts": "{visible} visible · {hidden} hidden",
+    "filterLabel": "Filter reviews",
+    "filters": {
+      "all": "All",
+      "visible": "Visible",
+      "hidden": "Hidden"
+    },
+    "none": "No reviews yet.",
+    "noComment": "No comment.",
+    "anonymous": "Customer",
+    "hiddenBadge": "Hidden",
+    "hide": "Hide",
+    "show": "Show again",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this review? It disappears from your page and from this list. This cannot be undone on your side.",
+    "footnote": "Only customers who were actually served can leave a review (one per order). Hide removes a review from your page; you can show it again. Delete removes it from your page and from this list. RestoCool keeps every review for the platform's safety.",
+    "ok": {
+      "hidden": "Review hidden.",
+      "shown": "Review shown again.",
+      "deleted": "Review deleted.",
+      "enabled": "Reviews are on.",
+      "disabled": "Reviews are off."
+    }
   }
 }
