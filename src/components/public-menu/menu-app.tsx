@@ -9,6 +9,8 @@ import { itemMatches } from "@/lib/public-menu/search";
 import { makeT, type Messages } from "@/lib/public-menu/translate";
 import type { CartLine, PublicItem, PublicMenuData } from "@/lib/public-menu/types";
 import { cn } from "@/lib/utils";
+import { useOrderOutbox, type QueuedOrder } from "./outbox";
+import { OfflineBanner } from "@/components/offline/offline-banner";
 import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHiddenOrders, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
 import { deviceId, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
 import dynamic from "next/dynamic";
@@ -278,11 +280,6 @@ export function MenuApp({
     toastTimer.current = window.setTimeout(() => setToast(null), 2500);
   }, []);
   useEffect(() => () => window.clearTimeout(toastTimer.current), []);
-  useEffect(() => {
-    const show = () => !navigator.onLine && flash(t("offline"));
-    window.addEventListener("offline", show);
-    return () => window.removeEventListener("offline", show);
-  }, [flash, t]);
 
   const [picker, setPicker] = useState(false);
   /* ---------- orders: send, live tracking, table bill ---------- */
@@ -330,6 +327,22 @@ export function MenuApp({
     onSessionChange,
     onServed,
   });
+  // Orders confirmed without network wait on the phone and leave by themselves when it comes back.
+  const outbox = useOrderOutbox(
+    data.slug,
+    (order, q) => {
+      history.addOrder(order.number, q.lines);
+      writeStore("local", trackKey, String(Date.now()));
+      setTracking(true);
+      live.setOrders((o) => [order, ...o.filter((x) => x.id !== order.id)]);
+      void live.refresh();
+      flash(t("queuedSent", { n: order.number }));
+    },
+    (_q, error, itemIds) => {
+      if (error === "unavailable") setLiveSoldOut((prev) => new Set([...(prev ?? soldOutIds(initialData)), ...itemIds]));
+      flash(t("queuedRefused"));
+    },
+  );
   // « À emporter » straight from the cart (no need to open the place picker first).
   const [quickTakeaway, setQuickTakeaway] = useState<string | null>(null);
   const cartOpen = panel?.type === "cart";
@@ -378,13 +391,35 @@ export function MenuApp({
     setSending(true);
     // Same selection resent (no answer last time) → same request id → never a duplicate order.
     requestIdRef.current ??= newRequestId();
-    const res = await sendOrder(data.slug, seat, valid, {
+    const extra = {
       customerName: details.customerName || seat.name,
       customerPhone: details.customerPhone,
       deliveryAddress: details.deliveryAddress,
       pickupTime: details.pickupTime,
-    }, requestIdRef.current);
+    };
+    const res = navigator.onLine ? await sendOrder(data.slug, seat, valid, extra, requestIdRef.current) : ({ ok: false, error: "network", itemIds: [] } as const);
     setSending(false);
+    if (!res.ok && res.error === "network") {
+      // No network: the order waits on the phone (same request id) and leaves when it comes back.
+      const q: QueuedOrder = {
+        requestId: requestIdRef.current,
+        seat,
+        lines: valid,
+        extra,
+        summary: valid.map((l) => {
+          const it = items.get(l.itemId);
+          return { name: it?.name ?? { fr: "?" }, code: it?.code ?? null, qty: l.qty };
+        }),
+        total: totals.total,
+        queuedAt: Date.now(),
+      };
+      outbox.add(q);
+      requestIdRef.current = null;
+      setLines([]);
+      openPanel({ type: "orders" });
+      flash(t("orderQueued"));
+      return;
+    }
     if (res.ok) {
       requestIdRef.current = null;
       history.addOrder(res.order.number, valid);
@@ -408,7 +443,6 @@ export function MenuApp({
     } else if (res.error === "no_trip") flash(t("busNotStarted"));
     else if (res.error === "takeaway_required") flash(t("takeawayDetailsMissing"));
     else if (res.error === "name_required" || res.error === "delivery_required") flash(t("orderDetailsMissing"));
-    else if (res.error === "network") flash(t("orderOffline"));
     else flash(t("orderError"));
   }
   // The customer can always correct their place (wrong table scanned, moved to a room…), like in the
@@ -531,10 +565,10 @@ export function MenuApp({
                     </button>
                   )
                 )}
-                {myOrders.length > 0 && (
+                {(myOrders.length > 0 || outbox.queue.length > 0) && (
                   <button type="button" onClick={() => openPanel({ type: "orders" })} className="min-h-11 rounded-full border border-border bg-surface px-4 text-sm font-bold" data-testid="my-orders-button">
                     🧾 {t("myOrders")}
-                    {activeOrders.length > 0 && <span className="ml-1 rounded-full bg-[var(--accent)] px-1.5 text-xs text-[var(--on-accent)]">{activeOrders.length}</span>}
+                    {activeOrders.length + outbox.queue.length > 0 && <span className="ml-1 rounded-full bg-[var(--accent)] px-1.5 text-xs text-[var(--on-accent)]">{activeOrders.length + outbox.queue.length}</span>}
                   </button>
                 )}
               </div>
@@ -548,6 +582,11 @@ export function MenuApp({
 
       {/* ---------- Sticky bar: search, filters, language, share + category tabs ---------- */}
       <div className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+        {/* Offline mode: switches on by itself when the network goes, tells the customer what still works. */}
+        <OfflineBanner
+          text={{ title: t("offTitle"), check: t("offCheck"), hint: t("offHint"), pending: t("offPending", { n: outbox.queue.filter((q) => !q.error).length }), back: t("backOnline") }}
+          pending={outbox.queue.filter((q) => !q.error).length}
+        />
         <div className="mx-auto flex max-w-3xl items-center gap-2 px-3 pt-2">
           {/* Small RestoCool button: back to the platform (home page, other businesses). */}
           <a
@@ -906,7 +945,18 @@ export function MenuApp({
       )}
       {panel?.type === "orders" && (
         <Sheet title={t("myOrders")} onClose={closePanel} t={t} testId="orders-sheet">
-          <OrdersList orders={myOrders} shared={live.shared} lang={lang} t={t} onShow={(o: CustomerOrder) => openPanel({ type: "server", orderId: o.id })} onHide={hiddenOrders.hide} />
+          <OrdersList
+            orders={myOrders}
+            shared={live.shared}
+            lang={lang}
+            t={t}
+            onShow={(o: CustomerOrder) => openPanel({ type: "server", orderId: o.id })}
+            onHide={hiddenOrders.hide}
+            pending={outbox.queue}
+            online={outbox.online}
+            onRetry={(id) => void outbox.flush(id)}
+            onDiscard={outbox.remove}
+          />
         </Sheet>
       )}
       {panel?.type === "server" && myOrders.find((o) => o.id === panel.orderId) && (

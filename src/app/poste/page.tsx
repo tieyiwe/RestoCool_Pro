@@ -7,6 +7,7 @@ import { getDb } from "@/db";
 import { DEVICE_COOKIE, deviceFromToken, deviceTeam } from "@/lib/devices";
 import { formatStaffNo } from "@/lib/personnel";
 import { PinPad } from "./pin-pad";
+import { ForgetOfflineData } from "@/components/offline/forget-offline-data";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,7 @@ export default async function PostePage({ searchParams }: { searchParams: Promis
   if (!dev) {
     return (
       <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-4 px-4 py-10 text-center" data-testid="poste-unauthorized">
+        <ForgetOfflineData />
         <p className="text-5xl" aria-hidden>
           📟
         </p>

@@ -7,6 +7,7 @@ import { env } from "@/lib/env";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { NOINDEX } from "@/lib/seo/site";
+import { ForgetOfflineData } from "@/components/offline/forget-offline-data";
 
 /** Private area: never in search results (robots.txt closes it too). */
 export const metadata: Metadata = { robots: NOINDEX };
@@ -19,6 +20,7 @@ export default async function Page() {
   const ta = await getTranslations("aide");
   return (
     <AuthProvider>
+      <ForgetOfflineData />
       <main className="rc-weave flex min-h-dvh flex-col items-center justify-center gap-6 px-4 py-10">
         <Link href="/" aria-label="RestoCool">
           <Logo />

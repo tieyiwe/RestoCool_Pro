@@ -25,6 +25,7 @@ import { CommandPalette } from "@/components/app-shell/command-palette";
 import { HelpLink } from "@/components/app-shell/help-link";
 import { InstallApp } from "@/components/app-shell/install-app";
 import { NotificationBell } from "@/components/app-shell/notification-bell";
+import { StaffOfflineSync } from "@/components/offline/staff-offline-sync";
 import { SideNav } from "@/components/app-shell/side-nav";
 import { notificationSummary } from "@/lib/platform/notifications";
 import { currentDeletion } from "@/lib/restaurants/deletion";
@@ -145,6 +146,8 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
           </aside>
         )}
         <div className="flex min-w-0 flex-1 flex-col">
+          {/* Offline mode: banner, actions waiting, and the device's copy erased when the person changes. */}
+          <StaffOfflineSync who={ctx ? `${ctx.repo.restaurantId}:${ctx.actor.kind === "member" ? ctx.actor.userId : ctx.actor.kind}` : null} />
           <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-border bg-surface/90 px-4 py-2 backdrop-blur supports-[backdrop-filter]:bg-surface/75 md:px-6 print:hidden">
             <div className="flex min-w-0 items-center gap-3">
               <Link href="/" aria-label="RestoCool" className={focus ? "" : "md:hidden"}>

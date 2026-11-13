@@ -457,7 +457,17 @@
       "empty": "未找到板块。",
       "hint": "↑ ↓ 选择 · 回车打开 · Esc 关闭"
     },
-    "promotions": "促销"
+    "promotions": "促销",
+    "offline": {
+      "title": "离线",
+      "check": "请检查您的网络连接（Wi-Fi 或移动数据）。",
+      "hint": "您看到的是最后收到的数据。网络恢复后，您对订单的操作会自动发送。",
+      "pending": "{n} 个操作等待发送。",
+      "back": "已重新联网：全部已同步。",
+      "queued": "离线：操作已保存，网络恢复后发送。",
+      "skipped": "一个等待中的操作未执行：订单已被更改。",
+      "waiting": "等待中"
+    }
   },
   "admin": {
     "title": "RestoCool administration",
@@ -1790,7 +1800,24 @@
     "offerUntil": "截止 {date}",
     "offerAdd": "加入我的选择",
     "promoBadge": "优惠",
-    "sponsored": "推广"
+    "sponsored": "推广",
+    "offTitle": "离线",
+    "offCheck": "请检查您的网络连接（Wi-Fi 或移动数据）。",
+    "offHint": "菜单仍可浏览。网络恢复后，您的订单会自动发送。",
+    "offPending": "{n} 个订单等待发送。",
+    "backOnline": "已重新联网。",
+    "orderQueued": "没有网络：您的订单已保存，网络恢复后将自动发送。",
+    "queuedSent": "订单 {n} 号已发送（网络已恢复）。",
+    "queuedRefused": "一个等待中的订单未被接受：请查看“我的订单”。",
+    "queuedTitle": "等待网络连接",
+    "queuedHint": "网络恢复后会自动发送。请尽量保持此页面打开。",
+    "queuedSending": "发送中…",
+    "queuedOldTitle": "尚未发送",
+    "queuedOldHint": "已超过 30 分钟没有网络：您还在吗？请发送或删除。",
+    "queuedRefusedTitle": "订单被拒绝",
+    "queuedRefusedHint": "可能有菜品已售罄，或桌位已被释放。请修改您的选择或询问服务员。",
+    "queuedSendAnyway": "仍然发送",
+    "queuedDiscard": "删除"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -3329,5 +3356,11 @@
       "served": "今日已上菜",
       "cancelled": "已取消"
     }
+  },
+  "update": {
+    "title": "有新版本",
+    "body": "RestoCool 刚刚发布了更新。请更新以使用新版本：您正在做的事情不会丢失。",
+    "update": "更新",
+    "later": "稍后"
   }
 }

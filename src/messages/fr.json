@@ -457,7 +457,17 @@
       "empty": "Aucune section trouvée.",
       "hint": "↑ ↓ pour choisir · Entrée pour ouvrir · Échap pour fermer"
     },
-    "promotions": "Promotions"
+    "promotions": "Promotions",
+    "offline": {
+      "title": "Hors ligne",
+      "check": "Vérifiez votre connexion Internet (Wi-Fi ou données mobiles).",
+      "hint": "Vous voyez les dernières données reçues. Vos actions sur les commandes seront envoyées au retour du réseau.",
+      "pending": "{n, plural, one {# action en attente d’envoi.} other {# actions en attente d’envoi.}}",
+      "back": "De nouveau en ligne : tout est synchronisé.",
+      "queued": "Hors ligne : action gardée, elle sera envoyée au retour du réseau.",
+      "skipped": "Une action en attente n’a pas été appliquée : la commande avait déjà changé.",
+      "waiting": "en attente"
+    }
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -1790,7 +1800,24 @@
     "offerUntil": "Jusqu’au {date}",
     "offerAdd": "Ajouter à ma sélection",
     "promoBadge": "Promo",
-    "sponsored": "Sponsorisé"
+    "sponsored": "Sponsorisé",
+    "offTitle": "Hors ligne",
+    "offCheck": "Vérifiez votre connexion Internet (Wi-Fi ou données mobiles).",
+    "offHint": "Le menu reste consultable. Vos commandes partiront dès le retour du réseau.",
+    "offPending": "{n, plural, one {# commande en attente.} other {# commandes en attente.}}",
+    "backOnline": "De nouveau en ligne.",
+    "orderQueued": "Pas de connexion : votre commande est gardée et partira dès le retour du réseau.",
+    "queuedSent": "Commande n° {n} envoyée (le réseau est revenu).",
+    "queuedRefused": "Une commande en attente n’a pas pu être acceptée : voyez « Mes commandes ».",
+    "queuedTitle": "En attente de connexion",
+    "queuedHint": "Elle partira toute seule dès le retour du réseau. Gardez cette page ouverte si possible.",
+    "queuedSending": "Envoi en cours…",
+    "queuedOldTitle": "Pas encore envoyée",
+    "queuedOldHint": "Plus de 30 minutes sans réseau : êtes-vous toujours là ? Envoyez-la ou supprimez-la.",
+    "queuedRefusedTitle": "Commande refusée",
+    "queuedRefusedHint": "Un plat est peut-être épuisé ou la table a été libérée. Modifiez votre sélection ou demandez au serveur.",
+    "queuedSendAnyway": "Envoyer quand même",
+    "queuedDiscard": "Supprimer"
   },
   "seating": {
     "title": "Tables et salles",
@@ -3329,5 +3356,11 @@
       "served": "Servies aujourd’hui",
       "cancelled": "Annulées"
     }
+  },
+  "update": {
+    "title": "Nouvelle version disponible",
+    "body": "Une mise à jour de RestoCool vient d’être publiée. Mettez à jour pour en profiter : rien de ce que vous faites n’est perdu.",
+    "update": "Mettre à jour",
+    "later": "Plus tard"
   }
 }

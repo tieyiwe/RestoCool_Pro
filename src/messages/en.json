@@ -457,7 +457,17 @@
       "empty": "No section found.",
       "hint": "↑ ↓ to choose · Enter to open · Esc to close"
     },
-    "promotions": "Promotions"
+    "promotions": "Promotions",
+    "offline": {
+      "title": "Offline",
+      "check": "Check your Internet connection (Wi-Fi or mobile data).",
+      "hint": "You are seeing the last data received. Your actions on orders will be sent when the network is back.",
+      "pending": "{n, plural, one {# action waiting to be sent.} other {# actions waiting to be sent.}}",
+      "back": "Back online: everything is in sync.",
+      "queued": "Offline: action kept, it will be sent when the network is back.",
+      "skipped": "A waiting action was not applied: the order had already changed.",
+      "waiting": "waiting"
+    }
   },
   "admin": {
     "title": "RestoCool administration",
@@ -1790,7 +1800,24 @@
     "offerUntil": "Until {date}",
     "offerAdd": "Add to my selection",
     "promoBadge": "Promo",
-    "sponsored": "Sponsored"
+    "sponsored": "Sponsored",
+    "offTitle": "Offline",
+    "offCheck": "Check your Internet connection (Wi-Fi or mobile data).",
+    "offHint": "The menu still works. Your orders will be sent as soon as the network is back.",
+    "offPending": "{n, plural, one {# order waiting.} other {# orders waiting.}}",
+    "backOnline": "Back online.",
+    "orderQueued": "No connection: your order is kept and will be sent as soon as the network is back.",
+    "queuedSent": "Order no. {n} sent (the network is back).",
+    "queuedRefused": "An order that was waiting could not be accepted: see « My orders ».",
+    "queuedTitle": "Waiting for a connection",
+    "queuedHint": "It will be sent by itself when the network is back. Keep this page open if you can.",
+    "queuedSending": "Sending…",
+    "queuedOldTitle": "Not sent yet",
+    "queuedOldHint": "More than 30 minutes without network: are you still here? Send it or delete it.",
+    "queuedRefusedTitle": "Order refused",
+    "queuedRefusedHint": "A dish may be sold out or the table was freed. Change your selection or ask the server.",
+    "queuedSendAnyway": "Send anyway",
+    "queuedDiscard": "Delete"
   },
   "seating": {
     "title": "Tables and rooms",
@@ -3329,5 +3356,11 @@
       "served": "Served today",
       "cancelled": "Cancelled"
     }
+  },
+  "update": {
+    "title": "New version available",
+    "body": "An update of RestoCool was just published. Update to get it: nothing you are doing is lost.",
+    "update": "Update",
+    "later": "Later"
   }
 }

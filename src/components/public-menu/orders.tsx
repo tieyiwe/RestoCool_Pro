@@ -6,6 +6,9 @@ import type { makeT } from "@/lib/public-menu/translate";
 import type { CartLine } from "@/lib/public-menu/types";
 import { cn } from "@/lib/utils";
 import { deviceId, type MySeat } from "./seating";
+import { OUTBOX_AUTO_MS } from "./outbox-config";
+import { reportNetwork } from "@/components/offline/offline-banner";
+import type { QueuedOrder } from "./outbox";
 
 type T = ReturnType<typeof makeT>;
 type Lang = "fr" | "en" | "zh";
@@ -181,6 +184,7 @@ export async function sendOrder(
       ...Object.fromEntries(Object.entries(extra).filter(([, v]) => v && v.trim())),
     }),
   }).catch(() => null);
+  reportNetwork(Boolean(res));
   if (!res) return { ok: false, error: "network", itemIds: [] };
   const body = (await res.json().catch(() => ({}))) as { order?: CustomerOrder; error?: string; itemIds?: string[] };
   if (res.ok && body.order) return { ok: true, order: body.order };
@@ -242,6 +246,10 @@ export function OrdersList({
   t,
   onShow,
   onHide,
+  pending = [],
+  online = true,
+  onRetry,
+  onDiscard,
 }: {
   orders: CustomerOrder[];
   shared: boolean;
@@ -250,8 +258,13 @@ export function OrdersList({
   onShow: (o: CustomerOrder) => void;
   /** Remove finished orders from this phone's list. */
   onHide?: (ids: string[]) => void;
+  /** Orders confirmed without network, waiting on the phone. */
+  pending?: QueuedOrder[];
+  online?: boolean;
+  onRetry?: (requestId: string) => void;
+  onDiscard?: (requestId: string) => void;
 }) {
-  if (orders.length === 0) return <p className="py-6 text-center text-muted-foreground">{t("noOrders")}</p>;
+  if (orders.length === 0 && pending.length === 0) return <p className="py-6 text-center text-muted-foreground">{t("noOrders")}</p>;
   const when = new Intl.DateTimeFormat(lang === "zh" ? "zh-CN" : lang, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Africa/Ouagadougou" });
   const finishedMine = orders.filter((o) => o.mine && FINISHED.has(o.status));
   // The table bill is this table's orders only, not this phone's earlier visits of the day.
@@ -330,6 +343,42 @@ export function OrdersList({
   );
   return (
     <div className="flex flex-col gap-4">
+      {pending.length > 0 && (
+        <ul className="flex flex-col gap-3" data-testid="pending-orders">
+          {pending.map((q) => {
+            const old = Date.now() - q.queuedAt > OUTBOX_AUTO_MS;
+            return (
+              <li key={q.requestId} className="rounded-xl border-2 border-dashed border-amber-500 bg-amber-50 p-3 text-amber-950 dark:bg-amber-900/30 dark:text-amber-100" data-testid="pending-order" data-state={q.error ? "refused" : old ? "old" : "waiting"}>
+                <p className="font-bold">
+                  {q.error ? `⚠️ ${t("queuedRefusedTitle")}` : old ? `⏸️ ${t("queuedOldTitle")}` : `⏳ ${t("queuedTitle")}`}
+                </p>
+                <p className="text-sm">{q.error ? t("queuedRefusedHint") : old ? t("queuedOldHint") : online ? t("queuedSending") : t("queuedHint")}</p>
+                <ul className="mt-2 text-sm">
+                  {q.summary.map((x, i) => (
+                    <li key={i}>
+                      {x.qty} × {x.code && <span className="opacity-70">{x.code}. </span>}
+                      {pick(x.name as CustomerOrder["items"][number]["name"], lang)}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-1 text-sm font-bold tabular-nums">{q.total > 0 ? formatFCFA(q.total) : t("onRequest")}</p>
+                <div className="mt-2 flex gap-2">
+                  {(old || q.error) && onRetry && (
+                    <button type="button" onClick={() => onRetry(q.requestId)} className="min-h-11 flex-1 rounded-xl bg-[var(--accent)] px-3 text-sm font-bold text-[var(--on-accent)]" data-testid="pending-retry">
+                      {t("queuedSendAnyway")}
+                    </button>
+                  )}
+                  {onDiscard && (
+                    <button type="button" onClick={() => onDiscard(q.requestId)} className="min-h-11 rounded-xl border border-current px-3 text-sm font-semibold" data-testid="pending-discard">
+                      🗑️ {t("queuedDiscard")}
+                    </button>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
       {shared && (
         <div className="rounded-xl bg-muted p-3" data-testid="table-bill">
           <p className="text-sm font-semibold">{t("tableBill")}</p>

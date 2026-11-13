@@ -23,13 +23,15 @@ const VERSION = ${JSON.stringify(version)};
 const PAGES = "rc-menu-pages-" + VERSION;
 const STATIC = "rc-menu-static-" + VERSION;
 const IMAGES = "rc-menu-images-v1";
+// Last answers of the customer's own data (their orders, dish availability): shown when offline.
+const DATA = "rc-menu-data-v1";
 const MAX_IMAGES = 250;
 
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
     for (const key of await caches.keys()) {
-      if (key.startsWith("rc-menu-") && key !== PAGES && key !== STATIC && key !== IMAGES) await caches.delete(key);
+      if (key.startsWith("rc-menu-") && key !== PAGES && key !== STATIC && key !== IMAGES && key !== DATA) await caches.delete(key);
     }
     await self.clients.claim();
   })());
@@ -66,6 +68,19 @@ async function networkFirst(request) {
   }
 }
 
+async function dataNetworkFirst(request) {
+  const cache = await caches.open(DATA);
+  try {
+    const res = await fetch(request);
+    if (res.ok) await cache.put(request, res.clone());
+    return res;
+  } catch (err) {
+    const hit = await cache.match(request);
+    if (hit) return hit;
+    throw err;
+  }
+}
+
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
@@ -73,6 +88,10 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
   if (req.mode === "navigate" && url.pathname.startsWith("/r/")) return event.respondWith(networkFirst(req));
   if (url.pathname.startsWith("/_next/static/")) return event.respondWith(cacheFirst(req, STATIC));
+  // The customer's orders and today's availability: network first, the last copy when offline.
+  if (url.pathname === "/api/public/orders" || /^\\/api\\/public\\/r\\/[^/]+\\/availability$/.test(url.pathname)) {
+    return event.respondWith(dataNetworkFirst(req));
+  }
   if (url.pathname.startsWith("/api/media/") || url.pathname.startsWith("/demo/") || url.pathname.startsWith("/brand/")) {
     return event.respondWith(cacheFirst(req, IMAGES));
   }

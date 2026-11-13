@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { formatFCFA } from "@/lib/format";
 import type { StaffOrder } from "@/lib/orders/serialize";
+import { pendingMoves, staffPost } from "@/lib/offline/staff-outbox";
 import { cn } from "@/lib/utils";
 
 type I18n = { fr: string } & Partial<Record<string, string>>;
@@ -76,8 +77,21 @@ export function useServiceOrders(onNew: (o: StaffOrder, before: StaffOrder["stat
     if (seen.current) for (const o of body.orders) if (seen.current.get(o.id) !== o.status) onNewRef.current(o, seen.current.get(o.id));
     seen.current = new Map(body.orders.map((o) => [o.id, o.status]));
     // First received first: the oldest order is always at the top of each column (priority).
-    setOrders([...body.orders].sort((a, b) => Date.parse(a.sentAt) - Date.parse(b.sentAt)));
+    raw.current = [...body.orders].sort((a, b) => Date.parse(a.sentAt) - Date.parse(b.sentAt));
+    setOrders(withPending(raw.current));
   }, []);
+  // Actions done offline show at once (the card moves and says « en attente »).
+  const raw = useRef<StaffOrder[]>([]);
+  useEffect(() => {
+    const again = () => setOrders((o) => (o === null ? o : withPending(raw.current)));
+    const synced = () => void refresh();
+    window.addEventListener("rc:outbox", again);
+    window.addEventListener("rc:synced", synced);
+    return () => {
+      window.removeEventListener("rc:outbox", again);
+      window.removeEventListener("rc:synced", synced);
+    };
+  }, [refresh]);
 
   useEffect(() => {
     void refresh();
@@ -113,6 +127,13 @@ export function useServiceOrders(onNew: (o: StaffOrder, before: StaffOrder["stat
   }, [refresh]);
 
   return { orders, error, connected, refresh, menuTick };
+}
+
+/** Board orders with the moves still waiting in the offline queue applied (marked `waiting`). */
+function withPending(list: StaffOrder[]): StaffOrder[] {
+  const moves = pendingMoves();
+  if (moves.size === 0) return list;
+  return list.map((o) => (moves.has(o.id) ? { ...o, status: moves.get(o.id) as StaffOrder["status"], waiting: true } : o));
 }
 
 /** Elapsed-time clock for the timers (one tick every 15 s is enough). */
@@ -170,13 +191,8 @@ function chime() {
   navigator.vibrate?.([200, 100, 200]);
 }
 
-async function post(url: string, body: unknown): Promise<{ ok: boolean; error?: string }> {
-  const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).catch(() => null);
-  if (!res) return { ok: false, error: "network" };
-  if (res.ok) return { ok: true };
-  const b = (await res.json().catch(() => ({}))) as { error?: string };
-  return { ok: false, error: b.error ?? "error" };
-}
+/** Every board action goes through the offline queue: without network it waits and leaves later. */
+const post = staffPost;
 
 /* ---------------------------------------------------------------- pieces */
 
@@ -241,8 +257,9 @@ function CancelForm({ onCancel, onClose }: { onCancel: (reason: string) => void;
 }
 
 /** One order on the front desk (or the detail page opened from the customer's QR). */
-export function OrderCard({ order, now, delays, onChanged, big = false, rank }: { order: StaffOrder; now: number; delays: Delays; onChanged: () => void; big?: boolean; /** Place in its column, oldest first (1 = to handle first). */ rank?: number }) {
+export function OrderCard({ order, now, delays, onChanged, big = false, rank }: { order: StaffOrder & { waiting?: boolean }; now: number; delays: Delays; onChanged: () => void; big?: boolean; /** Place in its column, oldest first (1 = to handle first). */ rank?: number }) {
   const t = useTranslations("service");
+  const tOff = useTranslations("app.offline");
   const locale = useLocale();
   const [busy, setBusy] = useState(false);
   const [cancelling, setCancelling] = useState(false);
@@ -252,7 +269,7 @@ export function OrderCard({ order, now, delays, onChanged, big = false, rank }: 
     const r = await post(`/api/app/orders/${order.id}/status`, { to, reason });
     setBusy(false);
     setCancelling(false);
-    setMsg(r.ok ? null : t(r.error === "conflict" ? "conflict" : r.error === "forbidden" ? "forbidden" : "actionError"));
+    setMsg(r.queued ? tOff("queued") : r.ok ? null : t(r.error === "conflict" ? "conflict" : r.error === "forbidden" ? "forbidden" : "actionError"));
     onChanged();
   };
   const perms = useContext(PermsContext);
@@ -280,6 +297,11 @@ export function OrderCard({ order, now, delays, onChanged, big = false, rank }: 
             )}
             {t("number", { n: order.number })}
           </span>
+          {order.waiting && (
+            <span className="rounded-full bg-amber-200 px-2 text-[11px] font-bold text-amber-950" data-testid="order-waiting">
+              ⏳ {tOff("waiting")}
+            </span>
+          )}
           {!done && <Elapsed since={order.sentAt} now={now} delays={delays} />}
         </div>
       </header>

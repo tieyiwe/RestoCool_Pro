@@ -19,19 +19,54 @@ const OFFLINE_HTML = `<!doctype html><html lang="fr"><head><meta charset="utf-8"
 /**
  * Service worker for the staff app (scope /app/).
  * - Next.js static files: cache first (content-addressed), so screens open instantly after the first time.
- * - Pages and APIs: always the network (orders, personnel and money are never served stale or
- *   kept on the device); when offline, a clear « Pas de connexion » page.
+ * - Pages and the service data (orders, one order, floor plan, sold-out list): always the network
+ *   when there is one; offline, the last copy received (at most 24 h old) so the team keeps
+ *   working, else a clear « Pas de connexion » page. Payments, settings and personnel APIs are
+ *   never served from the device. The page erases this copy at sign-out, on a locked tablet and
+ *   when the person or the business changes (src/lib/offline/staff-outbox.ts).
  */
 function script(version: string): string {
   return `
 const VERSION = ${JSON.stringify(version)};
 const STATIC = "rc-app-static-" + VERSION;
+const DATA = "rc-app-data-v1";
+const MAX_AGE = 24 * 3600 * 1000;
+const DATA_API = [/^\\/api\\/app\\/orders$/, /^\\/api\\/app\\/orders\\/(?!export$)[^/]+$/, /^\\/api\\/app\\/floor$/, /^\\/api\\/app\\/sold-out$/];
+
+async function keep(request, res) {
+  if (!res.ok || res.redirected || res.type !== "basic") return;
+  const headers = new Headers(res.headers);
+  headers.set("x-rc-cached-at", String(Date.now()));
+  const copy = new Response(await res.clone().blob(), { status: res.status, statusText: res.statusText, headers });
+  const cache = await caches.open(DATA);
+  await cache.put(request, copy);
+}
+async function lastCopy(request) {
+  const cache = await caches.open(DATA);
+  const hit = await cache.match(request, { ignoreSearch: request.mode === "navigate" ? false : true });
+  if (!hit) return null;
+  const at = Number(hit.headers.get("x-rc-cached-at") || 0);
+  if (Date.now() - at > MAX_AGE) return null;
+  return hit;
+}
+async function networkThenCopy(request, offlinePage) {
+  try {
+    const res = await fetch(request);
+    keep(request, res).catch(() => {});
+    return res;
+  } catch (err) {
+    const hit = await lastCopy(request);
+    if (hit) return hit;
+    if (offlinePage) return new Response(OFFLINE, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    throw err;
+  }
+}
 const OFFLINE = ${JSON.stringify(OFFLINE_HTML)};
 
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
-    for (const key of await caches.keys()) if (key.startsWith("rc-app-") && key !== STATIC) await caches.delete(key);
+    for (const key of await caches.keys()) if (key.startsWith("rc-app-") && key !== STATIC && key !== DATA) await caches.delete(key);
     await self.clients.claim();
   })());
 });
@@ -52,9 +87,8 @@ self.addEventListener("fetch", (event) => {
     })());
     return;
   }
-  if (req.mode === "navigate") {
-    event.respondWith(fetch(req).catch(() => new Response(OFFLINE, { headers: { "Content-Type": "text/html; charset=utf-8" } })));
-  }
+  if (req.mode === "navigate") return event.respondWith(networkThenCopy(req, true));
+  if (DATA_API.some((re) => re.test(url.pathname))) return event.respondWith(networkThenCopy(req, false));
 });
 `;
 }

@@ -1,4 +1,6 @@
 import { Beat } from "@/components/usage/beat";
+import { UpdateWatcher } from "@/components/update-watcher";
+import { buildVersion } from "@/lib/version";
 import type { Metadata, Viewport } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { BRAND } from "@/config/brand";
@@ -30,11 +32,14 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
+  const tu = await getTranslations("update");
   return (
     <html lang={locale}>
       <body className="min-h-dvh antialiased">
         {children}
         <Beat />
+        {/* A new version published: phones and customers reload at a safe moment, owners on a computer get a pop-up. */}
+        <UpdateWatcher version={buildVersion()} text={{ title: tu("title"), body: tu("body"), update: tu("update"), later: tu("later") }} />
       </body>
     </html>
   );
