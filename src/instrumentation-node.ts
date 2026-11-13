@@ -4,6 +4,7 @@ import { getPlatformSettings } from "./lib/platform/settings";
 import { startTrafficClock } from "./lib/usage/presence";
 import { getDb } from "./db";
 import { processDeletions } from "./lib/restaurants/deletion";
+import { sweepAllStale } from "./lib/seating/sessions";
 import { log } from "./lib/log";
 
 /** Node-only start-up work (database access): never bundled for the edge runtime. */
@@ -21,6 +22,14 @@ export function startNode() {
       processDeletions(getDb()).catch((err) => log.warn("deletion.process_failed", { error: err instanceof Error ? err.message : String(err) }));
     }, 5 * 60_000);
     g.__rcDeletionTimer.unref?.();
+  }
+  // Tables and rooms left « occupied » by customers who went away are freed, in every business.
+  const gs = globalThis as unknown as { __rcSeatTimer?: ReturnType<typeof setInterval> };
+  if (!gs.__rcSeatTimer) {
+    gs.__rcSeatTimer = setInterval(() => {
+      sweepAllStale(getDb()).catch((err) => log.warn("seating.sweep_failed", { error: err instanceof Error ? err.message : String(err) }));
+    }, 5 * 60_000);
+    gs.__rcSeatTimer.unref?.();
   }
 }
 

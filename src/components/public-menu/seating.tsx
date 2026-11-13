@@ -139,11 +139,20 @@ export function useSeat({ slug, token, config, onToast, t, hold = false }: { slu
       lastBeat.current = now;
       const s = seatRef.current;
       if (!s) return;
-      void post(`/api/public/sessions/${s.sessionId}/heartbeat`, { slug, deviceId: deviceId() }).then((res) => {
-        if (res.status === 410) {
-          setSeat(null);
-          onToast(t("released"));
+      void post(`/api/public/sessions/${s.sessionId}/heartbeat`, { slug, deviceId: deviceId() }).then(async (res) => {
+        if (res.status !== 410) return;
+        // A table opened from its printed QR was freed while this phone sat quietly: the customer is
+        // still there (they just touched the screen), so rejoin it from the QR address.
+        if (s.source === "qr" && token) {
+          const again = await post("/api/public/sessions", { slug, deviceId: deviceId(), token }).catch(() => null);
+          if (again?.ok) {
+            const body = (await again.json()) as { sessionId: string; seat: MySeat["seat"] };
+            setSeat({ sessionId: body.sessionId, seat: body.seat, source: "qr" });
+            return;
+          }
         }
+        setSeat(null);
+        onToast(t("released"));
       });
     };
 
@@ -189,7 +198,7 @@ export function useSeat({ slug, token, config, onToast, t, hold = false }: { slu
       document.removeEventListener("visibilitychange", onVisible);
       window.clearInterval(id);
     };
-  }, [seat, config.inactivity, leave, onToast, setSeat, slug, t]);
+  }, [seat, config.inactivity, leave, onToast, setSeat, slug, t, token]);
 
   const stillHere = useCallback(() => {
     lastActivity.current = Date.now();

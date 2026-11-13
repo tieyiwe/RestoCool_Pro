@@ -5,7 +5,7 @@ vi.mock("server-only", () => ({}));
 
 const { closeDb, getDb } = await import("@/db");
 const { tenantRepo } = await import("@/db/repos/tenant");
-const { restaurants, seats, tableSessions } = await import("@/db/schema");
+const { orders, restaurants, seats, tableSessions } = await import("@/db/schema");
 const sessions = await import("@/lib/seating/sessions");
 const admin = await import("@/lib/seating/admin");
 const { createRestaurantForUser } = await import("@/lib/restaurants/provision");
@@ -112,6 +112,68 @@ describe.skipIf(!hasDb)("table sessions and seating admin (database)", () => {
     await sessions.sweepStale(getDb(), await reload(r.id), muchLater);
     const stillOpen = await getDb().select().from(tableSessions).where(and(eq(tableSessions.restaurantId, r.id), eq(tableSessions.status, "open")));
     expect(stillOpen).toHaveLength(0);
+  });
+
+  it("tables free themselves: empty QR table 20 min, finished meal 1 h, forgotten orders 12 h; never a table being served", async () => {
+    const db = getDb();
+    const min = 60_000;
+    const seatsOf = await ctx.repo.seating.seats();
+    const open = async (label: string) => {
+      const seat = seatsOf.find((x) => x.label === label)!;
+      const j = await sessions.joinSession(db, r, { seat: { id: seat.id, type: seat.type, label: seat.label }, deviceId: PHONE_B, source: "qr" });
+      return j.ok ? { sessionId: j.sessionId, seatId: seat.id } : null;
+    };
+    let n = 900;
+    const order = (sess: { sessionId: string; seatId: string }, status: "sent" | "served" | "cancelled", at = new Date()) =>
+      db.insert(orders).values({ restaurantId: r.id, sessionId: sess.sessionId, seatId: sess.seatId, businessDate: "2026-11-13", number: n++, status, validationMode: "direct", updatedAt: at, sentAt: at });
+    const status = async (id: string) => (await db.query.tableSessions.findFirst({ where: eq(tableSessions.id, id) }))!;
+    const sweepAt = async (offsetMs: number) => sessions.sweepStale(db, await reload(r.id), new Date(Date.now() + offsetMs));
+
+    // 1. Scanned the table QR, never ordered: still held at 15 min, freed after 20 min.
+    const empty = (await open("1"))!;
+    await sweepAt(15 * min);
+    expect((await status(empty.sessionId)).status).toBe("open");
+    await sweepAt(21 * min);
+    expect(await status(empty.sessionId)).toMatchObject({ status: "closed", closedReason: "expired" });
+
+    // 2. Only a cancelled order counts as « nothing ordered ».
+    const cancelledOnly = (await open("2"))!;
+    await order(cancelledOnly, "cancelled");
+    await sweepAt(21 * min);
+    expect((await status(cancelledOnly.sessionId)).status).toBe("closed");
+
+    // 3. Everything served: held during the meal, freed an hour after the last move.
+    const ate = (await open("4"))!;
+    await order(ate, "served");
+    await sweepAt(45 * min);
+    expect((await status(ate.sessionId)).status).toBe("open");
+    await sweepAt(61 * min);
+    expect(await status(ate.sessionId)).toMatchObject({ status: "closed", closedReason: "finished" });
+
+    // 4. An order in progress keeps the table for hours (the kitchen is on it)…
+    const serving = (await open("5"))!;
+    await order(serving, "sent");
+    await sweepAt(5 * 60 * min);
+    expect((await status(serving.sessionId)).status).toBe("open");
+    // …but a recent move on the order (staff confirmed it late) counts as activity.
+    await db.update(orders).set({ updatedAt: new Date(Date.now() + 11 * 60 * min) }).where(eq(orders.sessionId, serving.sessionId));
+    await sweepAt(13 * 60 * min);
+    expect((await status(serving.sessionId)).status).toBe("open");
+    // 12 h with nothing at all: freed anyway; the order itself is untouched for the staff.
+    await sweepAt(24 * 60 * min);
+    expect(await status(serving.sessionId)).toMatchObject({ status: "closed", closedReason: "stale" });
+    const [kept] = await db.select({ status: orders.status }).from(orders).where(eq(orders.sessionId, serving.sessionId));
+    expect(kept!.status).toBe("sent");
+  });
+
+  it("the 5-minute job sweeps every business without waiting for a customer", async () => {
+    const seat = (await otherCtx.repo.seating.seats()).find((s) => s.type === "table") ?? null;
+    const target = seat ?? (await admin.addSeat(otherCtx, { type: "table", label: "9", areaId: null, capacity: null }));
+    const j = await sessions.joinSession(getDb(), other, { seat: { id: target.id, type: target.type, label: target.label }, deviceId: PHONE_A, source: "qr" });
+    expect(j.ok).toBe(true);
+    expect(await sessions.sweepAllStale(getDb(), new Date(Date.now() + 30 * 60_000))).toBeGreaterThanOrEqual(1);
+    const left = await getDb().select().from(tableSessions).where(and(eq(tableSessions.restaurantId, other.id), eq(tableSessions.status, "open")));
+    expect(left).toHaveLength(0);
   });
 
   it("the picker never exposes QR tokens, and hides printed seats in per-seat mode", async () => {

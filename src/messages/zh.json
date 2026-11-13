@@ -1191,6 +1191,8 @@
       "platform": "Platform"
     },
     "console": {
+      "home": "Platform home",
+      "homeHint": "Open restocool.com in a new tab",
       "badge": "Console",
       "owner": "Owner · all rights",
       "search": "Find a business: name, town, RC-…"

@@ -93,3 +93,15 @@ test("only the RestoCool team: the console lists businesses on the map page and 
   expect(csv.headers()["content-type"]).toContain("text/csv");
   expect(await csv.text()).toContain("Restaurant Démo");
 });
+
+test("console: « Platform home » opens the public home page in a new tab", async ({ page, context }) => {
+  await page.goto("/admin_pro");
+  const link = page.getByTestId("admin-platform-home");
+  await expect(link).toHaveAttribute("href", "/");
+  await expect(link).toHaveAttribute("target", "_blank");
+  const [tab] = await Promise.all([context.waitForEvent("page"), link.click()]);
+  await tab.waitForLoadState();
+  expect(new URL(tab.url()).pathname).toBe("/");
+  await expect(page).toHaveURL(/\/admin_pro/); // the console stays open
+  await tab.close();
+});

@@ -97,6 +97,21 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <input id="console-search" name="q" placeholder={`🔎 ${t("console.search")}`} className="min-h-10 w-full max-w-md rounded-xl border border-border bg-background px-3 text-sm" />
             </form>
             <div className="ml-auto flex items-center gap-3">
+              {/* The public platform, in a new tab (the console stays open). */}
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener"
+                title={t("console.homeHint")}
+                aria-label={t("console.homeHint")}
+                className="flex min-h-9 items-center gap-2 rounded-full border border-border px-3 text-xs font-bold hover:bg-muted"
+                data-testid="admin-platform-home"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element -- tiny static icon */}
+                <img src="/brand/png/app-icon-192.png" alt="" width={18} height={18} className="h-[18px] w-[18px] rounded" />
+                <span className="hidden sm:inline">{t("console.home")}</span>
+                <span aria-hidden>↗</span>
+              </a>
               <form action={adminLangAction} className="flex overflow-hidden rounded-full border border-border text-xs font-bold" data-testid="admin-lang">
                 <input type="hidden" name="back" value="/admin_pro" />
                 {(["en", "fr"] as const).map((l) => (

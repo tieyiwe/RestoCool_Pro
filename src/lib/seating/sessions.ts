@@ -4,9 +4,19 @@ import { and, asc, eq, inArray, isNull, lt, or, sql } from "drizzle-orm";
 import type { DB } from "@/db";
 import { areas, buses, orders, restaurants, seats, sessionDevices, tableSessions, trips } from "@/db/schema";
 import { DEFAULT_INACTIVITY } from "./tables";
+import { notify } from "@/lib/realtime/events";
 
-/** Sessions opened from a printed QR close after this long with no activity (never while orders are in progress). */
-export const QR_SESSION_IDLE_MS = 4 * 60 * 60 * 1000;
+/**
+ * When a table or room frees itself (every business, every seat type). « Activity » = the latest of
+ * a phone touching the menu (heartbeat) and any change to one of the table's orders.
+ *  - Picked from the list, nothing ordered: the inactivity timings (4 min + 30 s by default) + a margin.
+ *  - Opened from its QR, nothing ordered: 20 minutes (a phone still at the table silently rejoins).
+ *  - Everything served, paid or cancelled: 1 hour (the group has eaten and left).
+ *  - Orders forgotten « in progress »: 12 hours (the orders stay on the staff boards).
+ */
+export const EMPTY_SESSION_IDLE_MS = 20 * 60 * 1000;
+export const FINISHED_SESSION_IDLE_MS = 60 * 60 * 1000;
+export const STALE_SESSION_MS = 12 * 60 * 60 * 1000;
 /** Extra margin before the server frees a picker seat whose phone went silent. */
 const PICKER_GRACE_MS = 2 * 60 * 1000;
 /**
@@ -22,38 +32,59 @@ export type JoinResult =
 
 type Restaurant = typeof restaurants.$inferSelect;
 
-/** Close abandoned sessions of one restaurant. Called lazily from the public endpoints. */
-export async function sweepStale(db: DB, r: Restaurant, now = new Date()): Promise<number> {
+/** Close abandoned sessions of one restaurant. Called from the public endpoints, the staff tables page and a 5-minute job. */
+export async function sweepStale(db: DB, r: Pick<Restaurant, "id" | "settings">, now = new Date()): Promise<number> {
   const t = r.settings.inactivity ?? DEFAULT_INACTIVITY;
   const pickerCutoff = new Date(now.getTime() - (t.warnAfterSec + t.releaseAfterSec) * 1000 - PICKER_GRACE_MS);
-  const qrCutoff = new Date(now.getTime() - QR_SESSION_IDLE_MS);
+  const emptyCutoff = new Date(now.getTime() - EMPTY_SESSION_IDLE_MS);
+  const finishedCutoff = new Date(now.getTime() - FINISHED_SESSION_IDLE_MS);
+  const staleCutoff = new Date(now.getTime() - STALE_SESSION_MS);
+  const anyOrder = sql`exists (select 1 from ${orders} where ${orders.sessionId} = ${tableSessions.id} and ${orders.status} <> 'cancelled')`;
+  const inProgress = sql`exists (select 1 from ${orders} where ${orders.sessionId} = ${tableSessions.id} and ${orders.status} in ('sent','confirmed','preparing','ready'))`;
+  const lastMove = sql`greatest(${tableSessions.lastActivityAt}, coalesce((select max(${orders.updatedAt}) from ${orders} where ${orders.sessionId} = ${tableSessions.id}), ${tableSessions.lastActivityAt}))`;
   const stale = await db
-    .select({ id: tableSessions.id, source: tableSessions.source })
+    .select({ id: tableSessions.id })
     .from(tableSessions)
     .where(
       and(
         eq(tableSessions.restaurantId, r.id),
         eq(tableSessions.status, "open"),
         or(
-          // Inactivity release only frees a picker seat before any order is sent from it;
-          // once the table has ordered, it follows the long idle rule like a QR table.
-          and(
-            eq(tableSessions.source, "picker"),
-            lt(tableSessions.lastActivityAt, pickerCutoff),
-            sql`not exists (select 1 from ${orders} where ${orders.sessionId} = ${tableSessions.id} and ${orders.status} <> 'cancelled')`,
-          ),
-          lt(tableSessions.lastActivityAt, qrCutoff),
+          // Nothing ordered yet: a picked seat follows the inactivity timings, a scanned one 20 min.
+          and(sql`not ${anyOrder}`, eq(tableSessions.source, "picker"), lt(tableSessions.lastActivityAt, pickerCutoff)),
+          and(sql`not ${anyOrder}`, lt(tableSessions.lastActivityAt, emptyCutoff)),
+          // Ordered and everything is served / paid / cancelled: free an hour after the last move.
+          and(anyOrder, sql`not ${inProgress}`, sql`${lastMove} < ${finishedCutoff}`),
+          // Orders left « in progress » and nobody touched anything for 12 h.
+          sql`${lastMove} < ${staleCutoff}`,
         ),
-        // A table with orders still in progress stays open whatever the phones do.
-        sql`not exists (select 1 from ${orders} where ${orders.sessionId} = ${tableSessions.id} and ${orders.status} in ('sent','confirmed','preparing','ready'))`,
       ),
     );
   if (stale.length === 0) return 0;
+  const ids = stale.map((s) => s.id);
   await db
     .update(tableSessions)
-    .set({ status: "closed", closedAt: now, closedReason: sql`case when ${tableSessions.source} = 'picker' then 'inactive' else 'expired' end` })
-    .where(and(eq(tableSessions.restaurantId, r.id), inArray(tableSessions.id, stale.map((s) => s.id))));
-  return stale.length;
+    .set({
+      status: "closed",
+      closedAt: now,
+      closedReason: sql`case when ${inProgress} then 'stale' when ${anyOrder} then 'finished' when ${tableSessions.source} = 'picker' then 'inactive' else 'expired' end`,
+    })
+    .where(and(eq(tableSessions.restaurantId, r.id), inArray(tableSessions.id, ids), eq(tableSessions.status, "open")));
+  // Staff screens and the phones still on the page update right away.
+  for (const s of ids) await notify(db, { k: "session", r: r.id, s }).catch(() => {});
+  return ids.length;
+}
+
+/** Every business with open tables (the 5-minute job): nothing waits for a customer to open the menu. */
+export async function sweepAllStale(db: DB, now = new Date()): Promise<number> {
+  const rows = await db
+    .selectDistinct({ id: restaurants.id, settings: restaurants.settings })
+    .from(tableSessions)
+    .innerJoin(restaurants, eq(restaurants.id, tableSessions.restaurantId))
+    .where(eq(tableSessions.status, "open"));
+  let n = 0;
+  for (const r of rows) n += await sweepStale(db, r, now);
+  return n;
 }
 
 /** Find an active seat of this restaurant, by printed token or by id (picker). */

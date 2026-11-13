@@ -1191,6 +1191,8 @@
       "platform": "Plateforme"
     },
     "console": {
+      "home": "Accueil plateforme",
+      "homeHint": "Ouvrir restocool.com dans un nouvel onglet",
       "badge": "Console",
       "owner": "Propriétaire · tous les droits",
       "search": "Trouver un établissement : nom, ville, RC-…"

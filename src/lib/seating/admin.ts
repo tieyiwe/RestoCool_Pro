@@ -3,12 +3,13 @@ import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
 import type { TenantRepo } from "@/db/repos/tenant";
-import { accessCodes, areas, seats, sessionDevices, tableSessions, type I18nText } from "@/db/schema";
+import { accessCodes, areas, restaurants, seats, sessionDevices, tableSessions, type I18nText } from "@/db/schema";
 import { writeAudit } from "@/lib/audit";
 import type { Actor } from "@/lib/auth/can";
 import { NotFoundError } from "@/lib/errors";
 import { notify } from "@/lib/realtime/events";
 import { randomToken } from "@/lib/tokens";
+import { sweepStale } from "./sessions";
 import { tableNumbers } from "./tables";
 
 /** Seating writes. Every id from the browser is re-checked against ctx.repo.restaurantId. */
@@ -184,6 +185,9 @@ export async function syncSingletonSeats(db: DB, restaurantId: string, modes: re
 
 export async function openSessions(ctx: SeatingCtx) {
   const rid = ctx.repo.restaurantId;
+  // Free abandoned tables first, so staff never see a table « occupée » by people who left.
+  const [r] = await ctx.db.select({ id: restaurants.id, settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, rid));
+  if (r) await sweepStale(ctx.db, r);
   const rows = await ctx.db
     .select({
       id: tableSessions.id,
