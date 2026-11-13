@@ -57,6 +57,60 @@ async function applyPending(): Promise<{ applied: number; skipped: number }> {
   return { applied, skipped };
 }
 
+/** Structure-only statements a repair may replay: they create or add, never change or remove. */
+const ADDITIVE = /^\s*(CREATE\s+(TYPE|TABLE|INDEX|UNIQUE\s+INDEX)\b|ALTER\s+TABLE\s+\S+\s+ADD\s+(COLUMN|CONSTRAINT)\b)/i;
+
+/**
+ * Repair: the migration log can say a migration ran while its tables or columns are missing
+ * (an earlier deploy recorded migrations as applied after the host had synced only part of the
+ * structure). Replays, in order, the create/add statements of every migration in one transaction,
+ * skipping what already exists. Indexes that a later migration dropped are never recreated, and
+ * data statements (UPDATE…) are not replayed. Anything else that fails is reported, and the
+ * final column check decides whether the app may start.
+ */
+async function repairStructure(): Promise<number> {
+  const db = getDb();
+  // A brand-new database has nothing to repair: the migrations below build it.
+  const logged = await db.execute<{ n: string }>(sql`select count(*)::text as n from information_schema.tables where table_schema = 'drizzle' and table_name = '__drizzle_migrations'`);
+  if (logged.rows[0]?.n === "0") return 0;
+  const migrations = readMigrationFiles({ migrationsFolder: FOLDER });
+  // Position of the last DROP INDEX of each name: a CREATE before it is outdated (never replayed),
+  // a CREATE after it (the index rebuilt differently) is the current one.
+  const lastDrop = new Map<string, number>();
+  let pos = 0;
+  for (const m of migrations) {
+    for (const stmt of m.sql) {
+      for (const x of stmt.matchAll(/DROP\s+INDEX\s+(?:IF\s+EXISTS\s+)?"?([\w.]+)"?/gi)) lastDrop.set(x[1]!, pos);
+      pos++;
+    }
+  }
+  let created = 0;
+  await db.transaction(async (tx) => {
+    let at = 0;
+    for (const m of migrations) {
+      for (const stmt of m.sql) {
+        const here = at++;
+        if (!ADDITIVE.test(stmt)) continue;
+        const idx = stmt.match(/CREATE\s+(?:UNIQUE\s+)?INDEX\s+(?:IF\s+NOT\s+EXISTS\s+)?"?([\w.]+)"?/i)?.[1];
+        if (idx && here < (lastDrop.get(idx) ?? -1)) continue;
+        await tx.execute(sql.raw("savepoint rc_fix"));
+        try {
+          await tx.execute(sql.raw(stmt));
+          await tx.execute(sql.raw("release savepoint rc_fix"));
+          created++;
+          console.warn(`! repaired: ${stmt.trim().split("\n")[0]!.slice(0, 160)}`);
+        } catch (err) {
+          await tx.execute(sql.raw("rollback to savepoint rc_fix"));
+          if (!ALREADY_EXISTS.has(pgCode(err) ?? "")) {
+            console.warn(`! could not repair (${pgCode(err)}): ${stmt.trim().split("\n")[0]!.slice(0, 160)}`);
+          }
+        }
+      }
+    }
+  });
+  return created;
+}
+
 /** Every table and column defined in src/db/schema must exist, or the app would fail at runtime. */
 async function missingColumns(): Promise<string[]> {
   const db = getDb();
@@ -79,6 +133,8 @@ async function missingColumns(): Promise<string[]> {
 }
 
 async function main() {
+  const repaired = await repairStructure();
+  if (repaired > 0) console.warn(`! ${repaired} missing table(s)/column(s)/index(es) recreated from earlier migrations`);
   const { applied, skipped } = await applyPending();
   if (skipped > 0) console.warn(`! ${skipped} statement(s) skipped: already in the database (structure synced by the host)`);
   const missing = await missingColumns();
