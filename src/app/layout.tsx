@@ -1,14 +1,10 @@
 import { Beat } from "@/components/usage/beat";
 import type { Metadata, Viewport } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Baloo_2, Manrope } from "next/font/google";
 import { BRAND } from "@/config/brand";
 import { OG_BASE, siteBase } from "@/lib/seo/site";
 import "./globals.css";
 
-// Self-hosted at build time by next/font: no request to Google from customers' phones.
-const baloo = Baloo_2({ weight: ["600", "800"], subsets: ["latin", "latin-ext"], display: "swap", variable: "--font-baloo" });
-const manrope = Manrope({ weight: ["500", "700"], subsets: ["latin", "latin-ext"], display: "swap", variable: "--font-manrope" });
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("brand");
@@ -35,7 +31,7 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
   return (
-    <html lang={locale} className={`${baloo.variable} ${manrope.variable}`}>
+    <html lang={locale}>
       <body className="min-h-dvh antialiased">
         {children}
         <Beat />

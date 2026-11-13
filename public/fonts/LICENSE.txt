@@ -1,0 +1,2 @@
+Baloo 2 (Ek Type) and Manrope (Mikhail Sharanda) are licensed under the SIL Open Font License, Version 1.1.
+https://openfontlicense.org — files from Google Fonts (latin and latin-ext subsets, variable weights).
