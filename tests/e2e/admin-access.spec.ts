@@ -9,6 +9,7 @@ test("someone signed in who is not super admin: the whole console is « not foun
     expect(res?.status(), path).toBe(404);
     await expect(page.getByTestId("admin-overview")).toHaveCount(0);
     await expect(page.getByTestId("admin-nav")).toHaveCount(0);
+    await expect(page.getByTestId("admin-tabs")).toHaveCount(0);
   }
   // The data downloads too (CSV of businesses, map positions).
   for (const path of ["/api/admin/businesses", "/api/admin/locations"]) {

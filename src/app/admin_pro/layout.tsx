@@ -74,7 +74,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <UserMenu />
             </div>
           </div>
-          <ConsoleNav groups={groups} label={t("nav")} />
+          <ConsoleNav
+            groups={groups}
+            label={t("nav")}
+            mobile={{
+              menu: t("console.menu"),
+              close: t("console.closeMenu"),
+              search: t("console.search"),
+              person: { name: sa.name ?? sa.email, email: sa.email, role: roleName },
+              links: [
+                { href: "/app", label: t("openApp") },
+                { href: "/", label: t("console.home"), newTab: true },
+              ],
+            }}
+          />
           <div className="mt-auto hidden flex-col gap-3 md:flex">
             <div className="rounded-2xl bg-white/8 p-3">
               <p className="truncate text-sm font-bold text-white">{sa.name ?? sa.email}</p>
@@ -125,7 +138,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               </div>
             </div>
           </header>
-          <main className="min-w-0 flex-1 px-4 py-6 md:px-8 md:py-8">
+          <main className="min-w-0 flex-1 px-4 pt-5 pb-28 md:px-8 md:py-8">
             <div className="mx-auto w-full max-w-7xl">{children}</div>
           </main>
         </div>

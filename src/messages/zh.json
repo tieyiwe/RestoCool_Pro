@@ -51,7 +51,10 @@
       "signIn": "登录",
       "cta": "免费试用",
       "menu": "菜单",
-      "restaurants": "店铺"
+      "restaurants": "店铺",
+      "openMenu": "打开菜单",
+      "closeMenu": "关闭菜单",
+      "ctaShort": "免费试用"
     },
     "hero": {
       "eyebrow": "为布基纳法索的餐厅、小吃店、酒吧、咖啡馆、酒店和商店打造",
@@ -559,7 +562,8 @@
         "name": "Name",
         "orders": "Orders",
         "expiry": "Plan end"
-      }
+      },
+      "more": "Filters"
     },
     "kinds": {
       "restaurant": "Restaurants and others",
@@ -1195,7 +1199,9 @@
       "homeHint": "Open restocool.com in a new tab",
       "badge": "Console",
       "owner": "Owner · all rights",
-      "search": "Find a business: name, town, RC-…"
+      "search": "Find a business: name, town, RC-…",
+      "menu": "Menu",
+      "closeMenu": "Close the menu"
     },
     "deletions": {
       "title": "Deletion requests",

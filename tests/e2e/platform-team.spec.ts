@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { sql } from "./helpers";
+import { consoleNav, sql } from "./helpers";
 
 // One flow per viewport is enough: they share the database.
 test.describe.configure({ mode: "serial" });
@@ -42,7 +42,7 @@ test("collaborators: an owner gives limited access; the collaborator sees only t
   // Act as that collaborator (dev-only cookie).
   await context.addCookies([{ name: "rc_dev_admin_as", value: email, domain: "localhost", path: "/" }]);
   await page.goto("/admin_pro");
-  const nav = page.getByTestId("admin-nav");
+  const nav = await consoleNav(page);
   await expect(nav.getByRole("link", { name: /Requests/ })).toBeVisible();
   await expect(nav.getByRole("link", { name: /Team/ })).toHaveCount(0);
   await expect(nav.getByRole("link", { name: /Settings/ })).toHaveCount(0);
@@ -82,10 +82,12 @@ test("support request: a business reports a blocking problem, TIBLOGICS answers,
 
   // Console: urgent first, with business, person, screen and time.
   await page.goto("/admin_pro/support");
-  const row = page.getByTestId("admin-support-list").getByRole("row").filter({ hasText: subject });
+  // Phones get one card per request, wider screens the table.
+  const phone = (page.viewportSize()?.width ?? 1024) < 768;
+  const row = phone ? page.getByTestId("admin-support-card").filter({ hasText: subject }) : page.getByTestId("admin-support-list").getByRole("row").filter({ hasText: subject });
   await expect(row).toContainText("Restaurant Démo");
   await expect(row).toContainText("Blocking");
-  await row.getByRole("link", { name: subject }).click();
+  await (phone ? row : row.getByRole("link", { name: subject })).click();
   await expect(page.getByTestId("admin-support-business")).toContainText("Restaurant Démo");
   await expect(page.getByTestId("admin-support-request")).toContainText("/app/kitchen");
   await page.getByTestId("admin-support-body").fill("Bonjour, nous regardons. Rechargez la page cuisine.");

@@ -51,7 +51,10 @@
       "signIn": "Sign in",
       "cta": "Try it free",
       "menu": "Menu",
-      "restaurants": "Businesses"
+      "restaurants": "Businesses",
+      "openMenu": "Open the menu",
+      "closeMenu": "Close the menu",
+      "ctaShort": "Try it"
     },
     "hero": {
       "eyebrow": "For restaurants, maquis, bars, cafés, hotels and shops in Burkina Faso",
@@ -559,7 +562,8 @@
         "name": "Name",
         "orders": "Orders",
         "expiry": "Plan end"
-      }
+      },
+      "more": "Filters"
     },
     "kinds": {
       "restaurant": "Restaurants and others",
@@ -1195,7 +1199,9 @@
       "homeHint": "Open restocool.com in a new tab",
       "badge": "Console",
       "owner": "Owner · all rights",
-      "search": "Find a business: name, town, RC-…"
+      "search": "Find a business: name, town, RC-…",
+      "menu": "Menu",
+      "closeMenu": "Close the menu"
     },
     "deletions": {
       "title": "Deletion requests",

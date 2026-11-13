@@ -85,3 +85,12 @@ export async function freeDevOwnerSlots() {
     "delete from restaurants where slug <> 'restaurant-demo' and id in (select restaurant_id from members where clerk_user_id = 'dev-owner' and role = 'owner')",
   );
 }
+
+/** The console navigation for this screen size: the sidebar from tablets up, the « Menu » sheet on phones. */
+export async function consoleNav(page: import("@playwright/test").Page) {
+  if ((page.viewportSize()?.width ?? 1024) < 768) {
+    await page.getByTestId("admin-menu-button").click();
+    return page.getByTestId("admin-menu");
+  }
+  return page.getByTestId("admin-nav");
+}

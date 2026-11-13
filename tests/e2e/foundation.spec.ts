@@ -34,7 +34,7 @@ test.describe("public menu", () => {
     const fish = page.getByTestId("menu-item").filter({ hasText: "Poisson braisé" });
     await expect(fish).toContainText("Sur demande");
     await expect(page.getByText(`0${N}F`, { exact: true })).toHaveCount(0);
-    await expect(page.getByRole("link", { name: "RestoCool" })).toHaveAttribute("href", "https://restocool.com");
+    await expect(page.getByRole("link", { name: "RestoCool", exact: true })).toHaveAttribute("href", "https://restocool.com");
   });
 
   test("has no horizontal scroll", async ({ page }) => {

@@ -22,8 +22,10 @@ export default async function AdminBusinesses({ searchParams }: { searchParams: 
   const f = BusinessFilter.parse(Object.fromEntries(Object.entries(sp).filter(([, v]) => v)));
   const [t, tp, format, rows] = await Promise.all([adminI18n().then((x) => x.t), adminI18n().then((x) => x.tp), adminI18n().then((x) => x.format), listBusinesses(getDb(), f)]);
   const query = new URLSearchParams(Object.entries(f).filter(([, v]) => v && v !== "all") as [string, string][]).toString();
+  // Phones: the search stays visible, the other filters fold behind « Filtres » (open when one is set).
+  const anyFilter = (["plan", "status", "kind", "published"] as const).some((k) => f[k] && f[k] !== "all") || (f.sort && f.sort !== "recent");
   const sel = (name: keyof typeof f, options: readonly string[], label: (v: string) => string) => (
-    <label className="text-sm">
+    <label className="hidden text-sm peer-checked:block sm:block">
       <span className="mb-1 block font-semibold">{t(`filters.${name}`)}</span>
       <select name={name} defaultValue={f[name]} className={field}>
         {options.map((o) => (
@@ -48,7 +50,11 @@ export default async function AdminBusinesses({ searchParams }: { searchParams: 
       <form className="grid gap-3 rounded-2xl border border-border bg-surface p-3 sm:grid-cols-3 lg:grid-cols-[2fr_repeat(5,1fr)_auto] lg:items-end" data-testid="admin-filters">
         <label className="text-sm sm:col-span-3 lg:col-span-1">
           <span className="mb-1 block font-semibold">{t("filters.q")}</span>
-          <input name="q" defaultValue={f.q} placeholder={t("filters.qPlaceholder")} className={field} data-testid="admin-search" />
+          <input name="q" type="search" defaultValue={f.q} placeholder={t("filters.qPlaceholder")} className={field} data-testid="admin-search" />
+        </label>
+        <input type="checkbox" id="more-filters" className="peer sr-only" defaultChecked={anyFilter} />
+        <label htmlFor="more-filters" className="flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-border px-4 text-sm font-semibold peer-focus-visible:ring-2 sm:hidden" data-testid="admin-more-filters">
+          ⚙️ {t("filters.more")}
         </label>
         {sel("plan", ["all", "gratuit", "pro", "business"], (v) => tp(v))}
         {sel("status", ["all", "trial", "active", "past_due", "suspended"], (v) => tp(v))}
@@ -61,7 +67,43 @@ export default async function AdminBusinesses({ searchParams }: { searchParams: 
       {rows.length === 0 ? (
         <p className="rounded-2xl border border-border bg-surface p-6 text-center text-muted-foreground">{t("businesses.none")}</p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
+        <>
+        {/* Phones: one card per business (the table needs a wide screen). */}
+        <ul className="flex flex-col gap-2 md:hidden" data-testid="admin-business-cards">
+          {rows.map((b) => (
+            <li key={b.id}>
+              <Link href={`/admin_pro/businesses/${b.id}`} className="flex flex-col gap-1.5 rounded-2xl border border-border bg-surface p-3 active:bg-muted" data-testid="admin-business-card">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="font-bold">
+                    {b.kind === "transport" ? "🚌 " : ""}
+                    {b.name}
+                  </p>
+                  <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${STATUS_TONE[b.status] ?? ""}`}>
+                    {tp(b.plan)} · {tp(b.status)}
+                  </span>
+                </div>
+                <p className="flex flex-wrap gap-x-2 text-xs text-muted-foreground">
+                  <span>{b.city ?? "—"}</span>
+                  {b.rc && <span className="font-mono">RC-{b.rc}</span>}
+                  {!b.published && <span className="font-semibold text-amber-700">{t("draft")}</span>}
+                  {!b.setupDone && <span>{t("setupPending")}</span>}
+                  {b.featuredRank && <span>★ {b.featuredRank}</span>}
+                </p>
+                {(b.ownerName || b.ownerEmail) && <p className="truncate text-xs">👤 {b.ownerName ?? b.ownerEmail}</p>}
+                <p className="flex flex-wrap gap-x-3 text-xs">
+                  <span>
+                    {t("cols.orders30")} <b className="tabular-nums">{b.orders30}</b>
+                  </span>
+                  <span>
+                    {t("cols.gmv30")} <b className="tabular-nums">{formatFCFA(b.gmv30) ?? "0 F"}</b>
+                  </span>
+                  <span className="text-muted-foreground">{b.lastOrderAt ? format.relativeTime(b.lastOrderAt) : "—"}</span>
+                </p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="hidden overflow-x-auto rounded-2xl border border-border bg-surface md:block">
           <table className="w-full min-w-[56rem] text-left text-sm">
             <thead className="bg-muted text-xs uppercase">
               <tr>
@@ -109,6 +151,7 @@ export default async function AdminBusinesses({ searchParams }: { searchParams: 
             </tbody>
           </table>
         </div>
+        </>
       )}
     </div>
   );

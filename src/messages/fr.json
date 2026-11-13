@@ -51,7 +51,10 @@
       "signIn": "Se connecter",
       "cta": "Essayer gratuitement",
       "menu": "Menu",
-      "restaurants": "Explorer"
+      "restaurants": "Explorer",
+      "openMenu": "Ouvrir le menu",
+      "closeMenu": "Fermer le menu",
+      "ctaShort": "Essayer"
     },
     "hero": {
       "eyebrow": "Pour les restaurants, maquis, bars, cafés, hôtels et commerces du Burkina",
@@ -559,7 +562,8 @@
         "name": "Nom",
         "orders": "Commandes",
         "expiry": "Fin d’abonnement"
-      }
+      },
+      "more": "Filtres"
     },
     "kinds": {
       "restaurant": "Restaurant et autres",
@@ -1195,7 +1199,9 @@
       "homeHint": "Ouvrir restocool.com dans un nouvel onglet",
       "badge": "Console",
       "owner": "Propriétaire · tous les droits",
-      "search": "Trouver un établissement : nom, ville, RC-…"
+      "search": "Trouver un établissement : nom, ville, RC-…",
+      "menu": "Menu",
+      "closeMenu": "Fermer le menu"
     },
     "deletions": {
       "title": "Demandes de suppression",

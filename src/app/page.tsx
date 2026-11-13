@@ -27,6 +27,7 @@ import { Logo } from "@/components/brand/logo";
 import { DemoShowcase } from "@/components/demo/demo-showcase";
 import { PhoneMock } from "@/components/landing/phone-mock";
 import { LocaleSwitcher } from "@/components/locale-switcher";
+import { MobileMenu } from "@/components/marketing/mobile-menu";
 import { LEGAL } from "@/config/legal";
 import { LANDING_FEATURES, LOCAL_CLAIMS } from "@/config/marketing";
 import { PLANS } from "@/config/plans";
@@ -50,9 +51,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const primaryBtn =
-  "inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-or px-6 text-base font-bold text-encre shadow-lg shadow-or/20 transition hover:-translate-y-0.5 hover:shadow-xl";
+  "inline-flex min-h-12 items-center justify-center gap-2 text-center sm:whitespace-nowrap rounded-xl bg-or px-6 text-base font-bold text-encre shadow-lg shadow-or/20 transition hover:-translate-y-0.5 hover:shadow-xl";
 const ghostBtn =
-  "inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-creme/30 px-6 text-base font-bold text-creme transition hover:bg-creme/10";
+  "inline-flex min-h-12 items-center justify-center gap-2 text-center sm:whitespace-nowrap rounded-xl border border-creme/30 px-6 text-base font-bold text-creme transition hover:bg-creme/10";
 const section = "mx-auto w-full max-w-6xl px-4 sm:px-6";
 
 /**
@@ -150,9 +151,26 @@ export default async function HomePage() {
             <Link href="/sign-in" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold whitespace-nowrap hover:bg-sable md:flex">
               {t("nav.signIn")}
             </Link>
-            <Link href="/sign-up" className="inline-flex min-h-11 items-center rounded-xl bg-vert px-4 text-sm font-bold whitespace-nowrap text-creme hover:opacity-90">
-              {t("nav.cta")}
+            <Link href="/sign-up" className="inline-flex min-h-11 items-center rounded-xl bg-vert px-3 text-sm font-bold whitespace-nowrap text-creme hover:opacity-90 sm:px-4">
+              <span className="sm:hidden">{t("nav.ctaShort")}</span>
+              <span className="hidden sm:inline">{t("nav.cta")}</span>
             </Link>
+            {/* Phones and tablets: every link of the desktop menu, in one panel. */}
+            <MobileMenu
+              links={[
+                { href: "#features", label: t("nav.features"), icon: "✨" },
+                { href: "#how", label: t("nav.how"), icon: "🧭" },
+                { href: "/restaurants", label: t("nav.restaurants"), icon: "🍽️" },
+                { href: "/c", label: tc("short"), icon: "🔢" },
+                { href: "#pricing", label: t("nav.pricing"), icon: "💰" },
+                { href: "#faq", label: t("nav.faq"), icon: "❓" },
+              ]}
+              signIn={{ href: "/sign-in", label: t("nav.signIn") }}
+              cta={{ href: "/sign-up", label: t("nav.cta") }}
+              labels={{ open: t("nav.openMenu"), close: t("nav.closeMenu"), title: t("nav.menu") }}
+            >
+              <LocaleSwitcher />
+            </MobileMenu>
           </div>
         </div>
       </header>
@@ -165,8 +183,8 @@ export default async function HomePage() {
             <div className="absolute -right-24 -bottom-40 h-[26rem] w-[26rem] rounded-full bg-or/20 blur-3xl" />
             <div className="rc-weave absolute inset-0 opacity-20" />
           </div>
-          <div className={cn(section, "relative grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.15fr_1fr] lg:py-24")}>
-            <div className="flex flex-col items-start gap-6">
+          <div className={cn(section, "relative grid grid-cols-1 items-center gap-12 py-12 sm:py-20 lg:grid-cols-[1.15fr_1fr] lg:py-24")}>
+            <div className="flex min-w-0 flex-col items-start gap-6">
               {LOCAL_CLAIMS.founderBurkinabe ? (
                 <LocalBadge label={tb("local")} />
               ) : (

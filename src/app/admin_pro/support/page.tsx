@@ -53,7 +53,31 @@ export default async function AdminSupport({ searchParams }: { searchParams: Pro
       {list.length === 0 ? (
         <p className="rounded-2xl border border-border bg-surface p-6 text-center text-muted-foreground">{t("support.none")}</p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
+        <>
+        {/* Phones: one card per request, urgency and status first. */}
+        <ul className="flex flex-col gap-2 md:hidden" data-testid="admin-support-cards">
+          {list.map((r) => (
+            <li key={r.id}>
+              <Link href={`/admin_pro/support/${r.id}`} className="flex flex-col gap-1.5 rounded-2xl border border-border bg-surface p-3 active:bg-muted" data-testid="admin-support-card">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${URGENCY_CHIP[r.urgency as "low"] ?? ""}`}>{t(`support.urgencies.${r.urgency as "low"}`)}</span>
+                  <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${STATUS_CHIP[r.status] ?? ""}`}>{t(`support.statuses.${r.status as "new"}`)}</span>
+                  <span className="ml-auto text-xs text-muted-foreground">{format.relativeTime(r.createdAt)}</span>
+                </div>
+                <p className="font-semibold text-primary">{r.subject}</p>
+                <p className="text-sm">
+                  {r.business ?? <span className="text-amber-700">{t("support.noMatch", { rc: r.rcCode ?? "—" })}</span>}
+                  {r.city && <span className="text-muted-foreground"> · {r.city}</span>}
+                </p>
+                <p className="font-mono text-xs text-muted-foreground">
+                  {r.ref} · {t(`support.categories.${r.category as "bug"}`)} · {r.name}
+                  {r.assignedTo ? ` → ${r.assignedTo.split("@")[0]}` : ""}
+                </p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="hidden overflow-x-auto rounded-2xl border border-border bg-surface md:block">
           <table className="w-full min-w-[820px] text-sm" data-testid="admin-support-list">
             <thead className="border-b border-border text-left text-xs text-muted-foreground">
               <tr>
@@ -101,6 +125,7 @@ export default async function AdminSupport({ searchParams }: { searchParams: Pro
             </tbody>
           </table>
         </div>
+        </>
       )}
     </div>
   );

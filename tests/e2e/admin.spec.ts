@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { sql } from "./helpers";
+import { consoleNav, sql } from "./helpers";
 
 test.describe.configure({ mode: "serial" });
 
@@ -17,11 +17,14 @@ test("super admin: overview, find a business by name, record a payment, suspend 
     await page.getByTestId("admin-lang").getByRole("button", { name: "fr" }).click();
     await expect(page.getByTestId("admin-funnel")).toContainText("Première commande");
 
-    await page.getByTestId("admin-nav").getByRole("link", { name: /Établissements/ }).click();
+    await (await consoleNav(page)).getByRole("link", { name: /Établissements/ }).click();
     await page.getByTestId("admin-search").fill("Témoin");
     await page.getByTestId("admin-filters").getByRole("button", { name: "Filtrer" }).click();
-    await expect(page.getByTestId("admin-business-row")).toHaveCount(1);
-    await page.getByTestId("admin-business-row").getByRole("link").first().click();
+    // Phones get one card per business, wider screens the table.
+    const phone = (page.viewportSize()?.width ?? 1024) < 768;
+    const row = page.getByTestId(phone ? "admin-business-card" : "admin-business-row");
+    await expect(row).toHaveCount(1);
+    await (phone ? row : row.getByRole("link").first()).click();
     await expect(page.getByTestId("admin-business")).toBeVisible();
 
     // A payment received by Orange Money: the plan becomes active.
