@@ -1282,6 +1282,47 @@
       "enabled": "Reviews on",
       "disabled": "Reviews switched off by the business",
       "seeAll": "See all of this business's reviews"
+    },
+    "features": {
+      "title": "Feature usage",
+      "period": "Last 30 days",
+      "version": "running version {v}",
+      "shared": {
+        "title": "Shared selections",
+        "created": "Links created",
+        "sent": "Sent as one order",
+        "stopped": "Stopped without order",
+        "guests": "Friends who joined",
+        "lines": "Dishes in shared orders (with names)",
+        "openNow": "Open right now",
+        "businesses": "Businesses using it"
+      },
+      "tables": {
+        "title": "Tables & rooms",
+        "openNow": "Occupied now",
+        "released": "« Table libérée » by staff",
+        "byCustomer": "Left by the customer",
+        "auto": "Freed automatically",
+        "finished": "· after service (1 h)",
+        "inactive": "· nobody ordered",
+        "stale": "· forgotten orders (12 h)"
+      },
+      "reviews": {
+        "title": "Reviews",
+        "count": "Reviews received",
+        "average": "Average (all)",
+        "hidden": "Hidden by the business",
+        "deleted": "Deleted by the business"
+      },
+      "switches": {
+        "reviewsOff": "Businesses with reviews off",
+        "attendanceOff": "Businesses with check-in off",
+        "reviewsOffOne": "Reviews on",
+        "attendanceOffOne": "Check-in on"
+      },
+      "yes": "Yes",
+      "no": "No",
+      "offlineNote": "Offline mode and automatic updates work on the phones themselves: orders made without network arrive like any other once the phone is back online, and every screen moves to the running version by itself."
     }
   },
   "demo": {
@@ -1865,7 +1906,42 @@
     "reviewNamePh": "Your first name (optional)",
     "reviewSend": "Send my review",
     "reviewThanks": "Thank you for your review!",
-    "reviewError": "The review could not be sent. Try again."
+    "reviewError": "The review could not be sent. Try again.",
+    "shareStart": "Share my selection with my table",
+    "shareExplain": "Send a link to your friends at the table (by WhatsApp!). Everyone adds their dishes from their own phone, with their name. Only you confirm the order.",
+    "shareYourName": "Your first name",
+    "shareNamePlaceholder": "E.g. Awa",
+    "shareCreate": "Create the link and send it",
+    "shareError": "Couldn't create the link. Check your connection and try again.",
+    "shareText": "{name} invites you to choose your dishes at {business}: open the link, enter your name and add your choices.",
+    "shareLiveTitle": "Selection shared with the table",
+    "shareWaiting": "Link sent. Your friends' choices will appear here.",
+    "shareCount": "{n} person(s) · {done} done",
+    "shareGuest": "Guest",
+    "shareHostTag": "started the selection",
+    "shareDone": "Done",
+    "shareChoosing": "Still choosing",
+    "shareNothingYet": "Nothing chosen yet",
+    "shareAgain": "Send the link again",
+    "shareCopy": "Copy link",
+    "shareCopied": "Link copied",
+    "shareStop": "Stop sharing",
+    "shareHostOnly": "Only you choose the place, takeaway and confirm the order. Each person's name goes with their dishes.",
+    "shareMine": "My choices ({name})",
+    "shareTooMany": "Too many dishes for one order (50 lines max). Send part of them first.",
+    "shareHostDefault": "your friend",
+    "shareGateTitle": "{host} invites you to choose your dishes at {business}",
+    "shareGateHint": "Enter your first name: everyone will see who chose what.",
+    "shareGateGo": "Continue and choose my dishes",
+    "shareGuestTitle": "You are adding your choices to {host}'s selection",
+    "shareGuestHint": "Your dishes are saved under {name}. When you're done, tap “I'm done choosing”: {host} will confirm the order.",
+    "shareFinish": "I'm done choosing",
+    "shareGuestDone": "Got it! {host} sees your choices and will confirm the order.",
+    "shareEditChoices": "Change my choices",
+    "shareOthersTitle": "The table's choices",
+    "shareSentBy": "{host} confirmed the order. Enjoy your meal!",
+    "shareClosedBy": "{host} stopped sharing.",
+    "shareBanner": "{name}, you are choosing with {host}"
   },
   "seating": {
     "title": "Tables and rooms",

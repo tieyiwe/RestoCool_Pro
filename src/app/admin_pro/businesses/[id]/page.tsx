@@ -12,6 +12,8 @@ import { hasPerm } from "@/lib/admin/access";
 import { businessesLive, ordersNow } from "@/lib/admin/live";
 import { livePresence } from "@/lib/usage/presence";
 import { platformReviews, reviewsEnabled } from "@/lib/reviews";
+import { featureUsage } from "@/lib/admin/features";
+import { FeatureUsageCard } from "@/components/admin/feature-usage";
 import { formatBfPhone, formatFCFA, telHref, whatsappHref } from "@/lib/format";
 import {
   changePlanAction,
@@ -57,6 +59,7 @@ export default async function AdminBusiness({
   const [liveRow] = await businessesLive(getDb(), livePresence(), { restaurantId: d.r.id });
   const now = await ordersNow(getDb(), d.r.id);
   const rv = await platformReviews(getDb(), { restaurantId: d.r.id, limit: 5 });
+  const usage = await featureUsage(getDb(), d.r.id);
   const [t, tp, format, locale] = await Promise.all([
     adminI18n().then((x) => x.t),
     adminI18n().then((x) => x.tp),
@@ -218,6 +221,8 @@ export default async function AdminBusiness({
           </div>
         ))}
       </section>
+
+      <FeatureUsageCard u={usage} t={t as never} perBusiness />
 
       {/* Customer reviews: everything left, including what the business hid or deleted. */}
       <section className="rounded-2xl border border-border bg-surface p-4" data-testid="admin-business-reviews">

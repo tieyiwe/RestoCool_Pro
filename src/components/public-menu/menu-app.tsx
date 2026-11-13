@@ -10,6 +10,7 @@ import { makeT, type Messages } from "@/lib/public-menu/translate";
 import type { CartLine, PublicItem, PublicMenuData } from "@/lib/public-menu/types";
 import { cn } from "@/lib/utils";
 import { useOrderOutbox, type QueuedOrder } from "./outbox";
+import { GuestBanner, GuestNameGate, GuestShare, HostShare, useAutoSave, useSharedSelection } from "./shared-selection";
 import { ReviewsSection, Stars, useReviews } from "./reviews";
 import { OfflineBanner } from "@/components/offline/offline-banner";
 import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHiddenOrders, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
@@ -330,6 +331,12 @@ export function MenuApp({
   });
   // Customer reviews (the business may switch them off): visible ones + which of my orders I reviewed.
   const reviewsState = useReviews(data.slug, data.features.reviews && !data.preview);
+  // « Sélection partagée »: friends at the table add their dishes from their own phone (by link);
+  // only the person who started sends the order. Everyone's name goes with their dishes.
+  const shared = useSharedSelection(data.slug);
+  useAutoSave(shared, lines);
+  const guest = shared.role === "guest";
+  const canShare = seating.enabled && !data.preview && !seating.transport;
   // Orders confirmed without network wait on the phone and leave by themselves when it comes back.
   const outbox = useOrderOutbox(
     data.slug,
@@ -389,8 +396,18 @@ export function MenuApp({
       flash(t(seating.pickerAvailable ? "chooseSeatFirst" : "scanTableFirst"));
       return;
     }
-    const valid = lines.filter((l) => lineMatchesMenu(items, l));
+    if (guest) return; // only the person who started the shared selection sends it
+    // Shared selection: everyone's dishes go in one order, each with the person's name as a note
+    // (the staff and the ticket show who ordered what).
+    const sharing = shared.role === "host" && shared.open;
+    const named = (l: CartLine, who: string | null | undefined): CartLine => {
+      if (!sharing || !who) return l;
+      return { ...l, note: `${who}${l.note ? ` · ${l.note}` : ""}`.slice(0, 140) };
+    };
+    const guestNamed = shared.others.flatMap((m) => m.lines.map((l) => named({ ...l, key: `${m.id}:${l.key}` }, m.name)));
+    const valid = [...lines.map((l) => named(l, shared.me?.name ?? shared.view?.hostName)), ...guestNamed].filter((l) => lineMatchesMenu(items, l));
     if (valid.length === 0) return;
+    if (valid.length > 50) return flash(t("shareTooMany"));
     setSending(true);
     // Same selection resent (no answer last time) → same request id → never a duplicate order.
     requestIdRef.current ??= newRequestId();
@@ -418,6 +435,7 @@ export function MenuApp({
       };
       outbox.add(q);
       requestIdRef.current = null;
+      if (sharing) void shared.finish(null);
       setLines([]);
       openPanel({ type: "orders" });
       flash(t("orderQueued"));
@@ -425,6 +443,7 @@ export function MenuApp({
     }
     if (res.ok) {
       requestIdRef.current = null;
+      if (sharing) void shared.finish(res.order.id);
       history.addOrder(res.order.number, valid);
       setLines([]);
       writeStore("local", trackKey, String(Date.now()));
@@ -471,7 +490,8 @@ export function MenuApp({
     [data.categories, query, filters],
   );
   const photos = useMemo(() => (lowData ? [] : categories.flatMap((c) => c.items).filter((i) => i.photoUrl)), [categories, lowData]);
-  const totals = cartTotals(items, lines);
+  // The host's total includes the dishes their friends added (guests see only their own).
+  const totals = cartTotals(items, guest ? lines : [...lines, ...shared.guestLines]);
   // No opening hours entered: say nothing rather than « Fermé ».
   const status = now && data.hours.length ? openStatus(data.hours, now) : null;
   const accentStyle = {
@@ -598,6 +618,7 @@ export function MenuApp({
           text={{ title: t("offTitle"), check: t("offCheck"), hint: t("offHint"), pending: t("offPending", { n: outbox.queue.filter((q) => !q.error).length }), back: t("backOnline") }}
           pending={outbox.queue.filter((q) => !q.error).length}
         />
+        <GuestBanner shared={shared} t={t} />
         <div className="mx-auto flex max-w-3xl items-center gap-2 px-3 pt-2">
           {/* Small RestoCool button: back to the platform (home page, other businesses). */}
           <a
@@ -840,10 +861,14 @@ export function MenuApp({
               🕘 {t("previousSelections")} ({history.entries.length})
             </button>
           )}
-          {lines.length === 0 ? (
-            <p className="py-6 text-center text-muted-foreground">{t("emptySelection")}</p>
+          {lines.length === 0 && shared.guestLines.length === 0 ? (
+            <>
+              <p className="py-6 text-center text-muted-foreground">{t("emptySelection")}</p>
+              {guest ? <GuestShare shared={shared} lines={lines} items={items} lang={lang} t={t} /> : canShare && <HostShare shared={shared} lines={lines} items={items} lang={lang} t={t} businessName={data.name} />}
+            </>
           ) : (
             <>
+              {shared.open && lines.length > 0 && <p className="text-sm font-bold" data-testid="my-choices">{t("shareMine", { name: shared.me?.name ?? shared.view?.hostName ?? "" })}</p>}
               <ul className="flex flex-col divide-y divide-border">
                 {lines.map((l) => {
                   const item = items.get(l.itemId);
@@ -895,7 +920,8 @@ export function MenuApp({
                 <span className="tabular-nums">{totals.total === 0 && totals.hasOnRequest ? t("onRequest") : formatFCFA(totals.total)}</span>
               </p>
               {totals.hasOnRequest && <p className="text-sm text-muted-foreground">{t("plusOnRequest")}</p>}
-              {seating.enabled && !seat && quickTakeaway && (
+              {guest ? <GuestShare shared={shared} lines={lines} items={items} lang={lang} t={t} /> : canShare && <HostShare shared={shared} lines={lines} items={items} lang={lang} t={t} businessName={data.name} />}
+              {!guest && seating.enabled && !seat && quickTakeaway && (
                 <div className="mt-4" data-testid="order-mode">
                   <p className="mb-2 font-semibold">{t("howToOrder")}</p>
                   <div className="grid grid-cols-2 gap-2">
@@ -916,7 +942,7 @@ export function MenuApp({
                   </div>
                 </div>
               )}
-              {seating.enabled ? (
+              {guest ? null : seating.enabled ? (
                 <>
                   {seat && <OrderDetailsFields seat={seat} t={t} values={details} onChange={(v) => setDetails((d) => ({ ...d, ...v }))} />}
                   {seat && <p className="mt-3 text-sm text-muted-foreground">{t("orderFor", { seat: `${t(`seat_${seat.seat.type}`)} ${["table", "room", "area"].includes(seat.seat.type) ? seat.seat.label : ""}`.trim() })}</p>}
@@ -925,7 +951,7 @@ export function MenuApp({
                 <p className="mt-3 rounded-lg bg-muted p-3 text-sm">{t("showWaiterHint")}</p>
               )}
               <div className="mt-4 flex flex-col gap-2">
-                {seating.enabled && (
+                {!guest && seating.enabled && (
                   <button
                     type="button"
                     onClick={() => void submitOrder()}
@@ -937,7 +963,7 @@ export function MenuApp({
                     {sending ? t("sending") : seat ? `✓ ${t("sendOrder")}` : `📍 ${t(seating.pickerAvailable ? "chooseSeatToOrder" : "scanTableFirst")}`}
                   </button>
                 )}
-                {data.features.takeawayWhatsapp && (
+                {!guest && data.features.takeawayWhatsapp && (
                   <button
                     type="button"
                     onClick={() => openPanel({ type: "takeaway" })}
@@ -955,6 +981,7 @@ export function MenuApp({
           )}
         </Sheet>
       )}
+      <GuestNameGate shared={shared} t={t} businessName={data.name} />
       {panel?.type === "orders" && (
         <Sheet title={t("myOrders")} onClose={closePanel} t={t} testId="orders-sheet">
           <OrdersList

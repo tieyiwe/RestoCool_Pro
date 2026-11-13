@@ -1282,6 +1282,47 @@
       "enabled": "Reviews on",
       "disabled": "Reviews switched off by the business",
       "seeAll": "See all of this business's reviews"
+    },
+    "features": {
+      "title": "Feature usage",
+      "period": "Last 30 days",
+      "version": "running version {v}",
+      "shared": {
+        "title": "Shared selections",
+        "created": "Links created",
+        "sent": "Sent as one order",
+        "stopped": "Stopped without order",
+        "guests": "Friends who joined",
+        "lines": "Dishes in shared orders (with names)",
+        "openNow": "Open right now",
+        "businesses": "Businesses using it"
+      },
+      "tables": {
+        "title": "Tables & rooms",
+        "openNow": "Occupied now",
+        "released": "« Table libérée » by staff",
+        "byCustomer": "Left by the customer",
+        "auto": "Freed automatically",
+        "finished": "· after service (1 h)",
+        "inactive": "· nobody ordered",
+        "stale": "· forgotten orders (12 h)"
+      },
+      "reviews": {
+        "title": "Reviews",
+        "count": "Reviews received",
+        "average": "Average (all)",
+        "hidden": "Hidden by the business",
+        "deleted": "Deleted by the business"
+      },
+      "switches": {
+        "reviewsOff": "Businesses with reviews off",
+        "attendanceOff": "Businesses with check-in off",
+        "reviewsOffOne": "Reviews on",
+        "attendanceOffOne": "Check-in on"
+      },
+      "yes": "Yes",
+      "no": "No",
+      "offlineNote": "Offline mode and automatic updates work on the phones themselves: orders made without network arrive like any other once the phone is back online, and every screen moves to the running version by itself."
     }
   },
   "demo": {
@@ -1865,7 +1906,42 @@
     "reviewNamePh": "您的名字（可选）",
     "reviewSend": "发送评价",
     "reviewThanks": "感谢您的评价！",
-    "reviewError": "评价发送失败，请重试。"
+    "reviewError": "评价发送失败，请重试。",
+    "shareStart": "与同桌分享我的选择",
+    "shareExplain": "把链接发给同桌的朋友（可用 WhatsApp）。每人用自己的手机加菜并写上名字。只有您可以确认订单。",
+    "shareYourName": "您的名字",
+    "shareNamePlaceholder": "例如：Awa",
+    "shareCreate": "生成链接并发送",
+    "shareError": "无法生成链接。请检查网络后重试。",
+    "shareText": "{name} 邀请您在 {business} 点菜：打开链接，填写名字并添加您的选择。",
+    "shareLiveTitle": "与同桌共享的选择",
+    "shareWaiting": "链接已发送。朋友们的选择会显示在这里。",
+    "shareCount": "{n} 人 · {done} 人已完成",
+    "shareGuest": "客人",
+    "shareHostTag": "发起人",
+    "shareDone": "已完成",
+    "shareChoosing": "还在选",
+    "shareNothingYet": "还没有选菜",
+    "shareAgain": "再次发送链接",
+    "shareCopy": "复制链接",
+    "shareCopied": "链接已复制",
+    "shareStop": "停止分享",
+    "shareHostOnly": "只有您可以选择座位、外带并确认订单。每个人的名字会附在其菜品上。",
+    "shareMine": "我的选择（{name}）",
+    "shareTooMany": "一个订单菜品太多（最多 50 行）。请先发送一部分。",
+    "shareHostDefault": "您的朋友",
+    "shareGateTitle": "{host} 邀请您在 {business} 点菜",
+    "shareGateHint": "请填写名字：大家都能看到谁点了什么。",
+    "shareGateGo": "继续并点菜",
+    "shareGuestTitle": "您正在向 {host} 的选择中加菜",
+    "shareGuestHint": "您的菜品以 {name} 的名字保存。选好后请点“我选好了”：{host} 会确认订单。",
+    "shareFinish": "我选好了",
+    "shareGuestDone": "好的！{host} 能看到您的选择并会确认订单。",
+    "shareEditChoices": "修改我的选择",
+    "shareOthersTitle": "同桌的选择",
+    "shareSentBy": "{host} 已确认订单。祝您用餐愉快！",
+    "shareClosedBy": "{host} 已停止分享。",
+    "shareBanner": "{name}，您正在和 {host} 一起点菜"
   },
   "seating": {
     "title": "餐桌和包间",

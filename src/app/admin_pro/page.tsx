@@ -4,6 +4,9 @@ import { Bars, Funnel } from "@/components/admin/charts";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getDb } from "@/db";
 import { platformOverview } from "@/lib/admin/metrics";
+import { featureUsage } from "@/lib/admin/features";
+import { FeatureUsageCard } from "@/components/admin/feature-usage";
+import { buildVersion } from "@/lib/version";
 import { hasPerm, PAGE_PERM } from "@/lib/admin/access";
 import { ordersNow } from "@/lib/admin/live";
 import { livePresence } from "@/lib/usage/presence";
@@ -52,6 +55,7 @@ export default async function AdminOverview({ searchParams }: { searchParams: Pr
   }
   const presence = livePresence();
   const [t, tp, format, o, platform, now] = await Promise.all([adminI18n().then((x) => x.t), adminI18n().then((x) => x.tp), adminI18n().then((x) => x.format), platformOverview(getDb()), getPlatformSettings(), ordersNow(getDb())]);
+  const usage = await featureUsage(getDb());
   const F = (n: number) => formatFCFA(n) ?? "0 F";
   const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)} %` : "—");
   const days = o.series.ordersPerDay.map((d) => ({ k: d.d.slice(5), v: d.n, title: `${d.d} · ${d.n} · ${F(d.gmv)}` }));
@@ -188,6 +192,7 @@ export default async function AdminOverview({ searchParams }: { searchParams: Pr
           )}
         </Card>
       </section>
+      <FeatureUsageCard u={usage} t={t as never} version={buildVersion()} />
     </div>
   );
 }

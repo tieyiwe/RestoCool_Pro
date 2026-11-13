@@ -1282,6 +1282,47 @@
       "enabled": "Avis activés",
       "disabled": "Avis désactivés par l’établissement",
       "seeAll": "Voir tous les avis de cet établissement"
+    },
+    "features": {
+      "title": "Utilisation des fonctions",
+      "period": "30 derniers jours",
+      "version": "version en ligne {v}",
+      "shared": {
+        "title": "Sélections partagées",
+        "created": "Liens créés",
+        "sent": "Envoyées en une commande",
+        "stopped": "Arrêtées sans commande",
+        "guests": "Amis qui ont rejoint",
+        "lines": "Plats des commandes partagées (avec prénoms)",
+        "openNow": "Ouvertes en ce moment",
+        "businesses": "Établissements qui l’utilisent"
+      },
+      "tables": {
+        "title": "Tables et salons",
+        "openNow": "Occupés maintenant",
+        "released": "« Table libérée » par le personnel",
+        "byCustomer": "Quittées par le client",
+        "auto": "Libérées automatiquement",
+        "finished": "· après le service (1 h)",
+        "inactive": "· personne n’a commandé",
+        "stale": "· commandes oubliées (12 h)"
+      },
+      "reviews": {
+        "title": "Avis",
+        "count": "Avis reçus",
+        "average": "Moyenne (tous)",
+        "hidden": "Masqués par l’établissement",
+        "deleted": "Supprimés par l’établissement"
+      },
+      "switches": {
+        "reviewsOff": "Établissements avec avis désactivés",
+        "attendanceOff": "Établissements avec pointage désactivé",
+        "reviewsOffOne": "Avis activés",
+        "attendanceOffOne": "Pointage activé"
+      },
+      "yes": "Oui",
+      "no": "Non",
+      "offlineNote": "Le mode hors ligne et les mises à jour automatiques fonctionnent sur les téléphones : une commande faite sans réseau arrive comme les autres dès le retour du réseau, et chaque écran passe tout seul à la version en ligne."
     }
   },
   "demo": {
@@ -1865,7 +1906,42 @@
     "reviewNamePh": "Votre prénom (facultatif)",
     "reviewSend": "Envoyer mon avis",
     "reviewThanks": "Merci pour votre avis !",
-    "reviewError": "L’avis n’a pas pu être envoyé. Réessayez."
+    "reviewError": "L’avis n’a pas pu être envoyé. Réessayez.",
+    "shareStart": "Partager ma sélection avec ma table",
+    "shareExplain": "Envoyez un lien à vos amis à table (par WhatsApp !). Chacun ajoute ses plats depuis son téléphone, avec son prénom. Vous seul confirmez la commande.",
+    "shareYourName": "Votre prénom",
+    "shareNamePlaceholder": "Ex. : Awa",
+    "shareCreate": "Créer le lien et l’envoyer",
+    "shareError": "Impossible de créer le lien. Vérifiez votre connexion et réessayez.",
+    "shareText": "{name} vous invite à choisir vos plats chez {business} : ouvrez le lien, mettez votre prénom et ajoutez vos choix.",
+    "shareLiveTitle": "Sélection partagée avec la table",
+    "shareWaiting": "Lien envoyé. Les choix de vos amis apparaîtront ici.",
+    "shareCount": "{n} personne(s) · {done} ont terminé",
+    "shareGuest": "Invité",
+    "shareHostTag": "a lancé la sélection",
+    "shareDone": "Terminé",
+    "shareChoosing": "Choisit encore",
+    "shareNothingYet": "Rien choisi pour le moment",
+    "shareAgain": "Renvoyer le lien",
+    "shareCopy": "Copier le lien",
+    "shareCopied": "Lien copié",
+    "shareStop": "Arrêter le partage",
+    "shareHostOnly": "Vous seul choisissez la place, « À emporter » et confirmez la commande. Le prénom de chacun accompagne ses plats.",
+    "shareMine": "Mes choix ({name})",
+    "shareTooMany": "Trop de plats pour une seule commande (50 lignes maximum). Envoyez-en une partie d’abord.",
+    "shareHostDefault": "votre ami",
+    "shareGateTitle": "{host} vous invite à choisir vos plats chez {business}",
+    "shareGateHint": "Mettez votre prénom : tout le monde verra qui a choisi quoi.",
+    "shareGateGo": "Continuer et choisir mes plats",
+    "shareGuestTitle": "Vous ajoutez vos choix à la sélection de {host}",
+    "shareGuestHint": "Vos plats sont enregistrés au nom de {name}. Quand vous avez fini, appuyez sur « J’ai terminé mes choix » : {host} confirmera la commande.",
+    "shareFinish": "J’ai terminé mes choix",
+    "shareGuestDone": "C’est noté{N}! {{host}} voit vos choix et confirmera la commande.",
+    "shareEditChoices": "Modifier mes choix",
+    "shareOthersTitle": "Les choix de la table",
+    "shareSentBy": "{host} a confirmé la commande. Bon appétit !",
+    "shareClosedBy": "{host} a arrêté le partage.",
+    "shareBanner": "{name}, vous choisissez avec {host}"
   },
   "seating": {
     "title": "Tables et salles",
