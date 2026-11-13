@@ -145,6 +145,11 @@ test("busy day: the wait shows on the page and in the form; confirmed guests get
     })
     .not.toBe("");
   expect((await request.get(`/api/public/reservations/qr/${token}.png`)).headers()["content-type"]).toBe("image/png");
+  // The guest is expected now (the QR works from 3 h before the time until time + expiry).
+  await sql(
+    `update reservations set date = (now() at time zone 'UTC')::date, time = to_char(now() at time zone 'UTC', 'HH24:MI') where restaurant_id = ${DEMO} and email = $1`,
+    [email],
+  );
   // The guest's page shows the QR too.
   await phone.getByTestId("reservation-link").click();
   await expect(phone.getByTestId("reservation-qr")).toBeVisible();

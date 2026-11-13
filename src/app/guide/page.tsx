@@ -4,7 +4,10 @@ import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/brand/logo";
 import { GuideCenter } from "@/components/guide/guide-player";
 import { GuideTabs } from "@/components/guide/guide-tabs";
-import { PROFILES, type GuideId, type Profile } from "@/components/guide/guide-scenes";
+import type { GuideId, Profile } from "@/components/guide/guide-scenes";
+
+// Server-side list (the scenes module is client-only: its values cannot be read here).
+const PUBLIC_PROFILES: readonly Profile[] = ["server", "host", "kitchen", "manager", "owner"];
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("guide");
@@ -16,7 +19,7 @@ export default async function PublicGuidePage({ searchParams }: { searchParams: 
   const t = await getTranslations("guide");
   const sp = await searchParams;
   // Public guide (no account): every profile; personnel usually land on « Serveur ».
-  const audience: Profile = PROFILES.includes(sp.for as Profile) ? (sp.for as Profile) : "server";
+  const audience: Profile = PUBLIC_PROFILES.includes(sp.for as Profile) ? (sp.for as Profile) : "server";
   return (
     <div className="min-h-dvh">
       <header className="border-b border-border bg-surface">
@@ -34,7 +37,7 @@ export default async function PublicGuidePage({ searchParams }: { searchParams: 
           <h1 className="font-display text-3xl font-extrabold">{t("title")}</h1>
           <p className="text-muted-foreground">{t("introPublic")}</p>
         </div>
-        <GuideTabs base="/guide" profile={audience} profiles={["server", "host", "kitchen", "manager", "owner"]} />
+        <GuideTabs base="/guide" profile={audience} profiles={PUBLIC_PROFILES} />
         <GuideCenter key={audience} audience={audience} initial={(sp.g as GuideId) ?? null} inApp={false} />
       </main>
     </div>
