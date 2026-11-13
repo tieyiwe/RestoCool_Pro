@@ -6,7 +6,7 @@ Republishing RestoCool on Replit **never deletes** businesses, accounts, orders,
   database; photos are in Replit Object Storage. Republishing replaces the code only.
 - **Every start backs up first.** The deploy command (`node scripts/serve.mjs`) opens the port at
   once, then runs `npm run db:backup` (a full `pg_dump` saved in Object Storage under `backups/`,
-  the 14 most recent kept), then `npm run db:migrate`, and only then serves the app. If the
+  the 14 most recent kept), then `npm run db:migrate`, and only then hands the port to `next start`. If the
   migrations fail, the new version stops and the previous one keeps serving.
 - **Migrations only add.** A unit test (`tests/unit/migrations-safe.test.ts`) fails if a
   migration drops, empties, renames or retypes a table or column without an explicit

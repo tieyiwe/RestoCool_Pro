@@ -8,7 +8,8 @@
  *   1. listen on PORT immediately;
  *   2. backup (never blocks: errors and a 90 s timeout are ignored) → migrations (must succeed)
  *      → Shangri-La import (--if-missing, never blocks);
- *   3. prepare Next.js in this same process and hand it every request (no gap, no second port).
+ *   3. close this placeholder and run the regular `next start` on the same port (about a second
+ *      without an answer, after the health check has passed).
  *
  * While starting, "/" answers at once with a small 200 page that reloads itself (so the health
  * check passes); other requests wait up to 8 s for the app, then get a 503 with Retry-After.
@@ -16,14 +17,11 @@
  */
 import { spawn } from "node:child_process";
 import http from "node:http";
-import { parse } from "node:url";
-import next from "next";
 
 const port = Number(process.env.PORT || 5000);
 const hostname = "0.0.0.0";
 const HOLD_MS = 8_000;
 
-let handle = null; // Next request handler once ready
 const waiting = new Set();
 
 const starting = (req, res) => {
@@ -43,7 +41,6 @@ const starting = (req, res) => {
 };
 
 const server = http.createServer((req, res) => {
-  if (handle) return handle(req, res, parse(req.url ?? "/", true));
   // The health check (and anyone opening the home page) gets an answer right away.
   if (req.url === "/" || req.url?.startsWith("/?")) return starting(req, res);
   const entry = { req, res };
@@ -87,17 +84,20 @@ async function main() {
   await run("migrations", ["db:migrate"], {});
   await run("Shangri-La import", ["import:shangri-la", "--", "--if-missing"], { timeoutMs: 120_000, optional: true });
 
-  const app = next({ dev: false, hostname, port, dir: process.cwd(), httpServer: server });
-  await app.prepare();
-  handle = app.getRequestHandler();
-  const upgrade = app.getUpgradeHandler?.();
-  if (upgrade) server.on("upgrade", (req, socket, head) => upgrade(req, socket, head));
+  // Hand the port to the regular `next start` (the same server as before this script existed).
   for (const { req, res, timer } of waiting) {
     clearTimeout(timer);
-    handle(req, res, parse(req.url ?? "/", true));
+    starting(req, res);
   }
   waiting.clear();
-  console.log("✓ RestoCool ready");
+  await new Promise((resolve) => {
+    server.close(() => resolve());
+    server.closeAllConnections?.();
+  });
+  console.log("✓ database ready, starting Next.js");
+  const app = spawn("npx", ["next", "start", "-H", hostname, "-p", String(port)], { stdio: "inherit", env: process.env });
+  for (const sig of ["SIGTERM", "SIGINT"]) process.on(sig, () => app.kill(sig));
+  app.on("exit", (code, signal) => process.exit(code ?? (signal ? 1 : 0)));
 }
 
 main().catch((err) => {
