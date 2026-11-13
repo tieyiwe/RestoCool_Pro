@@ -169,3 +169,33 @@ test("staff can never read or change another restaurant's orders", async ({ page
     await sql("delete from orders where id = $1", [o!.id]);
   }
 });
+
+test("after « Confirmer la commande » the phone shows the current order on top; earlier ones fold under « Commandes précédentes »", async ({ browser }) => {
+  const phone = await phoneAt(browser, "6");
+  await dish(phone, "Alloco").getByRole("button", { name: /^Ajouter/ }).click();
+  await phone.getByTestId("cart-bar").click();
+  await expect(phone.getByTestId("send-order")).toHaveText(/Confirmer la commande/);
+  await phone.getByTestId("send-order").click();
+  await expect(phone.getByTestId("orders-sheet")).toBeVisible();
+  // Only one order: no « previous » section, no heading.
+  await expect(phone.getByTestId("previous-orders")).toHaveCount(0);
+
+  // The first order is served (eaten); an older, never-closed order from yesterday also exists.
+  const [first] = await sql<{ id: string }>("select id from orders where restaurant_id = (select id from restaurants where slug = 'restaurant-demo') order by sent_at desc limit 1");
+  await sql("update orders set status = 'served', served_at = now() where id = $1", [first!.id]);
+  await phone.getByTestId("orders-sheet").getByRole("button", { name: "Fermer" }).click();
+
+  await order(phone, ["Jus de bissap"]);
+  const sheet = phone.getByTestId("orders-sheet");
+  const current = sheet.getByTestId("current-orders");
+  await expect(current.getByTestId("my-order")).toHaveCount(1);
+  await expect(current.getByTestId("my-order")).toContainText("Jus de bissap");
+  await expect(current).toContainText("Commande en cours");
+  const previous = sheet.getByTestId("previous-orders");
+  await expect(previous).toContainText("Commandes précédentes (1)");
+  await expect(previous).not.toHaveAttribute("open", "");
+  await expect(previous.getByTestId("my-order")).toBeHidden();
+  await previous.locator("summary").click();
+  await expect(previous.getByTestId("my-order")).toContainText("Alloco");
+  await phone.context().close();
+});

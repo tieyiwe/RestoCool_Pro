@@ -214,6 +214,8 @@ function orderTotal(o: CustomerOrder, t: T) {
 }
 
 const FINISHED = new Set(["served", "paid", "cancelled"]);
+/** How long an order without a table session counts as « current » on the customer's phone. */
+const SITTING_MS = 4 * 60 * 60 * 1000;
 const NO_SERVER = new Set(["takeaway", "delivery"]);
 
 /** Orders this phone removed from its list (finished ones only). Device only: the restaurant keeps them. */
@@ -256,6 +258,76 @@ export function OrdersList({
   const live = orders.filter((o) => o.current && o.status !== "cancelled");
   const tableTotal = live.reduce((s, o) => s + o.subtotal, 0);
   const tableOnRequest = live.some((o) => o.hasOnRequest);
+  // The order just placed (and what is still in progress in this sitting) comes first; older
+  // orders are folded away under « Commandes précédentes ». « This sitting » = the table's open
+  // session, or sent in the last 4 hours (counter, takeaway…): an old order a business never
+  // closed does not come back on top. With nothing in progress, the latest order of the sitting
+  // stays on top (the one the customer is eating).
+  const now = Date.now();
+  const thisSitting = (o: CustomerOrder) => o.current || now - Date.parse(o.sentAt) < SITTING_MS;
+  const byNewest = [...orders].sort((a, b) => b.sentAt.localeCompare(a.sentAt));
+  const current = byNewest.filter((o) => thisSitting(o) && !FINISHED.has(o.status));
+  if (current.length === 0) {
+    const latest = byNewest.find((o) => o.mine && thisSitting(o));
+    if (latest) current.push(latest);
+  }
+  const previous = byNewest.filter((o) => !current.includes(o));
+  const renderOrder = (o: CustomerOrder) => (
+    <li key={o.id} className="rounded-xl border border-border p-3" data-testid="my-order" data-status={o.status}>
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <p className="font-bold">
+          {t("orderNumber", { n: o.number })}
+          {o.code && <span className="ml-1 font-mono text-xs font-normal text-muted-foreground" data-testid="my-order-code">{o.code}</span>}
+          {!o.mine && <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-xs font-semibold">{t("fromTable")}</span>}
+        </p>
+        <p className="font-bold tabular-nums">{orderTotal(o, t)}</p>
+      </div>
+      <p className="mb-2 text-xs text-muted-foreground" data-testid="my-order-date">
+        🕘 {t("orderSentAt", { when: when.format(new Date(o.sentAt)) })}
+        {o.servedAt && ` · ${t("orderServedAt", { when: when.format(new Date(o.servedAt)) })}`}
+      </p>
+      <StatusSteps status={o.status} t={t} />
+      {o.status === "cancelled" && o.cancelledReason && <p className="mt-1 text-sm text-muted-foreground">{o.cancelledReason}</p>}
+      <ul className="mt-2 text-sm">
+        {o.items.map((i) => (
+          <li key={i.id} className="flex justify-between gap-2">
+            <span>
+              {i.qty} × {i.code && <span className="text-muted-foreground">{i.code}. </span>}
+              {pick(i.name, lang)}
+              {(i.variantName || i.options.length > 0) && (
+                <span className="text-muted-foreground"> ({[i.variantName && pick(i.variantName, lang), ...i.options.map((x) => pick(x, lang))].filter(Boolean).join(", ")})</span>
+              )}
+              {i.note && <span className="block text-xs italic text-muted-foreground">« {i.note} »</span>}
+            </span>
+          </li>
+        ))}
+      </ul>
+      {o.mine && o.status !== "cancelled" && o.seat && NO_SERVER.has(o.seat.type) ? (
+        // Takeaway / delivery: the order is already with the business, nothing to show anyone.
+        <div className="mt-3 rounded-xl bg-muted p-3 text-sm" data-testid="takeaway-confirmation">
+          <p className="font-bold">✓ {t(o.seat.type === "delivery" ? "deliveryReceived" : "takeawayReceived")}</p>
+          <p className="text-muted-foreground">
+            {o.pickupTime ? t("takeawayPickupAt", { time: o.pickupTime }) : t("takeawayNoNeedToShow")}
+          </p>
+          <button type="button" onClick={() => onShow(o)} className="mt-2 min-h-11 text-sm font-semibold underline underline-offset-2" data-testid="show-server">
+            🧾 {t("seeMyTicket")}
+          </button>
+        </div>
+      ) : (
+        o.mine &&
+        o.status !== "cancelled" && (
+          <button type="button" onClick={() => onShow(o)} className="mt-3 min-h-11 w-full rounded-xl border-2 border-[var(--accent)] font-bold" data-testid="show-server">
+            📱 {t("showToServer")}
+          </button>
+        )
+      )}
+      {o.mine && FINISHED.has(o.status) && onHide && (
+        <button type="button" onClick={() => onHide([o.id])} className="mt-2 min-h-11 w-full rounded-xl border border-border text-sm font-semibold" data-testid="hide-order">
+          🗑️ {t("removeOrder")}
+        </button>
+      )}
+    </li>
+  );
   return (
     <div className="flex flex-col gap-4">
       {shared && (
@@ -267,64 +339,18 @@ export function OrdersList({
           <p className="text-xs text-muted-foreground">{t("tableBillHint")}</p>
         </div>
       )}
-      <ul className="flex flex-col gap-3">
-        {orders.map((o) => (
-          <li key={o.id} className="rounded-xl border border-border p-3" data-testid="my-order" data-status={o.status}>
-            <div className="mb-2 flex items-center justify-between gap-2">
-              <p className="font-bold">
-                {t("orderNumber", { n: o.number })}
-                {o.code && <span className="ml-1 font-mono text-xs font-normal text-muted-foreground" data-testid="my-order-code">{o.code}</span>}
-                {!o.mine && <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-xs font-semibold">{t("fromTable")}</span>}
-              </p>
-              <p className="font-bold tabular-nums">{orderTotal(o, t)}</p>
-            </div>
-            <p className="mb-2 text-xs text-muted-foreground" data-testid="my-order-date">
-              🕘 {t("orderSentAt", { when: when.format(new Date(o.sentAt)) })}
-              {o.servedAt && ` · ${t("orderServedAt", { when: when.format(new Date(o.servedAt)) })}`}
-            </p>
-            <StatusSteps status={o.status} t={t} />
-            {o.status === "cancelled" && o.cancelledReason && <p className="mt-1 text-sm text-muted-foreground">{o.cancelledReason}</p>}
-            <ul className="mt-2 text-sm">
-              {o.items.map((i) => (
-                <li key={i.id} className="flex justify-between gap-2">
-                  <span>
-                    {i.qty} × {i.code && <span className="text-muted-foreground">{i.code}. </span>}
-                    {pick(i.name, lang)}
-                    {(i.variantName || i.options.length > 0) && (
-                      <span className="text-muted-foreground"> ({[i.variantName && pick(i.variantName, lang), ...i.options.map((x) => pick(x, lang))].filter(Boolean).join(", ")})</span>
-                    )}
-                    {i.note && <span className="block text-xs italic text-muted-foreground">« {i.note} »</span>}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            {o.mine && o.status !== "cancelled" && o.seat && NO_SERVER.has(o.seat.type) ? (
-              // Takeaway / delivery: the order is already with the business, nothing to show anyone.
-              <div className="mt-3 rounded-xl bg-muted p-3 text-sm" data-testid="takeaway-confirmation">
-                <p className="font-bold">✓ {t(o.seat.type === "delivery" ? "deliveryReceived" : "takeawayReceived")}</p>
-                <p className="text-muted-foreground">
-                  {o.pickupTime ? t("takeawayPickupAt", { time: o.pickupTime }) : t("takeawayNoNeedToShow")}
-                </p>
-                <button type="button" onClick={() => onShow(o)} className="mt-2 min-h-11 text-sm font-semibold underline underline-offset-2" data-testid="show-server">
-                  🧾 {t("seeMyTicket")}
-                </button>
-              </div>
-            ) : (
-              o.mine &&
-              o.status !== "cancelled" && (
-                <button type="button" onClick={() => onShow(o)} className="mt-3 min-h-11 w-full rounded-xl border-2 border-[var(--accent)] font-bold" data-testid="show-server">
-                  📱 {t("showToServer")}
-                </button>
-              )
-            )}
-            {o.mine && FINISHED.has(o.status) && onHide && (
-              <button type="button" onClick={() => onHide([o.id])} className="mt-2 min-h-11 w-full rounded-xl border border-border text-sm font-semibold" data-testid="hide-order">
-                🗑️ {t("removeOrder")}
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
+      {current.length > 0 && (
+        <section className="flex flex-col gap-2" data-testid="current-orders">
+          {previous.length > 0 && <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">{t("currentOrders")}</h3>}
+          <ul className="flex flex-col gap-3">{current.map(renderOrder)}</ul>
+        </section>
+      )}
+      {previous.length > 0 && (
+        <details className="rounded-xl border border-border" data-testid="previous-orders" open={current.length === 0}>
+          <summary className="flex min-h-11 cursor-pointer items-center px-3 font-semibold">🕘 {t("previousOrders", { n: previous.length })}</summary>
+          <ul className="flex flex-col gap-3 p-3 pt-0">{previous.map(renderOrder)}</ul>
+        </details>
+      )}
       {onHide && finishedMine.length > 1 && (
         <button type="button" onClick={() => onHide(finishedMine.map((o) => o.id))} className="min-h-11 rounded-xl border border-border text-sm font-semibold" data-testid="hide-finished">
           🗑️ {t("removeFinished", { n: finishedMine.length })}
