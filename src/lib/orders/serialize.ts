@@ -48,6 +48,8 @@ export function staffOrder(
   o: OrderWithItems,
   areaOf?: (seatId: string | null) => { id: string; name: { fr: string } & Partial<Record<string, string>> } | null,
   who?: (memberId: string | null) => PersonRef,
+  /** Open table/room sessions: a served order there offers « Libérer la table ». */
+  openTables?: ReadonlySet<string>,
 ) {
   return {
     /** Personnel who handled each step: name + matricule. */
@@ -64,6 +66,7 @@ export function staffOrder(
     seat: o.seatType ? { type: o.seatType, label: o.seatLabel ?? "" } : null,
     seatId: o.seatId,
     sessionId: o.sessionId,
+    tableOpen: Boolean(o.sessionId && openTables?.has(o.sessionId)),
     customerName: o.customerName,
     customerPhone: o.customerPhone,
     deliveryAddress: o.deliveryAddress,

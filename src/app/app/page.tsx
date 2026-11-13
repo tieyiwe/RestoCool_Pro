@@ -21,6 +21,9 @@ import { ActivityFeed, Alerts, LiveStrip, RankingCard, Shortcuts, type Alert, ty
 import { attendanceEnabled } from "@/lib/personnel/attendance";
 import { personnel } from "@/lib/personnel";
 import { pendingJoinCount } from "@/lib/personnel/join";
+import { hasFeature } from "@/lib/plan";
+import { floorStatus } from "@/lib/seating/floor";
+import { FloorPlan } from "@/components/service/floor-plan";
 
 export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
   const t = await getTranslations("app");
@@ -59,6 +62,9 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     personnel(db, rid),
   ]);
   const allowed = (a: Parameters<typeof can>[1]) => can(ctx.actor, a, { restaurantId: rid });
+  // Live floor plan: businesses with tables or private rooms, for anyone who follows the service.
+  const hasFloor = r.kind !== "transport" && seats.some((s) => s.active && (s.type === "table" || s.type === "room")) && hasFeature(r, "kitchenDisplay") && allowed("orders.read");
+  const floor = hasFloor ? await floorStatus(db, rid) : null;
   const tro = await getTranslations("roles");
   const roleLabel = (p: { role: string; roleKey?: string | null; roleName?: string | null }) =>
     p.role === "owner" ? t("role.owner") : p.roleKey ? tro(`names.${p.roleKey}` as "names.server") : (p.roleName ?? t(`role.${p.role}` as "role.server"));
@@ -170,6 +176,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       )}
 
       {live && <LiveStrip live={live} attendance={attendance} />}
+      {floor && <FloorPlan initial={floor} canRelease={allowed("orders.serve")} />}
       {canReports && <Alerts alerts={alerts} />}
       <Shortcuts items={[...shortcuts]} />
 

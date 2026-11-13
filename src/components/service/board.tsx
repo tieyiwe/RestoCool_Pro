@@ -343,7 +343,57 @@ export function OrderCard({ order, now, delays, onChanged, big = false, rank }: 
         </div>
       )}
       {cancelling && <CancelForm onCancel={(r) => void move("cancelled", r)} onClose={() => setCancelling(false)} />}
+      {/* Last step at a table or room: the customers left, the table is free again. */}
+      {done && order.tableOpen && perms.serve && order.sessionId && <ReleaseTable sessionId={order.sessionId} seat={order.seat} onDone={onChanged} />}
     </article>
+  );
+}
+
+/**
+ * « Libérer la table »: two taps (ask, then confirm) so it is never pressed by accident. Refused
+ * while another order of the same table is still in progress.
+ */
+export function ReleaseTable({ sessionId, seat, onDone, compact = false }: { sessionId: string; seat: { type: string; label: string } | null; onDone: () => void; compact?: boolean }) {
+  const t = useTranslations("service");
+  const [asking, setAsking] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  const place = !seat ? "" : seat.type === "room" && /^(salon|room|vip|包间)/i.test(seat.label) ? seat.label : t(seat.type === "room" ? "release.room" : "release.table", { label: seat.label });
+  const release = async () => {
+    setBusy(true);
+    const r = await post(`/api/app/sessions/${sessionId}/release`, {});
+    setBusy(false);
+    setAsking(false);
+    setMsg(r.ok ? null : t(r.error === "table_busy" ? "release.busy" : "actionError"));
+    if (r.ok) onDone();
+  };
+  return (
+    <div className="flex flex-col gap-1.5" data-testid="release-table">
+      {asking ? (
+        <div className="flex gap-2">
+          <button type="button" disabled={busy} onClick={() => void release()} className="min-h-11 flex-1 rounded-xl bg-emerald-700 px-3 text-sm font-bold text-white disabled:opacity-60" data-testid="release-confirm">
+            ✓ {t("release.confirm", { place })}
+          </button>
+          <button type="button" onClick={() => setAsking(false)} className="min-h-11 rounded-xl border border-border px-3 text-sm font-semibold">
+            {t("release.keep")}
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setAsking(true)}
+          className={cn("min-h-11 rounded-xl border-2 border-emerald-700 px-3 text-sm font-bold text-emerald-800 dark:text-emerald-300", !compact && "w-full")}
+          data-testid="release-ask"
+        >
+          🧹 {t("release.ask")}
+        </button>
+      )}
+      {msg && (
+        <p role="alert" className="text-xs font-semibold text-red-700">
+          {msg}
+        </p>
+      )}
+    </div>
   );
 }
 

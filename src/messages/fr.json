@@ -2012,7 +2012,15 @@
     "pickupAt": "Retrait à {time}",
     "oldestFirst": "Du plus ancien au plus récent",
     "rank": "{n, selectordinal, one {#er} other {#e}}",
-    "rankTitle": "Ordre d’arrivée : la plus ancienne d’abord"
+    "rankTitle": "Ordre d’arrivée : la plus ancienne d’abord",
+    "release": {
+      "ask": "Table libérée",
+      "confirm": "Oui, {place} est libre",
+      "keep": "Pas encore",
+      "table": "la table {label}",
+      "room": "le salon {label}",
+      "busy": "Une autre commande de cette table est encore en cours : servez-la ou annulez-la d’abord."
+    }
   },
   "personnel": {
     "title": "Personnel",
@@ -3282,6 +3290,38 @@
       "name": "Le nom tapé ne correspond pas exactement au nom de l’établissement.",
       "understood": "Cochez la case pour confirmer que vous avez compris.",
       "forbidden": "Une demande est déjà en cours, ou vous n’êtes pas le propriétaire."
+    }
+  },
+  "floor": {
+    "title": "Salle en direct",
+    "subtitle": "Tables et salons, mis à jour en temps réel.",
+    "freeCount": "{n, plural, =0 {Aucune libre} one {# libre} other {# libres}}",
+    "busyCount": "{n, plural, =0 {aucune occupée} one {# occupée} other {# occupées}}",
+    "filter": "Filtrer les tables",
+    "all": "Toutes ({n})",
+    "busyFilter": "Occupées ({n})",
+    "none": "Aucune table dans ce filtre.",
+    "table": "Table {label}",
+    "room": "Salon {label}",
+    "orders": "{n, plural, one {# commande} other {# commandes}}",
+    "noOrderYet": "Pas encore commandé",
+    "openService": "Voir le service",
+    "minutes": "{n} min",
+    "hours": "{h} h {m}",
+    "state": {
+      "ready": "Prête à servir",
+      "waiting": "Commande en attente",
+      "kitchen": "En cuisine",
+      "eating": "Servie, en train de manger",
+      "seated": "Clients installés",
+      "free": "Libre"
+    },
+    "today": {
+      "pending": "En attente",
+      "kitchen": "En cuisine",
+      "ready": "Prêtes",
+      "served": "Servies aujourd’hui",
+      "cancelled": "Annulées"
     }
   }
 }

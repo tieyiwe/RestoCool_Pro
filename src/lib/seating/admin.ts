@@ -197,7 +197,7 @@ export async function openSessions(ctx: SeatingCtx) {
       lastActivityAt: tableSessions.lastActivityAt,
       label: seats.label,
       type: seats.type,
-      phones: sql<number>`(select count(*)::int from ${sessionDevices} d where d.session_id = ${tableSessions.id} and d.left_at is null)`,
+      phones: sql<number>`(select count(*)::int from ${sessionDevices} d where d.session_id = ${sql.raw(`"table_sessions"."id"`)} and d.left_at is null)`,
     })
     .from(tableSessions)
     .innerJoin(seats, eq(seats.id, tableSessions.seatId))

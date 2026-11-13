@@ -2012,7 +2012,15 @@
     "pickupAt": "Pickup at {time}",
     "oldestFirst": "Oldest first",
     "rank": "{n, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
-    "rankTitle": "Order of arrival: oldest first"
+    "rankTitle": "Order of arrival: oldest first",
+    "release": {
+      "ask": "Table freed",
+      "confirm": "Yes, {place} is free",
+      "keep": "Not yet",
+      "table": "table {label}",
+      "room": "room {label}",
+      "busy": "Another order at this table is still in progress: serve or cancel it first."
+    }
   },
   "personnel": {
     "title": "Personnel",
@@ -3282,6 +3290,38 @@
       "name": "The name typed does not exactly match the business name.",
       "understood": "Tick the box to confirm you understood.",
       "forbidden": "A request is already in progress, or you are not the owner."
+    }
+  },
+  "floor": {
+    "title": "Live floor",
+    "subtitle": "Tables and private rooms, updated in real time.",
+    "freeCount": "{n, plural, =0 {None free} one {# free} other {# free}}",
+    "busyCount": "{n, plural, =0 {none taken} one {# taken} other {# taken}}",
+    "filter": "Filter tables",
+    "all": "All ({n})",
+    "busyFilter": "Taken ({n})",
+    "none": "No table in this filter.",
+    "table": "Table {label}",
+    "room": "Room {label}",
+    "orders": "{n, plural, one {# order} other {# orders}}",
+    "noOrderYet": "Not ordered yet",
+    "openService": "Open service",
+    "minutes": "{n} min",
+    "hours": "{h} h {m}",
+    "state": {
+      "ready": "Ready to serve",
+      "waiting": "Order waiting",
+      "kitchen": "In the kitchen",
+      "eating": "Served, eating",
+      "seated": "Customers seated",
+      "free": "Free"
+    },
+    "today": {
+      "pending": "Waiting",
+      "kitchen": "In the kitchen",
+      "ready": "Ready",
+      "served": "Served today",
+      "cancelled": "Cancelled"
     }
   }
 }

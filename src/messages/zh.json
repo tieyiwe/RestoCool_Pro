@@ -2012,7 +2012,15 @@
     "pickupAt": "{time} 取餐",
     "oldestFirst": "从最早到最新",
     "rank": "第 {n}",
-    "rankTitle": "按到达顺序：最早的在前"
+    "rankTitle": "按到达顺序：最早的在前",
+    "release": {
+      "ask": "桌位已空出",
+      "confirm": "是的，{place}已空出",
+      "keep": "还没有",
+      "table": "{label}号桌",
+      "room": "{label}包间",
+      "busy": "这张桌还有订单在处理中：请先上菜或取消。"
+    }
   },
   "personnel": {
     "title": "员工",
@@ -3282,6 +3290,38 @@
       "name": "输入的名称与店铺名称不完全一致。",
       "understood": "请勾选确认您已了解。",
       "forbidden": "已有申请在处理中，或您不是店主。"
+    }
+  },
+  "floor": {
+    "title": "实时餐厅",
+    "subtitle": "桌位和包间，实时更新。",
+    "freeCount": "{n} 空闲",
+    "busyCount": "{n} 占用",
+    "filter": "筛选桌位",
+    "all": "全部（{n}）",
+    "busyFilter": "占用（{n}）",
+    "none": "此筛选下没有桌位。",
+    "table": "{label}号桌",
+    "room": "{label}包间",
+    "orders": "{n} 个订单",
+    "noOrderYet": "尚未点餐",
+    "openService": "查看服务",
+    "minutes": "{n} 分钟",
+    "hours": "{h} 小时 {m}",
+    "state": {
+      "ready": "待上菜",
+      "waiting": "订单待处理",
+      "kitchen": "制作中",
+      "eating": "已上菜，用餐中",
+      "seated": "客人已入座",
+      "free": "空闲"
+    },
+    "today": {
+      "pending": "待处理",
+      "kitchen": "制作中",
+      "ready": "已备好",
+      "served": "今日已上菜",
+      "cancelled": "已取消"
     }
   }
 }

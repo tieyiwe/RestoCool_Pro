@@ -10,6 +10,7 @@ import { servicePage } from "@/lib/orders/page";
 import { staffOrder } from "@/lib/orders/serialize";
 import { personLookup, personnel } from "@/lib/personnel";
 import { getOrder } from "@/lib/orders/service";
+import { openTableSessionIds } from "@/lib/seating/floor";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +32,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
         ← {t("frontDesk")}
       </Link>
       <OrderPermsProvider perms={perms}>
-        <OrderDetail initial={staffOrder(order, undefined, personLookup(await personnel(getDb(), ctx.repo.restaurantId)))} delays={delays} />
+        <OrderDetail initial={staffOrder(order, undefined, personLookup(await personnel(getDb(), ctx.repo.restaurantId)), await openTableSessionIds(getDb(), ctx.repo.restaurantId))} delays={delays} />
       </OrderPermsProvider>
     </div>
   );

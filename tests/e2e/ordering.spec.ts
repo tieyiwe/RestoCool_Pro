@@ -199,3 +199,43 @@ test("after « Confirmer la commande » the phone shows the current order on top
   await expect(previous.getByTestId("my-order")).toContainText("Alloco");
   await phone.context().close();
 });
+
+test("« Table libérée » after « Servi », and the owner's live floor plan shows free / busy tables and today's orders", async ({ browser, page }) => {
+  test.slow();
+  await patchDemoSettings({ orderValidation: "direct", qrStrategy: "per_seat" });
+  const phone = await phoneAt(browser, "3");
+
+  // Dashboard: table 3 is taken (customers seated), the others free.
+  await page.goto("/app");
+  const plan = page.getByTestId("floor-plan");
+  await expect(plan).toBeVisible();
+  const t3 = plan.locator('[data-testid="floor-table"][data-label="3"]');
+  await expect(t3).toHaveAttribute("data-state", "seated");
+  await expect(plan.locator('[data-testid="floor-table"][data-state="free"]').first()).toBeVisible();
+
+  // An order arrives: the tile changes live, without reloading.
+  await order(phone, ["Alloco"]);
+  await expect(t3).toHaveAttribute("data-state", /waiting|kitchen/);
+  await expect.poll(async () => Number(await plan.getByTestId("floor-today-pending").getAttribute("data-n")) + Number(await plan.getByTestId("floor-today-kitchen").getAttribute("data-n"))).toBeGreaterThan(0);
+  // While the order is in progress, the tile sends to the service (no release yet).
+  await expect(t3.getByTestId("release-ask")).toHaveCount(0);
+
+  // Served on the board: the last step is « Table libérée ».
+  const board = await page.context().newPage();
+  await board.goto("/app/service");
+  const card = board.getByTestId("order-card").filter({ has: board.getByTestId("seat-big").filter({ hasText: /^3$/ }) });
+  await card.getByTestId("action-ready").click();
+  await expect(t3).toHaveAttribute("data-state", "ready");
+  await card.getByTestId("action-served").click();
+  await expect(t3).toHaveAttribute("data-state", "eating");
+  const served = board.getByTestId("order-card").filter({ has: board.getByTestId("seat-big").filter({ hasText: /^3$/ }) }).filter({ has: board.getByTestId("release-table") });
+  await served.getByTestId("release-ask").click();
+  await served.getByTestId("release-confirm").click();
+  await expect(served.getByTestId("release-ask")).toHaveCount(0);
+
+  // The owner's floor plan shows the table free again; the served order is counted for today.
+  await expect(t3).toHaveAttribute("data-state", "free");
+  await expect(plan.getByTestId("floor-today-served")).not.toHaveAttribute("data-n", "0");
+  await board.close();
+  await phone.context().close();
+});

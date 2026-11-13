@@ -6,6 +6,7 @@ import { staffOrder } from "@/lib/orders/serialize";
 import { personLookup, personnel } from "@/lib/personnel";
 import { getOrder } from "@/lib/orders/service";
 import { serviceCtx } from "@/lib/orders/staff-api";
+import { openTableSessionIds } from "@/lib/seating/floor";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,6 @@ export const GET = handle(async (_req: Request, { params }: { params: Promise<{ 
   const id = z.uuid().safeParse((await params).id);
   if (!id.success) throw new NotFoundError();
   const ctx = await serviceCtx("orders.read");
-  const [order, people] = await Promise.all([getOrder(ctx, id.data), personnel(ctx.db, ctx.repo.restaurantId)]);
-  return NextResponse.json({ order: staffOrder(order, undefined, personLookup(people)) }, { headers: { "Cache-Control": "no-store" } });
+  const [order, people, openTables] = await Promise.all([getOrder(ctx, id.data), personnel(ctx.db, ctx.repo.restaurantId), openTableSessionIds(ctx.db, ctx.repo.restaurantId)]);
+  return NextResponse.json({ order: staffOrder(order, undefined, personLookup(people), openTables) }, { headers: { "Cache-Control": "no-store" } });
 });

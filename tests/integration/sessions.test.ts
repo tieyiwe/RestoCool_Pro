@@ -8,6 +8,7 @@ const { tenantRepo } = await import("@/db/repos/tenant");
 const { orders, restaurants, seats, tableSessions } = await import("@/db/schema");
 const sessions = await import("@/lib/seating/sessions");
 const admin = await import("@/lib/seating/admin");
+const floor = await import("@/lib/seating/floor");
 const { createRestaurantForUser } = await import("@/lib/restaurants/provision");
 const { NotFoundError } = await import("@/lib/errors");
 
@@ -174,6 +175,41 @@ describe.skipIf(!hasDb)("table sessions and seating admin (database)", () => {
     expect(await sessions.sweepAllStale(getDb(), new Date(Date.now() + 30 * 60_000))).toBeGreaterThanOrEqual(1);
     const left = await getDb().select().from(tableSessions).where(and(eq(tableSessions.restaurantId, other.id), eq(tableSessions.status, "open")));
     expect(left).toHaveLength(0);
+  });
+
+  it("floor plan: each table's live state; « Table libérée » frees it, never while an order is in progress, never for another business", async () => {
+    const db = getDb();
+    const seat = (await ctx.repo.seating.seats()).find((x) => x.label === "6")!;
+    const j = await sessions.joinSession(db, r, { seat: { id: seat.id, type: seat.type, label: seat.label }, deviceId: PHONE_A, source: "qr" });
+    const sessionId = j.ok ? j.sessionId : "";
+    const state = async () => (await floor.floorStatus(db, r.id)).tables.find((x) => x.label === "6")!;
+    expect((await state()).state).toBe("seated");
+
+    const [o] = await db.insert(orders).values({ restaurantId: r.id, sessionId, seatId: seat.id, businessDate: new Date().toISOString().slice(0, 10), number: 950, status: "sent", validationMode: "direct", subtotal: 3500 }).returning({ id: orders.id });
+    expect(await state()).toMatchObject({ state: "waiting", orders: 1, total: 3500 });
+    const f = await floor.floorStatus(db, r.id);
+    expect(f.today.pending).toBeGreaterThanOrEqual(1);
+
+    // A server may free a table, but not while its order is still in progress.
+    const server = { db, actor: { kind: "member" as const, userId: "it-seat-server", restaurantId: r.id, role: "server" as const }, restaurantId: r.id };
+    await expect(floor.releaseTable(server, sessionId)).rejects.toBeInstanceOf(floor.TableBusyError);
+    await db.update(orders).set({ status: "served", servedAt: new Date() }).where(eq(orders.id, o!.id));
+    expect((await state()).state).toBe("eating");
+    expect((await floor.openTableSessionIds(db, r.id)).has(sessionId)).toBe(true);
+
+    // Kitchen staff cannot (no « serve » right); another business cannot even see it.
+    const kitchen = { ...server, actor: { ...server.actor, role: "kitchen" as const } };
+    await expect(floor.releaseTable(kitchen, sessionId)).rejects.toMatchObject({ code: "forbidden" });
+    const foreign = { db, actor: { kind: "member" as const, userId: "it-seat-b", restaurantId: other.id, role: "owner" as const }, restaurantId: other.id };
+    await expect(floor.releaseTable(foreign, sessionId)).rejects.toBeInstanceOf(NotFoundError);
+
+    expect(await floor.releaseTable(server, sessionId)).toEqual({ already: false });
+    expect(await getDb().query.tableSessions.findFirst({ where: eq(tableSessions.id, sessionId) })).toMatchObject({ status: "closed", closedReason: "staff" });
+    expect((await state()).state).toBe("free");
+    // The customer's phone learns the table is gone (heartbeat refused).
+    expect(await sessions.heartbeat(db, r.id, sessionId, PHONE_A)).toBe(false);
+    // Twice is harmless.
+    expect(await floor.releaseTable(server, sessionId)).toEqual({ already: true });
   });
 
   it("the picker never exposes QR tokens, and hides printed seats in per-seat mode", async () => {
