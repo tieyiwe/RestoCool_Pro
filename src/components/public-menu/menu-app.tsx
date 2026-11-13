@@ -97,6 +97,8 @@ export function MenuApp({
   // Live « épuisé » (sold out / hidden) from the restaurant, applied over the server-rendered menu.
   const [liveSoldOut, setLiveSoldOut] = useState<Set<string> | null>(null);
   const [liveNotes, setLiveNotes] = useState<Record<string, string> | null>(null);
+  // « Temps d'attente » set by the business on a busy day (updates live with the menu events).
+  const [liveWait, setLiveWait] = useState(initialData.wait);
   const data = useMemo(
     () =>
       liveSoldOut
@@ -307,9 +309,10 @@ export function MenuApp({
   const refreshAvailability = useCallback(async () => {
     const res = await fetch(`/api/public/r/${initialData.slug}/availability`, { cache: "no-store" }).catch(() => null);
     if (res?.ok) {
-      const body = (await res.json()) as { soldOut: string[]; notes?: Record<string, string> };
+      const body = (await res.json()) as { soldOut: string[]; notes?: Record<string, string>; wait?: { minutes: number; note: string | null } | null };
       setLiveSoldOut(new Set(body.soldOut));
       setLiveNotes(body.notes ?? {});
+      if (body.wait !== undefined) setLiveWait(body.wait);
     }
   }, [initialData.slug]);
   const sessionIdForCheck = seat?.sessionId ?? null;
@@ -581,6 +584,12 @@ export function MenuApp({
                 </a>
               )}
             </p>
+            {liveWait && (
+              <p className="mt-2 inline-flex flex-wrap items-center gap-1 rounded-xl bg-amber-100 px-3 py-1.5 text-sm font-bold text-amber-950" data-testid="wait-time">
+                ⏳ {t("waitNow", { n: liveWait.minutes })}
+                {liveWait.note && <span className="font-normal">· {liveWait.note}</span>}
+              </p>
+            )}
             {data.features.reservations && (
               <button
                 type="button"
@@ -1050,7 +1059,7 @@ export function MenuApp({
       {served && <ServedCelebration t={t} onClose={() => setServed(false)} />}
       {panel?.type === "reserve" && data.features.reservations && (
         <Sheet title={t("resvTitle", { business: data.name })} onClose={closePanel} t={t} testId="reserve-sheet">
-          <ReservationForm slug={data.slug} lang={lang} t={t} onDone={closePanel} />
+          <ReservationForm slug={data.slug} lang={lang} t={t} onDone={closePanel} wait={liveWait} />
         </Sheet>
       )}
       {panel?.type === "takeaway" && data.takeawayWhatsapp && (

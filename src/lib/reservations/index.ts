@@ -1,6 +1,6 @@
 import "server-only";
 import { createHmac } from "node:crypto";
-import { and, asc, eq, gte, inArray, lte, sql } from "drizzle-orm";
+import { and, asc, eq, gte, inArray, isNull, lte, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
 import { openingHours, reservations, type Reservation, type ReservationStatus, type restaurants } from "@/db/schema";
@@ -18,8 +18,19 @@ import { sha256 } from "@/lib/tokens";
 
 /* ------------------------------------------------------------------ settings */
 
-export type ReservationConfig = { enabled: boolean; slotMinutes: number; maxParty: number; maxCoversPerSlot: number; noticeMinutes: number; daysAhead: number; note?: string };
-export const RESERVATION_DEFAULTS: ReservationConfig = { enabled: false, slotMinutes: 30, maxParty: 12, maxCoversPerSlot: 0, noticeMinutes: 60, daysAhead: 30 };
+export type ReservationConfig = {
+  enabled: boolean;
+  slotMinutes: number;
+  maxParty: number;
+  maxCoversPerSlot: number;
+  noticeMinutes: number;
+  daysAhead: number;
+  note?: string;
+  /** Minutes after the reservation time when the check-in QR stops working and the guest counts as absent. */
+  expiryMinutes: number;
+};
+export const RESERVATION_DEFAULTS: ReservationConfig = { enabled: false, slotMinutes: 30, maxParty: 12, maxCoversPerSlot: 0, noticeMinutes: 60, daysAhead: 30, expiryMinutes: 60 };
+export const EXPIRY_CHOICES = [15, 30, 45, 60, 90, 120, 180] as const;
 /** Hours used when the business entered no opening hours at all. */
 const DEFAULT_HOURS = { opens: "11:00", closes: "22:00" };
 
@@ -31,6 +42,7 @@ export const ReservationSettingsInput = z.object({
   noticeMinutes: z.coerce.number().int().min(0).max(7 * 24 * 60),
   daysAhead: z.coerce.number().int().min(1).max(365),
   note: z.string().trim().max(300).optional(),
+  expiryMinutes: z.coerce.number().int().refine((n) => (EXPIRY_CHOICES as readonly number[]).includes(n)),
 });
 
 type R = Pick<Restaurant, "id" | "settings" | "plan" | "planStatus" | "planExpiresAt" | "kind">;
@@ -106,6 +118,17 @@ function linkSecret(): string {
   return process.env.SESSION_SECRET || process.env.CLERK_SECRET_KEY || process.env.DATABASE_URL || "restocool-dev";
 }
 export const reservationToken = (id: string) => createHmac("sha256", sha256(`rc-resv|${linkSecret()}`)).update(id).digest("base64url").slice(0, 32);
+/** The check-in QR token (a different secret use than the customer's link: the QR only checks in). */
+export const checkinToken = (id: string) => createHmac("sha256", sha256(`rc-resv-checkin|${linkSecret()}`)).update(id).digest("base64url").slice(0, 32);
+export const checkinPath = (id: string) => `/rv/${checkinToken(id)}`;
+
+/** When the reservation's QR stops working: its time + the business's expiry minutes. */
+export const expiresAt = (x: Pick<Reservation, "date" | "time">, cfg: Pick<ReservationConfig, "expiryMinutes">) =>
+  new Date(Date.parse(`${x.date}T${x.time}:00Z`) + cfg.expiryMinutes * 60_000);
+
+/** The check-in QR can be used right now: confirmed, not used yet, not expired. */
+export const qrValid = (x: Reservation, cfg: Pick<ReservationConfig, "expiryMinutes">, now = new Date()) =>
+  x.status === "confirmed" && !x.checkedInAt && Boolean(x.checkinHash) && now.getTime() <= expiresAt(x, cfg).getTime();
 
 /* ------------------------------------------------------------------ booking */
 
@@ -263,6 +286,8 @@ export async function moveReservation(ctx: StaffCtx, id: string, action: Reserva
       updatedAt: now,
       ...(action === "decline" || action === "cancel" ? { reason: reason?.trim().slice(0, 300) || null } : {}),
       ...(action === "cancel" ? { cancelledBy: "business" as const } : {}),
+      ...(action === "confirm" ? { checkinHash: sha256(checkinToken(id)) } : {}),
+      ...(action === "seat" ? { checkedInAt: now, checkedInBy: who(ctx.actor), checkedInVia: "manual" as const } : {}),
     })
     .where(and(eq(reservations.id, id), eq(reservations.restaurantId, ctx.restaurantId), inArray(reservations.status, move.from)))
     .returning();
@@ -287,6 +312,138 @@ export async function markContacted(ctx: StaffCtx, id: string, now = new Date())
   if (!up) throw new NotFoundError();
   await writeAudit(ctx.db, ctx.actor, { restaurantId: ctx.restaurantId, action: "reservation.contacted", entity: "reservation", entityId: id, data: { ref: up.ref } });
   await notify(ctx.db, { k: "reservation", r: ctx.restaurantId });
+}
+
+/* ------------------------------------------------------------------ check-in by QR */
+
+export class CheckinError extends Error {
+  constructor(readonly code: "not_found" | "used" | "expired" | "early" | "not_confirmed", readonly reservation?: Reservation) {
+    super(code);
+  }
+}
+
+/** Who may check guests in: reservation managers, and servers / hosts who serve tables. */
+export const canCheckIn = (actor: Actor, restaurantId: string) =>
+  can(actor, "reservations.write", { restaurantId }) || can(actor, "orders.serve", { restaurantId }) || can(actor, "orders.confirm", { restaurantId });
+
+/** The reservation behind a scanned check-in QR (this business only). */
+export async function reservationByCheckin(db: DB, restaurantId: string | null, token: string) {
+  if (!/^[A-Za-z0-9_-]{16,64}$/.test(token)) return null;
+  const [row] = await db
+    .select()
+    .from(reservations)
+    .where(and(eq(reservations.checkinHash, sha256(token)), restaurantId ? eq(reservations.restaurantId, restaurantId) : undefined));
+  return row ?? null;
+}
+
+/** How early a guest may be checked in before the reservation time. */
+const EARLY_MINUTES = 180;
+
+/**
+ * Staff scan the guest's QR: the reservation becomes « Arrivés » and the QR stops working.
+ * Refused when already used, expired (time + expiry minutes), too early, or not confirmed.
+ */
+export async function checkInByQr(ctx: StaffCtx, r: Pick<Restaurant, "settings">, token: string, now = new Date()): Promise<Reservation> {
+  if (!canCheckIn(ctx.actor, ctx.restaurantId)) throw new ForbiddenError();
+  const row = await reservationByCheckin(ctx.db, ctx.restaurantId, token);
+  if (!row) throw new CheckinError("not_found");
+  const cfg = reservationConfig(r);
+  if (row.checkedInAt || row.status === "seated" || row.status === "completed") throw new CheckinError("used", row);
+  if (row.status !== "confirmed") throw new CheckinError(row.status === "no_show" || row.status === "expired" ? "expired" : "not_confirmed", row);
+  if (now.getTime() > expiresAt(row, cfg).getTime()) throw new CheckinError("expired", row);
+  if (now.getTime() < Date.parse(`${row.date}T${row.time}:00Z`) - EARLY_MINUTES * 60_000) throw new CheckinError("early", row);
+  const [up] = await ctx.db
+    .update(reservations)
+    .set({ status: "seated", checkedInAt: now, checkedInBy: who(ctx.actor), checkedInVia: "qr", statusAt: now, statusBy: who(ctx.actor), updatedAt: now })
+    .where(and(eq(reservations.id, row.id), eq(reservations.status, "confirmed"), isNull(reservations.checkedInAt)))
+    .returning();
+  // Two phones scanned at the same moment: only one wins.
+  if (!up) throw new CheckinError("used", row);
+  await writeAudit(ctx.db, ctx.actor, { restaurantId: ctx.restaurantId, action: "reservation.checkin", entity: "reservation", entityId: row.id, data: { ref: row.ref, via: "qr" } });
+  await notify(ctx.db, { k: "reservation", r: ctx.restaurantId });
+  return up;
+}
+
+/**
+ * Time passed (reservation time + the business's expiry minutes): a confirmed guest who never
+ * came is « Absent » (no-show), a request never answered is « Expirée ». One business or all.
+ */
+export async function sweepReservations(db: DB, restaurantId?: string, now = new Date()): Promise<number> {
+  const res = await db.execute<{ restaurant_id: string }>(sql`
+    update reservations v set
+      status = case when v.status = 'confirmed' then 'no_show' else 'expired' end,
+      status_at = ${now}, status_by = 'system', updated_at = ${now}
+    from restaurants x
+    where x.id = v.restaurant_id
+      and v.status in ('confirmed', 'requested')
+      and v.checked_in_at is null
+      ${restaurantId ? sql`and v.restaurant_id = ${restaurantId}` : sql``}
+      and (v.date::text || ' ' || v.time)::timestamp
+          + make_interval(mins => coalesce((x.settings #>> '{reservations,expiryMinutes}')::int, ${RESERVATION_DEFAULTS.expiryMinutes}))
+          < (${now}::timestamptz at time zone 'UTC')
+    returning v.restaurant_id`);
+  for (const rid of new Set(res.rows.map((x) => x.restaurant_id))) await notify(db, { k: "reservation", r: rid });
+  return res.rows.length;
+}
+
+/* ------------------------------------------------------------------ wait time */
+
+export const WAIT_CHOICES = [10, 15, 20, 30, 45, 60, 90, 120] as const;
+export const WAIT_HOURS = [1, 2, 3, 4, 6, 12] as const;
+export const WaitInput = z.object({
+  minutes: z.coerce.number().int().refine((n) => n === 0 || (WAIT_CHOICES as readonly number[]).includes(n)),
+  hours: z.coerce.number().int().refine((n) => (WAIT_HOURS as readonly number[]).includes(n)).default(3),
+  note: z.string().trim().max(140).optional(),
+});
+
+/** The wait shown to customers right now (null: none, or it ran out). */
+export function currentWait(r: Pick<Restaurant, "settings">, now = new Date()): { minutes: number; note: string | null; until: string } | null {
+  const w = r.settings.waitTime;
+  if (!w || w.minutes <= 0 || Date.parse(w.until) <= now.getTime()) return null;
+  return { minutes: w.minutes, note: w.note ?? null, until: w.until };
+}
+
+/* ------------------------------------------------------------------ figures */
+
+/** The owner's figures: today (expected, arrived, absent, waiting) and the last 30 days. */
+export async function reservationSummary(db: DB, restaurantId: string, now = new Date()) {
+  const day = today(now);
+  const since = addDays(day, -30);
+  const [row] = (
+    await db.execute<Record<string, number>>(sql`
+      select
+        count(*) filter (where date = ${day} and status not in ('declined', 'cancelled'))::int as today_expected,
+        coalesce(sum(party_size) filter (where date = ${day} and status not in ('declined', 'cancelled', 'no_show', 'expired')), 0)::int as today_guests,
+        count(*) filter (where date = ${day} and checked_in_at is not null)::int as today_arrived,
+        count(*) filter (where date = ${day} and status = 'no_show')::int as today_no_show,
+        count(*) filter (where date = ${day} and status = 'confirmed')::int as today_to_come,
+        count(*) filter (where status = 'requested' and date >= ${day})::int as waiting,
+        count(*) filter (where date between ${since} and ${day})::int as total,
+        count(*) filter (where date between ${since} and ${day} and checked_in_at is not null)::int as honoured,
+        count(*) filter (where date between ${since} and ${day} and checked_in_via = 'qr')::int as by_qr,
+        count(*) filter (where date between ${since} and ${day} and status = 'no_show')::int as no_show,
+        count(*) filter (where date between ${since} and ${day} and status = 'cancelled')::int as cancelled,
+        count(*) filter (where date between ${since} and ${day} and status in ('declined', 'expired'))::int as declined,
+        coalesce(sum(party_size) filter (where date between ${since} and ${day} and checked_in_at is not null), 0)::int as guests_honoured
+      from reservations where restaurant_id = ${restaurantId}`)
+  ).rows;
+  const n = (k: string) => Number(row?.[k] ?? 0);
+  const honoured = n("honoured");
+  const noShow = n("no_show");
+  return {
+    today: { expected: n("today_expected"), guests: n("today_guests"), arrived: n("today_arrived"), noShow: n("today_no_show"), toCome: n("today_to_come") },
+    waiting: n("waiting"),
+    last30: {
+      total: n("total"),
+      honoured,
+      byQr: n("by_qr"),
+      noShow,
+      cancelled: n("cancelled"),
+      declined: n("declined"),
+      guests: n("guests_honoured"),
+      showRate: honoured + noShow > 0 ? Math.round((honoured / (honoured + noShow)) * 100) : null,
+    },
+  };
 }
 
 /** Platform figures (console): reservations made, by state, last 30 days; one business or all. */

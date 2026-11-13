@@ -49,6 +49,8 @@ export type PublicMenuData = {
   onAccent2: string;
   poweredBadge: boolean;
   features: { welcomeScreen: boolean; fortuneCookie: boolean; share: boolean; takeawayWhatsapp: boolean; localBadge: boolean; reviews: boolean; reservations: boolean };
+  /** Current wait set by the business on a busy day (null: none). */
+  wait: { minutes: number; note: string | null } | null;
   locales: Array<"fr" | "en" | "zh">;
   hours: PublicHours[];
   categories: PublicCategory[];

@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { GUIDES, SceneFrame, sceneFor, type Audience, type GuideId } from "./guide-scenes";
+import { GUIDES, guidesFor, SceneFrame, sceneFor, type Audience, type GuideId } from "./guide-scenes";
 
 const STEP_MS = 3200;
 const SEEN_KEY = "rc-guide-seen";
@@ -124,7 +124,7 @@ export function GuidePlayer({ id, inApp }: { id: GuideId; inApp: boolean }) {
 export function GuideCenter({ audience, initial, inApp }: { audience: Audience; initial: GuideId | null; inApp: boolean }) {
   const t = useTranslations("guide");
   const seen = useSeenGuides();
-  const list = GUIDES.filter((g) => g.audience === audience);
+  const list = guidesFor(audience);
   const [current, setCurrent] = useState<GuideId>(initial && list.some((g) => g.id === initial) ? initial : list[0]!.id);
   const done = list.filter((g) => seen.has(g.id)).length;
   return (

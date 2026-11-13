@@ -36,7 +36,12 @@ export type RestaurantSettings = {
    * largest group, covers per slot (0 = no limit), minimum notice, how far ahead, a note shown
    * on the form.
    */
-  reservations?: { enabled: boolean; slotMinutes: number; maxParty: number; maxCoversPerSlot: number; noticeMinutes: number; daysAhead: number; note?: string };
+  reservations?: { enabled: boolean; slotMinutes: number; maxParty: number; maxCoversPerSlot: number; noticeMinutes: number; daysAhead: number; note?: string; expiryMinutes?: number };
+  /**
+   * Current wait (busy day), shown on the public page and the reservation form until `until`.
+   * minutes = 0 or past `until`: no wait shown.
+   */
+  waitTime?: { minutes: number; note?: string; setAt: string; until: string; setBy?: string };
   /** PIN sessions on authorised devices: end of shift (hours) and auto-lock when idle (minutes). */
   staffSessions?: { shiftHours: number; idleMinutes: number };
   /** Front desk timers: an open order turns orange, then red, after these many minutes. */

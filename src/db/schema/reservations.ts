@@ -3,14 +3,15 @@ import { sql } from "drizzle-orm";
 import { id, timestamps } from "./_shared";
 import { restaurants } from "./restaurants";
 
-export const RESERVATION_STATUSES = ["requested", "confirmed", "declined", "seated", "completed", "no_show", "cancelled"] as const;
+export const RESERVATION_STATUSES = ["requested", "confirmed", "declined", "seated", "completed", "no_show", "cancelled", "expired"] as const;
 export type ReservationStatus = (typeof RESERVATION_STATUSES)[number];
 
 /**
  * Table reservations made from the business's public page. The customer gets emails from
  * RestoCool and a private link (`token_hash`) to see or cancel it; the business calls them and
  * confirms or declines.
- *  requested → confirmed | declined | cancelled;  confirmed → seated → completed | no_show | cancelled
+ *  requested → confirmed | declined | cancelled | expired (never answered, time passed)
+ *  confirmed → seated (checked in: QR scanned or by hand) → completed;  confirmed → no_show (QR expired) | cancelled
  * Date and time are the business's local day and hour (Africa/Ouagadougou = UTC).
  */
 export const reservations = pgTable(
@@ -37,6 +38,15 @@ export const reservations = pgTable(
     tokenHash: text("token_hash").notNull(),
     /** SHA-256 of the anonymous device id that made it (rate limits). */
     deviceHash: text("device_hash"),
+    /**
+     * SHA-256 of the check-in QR token (set when the business confirms). The QR works once: after
+     * check-in (`checked_in_at`) or after the expiry (time + the business's expiry minutes) it is refused.
+     */
+    checkinHash: text("checkin_hash"),
+    checkedInAt: timestamp("checked_in_at", { withTimezone: true }),
+    checkedInBy: text("checked_in_by"),
+    /** « qr » (scanned) or « manual » (Arrivés button). */
+    checkedInVia: text("checked_in_via").$type<"qr" | "manual">(),
     /** The business called the customer (« Appelé »): when and who. */
     contactedAt: timestamp("contacted_at", { withTimezone: true }),
     contactedBy: text("contacted_by"),
@@ -53,6 +63,7 @@ export const reservations = pgTable(
     index("reservations_status_idx").on(t.restaurantId, t.status),
     uniqueIndex("reservations_ref_uq").on(t.restaurantId, t.ref),
     uniqueIndex("reservations_token_uq").on(t.tokenHash),
+    uniqueIndex("reservations_checkin_uq").on(t.checkinHash),
     index("reservations_created_idx").on(t.createdAt),
     check("reservations_party_range", sql`${t.partySize} between 1 and 200`),
   ],

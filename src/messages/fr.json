@@ -1332,10 +1332,17 @@
         "total": "Demandes reçues",
         "covers": "Personnes réservées",
         "waiting": "En attente d’appel",
-        "confirmed": "Confirmées ou honorées",
+        "confirmed": "Confirmées, à venir",
         "called": "Clients appelés",
         "declined": "Refusées ou annulées",
-        "noShow": "Absents"
+        "noShow": "Absents",
+        "honoured": "Clients venus (arrivée enregistrée)",
+        "byQr": "Arrivées par scan du QR",
+        "showRate": "Taux de présence",
+        "expired": "Demandes jamais traitées (expirées)",
+        "waitNow": "Établissements affichant une attente",
+        "waitNowOne": "Temps d’attente affiché",
+        "waitSet": "Temps d’attente annoncés"
       }
     }
   },
@@ -1992,7 +1999,9 @@
     "resvError_closed": "Les réservations ne sont pas ouvertes pour le moment.",
     "resvError_rate": "Trop de demandes. Réessayez dans quelques minutes.",
     "resvError_network": "Pas de connexion. Vérifiez Internet et réessayez.",
-    "resvError_error": "La réservation n’a pas pu être envoyée. Réessayez."
+    "resvError_error": "La réservation n’a pas pu être envoyée. Réessayez.",
+    "waitNow": "Attente actuelle : environ {n} min",
+    "resvWait": "Journée chargée : attente actuelle d’environ {n} min. Votre table peut être prête un peu plus tard."
   },
   "seating": {
     "title": "Tables et salles",
@@ -2454,8 +2463,11 @@
     "introPublic": "Tutoriels animés pour le personnel et les gérants : pointage, commandes, cuisine, numéro RC.",
     "audience": "Pour qui ?",
     "for": {
-      "manager": "Gérants",
-      "staff": "Personnel"
+      "owner": "Propriétaire",
+      "manager": "Gérant",
+      "server": "Serveur",
+      "host": "Accueil",
+      "kitchen": "Cuisine"
     },
     "prev": "Étape précédente",
     "next": "Étape suivante",
@@ -2528,7 +2540,42 @@
       "drinks": "Boissons",
       "owner": "Propriétaire",
       "min14": "14 min",
-      "min3": "3 min"
+      "min3": "3 min",
+      "reservations": "Réservations",
+      "resvSettings": "Réglages",
+      "resvOpen": "Ouvrir les réservations sur ma page",
+      "bookTable": "Réserver une table",
+      "guests": "Personnes",
+      "called": "J’ai appelé",
+      "emailQrSent": "Le client reçoit un email avec son QR d’arrivée",
+      "waitTitle": "Temps d’attente",
+      "waitNote": "Précision",
+      "waitNoteValue": "Salle pleine, terrasse libre",
+      "waitShow": "Afficher l’attente",
+      "waitPublic": "Attente actuelle : environ 45 min",
+      "emailQr": "Votre QR d’arrivée",
+      "resvValid": "Réservation valide",
+      "confirmArrival": "Confirmer l’arrivée",
+      "qrOnce": "Le QR ne fonctionne qu’une fois",
+      "tableFree": "Table libérée",
+      "tableFreeAsk": "La table 4 est libre ?",
+      "yesFree": "Oui, la table 4 est libre",
+      "floorLive": "Salle en direct",
+      "free": "libre",
+      "eating": "à table",
+      "rateUs": "Donnez votre avis",
+      "comment": "Commentaire",
+      "commentValue": "Très bon riz gras !",
+      "reviewsTitle": "Avis clients",
+      "hide": "Masquer",
+      "delete": "Supprimer",
+      "reviewsOnOff": "Avis activés sur ma page",
+      "shareTable": "Partager ma sélection avec ma table",
+      "done": "Terminé",
+      "serveByName": "Servez chaque plat à la bonne personne",
+      "offlineBanner": "Hors ligne",
+      "pendingSync": "⏳ en attente",
+      "backOnline": "De nouveau en ligne"
     },
     "items": {
       "menu": {
@@ -2627,8 +2674,66 @@
         "s1": "Montrez au client le numéro RC écrit sous le QR code (ex. : RC-K7M3P).",
         "s2": "Il va sur restocool.com/c et tape le numéro.",
         "s3": "Le menu s’ouvre, déjà à la bonne table."
+      },
+      "reservations": {
+        "title": "Recevoir des réservations",
+        "intro": "Vos clients réservent depuis votre page ; vous les appelez pour confirmer.",
+        "s1": "Dans « Réservations », cochez « Ouvrir les réservations sur ma page » et enregistrez.",
+        "s2": "Le client choisit le jour, l’heure et le nombre de personnes, avec son nom, son email et son téléphone.",
+        "s3": "La demande arrive en haut de la page : appelez le client, puis touchez « J’ai appelé ».",
+        "s4": "Touchez « Confirmer » : RestoCool lui envoie un email avec son QR d’arrivée."
+      },
+      "waitTime": {
+        "title": "Annoncer un temps d’attente",
+        "intro": "Journée chargée ? Prévenez vos clients avant qu’ils arrivent.",
+        "s1": "Dans « Réservations », choisissez l’attente (par exemple 45 min).",
+        "s2": "Ajoutez une précision si besoin, puis touchez « Afficher l’attente ».",
+        "s3": "Elle s’affiche sur votre page et au moment de réserver, puis disparaît toute seule."
+      },
+      "resvCheckin": {
+        "title": "Scanner le QR d’une réservation",
+        "intro": "Le client montre le QR reçu par email à son arrivée.",
+        "s1": "Le client confirmé a reçu son QR d’arrivée par email (aussi sur son lien de réservation).",
+        "s2": "Scannez-le avec l’appareil photo du téléphone ou « Scanner » dans l’application.",
+        "s3": "Vérifiez le nom et le nombre de personnes, touchez « Confirmer l’arrivée ». Le QR ne marche plus ensuite."
+      },
+      "releaseTable": {
+        "title": "Libérer une table",
+        "intro": "Quand les clients partent, la table redevient libre pour les suivants.",
+        "s1": "Sur la commande servie, touchez « Table libérée ».",
+        "s2": "Confirmez : « Oui, la table 4 est libre ».",
+        "s3": "La salle en direct la montre libre ; les tables oubliées se libèrent aussi toutes seules."
+      },
+      "reviews": {
+        "title": "Gérer les avis clients",
+        "intro": "Les clients servis peuvent laisser des étoiles et un commentaire.",
+        "s1": "Après avoir été servi, le client donne 1 à 5 étoiles et un commentaire.",
+        "s2": "Dans « Avis clients », masquez ou supprimez un avis si besoin.",
+        "s3": "Vous pouvez aussi désactiver les avis sur votre page à tout moment."
+      },
+      "sharedOrder": {
+        "title": "Commande partagée par une table",
+        "intro": "Des amis choisissent chacun depuis leur téléphone ; une seule commande arrive.",
+        "s1": "Un client partage sa sélection : chacun ajoute ses plats avec son prénom.",
+        "s2": "La commande arrive avec le prénom de chacun sur ses plats.",
+        "s3": "Servez chaque plat à la bonne personne."
+      },
+      "offline": {
+        "title": "Travailler sans réseau",
+        "intro": "Une coupure ? Continuez, tout part dès le retour du réseau.",
+        "s1": "Le bandeau « Hors ligne » s’affiche : continuez à confirmer et servir.",
+        "s2": "Vos actions attendent sur le téléphone avec « en attente ».",
+        "s3": "Au retour du réseau, tout est envoyé dans l’ordre, tout seul."
       }
-    }
+    },
+    "profileHint": {
+      "owner": "Tous les tutoriels de RestoCool. Pour former quelqu’un, ouvrez l’onglet de son profil et montrez-lui son écran.",
+      "manager": "Gérer le menu, l’équipe, les réservations et suivre l’activité.",
+      "server": "Prendre et servir les commandes, accueillir les réservations, libérer les tables.",
+      "host": "Accueillir les clients : réservations, QR d’arrivée, temps d’attente.",
+      "kitchen": "Préparer les commandes à l’écran cuisine et signaler les plats épuisés."
+    },
+    "trainHint": "Vous voyez ce que voit ce profil."
   },
   "location": {
     "title": "Emplacement de l'établissement",
@@ -3287,7 +3392,12 @@
         "subject": "Annulation confirmée · {business}",
         "title": "Votre réservation est annulée",
         "body": "Nous avons bien annulé votre réservation chez {business}. À une prochaine fois !"
-      }
+      },
+      "qrTitle": "Votre QR d’arrivée",
+      "qrAlt": "QR de la réservation {ref}",
+      "qrText": "Montrez ce QR au personnel en arrivant. Il fonctionne une seule fois, jusqu’à {until}.",
+      "qrFallback": "Sans le QR, donnez la référence {ref}.",
+      "waitNow": "Journée chargée : attente actuelle d’environ {n} min."
     }
   },
   "seo": {
@@ -3752,7 +3862,8 @@
       "seated": "Arrivés",
       "completed": "Terminée",
       "no_show": "Absent",
-      "cancelled": "Annulée"
+      "cancelled": "Annulée",
+      "expired": "Expirée"
     },
     "actions": {
       "contacted": "J’ai appelé",
@@ -3775,7 +3886,9 @@
       "contacted": "Appel noté.",
       "enabled": "Réservations ouvertes : le bouton est sur votre page.",
       "disabled": "Réservations fermées.",
-      "saved": "Réglages enregistrés."
+      "saved": "Réglages enregistrés.",
+      "wait": "Temps d’attente affiché sur votre page.",
+      "waitCleared": "Temps d’attente retiré."
     },
     "errors": {
       "moved": "Cette réservation a déjà changé. La liste est à jour.",
@@ -3797,7 +3910,63 @@
       "notePlaceholder": "Ex. : les tables sont gardées 15 minutes.",
       "hoursHint": "Les horaires proposés suivent vos heures d’ouverture.",
       "hoursLink": "Modifier les horaires",
-      "save": "Enregistrer"
+      "save": "Enregistrer",
+      "expiry": "Le QR expire après l’heure de la réservation",
+      "expiryHint": "Passé ce délai, le QR ne fonctionne plus et le client est compté absent."
+    },
+    "checkedInQr": "Arrivés à {at} (QR scanné)",
+    "checkedInManual": "Arrivés à {at}",
+    "qrUntil": "QR valable jusqu’à {at}",
+    "stats": {
+      "todayTitle": "Réservations aujourd’hui",
+      "expected": "Attendues",
+      "toCome": "À venir",
+      "arrived": "Arrivées",
+      "noShow": "Absents",
+      "guestsToday": "{n, plural, =0 {Aucune personne attendue} one {# personne attendue} other {# personnes attendues}} aujourd’hui.",
+      "monthTitle": "30 derniers jours",
+      "honoured": "Honorées",
+      "noShows": "Absents",
+      "showRate": "Taux de présence",
+      "cancelled": "Annulées / refusées",
+      "monthHint": "{total} réservations · {qr} arrivées par QR · {guests} personnes reçues.",
+      "dash": {
+        "expected": "{n} attendues",
+        "arrived": "{n} arrivées",
+        "noShow": "{n} absents",
+        "waiting": "{n} à confirmer"
+      }
+    },
+    "wait": {
+      "title": "Temps d’attente",
+      "none": "Aucune attente affichée",
+      "current": "~{n} min jusqu’à {until}",
+      "hint": "Journée chargée ? Indiquez l’attente : vos clients la voient sur votre page et au moment de réserver. Elle disparaît toute seule après la durée choisie.",
+      "min": "{n} min",
+      "hoursLabel": "{n, plural, one {# heure} other {# heures}}",
+      "noteLabel": "Précision (facultatif)",
+      "notePlaceholder": "Ex. : salle pleine, terrasse disponible",
+      "for": "Afficher pendant",
+      "save": "Afficher l’attente",
+      "clear": "Retirer l’attente"
+    },
+    "checkin": {
+      "title": "Arrivée d’une réservation",
+      "unknownTitle": "QR inconnu",
+      "unknownText": "Ce QR ne correspond à aucune réservation de votre établissement.",
+      "scanAnother": "Scanner un autre QR",
+      "doneTitle": "Bienvenue, {name} !",
+      "confirm": "Confirmer l’arrivée ({n, plural, one {# personne} other {# personnes}})",
+      "usedAt": "Arrivée déjà enregistrée à {at}.",
+      "expiredAt": "Ce QR a expiré à {at}.",
+      "earlyHint": "Trop tôt : le QR fonctionne à partir de 3 heures avant l’heure réservée.",
+      "state": {
+        "valid": "Réservation valide",
+        "used": "QR déjà utilisé",
+        "expired": "QR expiré",
+        "early": "Un peu tôt",
+        "invalid": "Réservation non confirmée"
+      }
     }
   },
   "reservation": {
@@ -3809,7 +3978,8 @@
       "seated": "Arrivés",
       "completed": "Terminée",
       "no_show": "Absent",
-      "cancelled": "Annulée"
+      "cancelled": "Annulée",
+      "expired": "Expirée"
     },
     "statusHint": {
       "requested": "{business} va vous appeler pour confirmer votre table.",
@@ -3818,7 +3988,8 @@
       "seated": "Bon appétit !",
       "completed": "Merci de votre visite.",
       "no_show": "Cette réservation est passée.",
-      "cancelled": "Cette réservation est annulée."
+      "cancelled": "Cette réservation est annulée.",
+      "expired": "Cette demande n’a pas été confirmée à temps."
     },
     "cancelledOk": "Votre réservation est annulée. Un email de confirmation vous a été envoyé.",
     "date": "Date",
@@ -3831,6 +4002,17 @@
     "call": "Appeler {phone}",
     "seeMenu": "Voir le menu",
     "cancel": "Annuler ma réservation",
-    "footer": "Réservation faite avec RestoCool pour {business}."
+    "footer": "Réservation faite avec RestoCool pour {business}.",
+    "qrTitle": "Votre QR d’arrivée",
+    "qrText": "Montrez-le au personnel en arrivant. Valable une seule fois, jusqu’à {until}.",
+    "checkedIn": "Votre arrivée est enregistrée. Bon appétit !",
+    "waitNow": "Attente actuelle : environ {n} min",
+    "qrHelp": {
+      "title": "Votre réservation",
+      "text": "Ce QR code est votre réservation : montrez-le au personnel de l’établissement à votre arrivée. Il le scanne pour enregistrer votre arrivée.",
+      "unknownTitle": "QR non valable",
+      "unknownText": "Ce QR ne correspond à aucune réservation.",
+      "staff": "Vous travaillez dans cet établissement ? Connectez-vous"
+    }
   }
 }

@@ -138,4 +138,47 @@ describe.skipIf(!hasDb)("reservations (database)", () => {
     const [row] = await db.select().from(reservations).where(eq(reservations.id, b.reservation.id));
     expect(row!.statusBy).toBe("it-resv-owner");
   });
+
+  it("confirmed: one-time check-in QR, refused when used, expired or early; no-shows swept after the expiry", async () => {
+    const db = getDb();
+    const own = owner();
+    await setCfg({ maxCoversPerSlot: 0, expiryMinutes: 30 });
+    const a = await rv.createReservation(db, r, rv.ReservationInput.parse({ ...base, time: "21:00", email: "qr@x.bf" }), PHONE, NOW);
+    // No QR before the business confirms.
+    expect(await rv.reservationByCheckin(db, r.id, rv.checkinToken(a.reservation.id))).toBeNull();
+    const ok = await rv.moveReservation(own, a.reservation.id, "confirm");
+    const token = rv.checkinToken(ok.id);
+    expect(rv.qrValid(ok, rv.reservationConfig(r), NOW)).toBe(true);
+    // Too early (more than 3 h before), then on time; a second scan is refused.
+    await expect(rv.checkInByQr(own, r, token, new Date("2026-11-14T17:00:00Z"))).rejects.toMatchObject({ code: "early" });
+    const seated = await rv.checkInByQr(own, r, token, new Date("2026-11-14T20:50:00Z"));
+    expect(seated).toMatchObject({ status: "seated", checkedInVia: "qr" });
+    await expect(rv.checkInByQr(own, r, token, new Date("2026-11-14T20:51:00Z"))).rejects.toMatchObject({ code: "used" });
+    // Another business cannot use it.
+    const foreign = { db, actor: { kind: "member" as const, userId: "it-resv-other", restaurantId: other.id, role: "owner" as const }, restaurantId: other.id };
+    await expect(rv.checkInByQr(foreign, other, token)).rejects.toMatchObject({ code: "not_found" });
+
+    // Past the expiry (21:30 + 30 min): the QR is refused and the sweep marks no-show / expired.
+    const late = await rv.createReservation(db, r, rv.ReservationInput.parse({ ...base, time: "21:30", email: "late@x.bf" }), PHONE, NOW);
+    await rv.moveReservation(own, late.reservation.id, "confirm");
+    const never = await rv.createReservation(db, r, rv.ReservationInput.parse({ ...base, time: "22:00", email: "never@x.bf" }), PHONE, NOW);
+    await expect(rv.checkInByQr(own, r, rv.checkinToken(late.reservation.id), new Date("2026-11-14T22:01:00Z"))).rejects.toMatchObject({ code: "expired" });
+    expect(await rv.sweepReservations(db, r.id, new Date("2026-11-14T22:10:00Z"))).toBe(1); // only 21:30 is past 30 min
+    expect(await rv.sweepReservations(db, r.id, new Date("2026-11-14T23:00:00Z"))).toBe(1);
+    const rows = await db.select({ id: reservations.id, status: reservations.status }).from(reservations).where(inArray(reservations.id, [late.reservation.id, never.reservation.id, seated.id]));
+    expect(Object.fromEntries(rows.map((x) => [x.id, x.status]))).toEqual({ [late.reservation.id]: "no_show", [never.reservation.id]: "expired", [seated.id]: "seated" });
+
+    // Figures for the owner.
+    const sum = await rv.reservationSummary(db, r.id, new Date("2026-11-14T23:00:00Z"));
+    expect(sum.today).toMatchObject({ arrived: 2, noShow: 1 });
+    expect(sum.last30).toMatchObject({ honoured: 2, byQr: 1, noShow: 1, showRate: 67 });
+  });
+
+  it("wait time: shown until it runs out", async () => {
+    const until = new Date(NOW.getTime() + 3_600_000).toISOString();
+    expect(rv.currentWait({ settings: { waitTime: { minutes: 30, setAt: NOW.toISOString(), until } } }, NOW)).toMatchObject({ minutes: 30 });
+    expect(rv.currentWait({ settings: { waitTime: { minutes: 30, setAt: NOW.toISOString(), until } } }, new Date(NOW.getTime() + 2 * 3_600_000))).toBeNull();
+    expect(rv.currentWait({ settings: {} }, NOW)).toBeNull();
+  });
 });
+

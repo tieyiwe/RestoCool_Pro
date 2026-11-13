@@ -36,10 +36,16 @@ export function FeatureUsageCard({ u, t, version, perBusiness = false }: { u: Fe
             <Row label={t("features.reservations.total")} value={u.reservations.total} testId="fu-resv-total" />
             <Row label={t("features.reservations.covers")} value={u.reservations.covers} />
             <Row label={t("features.reservations.waiting")} value={u.reservations.requested} testId="fu-resv-waiting" />
-            <Row label={t("features.reservations.confirmed")} value={u.reservations.confirmed + u.reservations.honoured} />
+            <Row label={t("features.reservations.confirmed")} value={u.reservations.confirmed} />
+            <Row label={t("features.reservations.honoured")} value={u.reservations.honoured} testId="fu-resv-honoured" />
             <Row label={t("features.reservations.called")} value={u.reservations.called} />
             <Row label={t("features.reservations.declined")} value={u.reservations.declined + u.reservations.cancelled} />
             <Row label={t("features.reservations.noShow")} value={u.reservations.noShow} />
+            <Row label={t("features.reservations.byQr")} value={u.reservations.byQr} testId="fu-resv-qr" />
+            <Row label={t("features.reservations.showRate")} value={u.reservations.showRate === null ? "—" : `${u.reservations.showRate} %`} testId="fu-resv-rate" />
+            <Row label={t("features.reservations.expired")} value={u.reservations.expired} />
+            <Row label={t(perBusiness ? "features.reservations.waitNowOne" : "features.reservations.waitNow")} value={perBusiness ? (u.reservations.waitNow ? t("features.yes") : t("features.no")) : u.reservations.waitNow} />
+            <Row label={t("features.reservations.waitSet")} value={u.reservations.waitSet} />
           </ul>
         </section>
         <section data-testid="feature-shared">

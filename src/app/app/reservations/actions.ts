@@ -10,8 +10,10 @@ import { writeAudit } from "@/lib/audit";
 import { requireMember } from "@/lib/auth/context";
 import { sendReservationEmail, type ReservationMailKind } from "@/lib/email/reservation";
 import { NotFoundError } from "@/lib/errors";
-import { markContacted, moveReservation, RESERVATION_ACTIONS, ReservationError, ReservationSettingsInput } from "@/lib/reservations";
+import { CheckinError, checkInByQr, markContacted, moveReservation, RESERVATION_ACTIONS, ReservationError, ReservationSettingsInput, WaitInput } from "@/lib/reservations";
+import { getMemberContext } from "@/lib/auth/context";
 import { publicBaseUrl } from "@/lib/urls";
+import { notify } from "@/lib/realtime/events";
 
 const back = (day: string | null, q: string) => `/app/reservations?${day && /^\d{4}-\d{2}-\d{2}$/.test(day) ? `day=${day}&` : ""}${q}`;
 
@@ -59,6 +61,7 @@ export async function reservationSettingsAction(fd: FormData) {
     noticeMinutes: fd.get("noticeMinutes"),
     daysAhead: fd.get("daysAhead"),
     note: (fd.get("note") as string | null) || undefined,
+    expiryMinutes: fd.get("expiryMinutes") ?? 60,
   });
   if (!p.success) redirect("/app/reservations?error=settings#settings");
   const r = await m.repo.restaurant.get();
@@ -77,4 +80,43 @@ export async function reservationSettingsAction(fd: FormData) {
   revalidatePath("/app/reservations");
   revalidatePath(`/r/${r.slug}`);
   redirect(`/app/reservations?ok=${was !== p.data.enabled ? (p.data.enabled ? "enabled" : "disabled") : "saved"}`);
+}
+
+/** A scanned guest QR: check them in (once). Staff who serve tables may do it. */
+export async function checkInAction(fd: FormData) {
+  const token = z.string().regex(/^[A-Za-z0-9_-]{16,64}$/).parse(fd.get("token"));
+  const ctx = await getMemberContext();
+  if (!ctx) redirect(`/rv/${token}`);
+  const r = await ctx.repo.restaurant.get();
+  if (!r) throw new NotFoundError();
+  let result = "ok";
+  try {
+    await checkInByQr({ db: getDb(), actor: ctx.actor, restaurantId: r.id }, r, token);
+  } catch (err) {
+    if (err instanceof CheckinError) result = err.code;
+    else throw err;
+  }
+  revalidatePath("/app/reservations");
+  redirect(`/app/reservations/checkin/${token}?result=${result}`);
+}
+
+/** « Temps d'attente » on a busy day: shown on the public page and the reservation form. */
+export async function waitTimeAction(fd: FormData) {
+  const m = await requireMember("reservations.write");
+  const p = WaitInput.safeParse({ minutes: fd.get("minutes"), hours: fd.get("hours") ?? 3, note: (fd.get("note") as string | null) || undefined });
+  if (!p.success) redirect("/app/reservations?error=settings");
+  const r = await m.repo.restaurant.get();
+  if (!r) throw new NotFoundError();
+  const now = new Date();
+  const waitTime = p.data.minutes > 0 ? { minutes: p.data.minutes, note: p.data.note, setAt: now.toISOString(), until: new Date(now.getTime() + p.data.hours * 3_600_000).toISOString(), setBy: m.actor.kind === "member" ? m.actor.userId : undefined } : undefined;
+  await getDb()
+    .update(restaurants)
+    .set({ settings: { ...r.settings, waitTime }, updatedAt: now })
+    .where(eq(restaurants.id, r.id));
+  await writeAudit(getDb(), m.actor, { restaurantId: r.id, action: waitTime ? "wait.set" : "wait.cleared", entity: "restaurant", entityId: r.id, data: waitTime ? { minutes: waitTime.minutes } : undefined });
+  // Customers on the page see it change (the menu event makes their page re-read it).
+  await notify(getDb(), { k: "menu", r: r.id });
+  revalidatePath("/app/reservations");
+  revalidatePath(`/r/${r.slug}`);
+  redirect(`/app/reservations?ok=${waitTime ? "wait" : "waitCleared"}`);
 }

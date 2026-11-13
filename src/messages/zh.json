@@ -1332,10 +1332,17 @@
         "total": "Requests received",
         "covers": "Guests booked",
         "waiting": "Waiting for a call",
-        "confirmed": "Confirmed or honoured",
+        "confirmed": "Confirmed, still to come",
         "called": "Customers called",
         "declined": "Declined or cancelled",
-        "noShow": "No-shows"
+        "noShow": "No-shows",
+        "honoured": "Guests who came (checked in)",
+        "byQr": "Checked in by QR scan",
+        "showRate": "Show-up rate",
+        "expired": "Requests never answered (expired)",
+        "waitNow": "Businesses showing a wait now",
+        "waitNowOne": "Wait time shown now",
+        "waitSet": "Wait times set"
       }
     }
   },
@@ -1992,7 +1999,9 @@
     "resvError_closed": "目前暂不接受预订。",
     "resvError_rate": "请求过多，请几分钟后再试。",
     "resvError_network": "无网络连接，请检查后重试。",
-    "resvError_error": "预订未能发送，请重试。"
+    "resvError_error": "预订未能发送，请重试。",
+    "waitNow": "当前等待：约 {n} 分钟",
+    "resvWait": "今日繁忙：当前等待约 {n} 分钟，您的餐桌可能会稍晚准备好。"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -2454,8 +2463,11 @@
     "introPublic": "面向员工和管理者的动画教程：打卡、订单、厨房、RC 号。",
     "audience": "适用对象",
     "for": {
-      "manager": "管理者",
-      "staff": "员工"
+      "owner": "店主",
+      "manager": "经理",
+      "server": "服务员",
+      "host": "迎宾",
+      "kitchen": "厨房"
     },
     "prev": "上一步",
     "next": "下一步",
@@ -2528,7 +2540,42 @@
       "drinks": "饮品",
       "owner": "店主",
       "min14": "14 分钟",
-      "min3": "3 分钟"
+      "min3": "3 分钟",
+      "reservations": "预订",
+      "resvSettings": "设置",
+      "resvOpen": "在我的页面开放预订",
+      "bookTable": "预订餐桌",
+      "guests": "人数",
+      "called": "我已致电",
+      "emailQrSent": "顾客会收到带到店二维码的邮件",
+      "waitTitle": "等待时间",
+      "waitNote": "说明",
+      "waitNoteValue": "室内已满，露台有位",
+      "waitShow": "显示等待时间",
+      "waitPublic": "当前等待：约 45 分钟",
+      "emailQr": "您的到店二维码",
+      "resvValid": "有效预订",
+      "confirmArrival": "确认到店",
+      "qrOnce": "二维码仅可使用一次",
+      "tableFree": "餐桌已空出",
+      "tableFreeAsk": "4 号桌空了吗？",
+      "yesFree": "是的，4 号桌已空",
+      "floorLive": "实时餐厅",
+      "free": "空闲",
+      "eating": "用餐中",
+      "rateUs": "给我们评分",
+      "comment": "评论",
+      "commentValue": "油饭很好吃！",
+      "reviewsTitle": "顾客评价",
+      "hide": "隐藏",
+      "delete": "删除",
+      "reviewsOnOff": "在我的页面开启评价",
+      "shareTable": "与同桌分享我的选择",
+      "done": "已完成",
+      "serveByName": "把每道菜送给对的人",
+      "offlineBanner": "离线",
+      "pendingSync": "⏳ 等待中",
+      "backOnline": "已恢复在线"
     },
     "items": {
       "menu": {
@@ -2627,8 +2674,66 @@
         "s1": "给顾客看二维码下方的 RC 号（如 RC-K7M3P）。",
         "s2": "顾客访问 restocool.com/c 并输入号码。",
         "s3": "菜单打开，已经是正确的桌号。"
+      },
+      "reservations": {
+        "title": "接收预订",
+        "intro": "顾客在您的页面预订，您致电确认。",
+        "s1": "在“预订”中勾选“在我的页面开放预订”并保存。",
+        "s2": "顾客选择日期、时间和人数，并填写姓名、邮箱和电话。",
+        "s3": "请求显示在页面顶部：致电顾客，然后点“我已致电”。",
+        "s4": "点“确认”：RestoCool 会给顾客发送带到店二维码的邮件。"
+      },
+      "waitTime": {
+        "title": "公布等待时间",
+        "intro": "今天很忙？在顾客到来前告诉他们。",
+        "s1": "在“预订”中选择等待时间（例如 45 分钟）。",
+        "s2": "如需要添加说明，然后点“显示等待时间”。",
+        "s3": "它会显示在您的页面和预订时，到时自动消失。"
+      },
+      "resvCheckin": {
+        "title": "扫描预订二维码",
+        "intro": "顾客到店时出示邮件中的二维码。",
+        "s1": "已确认的顾客通过邮件（及其预订链接）收到到店二维码。",
+        "s2": "用手机相机或应用内的“扫描”扫码。",
+        "s3": "核对姓名和人数，点“确认到店”。之后二维码失效。"
+      },
+      "releaseTable": {
+        "title": "释放餐桌",
+        "intro": "顾客离开后，餐桌为下一批顾客空出。",
+        "s1": "在已上菜的订单上点“餐桌已空出”。",
+        "s2": "确认：“是的，4 号桌已空”。",
+        "s3": "实时餐厅显示其空闲；被遗忘的餐桌也会自动释放。"
+      },
+      "reviews": {
+        "title": "管理顾客评价",
+        "intro": "已上菜的顾客可以留下星级和评论。",
+        "s1": "上菜后，顾客给出 1 到 5 星和评论。",
+        "s2": "在“顾客评价”中，可隐藏或删除评价。",
+        "s3": "您也可以随时关闭页面上的评价。"
+      },
+      "sharedOrder": {
+        "title": "同桌共享的订单",
+        "intro": "朋友们各自用手机点菜，只收到一个订单。",
+        "s1": "一位顾客分享选择：每人写上名字添加自己的菜。",
+        "s2": "订单中每道菜都附有点菜人的名字。",
+        "s3": "把每道菜送给对的人。"
+      },
+      "offline": {
+        "title": "无网络时工作",
+        "intro": "断网了？继续操作，恢复后自动发送。",
+        "s1": "显示“离线”横幅：继续确认和上菜。",
+        "s2": "您的操作在手机上等待，标记为“等待中”。",
+        "s3": "网络恢复后，所有操作按顺序自动发送。"
       }
-    }
+    },
+    "profileHint": {
+      "owner": "RestoCool 的全部教程。要培训某人，请打开其岗位的标签，向他展示他的界面。",
+      "manager": "管理菜单、团队、预订并跟踪经营情况。",
+      "server": "接单和上菜、接待预订、释放餐桌。",
+      "host": "接待顾客：预订、到店二维码、等待时间。",
+      "kitchen": "在厨房屏幕备餐并标记售罄菜品。"
+    },
+    "trainHint": "您看到的是该岗位看到的内容。"
   },
   "location": {
     "title": "店铺位置",
@@ -3287,7 +3392,12 @@
         "subject": "取消已确认 · {business}",
         "title": "您的预订已取消",
         "body": "我们已取消您在 {business} 的预订。期待下次光临！"
-      }
+      },
+      "qrTitle": "您的到店二维码",
+      "qrAlt": "预订 {ref} 的二维码",
+      "qrText": "到店时请向工作人员出示此二维码。仅可使用一次，有效至 {until}。",
+      "qrFallback": "没有二维码时，请提供编号 {ref}。",
+      "waitNow": "今日繁忙：当前等待约 {n} 分钟。"
     }
   },
   "seo": {
@@ -3752,7 +3862,8 @@
       "seated": "已到店",
       "completed": "已完成",
       "no_show": "未到",
-      "cancelled": "已取消"
+      "cancelled": "已取消",
+      "expired": "已过期"
     },
     "actions": {
       "contacted": "我已致电",
@@ -3775,7 +3886,9 @@
       "contacted": "已记录致电。",
       "enabled": "预订已开放：按钮已显示在您的页面上。",
       "disabled": "预订已关闭。",
-      "saved": "设置已保存。"
+      "saved": "设置已保存。",
+      "wait": "等待时间已显示在您的页面上。",
+      "waitCleared": "等待时间已移除。"
     },
     "errors": {
       "moved": "该预订已有变动，列表已更新。",
@@ -3797,7 +3910,63 @@
       "notePlaceholder": "例如：餐桌保留 15 分钟。",
       "hoursHint": "可选时间根据您的营业时间生成。",
       "hoursLink": "修改营业时间",
-      "save": "保存"
+      "save": "保存",
+      "expiry": "预订时间后二维码失效时间",
+      "expiryHint": "超过此时间，二维码失效，顾客记为未到。"
+    },
+    "checkedInQr": "{at} 到店（已扫码）",
+    "checkedInManual": "{at} 到店",
+    "qrUntil": "二维码有效至 {at}",
+    "stats": {
+      "todayTitle": "今日预订",
+      "expected": "预计",
+      "toCome": "待到",
+      "arrived": "已到",
+      "noShow": "未到",
+      "guestsToday": "今天预计 {n} 人。",
+      "monthTitle": "最近 30 天",
+      "honoured": "已履约",
+      "noShows": "未到",
+      "showRate": "到店率",
+      "cancelled": "取消 / 拒绝",
+      "monthHint": "{total} 个预订 · {qr} 个扫码到店 · 接待 {guests} 人。",
+      "dash": {
+        "expected": "预计 {n}",
+        "arrived": "已到 {n}",
+        "noShow": "未到 {n}",
+        "waiting": "待确认 {n}"
+      }
+    },
+    "wait": {
+      "title": "等待时间",
+      "none": "未显示等待时间",
+      "current": "约 {n} 分钟，至 {until}",
+      "hint": "今天很忙？显示等待时间：顾客会在您的页面和预订时看到。到时自动消失。",
+      "min": "{n} 分钟",
+      "hoursLabel": "{n} 小时",
+      "noteLabel": "说明（可选）",
+      "notePlaceholder": "例如：室内已满，露台有位",
+      "for": "显示时长",
+      "save": "显示等待时间",
+      "clear": "移除等待时间"
+    },
+    "checkin": {
+      "title": "预订到店",
+      "unknownTitle": "未知二维码",
+      "unknownText": "此二维码不对应您店铺的任何预订。",
+      "scanAnother": "扫描其他二维码",
+      "doneTitle": "欢迎，{name}！",
+      "confirm": "确认到店（{n} 人）",
+      "usedAt": "已于 {at} 记录到店。",
+      "expiredAt": "此二维码已于 {at} 失效。",
+      "earlyHint": "太早了：二维码在预订时间前 3 小时起可用。",
+      "state": {
+        "valid": "有效预订",
+        "used": "二维码已使用",
+        "expired": "二维码已失效",
+        "early": "稍早",
+        "invalid": "预订未确认"
+      }
     }
   },
   "reservation": {
@@ -3809,7 +3978,8 @@
       "seated": "已到店",
       "completed": "已完成",
       "no_show": "未到",
-      "cancelled": "已取消"
+      "cancelled": "已取消",
+      "expired": "已过期"
     },
     "statusHint": {
       "requested": "{business} 会致电确认您的餐桌。",
@@ -3818,7 +3988,8 @@
       "seated": "祝您用餐愉快！",
       "completed": "感谢您的光临。",
       "no_show": "此预订已过期。",
-      "cancelled": "此预订已取消。"
+      "cancelled": "此预订已取消。",
+      "expired": "此请求未能及时确认。"
     },
     "cancelledOk": "您的预订已取消，确认邮件已发送给您。",
     "date": "日期",
@@ -3831,6 +4002,17 @@
     "call": "致电 {phone}",
     "seeMenu": "查看菜单",
     "cancel": "取消我的预订",
-    "footer": "通过 RestoCool 为 {business} 预订。"
+    "footer": "通过 RestoCool 为 {business} 预订。",
+    "qrTitle": "您的到店二维码",
+    "qrText": "到店时请出示给工作人员。仅可使用一次，有效至 {until}。",
+    "checkedIn": "已记录您的到店，祝您用餐愉快！",
+    "waitNow": "当前等待：约 {n} 分钟",
+    "qrHelp": {
+      "title": "您的预订",
+      "text": "此二维码就是您的预订：到店时出示给工作人员，他们扫码记录您的到店。",
+      "unknownTitle": "二维码无效",
+      "unknownText": "此二维码不对应任何预订。",
+      "staff": "您在这家店工作？请登录"
+    }
   }
 }

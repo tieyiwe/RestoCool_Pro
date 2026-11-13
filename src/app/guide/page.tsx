@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/brand/logo";
 import { GuideCenter } from "@/components/guide/guide-player";
 import { GuideTabs } from "@/components/guide/guide-tabs";
-import type { Audience, GuideId } from "@/components/guide/guide-scenes";
+import { PROFILES, type GuideId, type Profile } from "@/components/guide/guide-scenes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("guide");
@@ -15,7 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PublicGuidePage({ searchParams }: { searchParams: Promise<{ for?: string; g?: string }> }) {
   const t = await getTranslations("guide");
   const sp = await searchParams;
-  const audience: Audience = sp.for === "manager" ? "manager" : "staff";
+  // Public guide (no account): every profile; personnel usually land on « Serveur ».
+  const audience: Profile = PROFILES.includes(sp.for as Profile) ? (sp.for as Profile) : "server";
   return (
     <div className="min-h-dvh">
       <header className="border-b border-border bg-surface">
@@ -33,7 +34,7 @@ export default async function PublicGuidePage({ searchParams }: { searchParams: 
           <h1 className="font-display text-3xl font-extrabold">{t("title")}</h1>
           <p className="text-muted-foreground">{t("introPublic")}</p>
         </div>
-        <GuideTabs base="/guide" audience={audience} />
+        <GuideTabs base="/guide" profile={audience} profiles={["server", "host", "kitchen", "manager", "owner"]} />
         <GuideCenter key={audience} audience={audience} initial={(sp.g as GuideId) ?? null} inApp={false} />
       </main>
     </div>

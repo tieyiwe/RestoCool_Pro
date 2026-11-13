@@ -5,14 +5,14 @@ import type { DB } from "@/db";
 import { restaurants, type Reservation } from "@/db/schema";
 import { formatBfPhone } from "@/lib/format";
 import { log } from "@/lib/log";
-import { reservationToken } from "@/lib/reservations";
+import { checkinToken, currentWait, expiresAt, RESERVATION_DEFAULTS, reservationConfig, reservationToken } from "@/lib/reservations";
 import { sendMail } from "./mailer";
 
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
 export type ReservationMailKind = "requested" | "confirmed" | "declined" | "cancelled" | "cancelledByCustomer";
 
-type Business = { name: string; slug: string; address: string | null; city: string; phone: string | null };
+type Business = { name: string; slug: string; address: string | null; city: string; phone: string | null; expiryMinutes?: number; waitMinutes?: number | null };
 
 /** The date in words in the customer's language (« samedi 14 novembre 2026 »). */
 function longDate(day: string, locale: string) {
@@ -39,6 +39,17 @@ export async function reservationEmail(kind: ReservationMailKind, r: Reservation
   const body = t(`${kind}.body`, { business: b.name, phone: formatBfPhone(r.phone) });
   const reason = r.reason && (kind === "declined" || kind === "cancelled") ? t("reason", { reason: r.reason }) : null;
   const showLink = kind === "requested" || kind === "confirmed";
+  // Confirmed: the check-in QR the guest shows on arrival (works once, until the expiry).
+  const qr = kind === "confirmed" && r.checkinHash ? checkinToken(r.id) : null;
+  const until = qr ? expiresAt(r, { expiryMinutes: b.expiryMinutes ?? RESERVATION_DEFAULTS.expiryMinutes }).toISOString().slice(11, 16) : null;
+  const qrBlock = qr
+    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0;border:2px solid #0f6b3e;border-radius:14px"><tr><td style="padding:16px;text-align:center">
+      <div style="font-size:17px;font-weight:800;color:#0b3d26">${esc(t("qrTitle"))}</div>
+      <img src="${baseUrl}/api/public/reservations/qr/${qr}.png" width="220" height="220" alt="${esc(t("qrAlt", { ref: r.ref }))}" style="display:block;margin:12px auto;width:220px;height:220px">
+      <div style="font-size:14px;line-height:1.5;color:#17231c">${esc(t("qrText", { until: until! }))}</div>
+      <div style="margin-top:6px;font-size:13px;color:#3e4a42">${esc(t("qrFallback", { ref: r.ref }))}</div></td></tr></table>`
+    : "";
+  const wait = kind === "confirmed" && b.waitMinutes ? t("waitNow", { n: b.waitMinutes }) : null;
   const html = `<!doctype html>
 <html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(subject)}</title></head>
 <body style="margin:0;padding:0;background:#fff8ec;font-family:Arial,Helvetica,sans-serif">
@@ -54,6 +65,8 @@ export async function reservationEmail(kind: ReservationMailKind, r: Reservation
     <p style="margin:0 0 6px;font-size:16px;color:#17231c">${esc(t("hello", { name: r.name.split(/\s+/)[0] ?? r.name }))}</p>
     <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#17231c">${esc(body)}</p>
     ${reason ? `<p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#17231c;background:#f1e6d0;border-radius:10px;padding:10px 12px">${esc(reason)}</p>` : ""}
+    ${qrBlock}
+    ${wait ? `<p style="margin:0 0 14px;font-size:14px;line-height:1.5;color:#7a4a00;background:#fff1cc;border-radius:10px;padding:10px 12px">⏳ ${esc(wait)}</p>` : ""}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e4d9c2;border-radius:12px">
       ${rows.map(([k, v]) => `<tr><td style="padding:8px 12px;font-size:13px;color:#3e4a42;width:40%">${esc(k)}</td><td style="padding:8px 12px;font-size:15px;font-weight:700;color:#17231c">${esc(v)}</td></tr>`).join("")}
     </table>
@@ -68,6 +81,8 @@ export async function reservationEmail(kind: ReservationMailKind, r: Reservation
     t("hello", { name: r.name.split(/\s+/)[0] ?? r.name }),
     body,
     reason ?? "",
+    qr ? `\n${t("qrTitle")}\n${t("qrText", { until: until! })}\n${t("qrFallback", { ref: r.ref })}\n${baseUrl}/reservation/${reservationToken(r.id)}` : "",
+    wait ?? "",
     "",
     ...rows.map(([k, v]) => `${k} : ${v}`),
     "",
@@ -85,11 +100,19 @@ export async function reservationEmail(kind: ReservationMailKind, r: Reservation
 export async function sendReservationEmail(db: DB, kind: ReservationMailKind, r: Reservation, baseUrl: string) {
   try {
     const [b] = await db
-      .select({ name: restaurants.name, slug: restaurants.slug, address: restaurants.address, city: restaurants.city, phones: restaurants.phones, whatsapp: restaurants.whatsapp })
+      .select({ name: restaurants.name, slug: restaurants.slug, address: restaurants.address, city: restaurants.city, phones: restaurants.phones, whatsapp: restaurants.whatsapp, settings: restaurants.settings })
       .from(restaurants)
       .where(eq(restaurants.id, r.restaurantId));
     if (!b) return { status: "skipped" as const };
-    const mail = await reservationEmail(kind, r, { name: b.name, slug: b.slug, address: b.address, city: b.city, phone: b.phones[0] ?? b.whatsapp ?? null }, baseUrl);
+    const mail = await reservationEmail(kind, r, {
+        name: b.name,
+        slug: b.slug,
+        address: b.address,
+        city: b.city,
+        phone: b.phones[0] ?? b.whatsapp ?? null,
+        expiryMinutes: reservationConfig(b).expiryMinutes,
+        waitMinutes: currentWait(b)?.minutes ?? null,
+      }, baseUrl);
     const res = await sendMail({ to: r.email, ...mail });
     log.info("reservation_email", { restaurantId: r.restaurantId, kind, status: res.status });
     return res;

@@ -14,8 +14,9 @@ import { MainQrCard } from "@/components/qr/main-qr-card";
 import { CustomizeGuide, customizeSteps } from "@/components/onboarding/customize-guide";
 import { OrderAnalyticsPanel } from "@/components/analytics/order-analytics";
 import { LearnCard } from "@/components/guide/learn-card";
+import { guideProfiles } from "@/lib/guide-profiles";
 import { getDb } from "@/db";
-import { pendingReservations } from "@/lib/reservations";
+import { pendingReservations, reservationsOpen, reservationSummary } from "@/lib/reservations";
 import { orderAnalytics, type Range } from "@/lib/analytics/orders";
 import { liveStatus, personnelRanking, type RankedPerson } from "@/lib/analytics/backoffice";
 import { ActivityFeed, Alerts, LiveStrip, RankingCard, Shortcuts, type Alert, type Shortcut } from "@/components/backoffice/backoffice";
@@ -66,6 +67,9 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   // Live floor plan: businesses with tables or private rooms, for anyone who follows the service.
   const hasFloor = r.kind !== "transport" && seats.some((s) => s.active && (s.type === "table" || s.type === "room")) && hasFeature(r, "kitchenDisplay") && allowed("orders.read");
   const floor = hasFloor ? await floorStatus(db, rid) : null;
+  // Reservations of the day (owner, managers, hosts): expected, arrived, absent, to confirm.
+  const resvDay = reservationsOpen(r) && allowed("reservations.write") ? await reservationSummary(db, rid) : null;
+  const trv = await getTranslations("reservations");
   const tro = await getTranslations("roles");
   const roleLabel = (p: { role: string; roleKey?: string | null; roleName?: string | null }) =>
     p.role === "owner" ? t("role.owner") : p.roleKey ? tro(`names.${p.roleKey}` as "names.server") : (p.roleName ?? t(`role.${p.role}` as "role.server"));
@@ -181,6 +185,17 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       )}
 
       {live && <LiveStrip live={live} attendance={attendance} />}
+      {resvDay && (
+        <Link href="/app/reservations" className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-surface p-4 hover:bg-muted" data-testid="dashboard-reservations">
+          <span className="font-extrabold">📅 {trv("stats.todayTitle")}</span>
+          <span className="flex flex-wrap gap-2 text-sm">
+            <span className="rounded-full bg-muted px-3 py-1 font-bold">{trv("stats.dash.expected", { n: resvDay.today.expected })}</span>
+            <span className="rounded-full bg-emerald-100 px-3 py-1 font-bold text-emerald-900">{trv("stats.dash.arrived", { n: resvDay.today.arrived })}</span>
+            {resvDay.today.noShow > 0 && <span className="rounded-full bg-red-100 px-3 py-1 font-bold text-red-900">{trv("stats.dash.noShow", { n: resvDay.today.noShow })}</span>}
+            {resvDay.waiting > 0 && <span className="rounded-full bg-amber-100 px-3 py-1 font-bold text-amber-950">{trv("stats.dash.waiting", { n: resvDay.waiting })}</span>}
+          </span>
+        </Link>
+      )}
       {floor && <FloorPlan initial={floor} canRelease={allowed("orders.serve")} />}
       {canReports && <Alerts alerts={alerts} />}
       <Shortcuts items={[...shortcuts]} />
@@ -188,7 +203,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       {analytics && <OrderAnalyticsPanel data={analytics} range={range} />}
       {ranking && <RankingCard people={ranking} range={range} roleOf={(p: RankedPerson) => roleLabel(p)} />}
 
-      <LearnCard audience={ctx.actor.role === "owner" || ctx.actor.role === "manager" ? "manager" : "staff"} />
+      <LearnCard audience={guideProfiles(ctx.actor, rid)[0]!} />
 
       {canSeats && <MainQrCard restaurantId={r.id} slug={r.slug} published={r.published} />}
 

@@ -7,7 +7,9 @@ import { Logo } from "@/components/brand/logo";
 import { getDb } from "@/db";
 import { restaurants } from "@/db/schema";
 import { formatBfPhone, telHref } from "@/lib/format";
-import { reservationByToken } from "@/lib/reservations";
+import { checkinToken, currentWait, expiresAt, qrValid, reservationByToken, reservationConfig } from "@/lib/reservations";
+import { brandedQrSvg } from "@/lib/qr-branded";
+import { publicBaseUrl } from "@/lib/urls";
 import { NOINDEX } from "@/lib/seo/site";
 import { cancelReservationAction } from "./actions";
 
@@ -37,6 +39,12 @@ export default async function MyReservation({ params, searchParams }: { params: 
   const phone = b.phones[0] ?? b.whatsapp;
   const canCancel = res.status === "requested" || res.status === "confirmed";
   const done = (await searchParams).done === "1";
+  // Confirmed and not used yet: the check-in QR the staff scan on arrival (until the expiry).
+  const cfg = reservationConfig(b);
+  const showQr = qrValid(res, cfg);
+  const qrSvg = showQr ? brandedQrSvg(`${await publicBaseUrl()}/rv/${checkinToken(res.id)}`) : null;
+  const until = expiresAt(res, cfg).toISOString().slice(11, 16);
+  const wait = res.status === "confirmed" || res.status === "requested" ? currentWait(b) : null;
   return (
     <div className="min-h-dvh bg-creme px-4 py-8 text-encre" data-testid="my-reservation" data-status={res.status}>
       <div className="mx-auto flex max-w-md flex-col gap-5">
@@ -53,6 +61,24 @@ export default async function MyReservation({ params, searchParams }: { params: 
           {done && (
             <p role="status" className="mt-3 rounded-xl bg-emerald-50 p-3 text-sm font-semibold text-emerald-900">
               {t("cancelledOk")}
+            </p>
+          )}
+          {qrSvg && (
+            <div className="mt-5 rounded-2xl border-2 border-vert p-4 text-center" data-testid="reservation-qr">
+              <p className="font-bold">{t("qrTitle")}</p>
+              <div className="mx-auto mt-3 w-56 max-w-full [&_svg]:h-auto [&_svg]:w-full" dangerouslySetInnerHTML={{ __html: qrSvg }} />
+              <p className="mt-2 text-sm">{t("qrText", { until })}</p>
+            </div>
+          )}
+          {res.checkedInAt && (
+            <p className="mt-4 rounded-xl bg-emerald-50 p-3 text-sm font-semibold text-emerald-900" data-testid="reservation-checked-in">
+              ✅ {t("checkedIn")}
+            </p>
+          )}
+          {wait && (
+            <p className="mt-4 rounded-xl bg-amber-50 p-3 text-sm font-semibold text-amber-950" data-testid="reservation-wait">
+              ⏳ {t("waitNow", { n: wait.minutes })}
+              {wait.note ? ` · ${wait.note}` : ""}
             </p>
           )}
           <dl className="mt-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">

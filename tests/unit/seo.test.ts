@@ -49,6 +49,7 @@ const menu = (over: Partial<PublicMenuData> = {}): PublicMenuData => ({
   onAccent2: "#17231C",
   poweredBadge: true,
   features: { welcomeScreen: true, fortuneCookie: true, share: true, takeawayWhatsapp: true, localBadge: false, reviews: true, reservations: false },
+  wait: null,
   locales: ["fr", "en", "zh"],
   hours: [{ weekday: 0, opens: "11:00", closes: "23:00" }],
   categories: [

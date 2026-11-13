@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { GUIDES, type Audience } from "./guide-scenes";
+import { guidesFor, type Audience } from "./guide-scenes";
 import { useSeenGuides } from "./guide-player";
 
 /** Dashboard card « Apprendre à utiliser RestoCool »: next tutorials to watch and progress. */
 export function LearnCard({ audience }: { audience: Audience }) {
   const t = useTranslations("guide");
   const seen = useSeenGuides();
-  const list = GUIDES.filter((g) => g.audience === audience);
+  const list = guidesFor(audience);
   const done = list.filter((g) => seen.has(g.id)).length;
   const next = list.filter((g) => !seen.has(g.id)).slice(0, 3);
   return (

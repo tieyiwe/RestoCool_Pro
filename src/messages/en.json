@@ -1332,10 +1332,17 @@
         "total": "Requests received",
         "covers": "Guests booked",
         "waiting": "Waiting for a call",
-        "confirmed": "Confirmed or honoured",
+        "confirmed": "Confirmed, still to come",
         "called": "Customers called",
         "declined": "Declined or cancelled",
-        "noShow": "No-shows"
+        "noShow": "No-shows",
+        "honoured": "Guests who came (checked in)",
+        "byQr": "Checked in by QR scan",
+        "showRate": "Show-up rate",
+        "expired": "Requests never answered (expired)",
+        "waitNow": "Businesses showing a wait now",
+        "waitNowOne": "Wait time shown now",
+        "waitSet": "Wait times set"
       }
     }
   },
@@ -1992,7 +1999,9 @@
     "resvError_closed": "Reservations are not open at the moment.",
     "resvError_rate": "Too many requests. Try again in a few minutes.",
     "resvError_network": "No connection. Check the Internet and try again.",
-    "resvError_error": "The reservation could not be sent. Try again."
+    "resvError_error": "The reservation could not be sent. Try again.",
+    "waitNow": "Current wait: about {n} min",
+    "resvWait": "Busy day: current wait about {n} min. Your table may be ready a little later."
   },
   "seating": {
     "title": "Tables and rooms",
@@ -2454,8 +2463,11 @@
     "introPublic": "Animated tutorials for staff and managers: check-in, orders, kitchen, RC number.",
     "audience": "For whom?",
     "for": {
-      "manager": "Managers",
-      "staff": "Staff"
+      "owner": "Owner",
+      "manager": "Manager",
+      "server": "Server",
+      "host": "Host",
+      "kitchen": "Kitchen"
     },
     "prev": "Previous step",
     "next": "Next step",
@@ -2528,7 +2540,42 @@
       "drinks": "Drinks",
       "owner": "Owner",
       "min14": "14 min",
-      "min3": "3 min"
+      "min3": "3 min",
+      "reservations": "Reservations",
+      "resvSettings": "Settings",
+      "resvOpen": "Open reservations on my page",
+      "bookTable": "Book a table",
+      "guests": "Guests",
+      "called": "I called",
+      "emailQrSent": "The guest gets an email with their arrival QR",
+      "waitTitle": "Wait time",
+      "waitNote": "Detail",
+      "waitNoteValue": "Room full, terrace free",
+      "waitShow": "Show the wait",
+      "waitPublic": "Current wait: about 45 min",
+      "emailQr": "Your arrival QR",
+      "resvValid": "Valid reservation",
+      "confirmArrival": "Confirm arrival",
+      "qrOnce": "The QR works only once",
+      "tableFree": "Table freed",
+      "tableFreeAsk": "Is table 4 free?",
+      "yesFree": "Yes, table 4 is free",
+      "floorLive": "Live floor",
+      "free": "free",
+      "eating": "eating",
+      "rateUs": "Rate us",
+      "comment": "Comment",
+      "commentValue": "Great riz gras!",
+      "reviewsTitle": "Customer reviews",
+      "hide": "Hide",
+      "delete": "Delete",
+      "reviewsOnOff": "Reviews on my page",
+      "shareTable": "Share my selection with my table",
+      "done": "Done",
+      "serveByName": "Serve each dish to the right person",
+      "offlineBanner": "Offline",
+      "pendingSync": "⏳ waiting",
+      "backOnline": "Back online"
     },
     "items": {
       "menu": {
@@ -2627,8 +2674,66 @@
         "s1": "Show the customer the RC number printed under the QR code (e.g. RC-K7M3P).",
         "s2": "They go to restocool.com/c and type the number.",
         "s3": "The menu opens, already at the right table."
+      },
+      "reservations": {
+        "title": "Receive reservations",
+        "intro": "Customers book from your page; you call them to confirm.",
+        "s1": "In “Reservations”, tick “Open reservations on my page” and save.",
+        "s2": "The customer picks the day, time and number of guests, with name, email and phone.",
+        "s3": "The request shows at the top: call the customer, then tap “I called”.",
+        "s4": "Tap “Confirm”: RestoCool emails them their arrival QR."
+      },
+      "waitTime": {
+        "title": "Announce a wait time",
+        "intro": "Busy day? Tell customers before they arrive.",
+        "s1": "In “Reservations”, choose the wait (e.g. 45 min).",
+        "s2": "Add a detail if needed, then tap “Show the wait”.",
+        "s3": "It shows on your page and when booking, then disappears by itself."
+      },
+      "resvCheckin": {
+        "title": "Scan a reservation QR",
+        "intro": "The guest shows the QR from their email when they arrive.",
+        "s1": "The confirmed guest received their arrival QR by email (also on their reservation link).",
+        "s2": "Scan it with the phone camera or “Scan” in the app.",
+        "s3": "Check the name and party size, tap “Confirm arrival”. The QR stops working after that."
+      },
+      "releaseTable": {
+        "title": "Free a table",
+        "intro": "When guests leave, the table becomes free for the next ones.",
+        "s1": "On the served order, tap “Table freed”.",
+        "s2": "Confirm: “Yes, table 4 is free”.",
+        "s3": "The live floor shows it free; forgotten tables also free themselves."
+      },
+      "reviews": {
+        "title": "Manage customer reviews",
+        "intro": "Served customers can leave stars and a comment.",
+        "s1": "Once served, the customer gives 1 to 5 stars and a comment.",
+        "s2": "In “Customer reviews”, hide or delete a review if needed.",
+        "s3": "You can also turn reviews off on your page at any time."
+      },
+      "sharedOrder": {
+        "title": "An order shared by a table",
+        "intro": "Friends each choose from their own phone; one order arrives.",
+        "s1": "A customer shares their selection: everyone adds their dishes with their name.",
+        "s2": "The order arrives with each person's name on their dishes.",
+        "s3": "Serve each dish to the right person."
+      },
+      "offline": {
+        "title": "Working without network",
+        "intro": "Network down? Keep going, everything leaves when it comes back.",
+        "s1": "The “Offline” banner shows: keep confirming and serving.",
+        "s2": "Your actions wait on the phone, marked “waiting”.",
+        "s3": "When the network returns, everything is sent in order, by itself."
       }
-    }
+    },
+    "profileHint": {
+      "owner": "Every RestoCool tutorial. To train someone, open their profile's tab and show them their screen.",
+      "manager": "Manage the menu, the team, reservations, and follow the activity.",
+      "server": "Take and serve orders, welcome reservations, free tables.",
+      "host": "Welcome guests: reservations, arrival QR, wait time.",
+      "kitchen": "Prepare orders on the kitchen screen and flag sold-out dishes."
+    },
+    "trainHint": "You see what this profile sees."
   },
   "location": {
     "title": "Business location",
@@ -3287,7 +3392,12 @@
         "subject": "Cancellation confirmed · {business}",
         "title": "Your reservation is cancelled",
         "body": "We cancelled your reservation at {business}. See you another time!"
-      }
+      },
+      "qrTitle": "Your arrival QR",
+      "qrAlt": "QR of reservation {ref}",
+      "qrText": "Show this QR to the staff when you arrive. It works once, until {until}.",
+      "qrFallback": "Without the QR, give the reference {ref}.",
+      "waitNow": "Busy day: current wait about {n} min."
     }
   },
   "seo": {
@@ -3752,7 +3862,8 @@
       "seated": "Arrived",
       "completed": "Completed",
       "no_show": "No-show",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "expired": "Expired"
     },
     "actions": {
       "contacted": "I called",
@@ -3775,7 +3886,9 @@
       "contacted": "Call noted.",
       "enabled": "Reservations open: the button is on your page.",
       "disabled": "Reservations closed.",
-      "saved": "Settings saved."
+      "saved": "Settings saved.",
+      "wait": "Wait time shown on your page.",
+      "waitCleared": "Wait time removed."
     },
     "errors": {
       "moved": "This reservation already changed. The list is up to date.",
@@ -3797,7 +3910,63 @@
       "notePlaceholder": "E.g. tables are held for 15 minutes.",
       "hoursHint": "The times offered follow your opening hours.",
       "hoursLink": "Edit opening hours",
-      "save": "Save"
+      "save": "Save",
+      "expiry": "QR expires after the reservation time",
+      "expiryHint": "After this, the QR stops working and the guest counts as a no-show."
+    },
+    "checkedInQr": "Arrived at {at} (QR scanned)",
+    "checkedInManual": "Arrived at {at}",
+    "qrUntil": "QR valid until {at}",
+    "stats": {
+      "todayTitle": "Reservations today",
+      "expected": "Expected",
+      "toCome": "To come",
+      "arrived": "Arrived",
+      "noShow": "No-shows",
+      "guestsToday": "{n, plural, =0 {No guests expected} one {# guest expected} other {# guests expected}} today.",
+      "monthTitle": "Last 30 days",
+      "honoured": "Honoured",
+      "noShows": "No-shows",
+      "showRate": "Show-up rate",
+      "cancelled": "Cancelled / declined",
+      "monthHint": "{total} reservations · {qr} arrivals by QR · {guests} guests welcomed.",
+      "dash": {
+        "expected": "{n} expected",
+        "arrived": "{n} arrived",
+        "noShow": "{n} no-shows",
+        "waiting": "{n} to confirm"
+      }
+    },
+    "wait": {
+      "title": "Wait time",
+      "none": "No wait shown",
+      "current": "~{n} min until {until}",
+      "hint": "Busy day? Show the wait: customers see it on your page and when booking. It disappears by itself after the time you choose.",
+      "min": "{n} min",
+      "hoursLabel": "{n, plural, one {# hour} other {# hours}}",
+      "noteLabel": "Detail (optional)",
+      "notePlaceholder": "E.g. room full, terrace available",
+      "for": "Show for",
+      "save": "Show the wait",
+      "clear": "Remove the wait"
+    },
+    "checkin": {
+      "title": "Reservation arrival",
+      "unknownTitle": "Unknown QR",
+      "unknownText": "This QR does not match any reservation of your business.",
+      "scanAnother": "Scan another QR",
+      "doneTitle": "Welcome, {name}!",
+      "confirm": "Confirm arrival ({n, plural, one {# guest} other {# guests}})",
+      "usedAt": "Arrival already recorded at {at}.",
+      "expiredAt": "This QR expired at {at}.",
+      "earlyHint": "Too early: the QR works from 3 hours before the reserved time.",
+      "state": {
+        "valid": "Valid reservation",
+        "used": "QR already used",
+        "expired": "QR expired",
+        "early": "A little early",
+        "invalid": "Reservation not confirmed"
+      }
     }
   },
   "reservation": {
@@ -3809,7 +3978,8 @@
       "seated": "Arrived",
       "completed": "Completed",
       "no_show": "No-show",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "expired": "Expired"
     },
     "statusHint": {
       "requested": "{business} will call you to confirm your table.",
@@ -3818,7 +3988,8 @@
       "seated": "Enjoy your meal!",
       "completed": "Thank you for your visit.",
       "no_show": "This reservation is over.",
-      "cancelled": "This reservation is cancelled."
+      "cancelled": "This reservation is cancelled.",
+      "expired": "This request was not confirmed in time."
     },
     "cancelledOk": "Your reservation is cancelled. A confirmation email was sent to you.",
     "date": "Date",
@@ -3831,6 +4002,17 @@
     "call": "Call {phone}",
     "seeMenu": "See the menu",
     "cancel": "Cancel my reservation",
-    "footer": "Reservation made with RestoCool for {business}."
+    "footer": "Reservation made with RestoCool for {business}.",
+    "qrTitle": "Your arrival QR",
+    "qrText": "Show it to the staff when you arrive. Valid once, until {until}.",
+    "checkedIn": "Your arrival is recorded. Enjoy your meal!",
+    "waitNow": "Current wait: about {n} min",
+    "qrHelp": {
+      "title": "Your reservation",
+      "text": "This QR code is your reservation: show it to the staff when you arrive. They scan it to record your arrival.",
+      "unknownTitle": "QR not valid",
+      "unknownText": "This QR does not match any reservation.",
+      "staff": "Do you work at this business? Sign in"
+    }
   }
 }

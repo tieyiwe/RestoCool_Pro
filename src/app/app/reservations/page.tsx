@@ -8,9 +8,9 @@ import type { Reservation } from "@/db/schema";
 import { can } from "@/lib/auth/can";
 import { requireMemberPage } from "@/lib/auth/page";
 import { formatBfPhone, telHref } from "@/lib/format";
-import { businessReservations, reservationConfig, reservationsInPlan } from "@/lib/reservations";
+import { businessReservations, currentWait, EXPIRY_CHOICES, expiresAt, reservationConfig, reservationsInPlan, reservationSummary, sweepReservations, WAIT_CHOICES, WAIT_HOURS } from "@/lib/reservations";
 import { cn } from "@/lib/utils";
-import { contactedAction, moveReservationAction, reservationSettingsAction } from "./actions";
+import { contactedAction, moveReservationAction, reservationSettingsAction, waitTimeAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +26,7 @@ const TONE: Record<string, string> = {
   declined: "bg-red-100 text-red-900",
   cancelled: "bg-red-100 text-red-900",
   no_show: "bg-red-100 text-red-900",
+  expired: "bg-muted text-muted-foreground",
 };
 const today = () => new Date().toISOString().slice(0, 10);
 const addDays = (day: string, n: number) => new Date(Date.parse(`${day}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
@@ -36,7 +37,11 @@ export default async function ReservationsPage({ searchParams }: { searchParams:
   const [t, format, sp] = await Promise.all([getTranslations("reservations"), getFormatter(), searchParams]);
   const r = await ctx.repo.restaurant.get();
   if (!r) return null;
+  // Past their time + expiry: confirmed → « Absent », never answered → « Expirée » (also every 5 min).
+  await sweepReservations(getDb(), r.id);
   const cfg = reservationConfig(r);
+  const wait = currentWait(r);
+  const sum = await reservationSummary(getDb(), r.id);
   const inPlan = reservationsInPlan(r);
   const canSettings = can(ctx.actor, "settings.write", { restaurantId: r.id });
   const start = today();
@@ -90,6 +95,100 @@ export default async function ReservationsPage({ searchParams }: { searchParams:
         </p>
       )}
 
+      {/* Figures: today, then the last 30 days (show-up rate, no-shows). */}
+      <section className="grid gap-3 lg:grid-cols-2" data-testid="reservations-stats">
+        <Card>
+          <h2 className="mb-2 font-extrabold">{t("stats.todayTitle")}</h2>
+          <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {(
+              [
+                ["expected", sum.today.expected, ""],
+                ["toCome", sum.today.toCome, ""],
+                ["arrived", sum.today.arrived, "text-emerald-700"],
+                ["noShow", sum.today.noShow, "text-red-700"],
+              ] as const
+            ).map(([k, v, c]) => (
+              <div key={k} className="rounded-xl bg-muted p-3" data-testid={`stat-today-${k}`}>
+                <dt className="text-xs text-muted-foreground">{t(`stats.${k}`)}</dt>
+                <dd className={cn("text-2xl font-extrabold tabular-nums", c)}>{v}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-2 text-sm text-muted-foreground">{t("stats.guestsToday", { n: sum.today.guests })}</p>
+        </Card>
+        <Card>
+          <h2 className="mb-2 font-extrabold">{t("stats.monthTitle")}</h2>
+          <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {(
+              [
+                ["honoured", sum.last30.honoured, "text-emerald-700"],
+                ["noShows", sum.last30.noShow, "text-red-700"],
+                ["showRate", sum.last30.showRate === null ? "—" : `${sum.last30.showRate} %`, ""],
+                ["cancelled", sum.last30.cancelled + sum.last30.declined, ""],
+              ] as const
+            ).map(([k, v, c]) => (
+              <div key={k} className="rounded-xl bg-muted p-3" data-testid={`stat-30-${k}`}>
+                <dt className="text-xs text-muted-foreground">{t(`stats.${k}`)}</dt>
+                <dd className={cn("text-2xl font-extrabold tabular-nums", c)}>{v}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-2 text-sm text-muted-foreground">{t("stats.monthHint", { total: sum.last30.total, qr: sum.last30.byQr, guests: sum.last30.guests })}</p>
+        </Card>
+      </section>
+
+      {/* Busy day: the wait customers see on the page and the reservation form. */}
+      <Card className="flex flex-col gap-3" data-testid="wait-card">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="font-extrabold">⏳ {t("wait.title")}</h2>
+          {wait ? (
+            <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-950" data-testid="wait-current">
+              {t("wait.current", { n: wait.minutes, until: format.dateTime(new Date(wait.until), { hour: "2-digit", minute: "2-digit" }) })}
+            </span>
+          ) : (
+            <span className="text-sm text-muted-foreground">{t("wait.none")}</span>
+          )}
+        </div>
+        <p className="text-sm text-muted-foreground">{t("wait.hint")}</p>
+        <form action={waitTimeAction} className="flex flex-col gap-3">
+          <fieldset className="flex flex-wrap gap-2">
+            <legend className="sr-only">{t("wait.title")}</legend>
+            {WAIT_CHOICES.map((n) => (
+              <label key={n} className="has-[:checked]:border-primary has-[:checked]:bg-primary/10 flex min-h-11 cursor-pointer items-center rounded-xl border-2 border-border px-3 text-sm font-bold">
+                <input type="radio" name="minutes" value={n} defaultChecked={wait?.minutes === n || (!wait && n === 30)} className="sr-only" data-testid={`wait-${n}`} />
+                {n < 120 ? t("wait.min", { n }) : t("wait.hoursLabel", { n: n / 60 })}
+              </label>
+            ))}
+          </fieldset>
+          <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+            <input name="note" maxLength={140} defaultValue={wait?.note ?? ""} placeholder={t("wait.notePlaceholder")} aria-label={t("wait.noteLabel")} className="min-h-11 rounded-lg border border-border bg-surface px-3 text-base" />
+            <label className="flex items-center gap-2 text-sm font-semibold">
+              {t("wait.for")}
+              <select name="hours" defaultValue={3} className="min-h-11 rounded-lg border border-border bg-surface px-2 text-base">
+                {WAIT_HOURS.map((h) => (
+                  <option key={h} value={h}>
+                    {t("wait.hoursLabel", { n: h })}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button type="submit" className="min-h-12 rounded-xl bg-primary px-5 font-bold text-primary-foreground" data-testid="wait-save">
+              {t("wait.save")}
+            </button>
+          </div>
+        </form>
+        {wait && (
+          <form action={waitTimeAction}>
+            <input type="hidden" name="minutes" value="0" />
+            <button type="submit" className="min-h-11 rounded-xl border border-border px-4 text-sm font-bold" data-testid="wait-clear">
+              {t("wait.clear")}
+            </button>
+          </form>
+        )}
+      </Card>
+
       {waiting.length > 0 && (
         <section aria-labelledby="waiting-title" data-testid="reservations-waiting">
           <h2 id="waiting-title" className="mb-2 text-lg font-extrabold">
@@ -98,7 +197,7 @@ export default async function ReservationsPage({ searchParams }: { searchParams:
           <p className="mb-3 text-sm text-muted-foreground">{t("waitingHint")}</p>
           <ul className="grid gap-3 lg:grid-cols-2">
             {waiting.map((x) => (
-              <ReservationCard key={x.id} x={x} t={t} day={day} showDate={dateLong(x.date)} business={r.name} format={format} />
+              <ReservationCard key={x.id} x={x} t={t} day={day} showDate={dateLong(x.date)} business={r.name} format={format} expiry={cfg.expiryMinutes} />
             ))}
           </ul>
         </section>
@@ -140,7 +239,7 @@ export default async function ReservationsPage({ searchParams }: { searchParams:
         ) : (
           <ul className="mt-3 grid gap-3 lg:grid-cols-2" data-testid="reservations-day">
             {ofDay.map((x) => (
-              <ReservationCard key={x.id} x={x} t={t} day={day} business={r.name} format={format} />
+              <ReservationCard key={x.id} x={x} t={t} day={day} business={r.name} format={format} expiry={cfg.expiryMinutes} />
             ))}
           </ul>
         )}
@@ -184,6 +283,17 @@ export default async function ReservationsPage({ searchParams }: { searchParams:
               </select>
             </label>
             <label className="flex flex-col gap-1 text-sm font-semibold">
+              {t("settings.expiry")}
+              <select name="expiryMinutes" defaultValue={cfg.expiryMinutes} className="min-h-11 rounded-lg border border-border bg-surface px-2 text-base" data-testid="reservations-expiry">
+                {EXPIRY_CHOICES.map((n) => (
+                  <option key={n} value={n}>
+                    {n < 60 ? t("settings.minutes", { n }) : t("settings.hours", { n: n / 60 })}
+                  </option>
+                ))}
+              </select>
+              <span className="text-xs font-normal text-muted-foreground">{t("settings.expiryHint")}</span>
+            </label>
+            <label className="flex flex-col gap-1 text-sm font-semibold">
               {t("settings.daysAhead")}
               <input type="number" name="daysAhead" min={1} max={365} defaultValue={cfg.daysAhead} className="min-h-11 rounded-lg border border-border bg-surface px-2 text-base" />
             </label>
@@ -211,7 +321,7 @@ type T = Awaited<ReturnType<typeof getTranslations<"reservations">>>;
 type F = Awaited<ReturnType<typeof getFormatter>>;
 
 /** One reservation: who, when, how many; call / WhatsApp / email; the next steps as buttons. */
-function ReservationCard({ x, t, day, showDate, business, format }: { x: Reservation; t: T; day: string; showDate?: string; business: string; format: F }) {
+function ReservationCard({ x, t, day, showDate, business, format, expiry }: { x: Reservation; t: T; day: string; showDate?: string; business: string; format: F; expiry: number }) {
   const wa = `https://wa.me/${x.phone}?text=${encodeURIComponent(t("waText", { name: x.name.split(/\s+/)[0] ?? x.name, business, date: x.date.split("-").reverse().join("/"), time: x.time, n: x.partySize }))}`;
   const btn = "min-h-11 rounded-lg px-3 text-sm font-bold";
   const Act = ({ action, label, tone, reason }: { action: string; label: string; tone: string; reason?: boolean }) => (
@@ -257,6 +367,13 @@ function ReservationCard({ x, t, day, showDate, business, format }: { x: Reserva
         {x.cancelledBy === "customer" ? ` · ${t("cancelledByCustomer")}` : ""}
       </p>
       {x.reason && <p className="mt-1 text-xs text-muted-foreground">{t("reasonShown", { reason: x.reason })}</p>}
+      {x.checkedInAt ? (
+        <p className="mt-1 text-sm font-semibold text-emerald-700" data-testid="resv-checked-in">
+          ✓ {t(x.checkedInVia === "qr" ? "checkedInQr" : "checkedInManual", { at: format.dateTime(x.checkedInAt, { hour: "2-digit", minute: "2-digit" }) })}
+        </p>
+      ) : (
+        x.status === "confirmed" && <p className="mt-1 text-xs text-muted-foreground">🎟️ {t("qrUntil", { at: expiresAt(x, { expiryMinutes: expiry }).toISOString().slice(11, 16) })}</p>
+      )}
       <div className="mt-3 flex flex-wrap gap-2">
         {x.status === "requested" && !x.contactedAt && (
           <form action={contactedAction}>

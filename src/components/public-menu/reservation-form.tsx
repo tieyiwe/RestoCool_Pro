@@ -17,7 +17,7 @@ const dayKey = (d: Date) => d.toISOString().slice(0, 10);
  * « Réserver une table »: day, time (free slots from the business's hours), guests, name, email,
  * phone and an optional note. RestoCool emails the customer; the business calls to confirm.
  */
-export function ReservationForm({ slug, lang, t, onDone }: { slug: string; lang: Lang; t: T; onDone?: () => void }) {
+export function ReservationForm({ slug, lang, t, onDone, wait }: { slug: string; lang: Lang; t: T; onDone?: () => void; wait?: { minutes: number; note: string | null } | null }) {
   const days = useMemo(() => {
     const now = new Date();
     return Array.from({ length: 14 }, (_, i) => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + i)));
@@ -115,6 +115,12 @@ export function ReservationForm({ slug, lang, t, onDone }: { slug: string; lang:
   const input = "min-h-12 w-full rounded-xl border border-border bg-surface px-3 text-base";
   return (
     <form onSubmit={submit} className="flex flex-col gap-4" data-testid="reservation-form">
+      {wait && (
+        <p className="rounded-xl bg-amber-100 p-3 text-sm font-semibold text-amber-950" data-testid="resv-wait">
+          ⏳ {t("resvWait", { n: wait.minutes })}
+          {wait.note ? ` · ${wait.note}` : ""}
+        </p>
+      )}
       {info?.note && <p className="rounded-xl bg-muted p-3 text-sm">{info.note}</p>}
       <fieldset>
         <legend className="mb-2 font-semibold">{t("resvDay")}</legend>

@@ -12,7 +12,22 @@ export type FeatureUsage = {
   tables: { releasedByStaff: number; closedFinished: number; closedInactive: number; closedExpired: number; closedStale: number; closedByStaff: number; closedByCustomer: number; openNow: number };
   reviews: { count: number; average: number | null; hidden: number; deleted: number };
   switches: { reviewsOff: number; attendanceOff: number; sharingBusinesses: number; reservationsOn: number };
-  reservations: { total: number; covers: number; requested: number; confirmed: number; declined: number; cancelled: number; noShow: number; honoured: number; called: number };
+  reservations: {
+    total: number;
+    covers: number;
+    requested: number;
+    confirmed: number;
+    declined: number;
+    cancelled: number;
+    noShow: number;
+    honoured: number;
+    called: number;
+    byQr: number;
+    expired: number;
+    showRate: number | null;
+    waitNow: number;
+    waitSet: number;
+  };
 };
 const n = (v: unknown) => Number(v ?? 0) || 0;
 
@@ -59,8 +74,14 @@ export async function featureUsage(db: DB, restaurantId?: string, now = new Date
       count(*) filter (where v.status = 'cancelled')::int as cancelled,
       count(*) filter (where v.status = 'no_show')::int as no_show,
       count(*) filter (where v.status in ('seated', 'completed'))::int as honoured,
-      count(*) filter (where v.contacted_at is not null)::int as called
+      count(*) filter (where v.contacted_at is not null)::int as called,
+      count(*) filter (where v.checked_in_via = 'qr')::int as by_qr,
+      count(*) filter (where v.status = 'expired')::int as expired
     from reservations v where v.created_at >= ${since} ${only("v.restaurant_id")}`);
+  const waits = await one(sql`
+    select
+      (select count(*) from restaurants x where x.deleted_at is null and (x.settings #>> '{waitTime,until}')::timestamptz > now() and (x.settings #>> '{waitTime,minutes}')::int > 0 ${only("x.id")})::int as now,
+      (select count(*) from audit_log a where a.action = 'wait.set' and a.created_at >= ${since} ${only("a.restaurant_id")})::int as set`);
   const named = await one(sql`
     select count(*)::int as n from order_items i join orders o on o.id = i.order_id
     where o.id in (select c.order_id from shared_carts c where c.status = 'sent' and c.created_at >= ${since} ${only("c.restaurant_id")})`);
@@ -89,6 +110,11 @@ export async function featureUsage(db: DB, restaurantId?: string, now = new Date
       noShow: n(resv.no_show),
       honoured: n(resv.honoured),
       called: n(resv.called),
+      byQr: n(resv.by_qr),
+      expired: n(resv.expired),
+      showRate: n(resv.honoured) + n(resv.no_show) > 0 ? Math.round((n(resv.honoured) / (n(resv.honoured) + n(resv.no_show))) * 100) : null,
+      waitNow: n(waits.now),
+      waitSet: n(waits.set),
     },
   };
 }
