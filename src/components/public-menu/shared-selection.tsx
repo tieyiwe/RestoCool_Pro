@@ -55,6 +55,8 @@ export function useSharedSelection(slug: string) {
   const [role, setRole] = useState<"none" | "host" | "guest">("none");
   const [view, setView] = useState<SharedView | null>(null);
   const [ended, setEnded] = useState<null | "sent" | "closed" | "gone">(null);
+  /** The dishes this phone last saved (a pending auto-save of the same dishes is skipped). */
+  const lastSaved = useRef<string | null>(null);
 
   useEffect(() => {
     const guest = new URLSearchParams(window.location.search).get("partage");
@@ -155,6 +157,7 @@ export function useSharedSelection(slug: string) {
     async (lines: CartLine[], name: string, done: boolean) => {
       if (!token || role === "none" || !name.trim()) return false;
       storeSet(NAME_KEY, name.trim());
+      lastSaved.current = sigOf(lines);
       const res = await fetch(`/api/public/shared-carts/${token}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -185,6 +188,7 @@ export function useSharedSelection(slug: string) {
     saveMine,
     guestLines,
     reload: load,
+    lastSaved,
     shareUrl: token && typeof window !== "undefined" ? `${window.location.origin}/r/${slug}?partage=${token}` : null,
   };
 }
@@ -192,7 +196,7 @@ export type Shared = ReturnType<typeof useSharedSelection>;
 
 /** Keeps my dishes saved on the shared selection while I add or remove them (host and guests). */
 export function useAutoSave(shared: Shared, lines: CartLine[]) {
-  const last = useRef<string | null>(null);
+  const last = shared.lastSaved;
   const name = shared.me?.name ?? "";
   const serverSig = shared.me ? sigOf(shared.me.lines) : null;
   useEffect(() => {
@@ -202,7 +206,8 @@ export function useAutoSave(shared: Shared, lines: CartLine[]) {
     const sig = sigOf(lines);
     if (sig === last.current) return;
     const id = window.setTimeout(() => {
-      last.current = sig;
+      // Saved meanwhile (e.g. « J'ai terminé » with these dishes): nothing to do.
+      if (sig === last.current) return;
       // A guest who changes their dishes is choosing again (no longer « terminé »).
       void shared.saveMine(lines, name, false);
     }, 700);
