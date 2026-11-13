@@ -196,7 +196,8 @@
         "f3": "Reports per server",
         "f4": "RestoCool badge can be hidden",
         "f5": "Priority support"
-      }
+      },
+      "details": "See full pricing details"
     },
     "faq": {
       "title": "Frequently asked questions",
@@ -3522,5 +3523,111 @@
       "enabled": "Reviews are on.",
       "disabled": "Reviews are off."
     }
+  },
+  "pricingPage": {
+    "metaTitle": "RestoCool pricing: digital menu and orders in FCFA",
+    "metaDescription": "Free, Pro 10,000 F / month or Business 25,000 F / month. Compare RestoCool plans: QR menu, live orders, kitchen display, staff. Pay by Orange Money, Moov Money or cash.",
+    "title": "Pricing",
+    "breadcrumb": "Breadcrumb",
+    "intro": "Simple plans in FCFA for maquis, restaurants, bars, hotels and transport. Start for free, change plan whenever you like.",
+    "launch": "Launch offer: the Pro plan is free during the launch. Create your business today without paying anything.",
+    "plansLabel": "Plans",
+    "compareTitle": "Compare the plans",
+    "compareIntro": "Everything included, plan by plan.",
+    "feature": "Feature",
+    "unlimited": "Unlimited",
+    "yes": "Included",
+    "no": "Not included",
+    "soon": "Soon",
+    "soonNote": "“Soon”: in progress, included in the plan as soon as it is released, at no extra cost.",
+    "cells": {
+      "qrPerSeat": "Per table and room",
+      "qrOne": "1 for the business"
+    },
+    "groups": {
+      "menu": "Menu and QR codes",
+      "service": "Orders and service",
+      "team": "Staff and tracking",
+      "growth": "Growth and support"
+    },
+    "rows": {
+      "menu": "Digital menu with photos, in French, English and Chinese",
+      "items": "Number of dishes",
+      "qr": "QR codes",
+      "rc": "RC number to type under each QR",
+      "offlineMenu": "Menu available even without network",
+      "whatsapp": "Takeaway orders by WhatsApp",
+      "ordering": "Ordering from the customer's phone, live tracking",
+      "shared": "Selection shared with the table",
+      "kitchen": "Kitchen display and service board",
+      "floor": "Live floor: free and occupied tables",
+      "reviews": "Customer reviews with stars",
+      "reservations": "Reservations",
+      "staff": "Staff members",
+      "pin": "PIN sign-in on the tablet, check-in",
+      "reports": "Order history and CSV export",
+      "staffPerformance": "Statistics per server",
+      "promotions": "Offers and promotions on your page",
+      "multiBranch": "Several locations, combined reports",
+      "hideBadge": "RestoCool badge can be hidden",
+      "support": "Help in French by WhatsApp",
+      "priority": "Priority support"
+    },
+    "pay": {
+      "title": "How to pay",
+      "intro": "No bank card, no automatic debit.",
+      "s1": {
+        "title": "Choose your plan",
+        "text": "From your RestoCool space, or by writing to us on WhatsApp."
+      },
+      "s2": {
+        "title": "Pay in FCFA",
+        "text": "By Orange Money, Moov Money or cash."
+      },
+      "s3": {
+        "title": "It's on",
+        "text": "The RestoCool team activates your plan and confirms its end date."
+      },
+      "badges": {
+        "om": "Orange Money",
+        "moov": "Moov Money",
+        "cash": "Cash",
+        "noData": "Your data is never deleted"
+      }
+    },
+    "faqTitle": "Pricing questions",
+    "faq": {
+      "q1": {
+        "q": "Is the Free plan really free?",
+        "a": "Yes, with no time limit: your online menu with photos in 3 languages, one QR code and takeaway orders by WhatsApp. No bank card needed."
+      },
+      "q2": {
+        "q": "What happens when the trial ends?",
+        "a": "Your business moves to the plan you choose. If you don't pay, nothing is deleted: your menu stays visible and everything comes back as soon as you take a plan again."
+      },
+      "q3": {
+        "q": "How do I pay?",
+        "a": "By Orange Money, Moov Money or cash, in FCFA. The RestoCool team activates your plan when the payment arrives."
+      },
+      "q4": {
+        "q": "Can I change plan?",
+        "a": "Yes, at any time, up or down. Your dishes, tables and staff are kept."
+      },
+      "q5": {
+        "q": "Are there fees on my sales?",
+        "a": "No. RestoCool takes no commission on your orders: you only pay the plan, by the month."
+      },
+      "q6": {
+        "q": "I have several businesses, what do I do?",
+        "a": "Each business has its own plan and you switch between them from the same account. Combined reports for the Business plan are coming soon."
+      }
+    },
+    "final": {
+      "title": "Ready to try?",
+      "text": "Create your business in a few minutes. Free to start, in FCFA as you grow."
+    },
+    "backHome": "Back to home",
+    "privacy": "Privacy",
+    "terms": "Terms"
   }
 }

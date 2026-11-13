@@ -196,7 +196,8 @@
         "f3": "按服务员统计",
         "f4": "可隐藏 RestoCool 标志",
         "f5": "优先支持"
-      }
+      },
+      "details": "查看价格详情"
     },
     "faq": {
       "title": "常见问题",
@@ -3522,5 +3523,111 @@
       "enabled": "评价已开启。",
       "disabled": "评价已关闭。"
     }
+  },
+  "pricingPage": {
+    "metaTitle": "RestoCool 价格：数字菜单与点餐（西非法郎）",
+    "metaDescription": "免费版、专业版每月 10 000 F、商业版每月 25 000 F。比较 RestoCool 各版本：二维码菜单、实时订单、厨房屏幕、员工。可用 Orange Money、Moov Money 或现金支付。",
+    "title": "价格",
+    "breadcrumb": "导航路径",
+    "intro": "以西非法郎计价的简单方案，适合小餐馆、餐厅、酒吧、酒店和交通。免费开始，随时更换方案。",
+    "launch": "上线优惠：上线期间专业版免费。今天就创建您的店铺，无需付费。",
+    "plansLabel": "方案",
+    "compareTitle": "比较方案",
+    "compareIntro": "各方案包含的全部功能。",
+    "feature": "功能",
+    "unlimited": "不限",
+    "yes": "包含",
+    "no": "不包含",
+    "soon": "即将推出",
+    "soonNote": "“即将推出”：正在开发，推出后即包含在方案中，不另收费。",
+    "cells": {
+      "qrPerSeat": "每张桌子和包间",
+      "qrOne": "整个店铺 1 个"
+    },
+    "groups": {
+      "menu": "菜单与二维码",
+      "service": "订单与服务",
+      "team": "员工与跟踪",
+      "growth": "发展与支持"
+    },
+    "rows": {
+      "menu": "带照片的数字菜单（法语、英语、中文）",
+      "items": "菜品数量",
+      "qr": "二维码",
+      "rc": "每个二维码下可输入的 RC 号码",
+      "offlineMenu": "无网络也能查看菜单",
+      "whatsapp": "通过 WhatsApp 外带点餐",
+      "ordering": "顾客手机点餐，实时跟踪",
+      "shared": "与同桌共享选择",
+      "kitchen": "厨房屏幕和服务看板",
+      "floor": "实时餐厅：空闲和占用的桌子",
+      "reviews": "带星级的顾客评价",
+      "reservations": "预订",
+      "staff": "员工人数",
+      "pin": "平板 PIN 登录、考勤",
+      "reports": "订单历史和 CSV 导出",
+      "staffPerformance": "按服务员统计",
+      "promotions": "页面上的优惠和促销",
+      "multiBranch": "多个地址，汇总报表",
+      "hideBadge": "可隐藏 RestoCool 标识",
+      "support": "通过 WhatsApp 提供法语帮助",
+      "priority": "优先支持"
+    },
+    "pay": {
+      "title": "如何付款",
+      "intro": "无需银行卡，无自动扣款。",
+      "s1": {
+        "title": "选择方案",
+        "text": "在您的 RestoCool 空间中，或通过 WhatsApp 联系我们。"
+      },
+      "s2": {
+        "title": "以西非法郎付款",
+        "text": "通过 Orange Money、Moov Money 或现金。"
+      },
+      "s3": {
+        "title": "开通完成",
+        "text": "RestoCool 团队为您开通方案并确认到期日期。"
+      },
+      "badges": {
+        "om": "Orange Money",
+        "moov": "Moov Money",
+        "cash": "现金",
+        "noData": "您的数据永不删除"
+      }
+    },
+    "faqTitle": "价格问题",
+    "faq": {
+      "q1": {
+        "q": "免费版真的免费吗？",
+        "a": "是的，没有期限：带照片的三语在线菜单、一个二维码和 WhatsApp 外带点餐。无需银行卡。"
+      },
+      "q2": {
+        "q": "试用结束后会怎样？",
+        "a": "您的店铺将转为您选择的方案。如果不付款，任何数据都不会删除：菜单仍然可见，重新选择方案后一切恢复。"
+      },
+      "q3": {
+        "q": "如何付款？",
+        "a": "以西非法郎通过 Orange Money、Moov Money 或现金付款。收到付款后 RestoCool 团队为您开通方案。"
+      },
+      "q4": {
+        "q": "可以更换方案吗？",
+        "a": "可以，随时升级或降级。您的菜品、桌子和员工都会保留。"
+      },
+      "q5": {
+        "q": "我的销售会收取费用吗？",
+        "a": "不会。RestoCool 不从您的订单中抽成：您只需按月支付方案费用。"
+      },
+      "q6": {
+        "q": "我有多家店铺怎么办？",
+        "a": "每家店铺有自己的方案，您可以在同一账户中切换。商业版的汇总报表即将推出。"
+      }
+    },
+    "final": {
+      "title": "准备好试试了吗？",
+      "text": "几分钟内创建您的店铺。免费开始，成长后以西非法郎付费。"
+    },
+    "backHome": "返回首页",
+    "privacy": "隐私",
+    "terms": "条款"
   }
 }

@@ -79,8 +79,8 @@ test("the host shares the selection by link; a friend gives a name first, adds d
   await page.goto("/admin_pro");
   await expect(page.getByTestId("feature-usage")).toBeVisible();
   expect(Number(await page.getByTestId("fu-shared-sent").locator("span").last().innerText())).toBeGreaterThanOrEqual(1);
-  const [{ id }] = await sql<{ id: string }>(`select id from restaurants where slug = 'restaurant-demo'`);
-  await page.goto(`/admin_pro/businesses/${id}`);
+  const [demo] = await sql<{ id: string }>(`select id from restaurants where slug = 'restaurant-demo'`);
+  await page.goto(`/admin_pro/businesses/${demo!.id}`);
   await expect(page.getByTestId("fu-shared-sent")).toContainText("1");
   await expect(page.getByTestId("fu-shared-guests")).toContainText("1");
 });

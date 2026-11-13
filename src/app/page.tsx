@@ -28,6 +28,7 @@ import { DemoShowcase } from "@/components/demo/demo-showcase";
 import { PhoneMock } from "@/components/landing/phone-mock";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { MobileMenu } from "@/components/marketing/mobile-menu";
+import { PricingCards } from "@/components/marketing/pricing-cards";
 import { LEGAL } from "@/config/legal";
 import { LANDING_FEATURES, LOCAL_CLAIMS } from "@/config/marketing";
 import { PLANS } from "@/config/plans";
@@ -134,7 +135,7 @@ export default async function HomePage() {
             <Link href="/restaurants" className="rounded-lg px-3 py-2 hover:bg-sable">
               {t("nav.restaurants")}
             </Link>
-            <a href="#pricing" className="rounded-lg px-3 py-2 hover:bg-sable">
+            <a href="/tarifs" className="rounded-lg px-3 py-2 hover:bg-sable">
               {t("nav.pricing")}
             </a>
             <a href="#faq" className="hidden rounded-lg px-3 py-2 hover:bg-sable 2xl:inline">
@@ -162,7 +163,7 @@ export default async function HomePage() {
                 { href: "#how", label: t("nav.how"), icon: "🧭" },
                 { href: "/restaurants", label: t("nav.restaurants"), icon: "🍽️" },
                 { href: "/c", label: tc("short"), icon: "🔢" },
-                { href: "#pricing", label: t("nav.pricing"), icon: "💰" },
+                { href: "/tarifs", label: t("nav.pricing"), icon: "💰" },
                 { href: "#faq", label: t("nav.faq"), icon: "❓" },
               ]}
               signIn={{ href: "/sign-in", label: t("nav.signIn") }}
@@ -463,46 +464,15 @@ export default async function HomePage() {
               <h2 className="font-display text-3xl font-extrabold sm:text-4xl">{t("pricing.title")}</h2>
               <p className="mt-3 text-lg text-encre-2">{t("pricing.subtitle")}</p>
             </div>
-            <div className="mt-12 grid gap-6 lg:grid-cols-3">
-              {plans.map((p) => (
-                <article
-                  key={p.id}
-                  className={cn(
-                    "relative flex flex-col rounded-3xl p-7",
-                    p.popular ? "bg-nuit text-creme shadow-2xl ring-2 ring-or lg:-translate-y-3" : "border border-ligne bg-white shadow-sm",
-                  )}
-                  data-testid={`plan-${p.id}`}
-                >
-                  {p.popular && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-or px-3 py-1 text-xs font-bold text-encre">{t("pricing.popular")}</span>
-                  )}
-                  <h3 className="font-display text-2xl font-extrabold">{t(`pricing.${p.id}.name`)}</h3>
-                  <p className={cn("mt-1 text-sm", p.popular ? "text-creme/80" : "text-encre-2")}>{t(`pricing.${p.id}.desc`)}</p>
-                  <p className="mt-5 flex items-baseline gap-1">
-                    <span className="font-display text-4xl font-extrabold tabular-nums">{formatFCFA(p.price)}</span>
-                    {p.price > 0 && <span className={p.popular ? "text-creme/70" : "text-encre-2"}>{t("pricing.month")}</span>}
-                  </p>
-                  <ul className="mt-6 flex flex-1 flex-col gap-2.5 text-sm">
-                    {(["f1", "f2", "f3", "f4", "f5"] as const).map((f) => (
-                      <li key={f} className="flex gap-2">
-                        <Check className={cn("mt-0.5 h-4 w-4 shrink-0", p.popular ? "text-or" : "text-vert")} aria-hidden />
-                        {t(`pricing.${p.id}.${f}`)}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href="/sign-up"
-                    className={cn(
-                      "mt-7 inline-flex min-h-12 items-center justify-center rounded-xl px-5 font-bold",
-                      p.popular ? "bg-or text-encre" : "bg-vert text-creme",
-                    )}
-                  >
-                    {p.cta}
-                  </Link>
-                </article>
-              ))}
+            <div className="mt-12">
+              <PricingCards />
             </div>
             <p className="mt-8 text-center text-sm text-encre-2">{t("pricing.note")}</p>
+            <p className="mt-4 text-center">
+              <Link href="/tarifs" className="inline-flex min-h-11 items-center font-bold text-vert underline-offset-4 hover:underline" data-testid="pricing-details">
+                {t("pricing.details")} →
+              </Link>
+            </p>
           </div>
         </section>
 
@@ -568,7 +538,7 @@ export default async function HomePage() {
             <a href="#features" className="hover:underline">
               {t("nav.features")}
             </a>
-            <a href="#pricing" className="hover:underline">
+            <a href="/tarifs" className="hover:underline">
               {t("nav.pricing")}
             </a>
             <Link href="/r/restaurant-demo" className="hover:underline">

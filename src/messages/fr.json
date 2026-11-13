@@ -196,7 +196,8 @@
         "f3": "Statistiques par serveur",
         "f4": "Badge RestoCool masquable",
         "f5": "Accompagnement prioritaire"
-      }
+      },
+      "details": "Voir le détail des tarifs"
     },
     "faq": {
       "title": "Questions fréquentes",
@@ -3522,5 +3523,111 @@
       "enabled": "Les avis sont activés.",
       "disabled": "Les avis sont désactivés."
     }
+  },
+  "pricingPage": {
+    "metaTitle": "Tarifs RestoCool : menu digital et commandes en FCFA",
+    "metaDescription": "Gratuit, Pro 10 000 F / mois ou Business 25 000 F / mois. Comparez les formules RestoCool : menu QR, commandes en direct, écran cuisine, personnel. Paiement Orange Money, Moov Money ou espèces.",
+    "title": "Tarifs",
+    "breadcrumb": "Fil d’Ariane",
+    "intro": "Des formules simples, en FCFA, pour les maquis, restaurants, bars, hôtels et transports. Commencez gratuitement, changez de formule quand vous voulez.",
+    "launch": "Offre de lancement : la formule Pro est offerte pendant le lancement. Créez votre établissement aujourd’hui, sans rien payer.",
+    "plansLabel": "Formules",
+    "compareTitle": "Comparer les formules",
+    "compareIntro": "Tout ce qui est inclus, formule par formule.",
+    "feature": "Fonction",
+    "unlimited": "Illimité",
+    "yes": "Inclus",
+    "no": "Non inclus",
+    "soon": "Bientôt",
+    "soonNote": "« Bientôt » : en préparation, inclus dans la formule dès sa sortie, sans supplément.",
+    "cells": {
+      "qrPerSeat": "Par table et salon",
+      "qrOne": "1 pour l’établissement"
+    },
+    "groups": {
+      "menu": "Menu et QR codes",
+      "service": "Commandes et service",
+      "team": "Personnel et suivi",
+      "growth": "Croissance et accompagnement"
+    },
+    "rows": {
+      "menu": "Menu digital avec photos, en français, anglais et chinois",
+      "items": "Nombre de plats",
+      "qr": "QR codes",
+      "rc": "Numéro RC à taper sous chaque QR",
+      "offlineMenu": "Menu disponible même sans réseau",
+      "whatsapp": "Commande à emporter par WhatsApp",
+      "ordering": "Commande depuis le téléphone du client et suivi en direct",
+      "shared": "Sélection partagée avec la table",
+      "kitchen": "Écran cuisine et tableau de service",
+      "floor": "Salle en direct : tables libres et occupées",
+      "reviews": "Avis clients avec étoiles",
+      "reservations": "Réservations",
+      "staff": "Membres du personnel",
+      "pin": "Connexion par code PIN sur la tablette, pointage",
+      "reports": "Historique des commandes et export CSV",
+      "staffPerformance": "Statistiques par serveur",
+      "promotions": "Offres et promotions sur votre page",
+      "multiBranch": "Plusieurs adresses, rapports regroupés",
+      "hideBadge": "Badge RestoCool masquable",
+      "support": "Aide en français par WhatsApp",
+      "priority": "Accompagnement prioritaire"
+    },
+    "pay": {
+      "title": "Comment payer",
+      "intro": "Pas de carte bancaire, pas de prélèvement automatique.",
+      "s1": {
+        "title": "Choisissez votre formule",
+        "text": "Depuis votre espace RestoCool, ou en nous écrivant sur WhatsApp."
+      },
+      "s2": {
+        "title": "Payez en FCFA",
+        "text": "Par Orange Money, Moov Money ou en espèces."
+      },
+      "s3": {
+        "title": "C’est activé",
+        "text": "L’équipe RestoCool active votre formule et vous confirme la date de fin."
+      },
+      "badges": {
+        "om": "Orange Money",
+        "moov": "Moov Money",
+        "cash": "Espèces",
+        "noData": "Vos données ne sont jamais supprimées"
+      }
+    },
+    "faqTitle": "Questions sur les tarifs",
+    "faq": {
+      "q1": {
+        "q": "La formule Gratuit est-elle vraiment gratuite ?",
+        "a": "Oui, sans limite de durée : votre menu en ligne avec photos, en 3 langues, un QR code et la commande à emporter par WhatsApp. Aucune carte bancaire n’est demandée."
+      },
+      "q2": {
+        "q": "Que se passe-t-il à la fin de l’essai ?",
+        "a": "Votre établissement passe à la formule que vous choisissez. Si vous ne payez pas, rien n’est supprimé : votre menu reste visible et vous retrouvez tout dès que vous reprenez une formule."
+      },
+      "q3": {
+        "q": "Comment payer ?",
+        "a": "Par Orange Money, Moov Money ou en espèces, en FCFA. L’équipe RestoCool active votre formule à réception du paiement."
+      },
+      "q4": {
+        "q": "Puis-je changer de formule ?",
+        "a": "Oui, à tout moment, vers le haut comme vers le bas. Vos plats, tables et personnel sont conservés."
+      },
+      "q5": {
+        "q": "Y a-t-il des frais sur mes ventes ?",
+        "a": "Non. RestoCool ne prend aucune commission sur vos commandes : vous payez seulement la formule, au mois."
+      },
+      "q6": {
+        "q": "J’ai plusieurs établissements, comment faire ?",
+        "a": "Chaque établissement a sa propre formule et vous passez de l’un à l’autre depuis le même compte. Les rapports regroupés de la formule Business arrivent bientôt."
+      }
+    },
+    "final": {
+      "title": "Prêt à essayer ?",
+      "text": "Créez votre établissement en quelques minutes. Gratuit pour commencer, en FCFA quand vous grandissez."
+    },
+    "backHome": "Retour à l’accueil",
+    "privacy": "Confidentialité",
+    "terms": "Conditions"
   }
 }

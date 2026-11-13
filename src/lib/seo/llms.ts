@@ -44,6 +44,7 @@ export function llmsTxt(base: string, businesses: LlmsBusiness[], opts: { full?:
 
   out.push("## Find a business", "");
   out.push(
+    `- [Pricing](${base}/tarifs): plans in FCFA (Free, Pro, Business), full comparison, how to pay (Orange Money, Moov Money, cash).`,
     `- [Directory](${base}/restaurants): every published business; search by name, town or RC number (${base}/restaurants?q=ouagadougou).`,
     `- Menu of a business: ${base}/r/{slug} (server-rendered HTML with schema.org Restaurant/Menu JSON-LD), and ${base}/r/{slug}/menu.json (same facts as JSON).`,
     `- RC number (« numéro RC »): the code printed under a business's QR code, e.g. RC-K7M3P. Open ${base}/c/{CODE} or type it at ${base}/c.`,
@@ -67,6 +68,7 @@ export function llmsTxt(base: string, businesses: LlmsBusiness[], opts: { full?:
   out.push("## Pages", "");
   out.push(
     `- [Home](${base}/): presentation, features, pricing, FAQ`,
+    `- [Pricing](${base}/tarifs)`,
     `- [Directory](${base}/restaurants)`,
     `- [Guide](${base}/guide): animated tutorials for managers and staff`,
     `- [Demo](${base}/demo): animated demo of a menu and orders`,

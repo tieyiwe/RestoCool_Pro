@@ -37,6 +37,8 @@ const nextConfig: NextConfig = {
       { source: "/confidentialite", destination: "/privacy?lang=fr", permanent: true },
       { source: "/conditions", destination: "/terms?lang=fr", permanent: true },
       { source: "/cgu", destination: "/terms?lang=fr", permanent: true },
+      { source: "/pricing", destination: "/tarifs", permanent: true },
+      { source: "/prix", destination: "/tarifs", permanent: true },
     ];
   },
   async headers() {
