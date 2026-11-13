@@ -12,6 +12,7 @@ export const DISALLOW = [
   "/pointage",
   "/rejoindre",
   "/o/",
+  "/reservation/",
   "/sign-in",
   "/sign-up",
   "/r/*/t/",

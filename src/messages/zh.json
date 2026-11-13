@@ -136,7 +136,7 @@
       },
       "reservations": {
         "title": "预订与统计",
-        "text": "通过 WhatsApp 确认预订，每日营业额，最畅销菜品。"
+        "text": "顾客在您的页面预订，您致电确认，RestoCool 自动发送邮件。今日数据一目了然。"
       }
     },
     "burkina": {
@@ -469,7 +469,8 @@
       "skipped": "一个等待中的操作未执行：订单已被更改。",
       "waiting": "等待中"
     },
-    "reviewsNav": "顾客评价"
+    "reviewsNav": "顾客评价",
+    "reservationsNav": "预订"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -1323,7 +1324,19 @@
       },
       "yes": "Yes",
       "no": "No",
-      "offlineNote": "Offline mode and automatic updates work on the phones themselves: orders made without network arrive like any other once the phone is back online, and every screen moves to the running version by itself."
+      "offlineNote": "Offline mode and automatic updates work on the phones themselves: orders made without network arrive like any other once the phone is back online, and every screen moves to the running version by itself.",
+      "reservations": {
+        "title": "Reservations",
+        "on": "Businesses with reservations open",
+        "onOne": "Reservations open",
+        "total": "Requests received",
+        "covers": "Guests booked",
+        "waiting": "Waiting for a call",
+        "confirmed": "Confirmed or honoured",
+        "called": "Customers called",
+        "declined": "Declined or cancelled",
+        "noShow": "No-shows"
+      }
     }
   },
   "demo": {
@@ -1942,7 +1955,44 @@
     "shareOthersTitle": "同桌的选择",
     "shareSentBy": "{host} 已确认订单。祝您用餐愉快！",
     "shareClosedBy": "{host} 已停止分享。",
-    "shareBanner": "{name}，您正在和 {host} 一起点菜"
+    "shareBanner": "{name}，您正在和 {host} 一起点菜",
+    "resvOpen": "预订餐桌",
+    "resvTitle": "在 {business} 预订",
+    "resvDay": "哪一天？",
+    "resvToday": "今天",
+    "resvTomorrow": "明天",
+    "resvTime": "几点？",
+    "resvLoading": "正在加载时间…",
+    "resvNoSlots": "当天已无空桌，请选择其他日期。",
+    "resvGuests": "人数",
+    "resvLess": "减少一人",
+    "resvMore": "增加一人",
+    "resvBigGroup": "超过 {n} 人？请直接致电店铺。",
+    "resvName": "姓名",
+    "resvEmail": "电子邮箱",
+    "resvEmailHint": "RestoCool 会将预订确认发送到此邮箱。",
+    "resvPhone": "电话",
+    "resvPhoneHint": "店铺会拨打此号码确认。",
+    "resvNote": "备注（可选）",
+    "resvNotePlaceholder": "生日、儿童椅、露台…",
+    "resvSubmit": "提交预订请求",
+    "resvPrivacy": "您的信息仅提供给该店铺用于您的预订。",
+    "resvSent": "请求已发送！",
+    "resvAlready": "您已提交过此请求",
+    "resvSentHint": "RestoCool 正在发送邮件至 {email}。店铺会致电确认您的餐桌。",
+    "resvSee": "查看或取消我的预订",
+    "resvBack": "返回菜单",
+    "resvClosed": "目前暂不接受预订。",
+    "resvError_slot": "该时间已不可选，请选择其他时间。",
+    "resvError_full": "该时间剩余座位不足，请选择其他时间。",
+    "resvError_party": "人数太多，无法在线预订：请致电店铺。",
+    "resvError_email": "请检查您的电子邮箱。",
+    "resvError_phone": "请检查您的电话号码。",
+    "resvError_invalid": "请检查填写的信息。",
+    "resvError_closed": "目前暂不接受预订。",
+    "resvError_rate": "请求过多，请几分钟后再试。",
+    "resvError_network": "无网络连接，请检查后重试。",
+    "resvError_error": "预订未能发送，请重试。"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -2712,7 +2762,8 @@
       "unpublished": "您的菜单尚未发布：顾客看不到",
       "noLocation": "添加店铺位置，方便顾客找到您",
       "join": "{n} 人等待加入团队",
-      "noPhoto": "添加门面或店内照片：顾客能更快认出您"
+      "noPhoto": "添加门面或店内照片：顾客能更快认出您",
+      "reservations": "{n} 个预订请求等待您致电确认"
     },
     "shortcuts": {
       "title": "全面管理",
@@ -3197,6 +3248,46 @@
       "team": "RestoCool 团队",
       "local": "100% 本地 · 布基纳法索骄傲出品",
       "footer": "RestoCool 是 TIBLOGICS 旗下产品 · restocool.com。您收到此邮件是因为您刚刚在 RestoCool 上创建了店铺。"
+    },
+    "reservation": {
+      "header": "您的预订",
+      "hello": "{name}，您好：",
+      "business": "店铺",
+      "date": "日期",
+      "time": "时间",
+      "guests": "人数",
+      "ref": "编号",
+      "address": "地址",
+      "phone": "电话",
+      "reason": "店铺留言：{reason}",
+      "manage": "查看或取消我的预订",
+      "menu": "查看 {business} 的菜单",
+      "footer": "此邮件由 RestoCool 代表 {business} 发送。如有疑问，请直接联系店铺。",
+      "requested": {
+        "subject": "已收到预订请求 · {business}",
+        "title": "已收到预订请求",
+        "body": "{business} 已收到您的请求，店铺会致电 {phone} 确认您的餐桌。"
+      },
+      "confirmed": {
+        "subject": "预订已确认 · {business}，{date} {time}",
+        "title": "您的餐桌已预订",
+        "body": "{business} 已确认您的预订，期待您的光临！"
+      },
+      "declined": {
+        "subject": "预订不可用 · {business}",
+        "title": "预订不可用",
+        "body": "抱歉，{business} 在该时间无法接待您。您可以在其页面选择其他时间。"
+      },
+      "cancelled": {
+        "subject": "预订已取消 · {business}",
+        "title": "预订已取消",
+        "body": "{business} 已取消您的预订。"
+      },
+      "cancelledByCustomer": {
+        "subject": "取消已确认 · {business}",
+        "title": "您的预订已取消",
+        "body": "我们已取消您在 {business} 的预订。期待下次光临！"
+      }
     }
   },
   "seo": {
@@ -3629,5 +3720,117 @@
     "backHome": "返回首页",
     "privacy": "隐私",
     "terms": "条款"
+  },
+  "reservations": {
+    "title": "预订",
+    "intro": "顾客的预订请求。致电确认，然后跟进每一桌。",
+    "stateOn": "预订已开放",
+    "stateOff": "预订已关闭",
+    "planNeeded": "预订功能包含在专业版和商业版中。",
+    "offHint": "预订已关闭：您的页面上不显示“预订餐桌”按钮。",
+    "turnOn": "开放预订",
+    "waitingTitle": "{n} 个请求待确认",
+    "waitingHint": "请致电顾客，然后确认或拒绝。RestoCool 会给顾客发送邮件。",
+    "days": "日期",
+    "today": "今天",
+    "tomorrow": "明天",
+    "dayCount": "{n} · {covers} 人",
+    "dayTotal": "{n} 个预订 · {covers} 人",
+    "empty": "当天没有预订。",
+    "guests": "{n} 人",
+    "received": "收到于 {at}",
+    "contactedAt": "已于 {at} 致电",
+    "cancelledByCustomer": "顾客已取消",
+    "reasonShown": "发送给顾客的原因：{reason}",
+    "reasonPlaceholder": "原因（会发送给顾客，可选）",
+    "emailNote": "顾客会收到 RestoCool 的邮件。",
+    "waText": "您好 {name}，这里是 {business}。我们确认您 {date} {time} 的 {n} 人预订。期待您的光临！",
+    "status": {
+      "requested": "等待确认",
+      "confirmed": "已确认",
+      "declined": "已拒绝",
+      "seated": "已到店",
+      "completed": "已完成",
+      "no_show": "未到",
+      "cancelled": "已取消"
+    },
+    "actions": {
+      "contacted": "我已致电",
+      "confirm": "确认",
+      "seat": "已到店",
+      "complete": "已完成",
+      "noShow": "未到",
+      "declineOpen": "拒绝请求…",
+      "cancelOpen": "取消预订…",
+      "decline": "拒绝",
+      "cancel": "取消预订"
+    },
+    "ok": {
+      "confirm": "预订已确认，顾客会收到邮件。",
+      "decline": "请求已拒绝，顾客会收到邮件。",
+      "cancel": "预订已取消，顾客会收到邮件。",
+      "seat": "顾客已到店。",
+      "complete": "预订已完成。",
+      "no_show": "已标记未到。",
+      "contacted": "已记录致电。",
+      "enabled": "预订已开放：按钮已显示在您的页面上。",
+      "disabled": "预订已关闭。",
+      "saved": "设置已保存。"
+    },
+    "errors": {
+      "moved": "该预订已有变动，列表已更新。",
+      "settings": "请检查设置。"
+    },
+    "settings": {
+      "title": "预订设置",
+      "enabled": "在我的页面开放预订",
+      "slot": "两个时段的间隔",
+      "minutes": "{n} 分钟",
+      "hours": "{n} 小时",
+      "maxParty": "每个预订最多人数",
+      "covers": "每个时段最多人数",
+      "coversHint": "0 = 不限。",
+      "notice": "最少提前时间",
+      "noNotice": "无",
+      "daysAhead": "可提前预订（天）",
+      "note": "表单上显示的信息（可选）",
+      "notePlaceholder": "例如：餐桌保留 15 分钟。",
+      "hoursHint": "可选时间根据您的营业时间生成。",
+      "hoursLink": "修改营业时间",
+      "save": "保存"
+    }
+  },
+  "reservation": {
+    "yourReservation": "您的预订",
+    "status": {
+      "requested": "等待确认",
+      "confirmed": "已确认",
+      "declined": "已拒绝",
+      "seated": "已到店",
+      "completed": "已完成",
+      "no_show": "未到",
+      "cancelled": "已取消"
+    },
+    "statusHint": {
+      "requested": "{business} 会致电确认您的餐桌。",
+      "confirmed": "您的餐桌已预订，期待您的光临！",
+      "declined": "{business} 在该时间无法接待您。",
+      "seated": "祝您用餐愉快！",
+      "completed": "感谢您的光临。",
+      "no_show": "此预订已过期。",
+      "cancelled": "此预订已取消。"
+    },
+    "cancelledOk": "您的预订已取消，确认邮件已发送给您。",
+    "date": "日期",
+    "time": "时间",
+    "guests": "人数",
+    "name": "姓名",
+    "ref": "编号",
+    "address": "地址",
+    "reason": "店铺留言：{reason}",
+    "call": "致电 {phone}",
+    "seeMenu": "查看菜单",
+    "cancel": "取消我的预订",
+    "footer": "通过 RestoCool 为 {business} 预订。"
   }
 }

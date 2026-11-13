@@ -179,7 +179,7 @@ export function businessJsonLd(input: BusinessInput): JsonLd {
             })),
           }),
         }
-      : { acceptsReservations: false, hasMenu: menuNode }),
+      : { acceptsReservations: input.menu.features.reservations, hasMenu: menuNode }),
   });
   const breadcrumb = breadcrumbJsonLd([
     { name: input.labels.home, url: `${base}/` },

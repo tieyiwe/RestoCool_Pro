@@ -1,4 +1,5 @@
 import "server-only";
+import { reservationsOpen } from "@/lib/reservations";
 import { DEFAULT_FORTUNES } from "@/config/fortunes";
 import { DEFAULT_ACCENT2 } from "@/config/palettes";
 import type { DB } from "@/db";
@@ -107,6 +108,8 @@ export async function loadPublicMenu(
         Boolean(r.settings.takeawayWhatsapp ?? r.whatsapp),
       localBadge: f.localBadge ?? false,
       reviews: f.reviews ?? true,
+      // Table reservations: turned on by the business and allowed by its plan.
+      reservations: reservationsOpen(r),
     },
     locales: (["fr", "en", "zh"] as const).filter(
       (l) =>

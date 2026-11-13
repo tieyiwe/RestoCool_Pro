@@ -12,6 +12,7 @@ import { JoinPrompt } from "@/components/app-shell/join-prompt";
 import { PinSessionBar } from "@/components/app-shell/pin-session-bar";
 import { formatStaffNo } from "@/lib/personnel";
 import { getDb } from "@/db";
+import { pendingReservations } from "@/lib/reservations";
 import { pendingJoinRequests } from "@/lib/personnel/join";
 import { Suspense } from "react";
 import { env } from "@/lib/env";
@@ -54,6 +55,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       { href: "/app/kitchen", label: t("kitchen"), icon: "👩‍🍳", need: "orders.read" },
       { href: "/app/scan", label: t("scan"), icon: "📷", need: null },
       { href: "/app/orders", label: t("history"), icon: "🧾", need: "reports.read" },
+      ...(transport ? [] : ([{ href: "/app/reservations", label: t("reservationsNav"), icon: "📅", need: "reservations.write" }] as const)),
       { href: "/app/menu", label: t("menu"), icon: "📖", need: "menu.write" },
       transport
         ? ({ href: "/app/buses", label: t("buses"), icon: "🚌", need: "seats.write" } as const)
@@ -108,13 +110,15 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   const deletionReq = ctx ? await currentDeletion(db, ctx.repo.restaurantId).catch(() => null) : null;
   const deletion = deletionReq && (deletionReq.status === "pending" || deletionReq.status === "confirmed") ? deletionReq : null;
   const td = await getTranslations("danger");
+  // Reservation requests waiting for an answer: a badge on « Réservations ».
+  const resvWaiting = ctx && nav.some((n) => n.href === "/app/reservations") ? await pendingReservations(db, ctx.repo.restaurantId).catch(() => 0) : 0;
   const summary = ctx ? await notificationSummary(db, ctx, locale).catch(() => ({ unread: 0, support: 0, popup: null })) : null;
   const groups = (["service", "manage", "help"] as const)
     .map((g) => ({
       label: t(`navGroups.${g}`),
       items: nav
         .filter((n) => (GROUP[n.href] ?? "service") === g)
-        .map((n) => ({ href: n.href, label: n.label, icon: n.icon, badge: n.href === "/app/notifications" ? (summary ? summary.unread + summary.support : 0) : undefined })),
+        .map((n) => ({ href: n.href, label: n.label, icon: n.icon, badge: n.href === "/app/notifications" ? (summary ? summary.unread + summary.support : 0) : n.href === "/app/reservations" ? resvWaiting : undefined })),
     }))
     .filter((g) => g.items.length);
   const lead = ctx ? ctx.actor.role === "owner" || ctx.actor.role === "manager" : false;

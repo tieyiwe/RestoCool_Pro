@@ -18,8 +18,10 @@ test("/tarifs: plan cards, the full comparison from the plan config, how to pay,
   await expect(page.getByTestId("compare-staff").locator('[data-plan="pro"]')).toHaveText("10");
   await expect(page.getByTestId("compare-promotions").locator('[data-plan="pro"]')).toContainText("Non inclus");
   await expect(page.getByTestId("compare-promotions").locator('[data-plan="business"]')).toContainText("Inclus");
-  // Not built yet: « Bientôt », never a plain tick.
-  await expect(page.getByTestId("compare-reservations").locator('[data-plan="pro"]')).toHaveText("Bientôt");
+  // Reservations: Pro and Business; not built yet (combined multi-branch reports): « Bientôt », never a tick.
+  await expect(page.getByTestId("compare-reservations").locator('[data-plan="pro"]')).toContainText("Inclus");
+  await expect(page.getByTestId("compare-reservations").locator('[data-plan="gratuit"]')).toContainText("Non inclus");
+  await expect(page.getByTestId("compare-multiBranch").locator('[data-plan="business"]')).toHaveText("Bientôt");
   await expect(page.getByText("Orange Money").first()).toBeVisible();
 
   // The page never scrolls sideways (the table scrolls in its own box on phones).

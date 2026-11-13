@@ -31,6 +31,12 @@ export type RestaurantSettings = {
   accent2?: string;
   /** WhatsApp that receives takeaway orders when it is not the main WhatsApp (absent = same). */
   takeawayWhatsapp?: string;
+  /**
+   * Table reservations from the public page (off until the owner turns them on): slot length,
+   * largest group, covers per slot (0 = no limit), minimum notice, how far ahead, a note shown
+   * on the form.
+   */
+  reservations?: { enabled: boolean; slotMinutes: number; maxParty: number; maxCoversPerSlot: number; noticeMinutes: number; daysAhead: number; note?: string };
   /** PIN sessions on authorised devices: end of shift (hours) and auto-lock when idle (minutes). */
   staffSessions?: { shiftHours: number; idleMinutes: number };
   /** Front desk timers: an open order turns orange, then red, after these many minutes. */

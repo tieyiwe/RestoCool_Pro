@@ -29,6 +29,13 @@ export function allow(req: Request, deviceId = "-"): boolean {
  * (preview). Seating needs a plan with ordering (Pro / Business / trial).
  */
 export async function publicRestaurant(slug: string) {
+  const r = await publicBusiness(slug);
+  if (!r || !hasFeature(r, "ordering")) return null;
+  return r;
+}
+
+/** Like publicRestaurant, whatever the plan (features that check their own plan rule, e.g. reservations). */
+export async function publicBusiness(slug: string) {
   const db = getDb();
   let r = await findRestaurantBySlug(db, slug);
   if (!r) {
@@ -36,6 +43,5 @@ export async function publicRestaurant(slug: string) {
     const member = draft ? await getMemberContext() : null;
     if (draft && member?.memberships.some((m) => m.restaurantId === draft.id)) r = draft;
   }
-  if (!r || !hasFeature(r, "ordering")) return null;
-  return r;
+  return r ?? null;
 }

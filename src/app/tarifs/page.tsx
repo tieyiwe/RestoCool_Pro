@@ -58,7 +58,7 @@ function rows(t: (k: string, v?: Record<string, string | number>) => string): Ar
         { key: "kitchen", cells: has("kitchenDisplay") },
         { key: "floor", cells: has("kitchenDisplay") },
         { key: "reviews", cells: has("ordering") },
-        { key: "reservations", cells: (p) => (PLANS[p].features.has("reservations") ? "soon" : false) },
+        { key: "reservations", cells: has("reservations") },
       ],
     },
     {

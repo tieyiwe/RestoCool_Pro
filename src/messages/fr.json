@@ -136,7 +136,7 @@
       },
       "reservations": {
         "title": "Réservations et statistiques",
-        "text": "Réservations confirmées par WhatsApp, chiffre d’affaires par jour, plats les plus vendus."
+        "text": "Vos clients réservent depuis votre page, vous les appelez pour confirmer, RestoCool leur envoie l’email. Et vos chiffres du jour en un coup d’œil."
       }
     },
     "burkina": {
@@ -469,7 +469,8 @@
       "skipped": "Une action en attente n’a pas été appliquée : la commande avait déjà changé.",
       "waiting": "en attente"
     },
-    "reviewsNav": "Avis clients"
+    "reviewsNav": "Avis clients",
+    "reservationsNav": "Réservations"
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -1323,7 +1324,19 @@
       },
       "yes": "Oui",
       "no": "Non",
-      "offlineNote": "Le mode hors ligne et les mises à jour automatiques fonctionnent sur les téléphones : une commande faite sans réseau arrive comme les autres dès le retour du réseau, et chaque écran passe tout seul à la version en ligne."
+      "offlineNote": "Le mode hors ligne et les mises à jour automatiques fonctionnent sur les téléphones : une commande faite sans réseau arrive comme les autres dès le retour du réseau, et chaque écran passe tout seul à la version en ligne.",
+      "reservations": {
+        "title": "Réservations",
+        "on": "Établissements avec réservations ouvertes",
+        "onOne": "Réservations ouvertes",
+        "total": "Demandes reçues",
+        "covers": "Personnes réservées",
+        "waiting": "En attente d’appel",
+        "confirmed": "Confirmées ou honorées",
+        "called": "Clients appelés",
+        "declined": "Refusées ou annulées",
+        "noShow": "Absents"
+      }
     }
   },
   "demo": {
@@ -1942,7 +1955,44 @@
     "shareOthersTitle": "Les choix de la table",
     "shareSentBy": "{host} a confirmé la commande. Bon appétit !",
     "shareClosedBy": "{host} a arrêté le partage.",
-    "shareBanner": "{name}, vous choisissez avec {host}"
+    "shareBanner": "{name}, vous choisissez avec {host}",
+    "resvOpen": "Réserver une table",
+    "resvTitle": "Réserver chez {business}",
+    "resvDay": "Quel jour ?",
+    "resvToday": "Aujourd’hui",
+    "resvTomorrow": "Demain",
+    "resvTime": "À quelle heure ?",
+    "resvLoading": "Chargement des horaires…",
+    "resvNoSlots": "Plus de table disponible ce jour-là. Choisissez un autre jour.",
+    "resvGuests": "Nombre de personnes",
+    "resvLess": "Une personne de moins",
+    "resvMore": "Une personne de plus",
+    "resvBigGroup": "Plus de {n} personnes ? Appelez directement l’établissement.",
+    "resvName": "Nom et prénom",
+    "resvEmail": "Email",
+    "resvEmailHint": "RestoCool vous envoie la confirmation de votre réservation à cette adresse.",
+    "resvPhone": "Téléphone",
+    "resvPhoneHint": "L’établissement vous appellera à ce numéro pour confirmer.",
+    "resvNote": "Une précision ? (facultatif)",
+    "resvNotePlaceholder": "Anniversaire, chaise bébé, terrasse…",
+    "resvSubmit": "Demander la réservation",
+    "resvPrivacy": "Vos coordonnées sont transmises uniquement à cet établissement pour votre réservation.",
+    "resvSent": "Demande envoyée !",
+    "resvAlready": "Vous avez déjà cette demande",
+    "resvSentHint": "Un email de RestoCool part à {email}. L’établissement vous appellera pour confirmer votre table.",
+    "resvSee": "Voir ou annuler ma réservation",
+    "resvBack": "Retour au menu",
+    "resvClosed": "Les réservations ne sont pas ouvertes pour le moment.",
+    "resvError_slot": "Cet horaire n’est plus disponible. Choisissez-en un autre.",
+    "resvError_full": "Il n’y a plus assez de places à cet horaire. Choisissez-en un autre.",
+    "resvError_party": "Groupe trop grand pour une réservation en ligne : appelez l’établissement.",
+    "resvError_email": "Vérifiez votre adresse email.",
+    "resvError_phone": "Vérifiez votre numéro de téléphone (+226 et 8 chiffres).",
+    "resvError_invalid": "Vérifiez les informations saisies.",
+    "resvError_closed": "Les réservations ne sont pas ouvertes pour le moment.",
+    "resvError_rate": "Trop de demandes. Réessayez dans quelques minutes.",
+    "resvError_network": "Pas de connexion. Vérifiez Internet et réessayez.",
+    "resvError_error": "La réservation n’a pas pu être envoyée. Réessayez."
   },
   "seating": {
     "title": "Tables et salles",
@@ -2712,7 +2762,8 @@
       "unpublished": "Votre menu n'est pas encore publié : les clients ne le voient pas",
       "noLocation": "Ajoutez l'emplacement de l'établissement pour que les clients vous trouvent",
       "join": "{n, plural, one {# personne attend} other {# personnes attendent}} pour rejoindre l'équipe",
-      "noPhoto": "Ajoutez une photo de votre façade ou de l'intérieur : les clients vous reconnaîtront plus vite"
+      "noPhoto": "Ajoutez une photo de votre façade ou de l'intérieur : les clients vous reconnaîtront plus vite",
+      "reservations": "{n, plural, one {# demande de réservation attend} other {# demandes de réservation attendent}} votre appel"
     },
     "shortcuts": {
       "title": "Tout gérer",
@@ -3197,6 +3248,46 @@
       "team": "L’équipe RestoCool",
       "local": "100 % local · Fièrement burkinabè",
       "footer": "RestoCool, un produit TIBLOGICS · restocool.com. Vous recevez cet e-mail parce que vous venez de créer un établissement sur RestoCool."
+    },
+    "reservation": {
+      "header": "Votre réservation",
+      "hello": "Bonjour {name},",
+      "business": "Établissement",
+      "date": "Date",
+      "time": "Heure",
+      "guests": "Personnes",
+      "ref": "Référence",
+      "address": "Adresse",
+      "phone": "Téléphone",
+      "reason": "Message de l’établissement : {reason}",
+      "manage": "Voir ou annuler ma réservation",
+      "menu": "Voir le menu de {business}",
+      "footer": "Email envoyé par RestoCool pour le compte de {business}. Pour toute question, contactez directement l’établissement.",
+      "requested": {
+        "subject": "Demande de réservation reçue · {business}",
+        "title": "Demande de réservation reçue",
+        "body": "{business} a bien reçu votre demande. L’établissement va vous appeler au {phone} pour confirmer votre table."
+      },
+      "confirmed": {
+        "subject": "Réservation confirmée · {business}, {date} à {time}",
+        "title": "Votre table est réservée",
+        "body": "{business} confirme votre réservation. À bientôt !"
+      },
+      "declined": {
+        "subject": "Réservation non disponible · {business}",
+        "title": "Réservation non disponible",
+        "body": "Désolé, {business} ne peut pas vous recevoir à cet horaire. Vous pouvez choisir un autre moment sur sa page."
+      },
+      "cancelled": {
+        "subject": "Réservation annulée · {business}",
+        "title": "Réservation annulée",
+        "body": "{business} a annulé votre réservation."
+      },
+      "cancelledByCustomer": {
+        "subject": "Annulation confirmée · {business}",
+        "title": "Votre réservation est annulée",
+        "body": "Nous avons bien annulé votre réservation chez {business}. À une prochaine fois !"
+      }
     }
   },
   "seo": {
@@ -3629,5 +3720,117 @@
     "backHome": "Retour à l’accueil",
     "privacy": "Confidentialité",
     "terms": "Conditions"
+  },
+  "reservations": {
+    "title": "Réservations",
+    "intro": "Les demandes de vos clients. Appelez-les pour confirmer, puis suivez chaque table.",
+    "stateOn": "Réservations ouvertes",
+    "stateOff": "Réservations fermées",
+    "planNeeded": "Les réservations font partie des formules Pro et Business.",
+    "offHint": "Les réservations sont fermées : le bouton « Réserver une table » n’apparaît pas sur votre page.",
+    "turnOn": "Les ouvrir",
+    "waitingTitle": "{n, plural, one {# demande à confirmer} other {# demandes à confirmer}}",
+    "waitingHint": "Appelez le client, puis confirmez ou refusez. RestoCool lui envoie un email.",
+    "days": "Jours",
+    "today": "Aujourd’hui",
+    "tomorrow": "Demain",
+    "dayCount": "{n} · {covers} pers.",
+    "dayTotal": "{n, plural, =0 {Aucune réservation} one {# réservation} other {# réservations}} · {covers} personnes",
+    "empty": "Aucune réservation ce jour-là.",
+    "guests": "{n, plural, one {# personne} other {# personnes}}",
+    "received": "reçue le {at}",
+    "contactedAt": "appelé à {at}",
+    "cancelledByCustomer": "annulée par le client",
+    "reasonShown": "Motif envoyé au client : {reason}",
+    "reasonPlaceholder": "Motif (envoyé au client, facultatif)",
+    "emailNote": "Le client reçoit un email de RestoCool.",
+    "waText": "Bonjour {name}, ici {business}. Nous confirmons votre réservation du {date} à {time} pour {n} personne(s). À bientôt !",
+    "status": {
+      "requested": "En attente de confirmation",
+      "confirmed": "Confirmée",
+      "declined": "Refusée",
+      "seated": "Arrivés",
+      "completed": "Terminée",
+      "no_show": "Absent",
+      "cancelled": "Annulée"
+    },
+    "actions": {
+      "contacted": "J’ai appelé",
+      "confirm": "Confirmer",
+      "seat": "Arrivés",
+      "complete": "Terminée",
+      "noShow": "Absent",
+      "declineOpen": "Refuser la demande…",
+      "cancelOpen": "Annuler la réservation…",
+      "decline": "Refuser",
+      "cancel": "Annuler la réservation"
+    },
+    "ok": {
+      "confirm": "Réservation confirmée. Le client reçoit un email.",
+      "decline": "Demande refusée. Le client reçoit un email.",
+      "cancel": "Réservation annulée. Le client reçoit un email.",
+      "seat": "Clients arrivés.",
+      "complete": "Réservation terminée.",
+      "no_show": "Marqué absent.",
+      "contacted": "Appel noté.",
+      "enabled": "Réservations ouvertes : le bouton est sur votre page.",
+      "disabled": "Réservations fermées.",
+      "saved": "Réglages enregistrés."
+    },
+    "errors": {
+      "moved": "Cette réservation a déjà changé. La liste est à jour.",
+      "settings": "Vérifiez les réglages."
+    },
+    "settings": {
+      "title": "Réglages des réservations",
+      "enabled": "Ouvrir les réservations sur ma page",
+      "slot": "Intervalle entre deux horaires",
+      "minutes": "{n} min",
+      "hours": "{n, plural, one {# heure} other {# heures}}",
+      "maxParty": "Personnes maximum par réservation",
+      "covers": "Couverts maximum par horaire",
+      "coversHint": "0 = pas de limite.",
+      "notice": "Délai minimum avant l’heure",
+      "noNotice": "Aucun",
+      "daysAhead": "Réservable jusqu’à (jours)",
+      "note": "Message affiché sur le formulaire (facultatif)",
+      "notePlaceholder": "Ex. : les tables sont gardées 15 minutes.",
+      "hoursHint": "Les horaires proposés suivent vos heures d’ouverture.",
+      "hoursLink": "Modifier les horaires",
+      "save": "Enregistrer"
+    }
+  },
+  "reservation": {
+    "yourReservation": "Votre réservation",
+    "status": {
+      "requested": "En attente de confirmation",
+      "confirmed": "Confirmée",
+      "declined": "Refusée",
+      "seated": "Arrivés",
+      "completed": "Terminée",
+      "no_show": "Absent",
+      "cancelled": "Annulée"
+    },
+    "statusHint": {
+      "requested": "{business} va vous appeler pour confirmer votre table.",
+      "confirmed": "Votre table est réservée. À bientôt !",
+      "declined": "{business} ne peut pas vous recevoir à cet horaire.",
+      "seated": "Bon appétit !",
+      "completed": "Merci de votre visite.",
+      "no_show": "Cette réservation est passée.",
+      "cancelled": "Cette réservation est annulée."
+    },
+    "cancelledOk": "Votre réservation est annulée. Un email de confirmation vous a été envoyé.",
+    "date": "Date",
+    "time": "Heure",
+    "guests": "Personnes",
+    "name": "Nom",
+    "ref": "Référence",
+    "address": "Adresse",
+    "reason": "Message de l’établissement : {reason}",
+    "call": "Appeler {phone}",
+    "seeMenu": "Voir le menu",
+    "cancel": "Annuler ma réservation",
+    "footer": "Réservation faite avec RestoCool pour {business}."
   }
 }

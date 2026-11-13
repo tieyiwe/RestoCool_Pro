@@ -136,7 +136,7 @@
       },
       "reservations": {
         "title": "Reservations and reports",
-        "text": "Reservations confirmed by WhatsApp, revenue per day, best-selling dishes."
+        "text": "Customers book from your page, you call them to confirm, RestoCool sends them the email. And today's figures at a glance."
       }
     },
     "burkina": {
@@ -469,7 +469,8 @@
       "skipped": "A waiting action was not applied: the order had already changed.",
       "waiting": "waiting"
     },
-    "reviewsNav": "Reviews"
+    "reviewsNav": "Reviews",
+    "reservationsNav": "Reservations"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -1323,7 +1324,19 @@
       },
       "yes": "Yes",
       "no": "No",
-      "offlineNote": "Offline mode and automatic updates work on the phones themselves: orders made without network arrive like any other once the phone is back online, and every screen moves to the running version by itself."
+      "offlineNote": "Offline mode and automatic updates work on the phones themselves: orders made without network arrive like any other once the phone is back online, and every screen moves to the running version by itself.",
+      "reservations": {
+        "title": "Reservations",
+        "on": "Businesses with reservations open",
+        "onOne": "Reservations open",
+        "total": "Requests received",
+        "covers": "Guests booked",
+        "waiting": "Waiting for a call",
+        "confirmed": "Confirmed or honoured",
+        "called": "Customers called",
+        "declined": "Declined or cancelled",
+        "noShow": "No-shows"
+      }
     }
   },
   "demo": {
@@ -1942,7 +1955,44 @@
     "shareOthersTitle": "The table's choices",
     "shareSentBy": "{host} confirmed the order. Enjoy your meal!",
     "shareClosedBy": "{host} stopped sharing.",
-    "shareBanner": "{name}, you are choosing with {host}"
+    "shareBanner": "{name}, you are choosing with {host}",
+    "resvOpen": "Book a table",
+    "resvTitle": "Book at {business}",
+    "resvDay": "Which day?",
+    "resvToday": "Today",
+    "resvTomorrow": "Tomorrow",
+    "resvTime": "What time?",
+    "resvLoading": "Loading times…",
+    "resvNoSlots": "No tables left that day. Choose another day.",
+    "resvGuests": "Number of guests",
+    "resvLess": "One guest less",
+    "resvMore": "One guest more",
+    "resvBigGroup": "More than {n} guests? Call the business directly.",
+    "resvName": "Full name",
+    "resvEmail": "Email",
+    "resvEmailHint": "RestoCool sends the confirmation of your reservation to this address.",
+    "resvPhone": "Phone",
+    "resvPhoneHint": "The business will call this number to confirm.",
+    "resvNote": "Anything to add? (optional)",
+    "resvNotePlaceholder": "Birthday, high chair, terrace…",
+    "resvSubmit": "Request the reservation",
+    "resvPrivacy": "Your details are only shared with this business for your reservation.",
+    "resvSent": "Request sent!",
+    "resvAlready": "You already made this request",
+    "resvSentHint": "RestoCool is emailing {email}. The business will call you to confirm your table.",
+    "resvSee": "See or cancel my reservation",
+    "resvBack": "Back to the menu",
+    "resvClosed": "Reservations are not open at the moment.",
+    "resvError_slot": "That time is no longer available. Choose another one.",
+    "resvError_full": "Not enough seats left at that time. Choose another one.",
+    "resvError_party": "Group too large to book online: call the business.",
+    "resvError_email": "Check your email address.",
+    "resvError_phone": "Check your phone number.",
+    "resvError_invalid": "Check the details you entered.",
+    "resvError_closed": "Reservations are not open at the moment.",
+    "resvError_rate": "Too many requests. Try again in a few minutes.",
+    "resvError_network": "No connection. Check the Internet and try again.",
+    "resvError_error": "The reservation could not be sent. Try again."
   },
   "seating": {
     "title": "Tables and rooms",
@@ -2712,7 +2762,8 @@
       "unpublished": "Your menu isn't published yet: customers can't see it",
       "noLocation": "Add your business location so customers can find you",
       "join": "{n, plural, one {# person is} other {# people are}} waiting to join the team",
-      "noPhoto": "Add a photo of your front or interior: customers will recognise you faster"
+      "noPhoto": "Add a photo of your front or interior: customers will recognise you faster",
+      "reservations": "{n, plural, one {# reservation request is} other {# reservation requests are}} waiting for your call"
     },
     "shortcuts": {
       "title": "Run everything",
@@ -3197,6 +3248,46 @@
       "team": "The RestoCool team",
       "local": "100% local · Proudly Burkinabè",
       "footer": "RestoCool, a TIBLOGICS product · restocool.com. You are receiving this email because you just created a business on RestoCool."
+    },
+    "reservation": {
+      "header": "Your reservation",
+      "hello": "Hello {name},",
+      "business": "Business",
+      "date": "Date",
+      "time": "Time",
+      "guests": "Guests",
+      "ref": "Reference",
+      "address": "Address",
+      "phone": "Phone",
+      "reason": "Message from the business: {reason}",
+      "manage": "See or cancel my reservation",
+      "menu": "See the menu of {business}",
+      "footer": "Email sent by RestoCool on behalf of {business}. For any question, contact the business directly.",
+      "requested": {
+        "subject": "Reservation request received · {business}",
+        "title": "Reservation request received",
+        "body": "{business} received your request. The business will call you at {phone} to confirm your table."
+      },
+      "confirmed": {
+        "subject": "Reservation confirmed · {business}, {date} at {time}",
+        "title": "Your table is booked",
+        "body": "{business} confirms your reservation. See you soon!"
+      },
+      "declined": {
+        "subject": "Reservation not available · {business}",
+        "title": "Reservation not available",
+        "body": "Sorry, {business} cannot welcome you at that time. You can choose another time on its page."
+      },
+      "cancelled": {
+        "subject": "Reservation cancelled · {business}",
+        "title": "Reservation cancelled",
+        "body": "{business} cancelled your reservation."
+      },
+      "cancelledByCustomer": {
+        "subject": "Cancellation confirmed · {business}",
+        "title": "Your reservation is cancelled",
+        "body": "We cancelled your reservation at {business}. See you another time!"
+      }
     }
   },
   "seo": {
@@ -3629,5 +3720,117 @@
     "backHome": "Back to home",
     "privacy": "Privacy",
     "terms": "Terms"
+  },
+  "reservations": {
+    "title": "Reservations",
+    "intro": "Your customers' requests. Call them to confirm, then follow each table.",
+    "stateOn": "Reservations open",
+    "stateOff": "Reservations closed",
+    "planNeeded": "Reservations are part of the Pro and Business plans.",
+    "offHint": "Reservations are closed: the “Book a table” button does not show on your page.",
+    "turnOn": "Open them",
+    "waitingTitle": "{n, plural, one {# request to confirm} other {# requests to confirm}}",
+    "waitingHint": "Call the customer, then confirm or decline. RestoCool emails them.",
+    "days": "Days",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "dayCount": "{n} · {covers} ppl",
+    "dayTotal": "{n, plural, =0 {No reservations} one {# reservation} other {# reservations}} · {covers} guests",
+    "empty": "No reservations that day.",
+    "guests": "{n, plural, one {# guest} other {# guests}}",
+    "received": "received {at}",
+    "contactedAt": "called at {at}",
+    "cancelledByCustomer": "cancelled by the customer",
+    "reasonShown": "Reason sent to the customer: {reason}",
+    "reasonPlaceholder": "Reason (sent to the customer, optional)",
+    "emailNote": "The customer gets an email from RestoCool.",
+    "waText": "Hello {name}, this is {business}. We confirm your reservation on {date} at {time} for {n} guest(s). See you soon!",
+    "status": {
+      "requested": "Waiting for confirmation",
+      "confirmed": "Confirmed",
+      "declined": "Declined",
+      "seated": "Arrived",
+      "completed": "Completed",
+      "no_show": "No-show",
+      "cancelled": "Cancelled"
+    },
+    "actions": {
+      "contacted": "I called",
+      "confirm": "Confirm",
+      "seat": "Arrived",
+      "complete": "Completed",
+      "noShow": "No-show",
+      "declineOpen": "Decline the request…",
+      "cancelOpen": "Cancel the reservation…",
+      "decline": "Decline",
+      "cancel": "Cancel the reservation"
+    },
+    "ok": {
+      "confirm": "Reservation confirmed. The customer gets an email.",
+      "decline": "Request declined. The customer gets an email.",
+      "cancel": "Reservation cancelled. The customer gets an email.",
+      "seat": "Guests arrived.",
+      "complete": "Reservation completed.",
+      "no_show": "Marked as no-show.",
+      "contacted": "Call noted.",
+      "enabled": "Reservations open: the button is on your page.",
+      "disabled": "Reservations closed.",
+      "saved": "Settings saved."
+    },
+    "errors": {
+      "moved": "This reservation already changed. The list is up to date.",
+      "settings": "Check the settings."
+    },
+    "settings": {
+      "title": "Reservation settings",
+      "enabled": "Open reservations on my page",
+      "slot": "Time between two slots",
+      "minutes": "{n} min",
+      "hours": "{n, plural, one {# hour} other {# hours}}",
+      "maxParty": "Maximum guests per reservation",
+      "covers": "Maximum covers per time slot",
+      "coversHint": "0 = no limit.",
+      "notice": "Minimum notice",
+      "noNotice": "None",
+      "daysAhead": "Bookable up to (days)",
+      "note": "Message shown on the form (optional)",
+      "notePlaceholder": "E.g. tables are held for 15 minutes.",
+      "hoursHint": "The times offered follow your opening hours.",
+      "hoursLink": "Edit opening hours",
+      "save": "Save"
+    }
+  },
+  "reservation": {
+    "yourReservation": "Your reservation",
+    "status": {
+      "requested": "Waiting for confirmation",
+      "confirmed": "Confirmed",
+      "declined": "Declined",
+      "seated": "Arrived",
+      "completed": "Completed",
+      "no_show": "No-show",
+      "cancelled": "Cancelled"
+    },
+    "statusHint": {
+      "requested": "{business} will call you to confirm your table.",
+      "confirmed": "Your table is booked. See you soon!",
+      "declined": "{business} cannot welcome you at that time.",
+      "seated": "Enjoy your meal!",
+      "completed": "Thank you for your visit.",
+      "no_show": "This reservation is over.",
+      "cancelled": "This reservation is cancelled."
+    },
+    "cancelledOk": "Your reservation is cancelled. A confirmation email was sent to you.",
+    "date": "Date",
+    "time": "Time",
+    "guests": "Guests",
+    "name": "Name",
+    "ref": "Reference",
+    "address": "Address",
+    "reason": "Message from the business: {reason}",
+    "call": "Call {phone}",
+    "seeMenu": "See the menu",
+    "cancel": "Cancel my reservation",
+    "footer": "Reservation made with RestoCool for {business}."
   }
 }

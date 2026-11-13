@@ -11,7 +11,8 @@ export type FeatureUsage = {
   shared: { created: number; sent: number; stopped: number; openNow: number; guests: number; namedLines: number };
   tables: { releasedByStaff: number; closedFinished: number; closedInactive: number; closedExpired: number; closedStale: number; closedByStaff: number; closedByCustomer: number; openNow: number };
   reviews: { count: number; average: number | null; hidden: number; deleted: number };
-  switches: { reviewsOff: number; attendanceOff: number; sharingBusinesses: number };
+  switches: { reviewsOff: number; attendanceOff: number; sharingBusinesses: number; reservationsOn: number };
+  reservations: { total: number; covers: number; requested: number; confirmed: number; declined: number; cancelled: number; noShow: number; honoured: number; called: number };
 };
 const n = (v: unknown) => Number(v ?? 0) || 0;
 
@@ -46,9 +47,20 @@ export async function featureUsage(db: DB, restaurantId?: string, now = new Date
       from reviews r where r.created_at >= ${since} ${only("r.restaurant_id")}`),
     one(sql`
       select count(*) filter (where (x.settings #>> '{features,reviews}') = 'false')::int as reviews_off,
-        count(*) filter (where (x.settings #>> '{features,attendance}') = 'false')::int as attendance_off
+        count(*) filter (where (x.settings #>> '{features,attendance}') = 'false')::int as attendance_off,
+        count(*) filter (where (x.settings #>> '{reservations,enabled}') = 'true')::int as reservations_on
       from restaurants x where x.deleted_at is null ${only("x.id")}`),
   ]);
+  const resv = await one(sql`
+    select count(*)::int as total, coalesce(sum(v.party_size), 0)::int as covers,
+      count(*) filter (where v.status = 'requested')::int as requested,
+      count(*) filter (where v.status = 'confirmed')::int as confirmed,
+      count(*) filter (where v.status = 'declined')::int as declined,
+      count(*) filter (where v.status = 'cancelled')::int as cancelled,
+      count(*) filter (where v.status = 'no_show')::int as no_show,
+      count(*) filter (where v.status in ('seated', 'completed'))::int as honoured,
+      count(*) filter (where v.contacted_at is not null)::int as called
+    from reservations v where v.created_at >= ${since} ${only("v.restaurant_id")}`);
   const named = await one(sql`
     select count(*)::int as n from order_items i join orders o on o.id = i.order_id
     where o.id in (select c.order_id from shared_carts c where c.status = 'sent' and c.created_at >= ${since} ${only("c.restaurant_id")})`);
@@ -66,6 +78,17 @@ export async function featureUsage(db: DB, restaurantId?: string, now = new Date
       openNow: n(tables.open_now),
     },
     reviews: { count: n(reviews.count), average: reviews.average == null ? null : Number(reviews.average), hidden: n(reviews.hidden), deleted: n(reviews.deleted) },
-    switches: { reviewsOff: n(switches.reviews_off), attendanceOff: n(switches.attendance_off), sharingBusinesses: n(shared.businesses) },
+    switches: { reviewsOff: n(switches.reviews_off), attendanceOff: n(switches.attendance_off), sharingBusinesses: n(shared.businesses), reservationsOn: n(switches.reservations_on) },
+    reservations: {
+      total: n(resv.total),
+      covers: n(resv.covers),
+      requested: n(resv.requested),
+      confirmed: n(resv.confirmed),
+      declined: n(resv.declined),
+      cancelled: n(resv.cancelled),
+      noShow: n(resv.no_show),
+      honoured: n(resv.honoured),
+      called: n(resv.called),
+    },
   };
 }

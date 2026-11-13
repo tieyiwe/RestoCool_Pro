@@ -28,7 +28,20 @@ export function FeatureUsageCard({ u, t, version, perBusiness = false }: { u: Fe
           {version ? ` · ${t("features.version", { v: version.slice(0, 12) })}` : ""}
         </span>
       </div>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <section data-testid="feature-reservations">
+          <h3 className="font-semibold">📅 {t("features.reservations.title")}</h3>
+          <ul className="divide-y divide-border">
+            <Row label={t(perBusiness ? "features.reservations.onOne" : "features.reservations.on")} value={perBusiness ? (u.switches.reservationsOn ? t("features.yes") : t("features.no")) : u.switches.reservationsOn} testId="fu-resv-on" />
+            <Row label={t("features.reservations.total")} value={u.reservations.total} testId="fu-resv-total" />
+            <Row label={t("features.reservations.covers")} value={u.reservations.covers} />
+            <Row label={t("features.reservations.waiting")} value={u.reservations.requested} testId="fu-resv-waiting" />
+            <Row label={t("features.reservations.confirmed")} value={u.reservations.confirmed + u.reservations.honoured} />
+            <Row label={t("features.reservations.called")} value={u.reservations.called} />
+            <Row label={t("features.reservations.declined")} value={u.reservations.declined + u.reservations.cancelled} />
+            <Row label={t("features.reservations.noShow")} value={u.reservations.noShow} />
+          </ul>
+        </section>
         <section data-testid="feature-shared">
           <h3 className="font-semibold">👥 {t("features.shared.title")}</h3>
           <ul className="divide-y divide-border">

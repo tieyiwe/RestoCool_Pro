@@ -25,5 +25,5 @@ export const LANDING_FEATURES = [
   { key: "orders", ready: true },
   // Staff PIN login is live; cash-in and the end-of-day closing come with payments (M5).
   { key: "staff", ready: false },
-  { key: "reservations", ready: false },
+  { key: "reservations", ready: true },
 ] as const;

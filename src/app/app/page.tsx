@@ -15,6 +15,7 @@ import { CustomizeGuide, customizeSteps } from "@/components/onboarding/customiz
 import { OrderAnalyticsPanel } from "@/components/analytics/order-analytics";
 import { LearnCard } from "@/components/guide/learn-card";
 import { getDb } from "@/db";
+import { pendingReservations } from "@/lib/reservations";
 import { orderAnalytics, type Range } from "@/lib/analytics/orders";
 import { liveStatus, personnelRanking, type RankedPerson } from "@/lib/analytics/backoffice";
 import { ActivityFeed, Alerts, LiveStrip, RankingCard, Shortcuts, type Alert, type Shortcut } from "@/components/backoffice/backoffice";
@@ -81,6 +82,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   if (allowed("staff.write")) {
     const waiting = await pendingJoinCount(db, rid);
     if (waiting) alerts.push({ key: "join", n: waiting, href: "/app/staff#join", tone: "red" });
+  }
+  if (allowed("reservations.write") && r.kind !== "transport") {
+    const resv = await pendingReservations(db, rid);
+    if (resv) alerts.push({ key: "reservations", n: resv, href: "/app/reservations", tone: "red" });
   }
   if (allowed("settings.write")) {
     if (!r.published) alerts.push({ key: "unpublished", href: "/app/settings#publish", tone: "amber" });

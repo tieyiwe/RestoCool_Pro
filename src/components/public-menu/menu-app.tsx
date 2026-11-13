@@ -10,6 +10,7 @@ import { makeT, type Messages } from "@/lib/public-menu/translate";
 import type { CartLine, PublicItem, PublicMenuData } from "@/lib/public-menu/types";
 import { cn } from "@/lib/utils";
 import { useOrderOutbox, type QueuedOrder } from "./outbox";
+import { ReservationForm } from "./reservation-form";
 import { GuestBanner, GuestNameGate, GuestShare, HostShare, useAutoSave, useSharedSelection } from "./shared-selection";
 import { ReviewsSection, Stars, useReviews } from "./reviews";
 import { OfflineBanner } from "@/components/offline/offline-banner";
@@ -27,6 +28,7 @@ type Panel =
   | { type: "variant"; itemId: string }
   | { type: "cart" }
   | { type: "takeaway" }
+  | { type: "reserve" }
   | { type: "share" }
   | { type: "orders" }
   | { type: "history" }
@@ -579,6 +581,17 @@ export function MenuApp({
                 </a>
               )}
             </p>
+            {data.features.reservations && (
+              <button
+                type="button"
+                onClick={() => openPanel({ type: "reserve" })}
+                className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-full border-2 px-4 text-sm font-bold"
+                style={{ borderColor: "var(--accent)" }}
+                data-testid="reserve-button"
+              >
+                📅 {t("resvOpen")}
+              </button>
+            )}
             {seating.enabled && (
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 {seat ? (
@@ -1035,6 +1048,11 @@ export function MenuApp({
         </Sheet>
       )}
       {served && <ServedCelebration t={t} onClose={() => setServed(false)} />}
+      {panel?.type === "reserve" && data.features.reservations && (
+        <Sheet title={t("resvTitle", { business: data.name })} onClose={closePanel} t={t} testId="reserve-sheet">
+          <ReservationForm slug={data.slug} lang={lang} t={t} onDone={closePanel} />
+        </Sheet>
+      )}
       {panel?.type === "takeaway" && data.takeawayWhatsapp && (
         <TakeawaySheet
           t={t}
