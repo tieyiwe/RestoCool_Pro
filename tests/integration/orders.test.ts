@@ -320,4 +320,29 @@ describe.skipIf(!hasDb)("orders (database)", () => {
       expect(b.byHour.reduce((s, c) => s + c, 0)).toBe(1);
     });
   });
+
+  it("an order nobody picked up for 2 h is closed as « non prise en charge » and frees its table", async () => {
+    const db = getDb();
+    await admin.addTables(owner, { from: 4, to: 4, skip: [], areaId: null, capacity: null });
+    const seat = (await owner.repo.seating.seats()).find((x) => x.type === "table" && x.label === "4")!;
+    const joined = await sessions.joinSession(db, r, { seat: { id: seat.id, type: seat.type, label: seat.label }, deviceId: PHONE_C, source: "qr" });
+    if (!joined.ok) throw new Error("not joined");
+    const o = await svc.placeCustomerOrder(db, r, PHONE_C, { sessionId: joined.sessionId, lines: [{ itemId: bissapId, variantId: null, optionIds: [], qty: 1 }] });
+    // Less than 2 h: nothing happens.
+    await sessions.sweepStale(db, await reload(r.id));
+    expect((await db.query.orders.findFirst({ where: eq(orders.id, o.id) }))?.status).toBe("sent");
+    // 3 h without anyone touching it: closed, and the table frees itself.
+    const past = new Date(Date.now() - 3 * 3600_000);
+    await db.update(orders).set({ updatedAt: past }).where(eq(orders.id, o.id));
+    await db.update(tableSessions).set({ lastActivityAt: past }).where(eq(tableSessions.id, joined.sessionId));
+    await sessions.sweepStale(db, await reload(r.id));
+    const row = await db.query.orders.findFirst({ where: eq(orders.id, o.id) });
+    expect(row).toMatchObject({ status: "cancelled", cancelledReason: sessions.UNHANDLED_REASON });
+    expect((await db.query.tableSessions.findFirst({ where: eq(tableSessions.id, joined.sessionId) }))?.status).toBe("closed");
+    // A confirmed order is never closed this way (the business has it in hand).
+    expect(await sessions.expireUnhandledOrders(db, r.id, new Date(Date.now() + 10 * 3600_000))).toBeGreaterThanOrEqual(0);
+    const kept = await db.select({ status: orders.status }).from(orders).where(eq(orders.restaurantId, r.id));
+    expect(kept.every((k) => k.status !== "sent")).toBe(true);
+  });
 });
+

@@ -1815,7 +1815,7 @@
     "chooseSeatToOrder": "Choisir ma place pour commander",
     "chooseSeatFirst": "Choisissez d’abord votre place.",
     "scanTableFirst": "Scannez le QR code de votre table pour commander.",
-    "orderSent": "Commande n° {n} envoyée !",
+    "orderSent": "Commande n° {n} transmise à l’établissement !",
     "orderUnavailable": "Un plat vient d’être épuisé : il a été retiré de votre sélection. Vérifiez et renvoyez.",
     "orderDetailsMissing": "Complétez votre nom (et l’adresse et le téléphone pour une livraison).",
     "orderOffline": "Pas de connexion. Votre sélection est gardée : réessayez quand le réseau revient.",
@@ -1827,7 +1827,7 @@
     "deliveryAddress": "Adresse de livraison",
     "orderNumber": "Commande n° {n}",
     "orderStatus": "État de la commande",
-    "status_sent": "Envoyée",
+    "status_sent": "En attente de l’établissement",
     "status_confirmed": "Confirmée",
     "status_preparing": "En préparation",
     "status_ready": "Prête",
@@ -1877,7 +1877,7 @@
     "pickupTimeOptional": "Heure de retrait (facultatif)",
     "takeawayDetailsMissing": "Pour une commande à emporter, indiquez votre nom et votre numéro de téléphone.",
     "takeawayByWhatsapp": "Ou commander à emporter par WhatsApp",
-    "orderSentAt": "Envoyée le {when}",
+    "orderSentAt": "Passée le {when}",
     "orderServedAt": "servie le {when}",
     "takeawayReceived": "Commande à emporter reçue par l’établissement.",
     "deliveryReceived": "Commande de livraison reçue par l’établissement.",
@@ -1904,7 +1904,7 @@
     "offPending": "{n, plural, one {# commande en attente.} other {# commandes en attente.}}",
     "backOnline": "De nouveau en ligne.",
     "orderQueued": "Pas de connexion : votre commande est gardée et partira dès le retour du réseau.",
-    "queuedSent": "Commande n° {n} envoyée (le réseau est revenu).",
+    "queuedSent": "Commande n° {n} transmise (le réseau est revenu).",
     "queuedRefused": "Une commande en attente n’a pas pu être acceptée : voyez « Mes commandes ».",
     "queuedTitle": "En attente de connexion",
     "queuedHint": "Elle partira toute seule dès le retour du réseau. Gardez cette page ouverte si possible.",
@@ -2001,7 +2001,8 @@
     "resvError_network": "Pas de connexion. Vérifiez Internet et réessayez.",
     "resvError_error": "La réservation n’a pas pu être envoyée. Réessayez.",
     "waitNow": "Attente actuelle : environ {n} min",
-    "resvWait": "Journée chargée : attente actuelle d’environ {n} min. Votre table peut être prête un peu plus tard."
+    "resvWait": "Journée chargée : attente actuelle d’environ {n} min. Votre table peut être prête un peu plus tard.",
+    "cancelUnhandled": "Non prise en charge par l’établissement à temps. Si vous êtes encore sur place, appelez un serveur ou commandez à nouveau."
   },
   "seating": {
     "title": "Tables et salles",
@@ -3005,7 +3006,8 @@
         "prepared": "préparée par",
         "served": "servie par",
         "cancelled": "annulée par"
-      }
+      },
+      "unhandled": "non prise en charge (fermée automatiquement après 2 h)"
     },
     "csv": {
       "date": "Date",

@@ -252,7 +252,10 @@ export function OrdersList({
   onRetry,
   onDiscard,
   review,
+  visitStart = 0,
 }: {
+  /** Start of this visit (ms): orders from an earlier visit are never « en cours » again. */
+  visitStart?: number;
   orders: CustomerOrder[];
   shared: boolean;
   lang: Lang;
@@ -281,7 +284,7 @@ export function OrdersList({
   // closed does not come back on top. With nothing in progress, the latest order of the sitting
   // stays on top (the one the customer is eating).
   const now = Date.now();
-  const thisSitting = (o: CustomerOrder) => o.current || now - Date.parse(o.sentAt) < SITTING_MS;
+  const thisSitting = (o: CustomerOrder) => Date.parse(o.sentAt) >= visitStart && (o.current || now - Date.parse(o.sentAt) < SITTING_MS);
   const byNewest = [...orders].sort((a, b) => b.sentAt.localeCompare(a.sentAt));
   const current = byNewest.filter((o) => thisSitting(o) && !FINISHED.has(o.status));
   if (current.length === 0) {
@@ -304,7 +307,11 @@ export function OrdersList({
         {o.servedAt && ` · ${t("orderServedAt", { when: when.format(new Date(o.servedAt)) })}`}
       </p>
       <StatusSteps status={o.status} t={t} />
-      {o.status === "cancelled" && o.cancelledReason && <p className="mt-1 text-sm text-muted-foreground">{o.cancelledReason}</p>}
+      {o.status === "cancelled" && o.cancelledReason && (
+        <p className="mt-1 text-sm text-muted-foreground" data-testid="my-order-cancel-reason">
+          {o.cancelledReason === "system:unhandled" ? t("cancelUnhandled") : o.cancelledReason}
+        </p>
+      )}
       <ul className="mt-2 text-sm">
         {o.items.map((i) => (
           <li key={i.id} className="flex justify-between gap-2">

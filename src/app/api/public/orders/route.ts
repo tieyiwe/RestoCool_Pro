@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sweepStale } from "@/lib/seating/sessions";
 import { z } from "zod";
 import { getDb } from "@/db";
 import { orderErrorResponse } from "@/lib/orders/http";
@@ -41,6 +42,8 @@ export async function GET(req: Request) {
   if (!allow(req, q.data.deviceId)) return tooMany();
   const r = await publicRestaurant(q.data.slug);
   if (!r) return notFound();
+  // Orders nobody picked up and abandoned tables close before the phone reads its list.
+  await sweepStale(getDb(), r).catch(() => 0);
   const { orders, sharedSessionId, currentSessionId } = await ordersForCustomer(getDb(), r.id, q.data.deviceId, q.data.sessionId ?? null);
   return NextResponse.json({ orders: orders.map((o) => publicOrder(o, q.data.deviceId, currentSessionId)), shared: Boolean(sharedSessionId) }, { headers: { "Cache-Control": "no-store" } });
 }

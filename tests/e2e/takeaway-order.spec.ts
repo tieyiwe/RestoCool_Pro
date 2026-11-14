@@ -93,7 +93,7 @@ test("takeaway straight from the cart (no place picker), a clear confirmation, d
   // No need to show it to anyone: the business has it.
   await expect(card.getByTestId("takeaway-confirmation")).toContainText("reçue par l’établissement");
   await expect(card.getByTestId("takeaway-confirmation")).toContainText("Retrait à 13:15");
-  await expect(card.getByTestId("my-order-date")).toContainText(/Envoyée le \d+/);
+  await expect(card.getByTestId("my-order-date")).toContainText(/Passée le \d+/);
   // The ticket: everything visible without scrolling on a small phone.
   await card.getByTestId("show-server").click();
   const footer = phone.getByTestId("server-footer");

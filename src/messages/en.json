@@ -1815,7 +1815,7 @@
     "chooseSeatToOrder": "Choose my seat to order",
     "chooseSeatFirst": "Choose your seat first.",
     "scanTableFirst": "Scan your table’s QR code to order.",
-    "orderSent": "Order no. {n} sent!",
+    "orderSent": "Order no. {n} passed to the business!",
     "orderUnavailable": "A dish just sold out and was removed from your selection. Check and send again.",
     "orderDetailsMissing": "Add your name (and address and phone for a delivery).",
     "orderOffline": "No connection. Your selection is kept: try again when the network is back.",
@@ -1827,7 +1827,7 @@
     "deliveryAddress": "Delivery address",
     "orderNumber": "Order no. {n}",
     "orderStatus": "Order status",
-    "status_sent": "Sent",
+    "status_sent": "Waiting for the business",
     "status_confirmed": "Confirmed",
     "status_preparing": "Preparing",
     "status_ready": "Ready",
@@ -1877,7 +1877,7 @@
     "pickupTimeOptional": "Pickup time (optional)",
     "takeawayDetailsMissing": "For a takeaway order, enter your name and phone number.",
     "takeawayByWhatsapp": "Or order takeaway by WhatsApp",
-    "orderSentAt": "Sent {when}",
+    "orderSentAt": "Placed on {when}",
     "orderServedAt": "served {when}",
     "takeawayReceived": "Takeaway order received by the restaurant.",
     "deliveryReceived": "Delivery order received by the restaurant.",
@@ -1904,7 +1904,7 @@
     "offPending": "{n, plural, one {# order waiting.} other {# orders waiting.}}",
     "backOnline": "Back online.",
     "orderQueued": "No connection: your order is kept and will be sent as soon as the network is back.",
-    "queuedSent": "Order no. {n} sent (the network is back).",
+    "queuedSent": "Order no. {n} passed on (the network is back).",
     "queuedRefused": "An order that was waiting could not be accepted: see « My orders ».",
     "queuedTitle": "Waiting for a connection",
     "queuedHint": "It will be sent by itself when the network is back. Keep this page open if you can.",
@@ -2001,7 +2001,8 @@
     "resvError_network": "No connection. Check the Internet and try again.",
     "resvError_error": "The reservation could not be sent. Try again.",
     "waitNow": "Current wait: about {n} min",
-    "resvWait": "Busy day: current wait about {n} min. Your table may be ready a little later."
+    "resvWait": "Busy day: current wait about {n} min. Your table may be ready a little later.",
+    "cancelUnhandled": "Not picked up by the business in time. If you are still there, call a server or order again."
   },
   "seating": {
     "title": "Tables and rooms",
@@ -3005,7 +3006,8 @@
         "prepared": "prepared by",
         "served": "served by",
         "cancelled": "cancelled by"
-      }
+      },
+      "unhandled": "not picked up (closed automatically after 2 h)"
     },
     "csv": {
       "date": "Date",

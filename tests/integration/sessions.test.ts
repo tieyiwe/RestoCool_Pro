@@ -115,7 +115,7 @@ describe.skipIf(!hasDb)("table sessions and seating admin (database)", () => {
     expect(stillOpen).toHaveLength(0);
   });
 
-  it("tables free themselves: empty QR table 20 min, finished meal 1 h, forgotten orders 12 h; never a table being served", async () => {
+  it("tables free themselves: empty QR table 20 min, finished meal 1 h, forgotten orders 6 h; never a table being served; unanswered orders closed after 2 h", async () => {
     const db = getDb();
     const min = 60_000;
     const seatsOf = await ctx.repo.seating.seats();
@@ -125,7 +125,7 @@ describe.skipIf(!hasDb)("table sessions and seating admin (database)", () => {
       return j.ok ? { sessionId: j.sessionId, seatId: seat.id } : null;
     };
     let n = 900;
-    const order = (sess: { sessionId: string; seatId: string }, status: "sent" | "served" | "cancelled", at = new Date()) =>
+    const order = (sess: { sessionId: string; seatId: string }, status: "sent" | "confirmed" | "served" | "cancelled", at = new Date()) =>
       db.insert(orders).values({ restaurantId: r.id, sessionId: sess.sessionId, seatId: sess.seatId, businessDate: "2026-11-13", number: n++, status, validationMode: "direct", updatedAt: at, sentAt: at });
     const status = async (id: string) => (await db.query.tableSessions.findFirst({ where: eq(tableSessions.id, id) }))!;
     const sweepAt = async (offsetMs: number) => sessions.sweepStale(db, await reload(r.id), new Date(Date.now() + offsetMs));
@@ -153,18 +153,28 @@ describe.skipIf(!hasDb)("table sessions and seating admin (database)", () => {
 
     // 4. An order in progress keeps the table for hours (the kitchen is on it)…
     const serving = (await open("5"))!;
-    await order(serving, "sent");
+    await order(serving, "confirmed");
     await sweepAt(5 * 60 * min);
     expect((await status(serving.sessionId)).status).toBe("open");
     // …but a recent move on the order (staff confirmed it late) counts as activity.
     await db.update(orders).set({ updatedAt: new Date(Date.now() + 11 * 60 * min) }).where(eq(orders.sessionId, serving.sessionId));
     await sweepAt(13 * 60 * min);
     expect((await status(serving.sessionId)).status).toBe("open");
-    // 12 h with nothing at all: freed anyway; the order itself is untouched for the staff.
+    // 6 h with nothing at all: freed anyway; the order itself is untouched for the staff.
     await sweepAt(24 * 60 * min);
     expect(await status(serving.sessionId)).toMatchObject({ status: "closed", closedReason: "stale" });
     const [kept] = await db.select({ status: orders.status }).from(orders).where(eq(orders.sessionId, serving.sessionId));
-    expect(kept!.status).toBe("sent");
+    expect(kept!.status).toBe("confirmed");
+
+    // 5. An order nobody picked up (still « sent ») for 2 h is closed and frees the table.
+    const ignored = (await open("6"))!;
+    await order(ignored, "sent");
+    await sweepAt(60 * min);
+    expect((await status(ignored.sessionId)).status).toBe("open");
+    await sweepAt(3 * 60 * min);
+    const [gone] = await db.select({ status: orders.status, reason: orders.cancelledReason }).from(orders).where(eq(orders.sessionId, ignored.sessionId));
+    expect(gone).toEqual({ status: "cancelled", reason: sessions.UNHANDLED_REASON });
+    expect((await status(ignored.sessionId)).status).toBe("closed");
   });
 
   it("the 5-minute job sweeps every business without waiting for a customer", async () => {

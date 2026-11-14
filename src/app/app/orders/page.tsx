@@ -140,7 +140,7 @@ export default async function OrderHistoryPage({ searchParams }: { searchParams:
                     {o.code && <b className="font-mono text-foreground" data-testid="history-code">{o.code} · </b>}
                     {day(o.sentAt)} · {time(o.sentAt)}
                     {handled.map(([k, p]) => ` · ${t(`by.${k}`)} ${p!.name} (${p!.staffNo})`).join("")}
-                    {o.cancelledReason ? ` · ${o.cancelledReason}` : ""}
+                    {o.cancelledReason ? ` · ${o.cancelledReason === "system:unhandled" ? t("unhandled") : o.cancelledReason}` : ""}
                   </span>
                   <span className={`justify-self-end rounded-full px-2 py-0.5 text-xs font-semibold ${STATUS_TONE[o.status] ?? ""}`}>{ts(o.status)}</span>
                 </Link>

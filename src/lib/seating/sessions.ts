@@ -12,11 +12,33 @@ import { notify } from "@/lib/realtime/events";
  *  - Picked from the list, nothing ordered: the inactivity timings (4 min + 30 s by default) + a margin.
  *  - Opened from its QR, nothing ordered: 20 minutes (a phone still at the table silently rejoins).
  *  - Everything served, paid or cancelled: 1 hour (the group has eaten and left).
- *  - Orders forgotten « in progress »: 12 hours (the orders stay on the staff boards).
+ *  - An order nobody at the business picked up (still « envoyée ») for 2 hours is closed as
+ *    « non prise en charge » (cancelled, reason UNHANDLED_REASON): it no longer holds the table.
+ *  - Orders forgotten « in progress » (confirmed, in the kitchen, ready): 6 hours (the orders stay
+ *    on the staff boards).
  */
 export const EMPTY_SESSION_IDLE_MS = 20 * 60 * 1000;
 export const FINISHED_SESSION_IDLE_MS = 60 * 60 * 1000;
-export const STALE_SESSION_MS = 12 * 60 * 60 * 1000;
+export const STALE_SESSION_MS = 6 * 60 * 60 * 1000;
+export const UNHANDLED_ORDER_MS = 2 * 60 * 60 * 1000;
+/** cancelled_reason of an order closed because nobody picked it up (translated on screens). */
+export const UNHANDLED_REASON = "system:unhandled";
+
+/**
+ * Orders still « envoyée » (sent) and untouched for UNHANDLED_ORDER_MS: nobody at the business
+ * picked them up. They are closed as cancelled (« non prise en charge »), so they stop showing as
+ * the customer's current order and stop holding the table. One business, or all (5-minute job).
+ */
+export async function expireUnhandledOrders(db: DB, restaurantId?: string, now = new Date()): Promise<number> {
+  const cutoff = new Date(now.getTime() - UNHANDLED_ORDER_MS);
+  const rows = await db
+    .update(orders)
+    .set({ status: "cancelled", cancelledAt: now, cancelledReason: UNHANDLED_REASON, updatedAt: now })
+    .where(and(eq(orders.status, "sent"), lt(orders.updatedAt, cutoff), restaurantId ? eq(orders.restaurantId, restaurantId) : undefined))
+    .returning({ id: orders.id, r: orders.restaurantId, s: orders.sessionId, d: orders.customerDeviceId });
+  for (const o of rows) await notify(db, { k: "order", r: o.r, o: o.id, s: o.s, d: o.d }).catch(() => {});
+  return rows.length;
+}
 /** Extra margin before the server frees a picker seat whose phone went silent. */
 const PICKER_GRACE_MS = 2 * 60 * 1000;
 /**
@@ -34,6 +56,8 @@ type Restaurant = typeof restaurants.$inferSelect;
 
 /** Close abandoned sessions of one restaurant. Called from the public endpoints, the staff tables page and a 5-minute job. */
 export async function sweepStale(db: DB, r: Pick<Restaurant, "id" | "settings">, now = new Date()): Promise<number> {
+  // Orders nobody picked up first: then their table can free itself below.
+  await expireUnhandledOrders(db, r.id, now);
   const t = r.settings.inactivity ?? DEFAULT_INACTIVITY;
   const pickerCutoff = new Date(now.getTime() - (t.warnAfterSec + t.releaseAfterSec) * 1000 - PICKER_GRACE_MS);
   const emptyCutoff = new Date(now.getTime() - EMPTY_SESSION_IDLE_MS);
@@ -77,6 +101,8 @@ export async function sweepStale(db: DB, r: Pick<Restaurant, "id" | "settings">,
 
 /** Every business with open tables (the 5-minute job): nothing waits for a customer to open the menu. */
 export async function sweepAllStale(db: DB, now = new Date()): Promise<number> {
+  // Every business, with or without open tables (takeaway, counter, delivery orders too).
+  await expireUnhandledOrders(db, undefined, now);
   const rows = await db
     .selectDistinct({ id: restaurants.id, settings: restaurants.settings })
     .from(tableSessions)

@@ -131,6 +131,9 @@ export function MenuApp({
   const cartKey = `rc-cart-${initialData.slug}`;
   const lastSeenKey = `rc-lastseen-${initialData.slug}`;
   const [freshVisit, setFreshVisit] = useState(false);
+  // When this visit started (fresh start after VISIT_GAP_MS away): older orders are « précédentes ».
+  const visitKey = `rc-visit-${initialData.slug}`;
+  const [visitStart, setVisitStart] = useState(0);
   const history = useHistory(initialData.slug, isCartLine);
   const { startVisit, rememberCart } = history;
 
@@ -154,8 +157,10 @@ export function MenuApp({
     if (away) {
       writeStore("session", cartKey, null);
       writeStore("session", `rc-seat-${initialData.slug}`, null);
+      writeStore("local", visitKey, String(Date.now()));
       setFreshVisit(true);
     }
+    setVisitStart(Number(readStore("local", visitKey) ?? 0));
     writeStore("local", lastSeenKey, String(Date.now()));
     const stored = readStore("session", cartKey);
     // A new visit starts with an empty cart; last visit's cart goes to « Sélections précédentes ».
@@ -172,7 +177,7 @@ export function MenuApp({
     }
     setNow(new Date());
     hydrated.current = true;
-  }, [cartKey, initialData, baseItems, startVisit]);
+  }, [cartKey, visitKey, initialData, baseItems, startVisit]);
 
   useEffect(() => {
     if (!hydrated.current) return;
@@ -386,7 +391,8 @@ export function MenuApp({
   }, [freshVisit, live.orders, hiddenOrders]);
   // Finished orders the customer removed from this phone stay with the restaurant, not on the list.
   const myOrders = useMemo(() => live.orders.filter((o) => !hiddenOrders.hidden.has(o.id)), [live.orders, hiddenOrders.hidden]);
-  const activeOrders = myOrders.filter((o) => o.mine && ["sent", "confirmed", "preparing", "ready"].includes(o.status));
+  // Only this visit's orders are « en cours » (an old one a business never closed does not come back).
+  const activeOrders = myOrders.filter((o) => o.mine && ["sent", "confirmed", "preparing", "ready"].includes(o.status) && Date.parse(o.sentAt) >= visitStart);
   useEffect(() => {
     // Only an order sent from this seat holds it (not one from an earlier visit today).
     setHeldSeat(Boolean(seat && myOrders.some((o) => o.mine && o.current && o.status !== "cancelled")));
@@ -1008,6 +1014,7 @@ export function MenuApp({
         <Sheet title={t("myOrders")} onClose={closePanel} t={t} testId="orders-sheet">
           <OrdersList
             orders={myOrders}
+            visitStart={visitStart}
             shared={live.shared}
             lang={lang}
             t={t}
