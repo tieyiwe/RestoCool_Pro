@@ -14,6 +14,24 @@ These documents describe the platform as it works today. Screen labels are quote
 | 6 | [Sales and onboarding playbook](06-sales-and-onboarding-playbook.md) | Field sales agents |
 | 7 | [Quick guides by profile](07-quick-guides-by-profile.md) | Owners training their team |
 
+## Downloads
+
+Every document is also available as **PDF** (to print or send) and **Word** (to edit), in [`downloads/`](downloads/):
+
+| Document | PDF | Word |
+|---|---|---|
+| 1. Platform overview | [PDF](downloads/01-platform-overview.pdf) | [DOCX](downloads/01-platform-overview.docx) |
+| 2. Features list | [PDF](downloads/02-features-list.pdf) | [DOCX](downloads/02-features-list.docx) |
+| 3. SOP: onboarding a business | [PDF](downloads/03-sop-onboarding-a-business.pdf) | [DOCX](downloads/03-sop-onboarding-a-business.docx) |
+| 4. SOP: daily operations | [PDF](downloads/04-sop-daily-operations.pdf) | [DOCX](downloads/04-sop-daily-operations.docx) |
+| 5. SOP: platform administration | [PDF](downloads/05-sop-platform-administration.pdf) | [DOCX](downloads/05-sop-platform-administration.docx) |
+| 6. Sales and onboarding playbook | [PDF](downloads/06-sales-and-onboarding-playbook.pdf) | [DOCX](downloads/06-sales-and-onboarding-playbook.docx) |
+| 7. Quick guides by profile | [PDF](downloads/07-quick-guides-by-profile.pdf) | [DOCX](downloads/07-quick-guides-by-profile.docx) |
+
+All of them in one file: [`restocool-documentation.zip`](downloads/restocool-documentation.zip).
+
+The Markdown files (`0*.md`) are the source: edit them, then rebuild the downloads (pandoc for Word, the browser's « print to PDF » or the same pandoc + Chromium steps for PDF).
+
 Related technical notes: [`docs/BACKUP.md`](../BACKUP.md) (backups and restore), [`CLAUDE.md`](../../CLAUDE.md) (build decisions).
 
 **Keep these documents true.** When a feature changes, update the matching section here and the in-app tutorial (`/app/guide`) in the same change.
