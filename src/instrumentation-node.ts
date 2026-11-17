@@ -6,6 +6,7 @@ import { getDb } from "./db";
 import { processDeletions } from "./lib/restaurants/deletion";
 import { sweepAllStale } from "./lib/seating/sessions";
 import { sweepReservations } from "./lib/reservations";
+import { reconcilePayments } from "./payments/service";
 import { log } from "./lib/log";
 
 /** Node-only start-up work (database access): never bundled for the edge runtime. */
@@ -29,6 +30,8 @@ export function startNode() {
   if (!gs.__rcSeatTimer) {
     gs.__rcSeatTimer = setInterval(() => {
       sweepAllStale(getDb()).catch((err) => log.warn("seating.sweep_failed", { error: err instanceof Error ? err.message : String(err) }));
+      // Online payments left pending: ask the provider, expire abandoned ones (section 8b).
+      reconcilePayments(getDb()).catch((err) => log.warn("payments.reconcile_failed", { error: err instanceof Error ? err.message : String(err) }));
       // Reservations past their time + expiry: confirmed → « Absent », never answered → « Expirée ».
       sweepReservations(getDb()).catch((err) => log.warn("reservations.sweep_failed", { error: err instanceof Error ? err.message : String(err) }));
     }, 5 * 60_000);

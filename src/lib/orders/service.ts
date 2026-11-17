@@ -278,7 +278,7 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
 
 export type OrderWithItems = Order & { items: OrderItem[] };
 
-async function withItems(db: DB, restaurantId: string, list: Order[]): Promise<OrderWithItems[]> {
+export async function withItems(db: DB, restaurantId: string, list: Order[]): Promise<OrderWithItems[]> {
   if (list.length === 0) return [];
   const items = await db
     .select()
@@ -315,12 +315,12 @@ export async function ordersForCustomer(db: DB, restaurantId: string, deviceId: 
 
 export type ServiceCtx = { db: DB; actor: Actor; repo: TenantRepo };
 
-function need(ctx: ServiceCtx, action: Action) {
+export function need(ctx: ServiceCtx, action: Action) {
   if (!can(ctx.actor, action, { restaurantId: ctx.repo.restaurantId })) throw new ForbiddenError();
 }
 
 /** members.id of the person acting (their matricule goes on the order), or null (dev bypass, system). */
-async function memberIdOf(ctx: ServiceCtx): Promise<string | null> {
+export async function memberIdOf(ctx: ServiceCtx): Promise<string | null> {
   if (ctx.actor.kind !== "member") return null;
   if (ctx.actor.memberId) return ctx.actor.memberId;
   const [m] = await ctx.db
@@ -341,7 +341,7 @@ const BY: Record<TargetStatusKey, "confirmedBy" | "preparedBy" | "servedBy" | "c
 };
 type TargetStatusKey = "confirmed" | "preparing" | "ready" | "served" | "cancelled";
 
-const actorTag = (a: Actor) => (a.kind === "member" ? `member:${a.userId}` : a.kind === "staff" ? `staff:${a.staffId}` : a.kind);
+export const actorTag = (a: Actor) => (a.kind === "member" ? `member:${a.userId}` : a.kind === "staff" ? `staff:${a.staffId}` : a.kind);
 
 /** Open orders for the front desk and kitchen, plus those served in the last 30 minutes. */
 export async function serviceOrders(ctx: ServiceCtx, now = new Date()) {

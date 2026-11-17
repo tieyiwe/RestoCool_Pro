@@ -15,3 +15,4 @@ export * from "./admin";
 export * from "./reviews";
 export * from "./shared-carts";
 export * from "./reservations";
+export * from "./payments";

@@ -60,6 +60,9 @@ export const orders = pgTable(
     preparedBy: uuid("prepared_by").references(() => members.id, { onDelete: "set null" }),
     servedBy: uuid("served_by").references(() => members.id, { onDelete: "set null" }),
     cancelledBy: uuid("cancelled_by").references(() => members.id, { onDelete: "set null" }),
+    /** Who recorded the payment that settled the order (members.id), and the bill it belongs to. */
+    paidBy: uuid("paid_by").references(() => members.id, { onDelete: "set null" }),
+    billId: uuid("bill_id"),
     /** Who made the last status change: "member:<userId>", "staff:<id>", "customer", "system". */
     updatedBy: text("updated_by"),
     ...timestamps,

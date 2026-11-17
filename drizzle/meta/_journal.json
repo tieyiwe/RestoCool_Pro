@@ -232,6 +232,13 @@
       "when": 1794605160173,
       "tag": "0032_reservation_checkin",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1794927986083,
+      "tag": "0033_payments",
+      "breakpoints": true
     }
   ]
 }
