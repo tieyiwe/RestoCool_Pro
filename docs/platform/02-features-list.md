@@ -68,6 +68,7 @@
 | « Caisse »: bills to collect by table; « Encaisser »: cash with change, Orange Money / Moov with reference, card; split in equal parts or by dish; « sur demande » price; discounts with a reason (above 20 % only managers/owner); the table frees itself when paid | P B | Live |
 | Receipts (print / PDF, WhatsApp) and « Clôture de caisse » (by method, person, category, discounts, cancellations; CSV and PDF) | P B | Live |
 | Online payment plumbing (provider interface, « manual » provider, CinetPay / PayDunya / Ligdicash / Orange Money / Moov adapters waiting to be connected, webhooks, reconciliation, encrypted credentials) | – | Live (no provider connected yet) |
+| Each business connects its **own** Orange Money / Moov merchant account or an aggregator (Paramètres → « Paiements »: test/live, write-only credentials, its own webhook address, « Tester la connexion »); customers then get « 💳 Payer maintenant » on their order and a payment status page; money goes straight to the business | P B | Ready, waiting for the first provider adapter ([guide](08-connecting-mobile-money.md)) |
 
 ### Reservations
 

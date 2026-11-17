@@ -7,6 +7,7 @@ import { getDb } from "@/db";
 import { paymentProviderConfigs } from "@/db/schema";
 import { requireMemberPage } from "@/lib/auth/page";
 import { DEFAULT_DISCOUNT_APPROVAL_PERCENT } from "@/lib/billing";
+import { siteBase } from "@/lib/seo/site";
 import { encryptionReady } from "@/payments/crypto";
 import { CREDENTIAL_FIELDS, ONLINE_PROVIDERS, PROVIDERS } from "@/payments/registry";
 import { cashierSettingsAction, saveProviderAction, testProviderAction } from "./actions";
@@ -25,6 +26,7 @@ export default async function PaymentsSettingsPage({ searchParams }: { searchPar
   const [t, tc, sp] = await Promise.all([getTranslations("payments"), getTranslations("cashier"), searchParams]);
   const r = await ctx.repo.restaurant.get();
   if (!r) return null;
+  const base = await siteBase();
   const configs = await getDb().select().from(paymentProviderConfigs).where(eq(paymentProviderConfigs.restaurantId, r.id));
   const pct = (r.settings as { payments?: { discountApprovalPercent?: number } }).payments?.discountApprovalPercent ?? DEFAULT_DISCOUNT_APPROVAL_PERCENT;
   return (
@@ -77,6 +79,14 @@ export default async function PaymentsSettingsPage({ searchParams }: { searchPar
         <h2 className="text-lg font-extrabold">🌐 {t("onlineTitle")}</h2>
         <p className="text-sm text-muted-foreground">{t("onlineHint")}</p>
         {!encryptionReady() && <p className="rounded-xl bg-amber-50 p-3 text-sm text-amber-950">{t("noKey")}</p>}
+        <details className="rounded-xl border border-border p-3 text-sm" data-testid="connect-steps">
+          <summary className="cursor-pointer font-bold">{t("howTitle")}</summary>
+          <ol className="mt-2 list-decimal space-y-1 pl-5">
+            {[1, 2, 3, 4, 5, 6].map((n) => (
+              <li key={n}>{t(`how${n}`)}</li>
+            ))}
+          </ol>
+        </details>
         <ul className="flex flex-col gap-3">
           {ONLINE_PROVIDERS.map((id) => {
             const p = PROVIDERS[id];
@@ -94,6 +104,10 @@ export default async function PaymentsSettingsPage({ searchParams }: { searchPar
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground">{p.supports.methods.map((m) => tc(`methods.${m}`)).join(" · ")}</p>
+                <div className="mt-2 rounded-lg bg-muted p-2 text-xs" data-testid="webhook-url">
+                  <p className="font-semibold">{t("webhookLabel")}</p>
+                  <code className="block break-all select-all">{`${base}/api/webhooks/payments/${id}/${r.id}`}</code>
+                </div>
                 {p.implemented && (
                   <form action={saveProviderAction} className="mt-3 grid gap-2 sm:grid-cols-2">
                     <input type="hidden" name="provider" value={id} />

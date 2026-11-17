@@ -2016,7 +2016,33 @@
     "resvError_error": "预订未能发送，请重试。",
     "waitNow": "当前等待：约 {n} 分钟",
     "resvWait": "今日繁忙：当前等待约 {n} 分钟，您的餐桌可能会稍晚准备好。",
-    "cancelUnhandled": "店铺未能及时处理。如果您仍在店内，请呼叫服务员或重新点单。"
+    "cancelUnhandled": "店铺未能及时处理。如果您仍在店内，请呼叫服务员或重新点单。",
+    "payNow": "立即付款",
+    "payChoose": "您想如何付款？",
+    "payPhone": "您的电话号码",
+    "payGo": "付款",
+    "payUssd": "请在手机上拨打以下代码确认付款：",
+    "payFollow": "查看付款状态",
+    "payMethod_orange_money": "Orange Money",
+    "payMethod_moov_money": "Moov Money",
+    "payMethod_card": "银行卡",
+    "payMethod_cash": "现金",
+    "payMethod_other": "其他",
+    "payError_not_available": "暂时无法在线付款，请到收银台付款。",
+    "payError_not_yours": "此订单不是从这部手机下的。",
+    "payError_nothing_to_pay": "已无需付款。",
+    "payError_network": "没有网络，请在网络恢复后重试。",
+    "payError_error": "付款无法开始，请重试或到收银台付款。",
+    "payTitle": "您的付款",
+    "payWaiting": "正在等待付款确认…",
+    "payWaitingSub": "请在手机上确认付款，本页会自动更新。",
+    "paySucceeded": "已收到付款，谢谢！",
+    "payFailed": "付款未成功。",
+    "payFailedSub": "未扣除任何金额。您可以重试，或到收银台付款。",
+    "payRetry": "重试",
+    "payBack": "返回菜单",
+    "payAmount": "金额：{amount}",
+    "payNotFound": "在这部手机上找不到该付款。"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -4212,6 +4238,14 @@
       "no_key": "目前无法保存凭证（缺少加密密钥）。",
       "credentials_missing": "开启前请输入凭证。",
       "not_available": "该在线支付方式尚未推出。"
-    }
+    },
+    "webhookLabel": "需要粘贴到支付服务商的通知地址（webhook）：",
+    "howTitle": "如何连接 Orange Money、Moov Money 或聚合支付？",
+    "how1": "开通商户账户（Orange Money、Moov Money）或聚合支付账户（CinetPay、PayDunya、Ligdicash），服务商会给您 API 凭证。",
+    "how2": "显示「即将推出」的服务商由 RestoCool 团队完成对接：请通过 🛟 帮助联系我们。",
+    "how3": "选择「测试」模式，在此粘贴凭证并保存。凭证会被加密，之后不再显示。",
+    "how4": "复制服务商下方显示的通知地址（webhook），粘贴到您的商户后台。",
+    "how5": "点击「测试连接」，然后从您的菜单做一笔小额测试付款。",
+    "how6": "一切正常后，切换到「正式」模式并勾选「启用」。顾客就会看到「立即付款」按钮，款项直接进入您的商户账户。"
   }
 }

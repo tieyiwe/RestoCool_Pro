@@ -1,12 +1,13 @@
 import "server-only";
 import { and, eq, inArray, lt, or, sql } from "drizzle-orm";
 import type { DB } from "@/db";
-import { bills, members, orders, paymentIntents, payments, tableSessions, type PaymentIntent } from "@/db/schema";
+import { bills, members, orders, paymentIntents, paymentProviderConfigs, payments, tableSessions, type PaymentIntent } from "@/db/schema";
 import type { IntentPurpose, PaymentMethod } from "@/db/schema/payments";
 import { writeAudit } from "@/lib/audit";
 import type { Actor } from "@/lib/auth/can";
 import { log } from "@/lib/log";
 import { notify } from "@/lib/realtime/events";
+import { decryptJson } from "./crypto";
 import { manualFor, providerById, type ResolvedProvider } from "./registry";
 import { ProviderNotConfiguredError, type CreatePaymentResult } from "./types";
 
@@ -80,7 +81,8 @@ export async function startPayment(db: DB, input: StartInput, resolved: Resolved
       method: created.method,
       description: input.description,
       customerPhone: created.customerPhone,
-      returnUrl: created.returnUrl,
+      // A return URL ending with « / » gets the intent id (the customer comes back to its status page).
+      returnUrl: created.returnUrl?.endsWith("/") ? `${created.returnUrl}${created.id}` : created.returnUrl,
       credentials: resolved.credentials,
       mode: resolved.mode,
     });
@@ -224,7 +226,7 @@ export async function reconcilePayments(db: DB, now = new Date()): Promise<{ che
     const p = providerById(i.provider);
     try {
       if (p && i.providerRef) {
-        const st = await p.getStatus(i.providerRef);
+        const st = await p.getStatus(i.providerRef, await credentialsOf(db, i.restaurantId, i.provider));
         if (st === "succeeded") {
           await settleIntent(db, i.id, i.providerRef, now);
           settled++;
@@ -243,6 +245,16 @@ export async function reconcilePayments(db: DB, now = new Date()): Promise<{ che
     }
   }
   return { checked: due.length, settled, expired };
+}
+
+/** A business's decrypted credentials for a provider (reconciliation, per-business accounts). */
+async function credentialsOf(db: DB, restaurantId: string | null, provider: string) {
+  if (!restaurantId) return { credentials: null };
+  const [c] = await db
+    .select({ sealed: paymentProviderConfigs.credentialsEncrypted, mode: paymentProviderConfigs.mode })
+    .from(paymentProviderConfigs)
+    .where(and(eq(paymentProviderConfigs.restaurantId, restaurantId), eq(paymentProviderConfigs.provider, provider as never)));
+  return { credentials: c?.sealed ? decryptJson(c.sealed) : null, mode: c?.mode };
 }
 
 /** members.id → name + matricule, for receipts and the closing. */

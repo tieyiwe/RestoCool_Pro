@@ -29,7 +29,19 @@ const totalOf = (b: Pick<Bill, "subtotal" | "adjustment" | "discount">) => Math.
  */
 export async function openBill(ctx: ServiceCtx, target: { orderId: string } | { sessionId: string }, now = new Date()): Promise<Bill> {
   need(ctx, "orders.pay");
-  const rid = ctx.repo.restaurantId;
+  return openBillFor({ db: ctx.db, restaurantId: ctx.repo.restaurantId, createdBy: await memberIdOf(ctx) }, target, now);
+}
+
+/**
+ * The same, for one business without a staff member (a customer paying from their phone).
+ * Callers check who may see the orders first.
+ */
+export async function openBillFor(
+  ctx: { db: ServiceCtx["db"]; restaurantId: string; createdBy: string | null },
+  target: { orderId: string } | { sessionId: string },
+  now = new Date(),
+): Promise<Bill> {
+  const rid = ctx.restaurantId;
   let list;
   let sessionId: string | null = null;
   if ("sessionId" in target) {
@@ -84,7 +96,7 @@ export async function openBill(ctx: ServiceCtx, target: { orderId: string } | { 
   }
   const [b] = await ctx.db
     .insert(bills)
-    .values({ restaurantId: rid, ...values, total: subtotal, createdBy: await memberIdOf(ctx) })
+    .values({ restaurantId: rid, ...values, total: subtotal, createdBy: ctx.createdBy })
     .returning();
   return b!;
 }

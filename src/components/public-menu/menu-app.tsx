@@ -1015,6 +1015,7 @@ export function MenuApp({
           <OrdersList
             orders={myOrders}
             visitStart={visitStart}
+            payNow={data.preview ? undefined : { slug: data.slug, methods: data.onlinePay }}
             shared={live.shared}
             lang={lang}
             t={t}

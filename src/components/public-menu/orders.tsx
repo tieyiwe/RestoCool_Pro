@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { PayNow } from "./pay-now";
 import { formatFCFA } from "@/lib/format";
 import type { makeT } from "@/lib/public-menu/translate";
 import type { CartLine } from "@/lib/public-menu/types";
@@ -253,7 +254,10 @@ export function OrdersList({
   onDiscard,
   review,
   visitStart = 0,
+  payNow,
 }: {
+  /** Online payment through the business's own provider (hidden while none is connected). */
+  payNow?: { slug: string; methods: string[] };
   /** Start of this visit (ms): orders from an earlier visit are never « en cours » again. */
   visitStart?: number;
   orders: CustomerOrder[];
@@ -307,6 +311,7 @@ export function OrdersList({
         {o.servedAt && ` · ${t("orderServedAt", { when: when.format(new Date(o.servedAt)) })}`}
       </p>
       <StatusSteps status={o.status} t={t} />
+      {payNow && o.mine && payNow.methods.length > 0 && ["sent", "confirmed", "preparing", "ready", "served"].includes(o.status) && <PayNow slug={payNow.slug} methods={payNow.methods} orderId={o.id} t={t} />}
       {o.status === "cancelled" && o.cancelledReason && (
         <p className="mt-1 text-sm text-muted-foreground" data-testid="my-order-cancel-reason">
           {o.cancelledReason === "system:unhandled" ? t("cancelUnhandled") : o.cancelledReason}

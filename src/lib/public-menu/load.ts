@@ -1,5 +1,6 @@
 import "server-only";
 import { currentWait, reservationsOpen } from "@/lib/reservations";
+import { onlinePayMethods } from "@/payments/customer";
 import { DEFAULT_FORTUNES } from "@/config/fortunes";
 import { DEFAULT_ACCENT2 } from "@/config/palettes";
 import type { DB } from "@/db";
@@ -111,6 +112,7 @@ export async function loadPublicMenu(
       // Table reservations: turned on by the business and allowed by its plan.
       reservations: reservationsOpen(r),
     },
+    onlinePay: opts.preview ? [] : await onlinePayMethods(db, r.id),
     wait: (() => {
       const w = currentWait(r);
       return w ? { minutes: w.minutes, note: w.note } : null;

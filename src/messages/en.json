@@ -2016,7 +2016,33 @@
     "resvError_error": "The reservation could not be sent. Try again.",
     "waitNow": "Current wait: about {n} min",
     "resvWait": "Busy day: current wait about {n} min. Your table may be ready a little later.",
-    "cancelUnhandled": "Not picked up by the business in time. If you are still there, call a server or order again."
+    "cancelUnhandled": "Not picked up by the business in time. If you are still there, call a server or order again.",
+    "payNow": "Pay now",
+    "payChoose": "How would you like to pay?",
+    "payPhone": "Your phone number",
+    "payGo": "Pay",
+    "payUssd": "Dial this code on your phone to approve the payment:",
+    "payFollow": "Follow my payment",
+    "payMethod_orange_money": "Orange Money",
+    "payMethod_moov_money": "Moov Money",
+    "payMethod_card": "Card",
+    "payMethod_cash": "Cash",
+    "payMethod_other": "Other",
+    "payError_not_available": "Online payment is not available right now. Please pay at the counter.",
+    "payError_not_yours": "This order was not placed from this phone.",
+    "payError_nothing_to_pay": "There is nothing left to pay.",
+    "payError_network": "No connection. Try again when the network is back.",
+    "payError_error": "The payment could not start. Try again or pay at the counter.",
+    "payTitle": "Your payment",
+    "payWaiting": "Waiting for your payment to be confirmed…",
+    "payWaitingSub": "Approve the payment on your phone. This page updates by itself.",
+    "paySucceeded": "Payment received. Thank you!",
+    "payFailed": "The payment did not go through.",
+    "payFailedSub": "No money was taken. You can try again, or pay at the counter.",
+    "payRetry": "Try again",
+    "payBack": "Back to the menu",
+    "payAmount": "Amount: {amount}",
+    "payNotFound": "Payment not found on this phone."
   },
   "seating": {
     "title": "Tables and rooms",
@@ -4212,6 +4238,14 @@
       "no_key": "Credentials cannot be saved right now (encryption key missing).",
       "credentials_missing": "Enter the credentials before turning it on.",
       "not_available": "This online payment method is not available yet."
-    }
+    },
+    "webhookLabel": "Notification address (webhook) to paste at the provider:",
+    "howTitle": "How do I connect my Orange Money, Moov Money or an aggregator?",
+    "how1": "Open a merchant account (Orange Money, Moov Money) or an account with an aggregator (CinetPay, PayDunya, Ligdicash). The provider gives you API credentials.",
+    "how2": "When a provider shows « Soon », the RestoCool team finishes its connection: write to us from 🛟 Help.",
+    "how3": "Choose « Test » mode, paste your credentials here and save. They are encrypted and never shown again.",
+    "how4": "Copy the notification address (webhook) shown under the provider and paste it in your merchant account.",
+    "how5": "Tap « Test the connection », then make a small test payment from your menu.",
+    "how6": "When everything works, switch to « Live » and tick « Enable ». The « Pay now » button then appears for your customers; the money goes straight to your merchant account."
   }
 }

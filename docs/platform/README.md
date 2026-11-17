@@ -13,6 +13,7 @@ These documents describe the platform as it works today. Screen labels are quote
 | 5 | [SOP: platform administration (console)](05-sop-platform-administration.md) | TIBLOGICS team |
 | 6 | [Sales and onboarding playbook](06-sales-and-onboarding-playbook.md) | Field sales agents |
 | 7 | [Quick guides by profile](07-quick-guides-by-profile.md) | Owners training their team |
+| 8 | [Connecting mobile money (online payment)](08-connecting-mobile-money.md) | Owners, TIBLOGICS team |
 
 ## Downloads
 
@@ -27,6 +28,7 @@ Every document is also available as **PDF** (to print or send) and **Word** (to 
 | 5. SOP: platform administration | [PDF](downloads/05-sop-platform-administration.pdf) | [DOCX](downloads/05-sop-platform-administration.docx) |
 | 6. Sales and onboarding playbook | [PDF](downloads/06-sales-and-onboarding-playbook.pdf) | [DOCX](downloads/06-sales-and-onboarding-playbook.docx) |
 | 7. Quick guides by profile | [PDF](downloads/07-quick-guides-by-profile.pdf) | [DOCX](downloads/07-quick-guides-by-profile.docx) |
+| 8. Connecting mobile money | [PDF](downloads/08-connecting-mobile-money.pdf) | [DOCX](downloads/08-connecting-mobile-money.docx) |
 
 All of them in one file: [`restocool-documentation.zip`](downloads/restocool-documentation.zip).
 

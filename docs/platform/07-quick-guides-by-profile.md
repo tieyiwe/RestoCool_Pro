@@ -26,7 +26,8 @@ One page per job. Owners print the page for each person, or open the guide in th
 
 - change job roles and give lead roles;
 - change business settings and the plan;
-- delete the business.
+- delete the business;
+- connect online payment (Paramètres → « Paiements », see [document 8](08-connecting-mobile-money.md)).
 
 **Tutorials (« Propriétaire » tab):** all 22, including « Ajouter vos plats », « Imprimer et placer vos QR codes », « Publier et partager votre menu », « Ajouter votre personnel et le pointage », « Recevoir des réservations », « Annoncer un temps d’attente », « Gérer les avis clients », « Lire vos chiffres ».
 

@@ -191,4 +191,24 @@ describe.skipIf(!hasDb)("billing and the payment layer (database)", () => {
     await expect(billing.payBill(otherOwner, b!.id, { method: "cash", requestId: "foreign-1" })).rejects.toBeInstanceOf(NotFoundError);
     expect(await billing.toCollect(otherOwner)).toEqual([]);
   });
+
+  it("keeps « Payer maintenant » hidden until a working provider is connected", async () => {
+    const db = getDb();
+    const { onlinePayMethods, startCustomerPayment, CustomerPayError } = await import("@/payments/customer");
+    const { paymentProviderConfigs } = await import("@/db/schema");
+    expect(await onlinePayMethods(db, r.id)).toEqual([]);
+    // A stub provider (adapter not written yet) never turns the button on, even enabled with credentials.
+    await db.insert(paymentProviderConfigs).values({ restaurantId: r.id, provider: "orange_money", enabled: true, credentialsEncrypted: "x.y.z" });
+    expect(await onlinePayMethods(db, r.id)).toEqual([]);
+    const [o] = await db.select().from(orders).where(eq(orders.restaurantId, r.id)).limit(1);
+    await expect(startCustomerPayment(db, r, PHONE, { method: "orange_money", orderId: o!.id, requestId: "custpay-1" }, "http://localhost")).rejects.toBeInstanceOf(CustomerPayError);
+  });
+
+  it("refuses webhooks for unknown providers and businesses without a connected provider", async () => {
+    const { handlePaymentWebhook } = await import("@/payments/webhook");
+    const req = () => new Request("http://localhost/api/webhooks/payments/x", { method: "POST", body: "{}" });
+    expect((await handlePaymentWebhook(req(), "nope", null)).status).toBe(404);
+    expect((await handlePaymentWebhook(req(), "manual", null)).status).toBe(404);
+    expect((await handlePaymentWebhook(req(), "cinetpay", other.id)).status).toBe(404);
+  });
 });

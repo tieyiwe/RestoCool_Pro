@@ -2016,7 +2016,33 @@
     "resvError_error": "La réservation n’a pas pu être envoyée. Réessayez.",
     "waitNow": "Attente actuelle : environ {n} min",
     "resvWait": "Journée chargée : attente actuelle d’environ {n} min. Votre table peut être prête un peu plus tard.",
-    "cancelUnhandled": "Non prise en charge par l’établissement à temps. Si vous êtes encore sur place, appelez un serveur ou commandez à nouveau."
+    "cancelUnhandled": "Non prise en charge par l’établissement à temps. Si vous êtes encore sur place, appelez un serveur ou commandez à nouveau.",
+    "payNow": "Payer maintenant",
+    "payChoose": "Comment voulez-vous payer ?",
+    "payPhone": "Votre numéro de téléphone",
+    "payGo": "Payer",
+    "payUssd": "Composez ce code sur votre téléphone pour valider le paiement :",
+    "payFollow": "Suivre mon paiement",
+    "payMethod_orange_money": "Orange Money",
+    "payMethod_moov_money": "Moov Money",
+    "payMethod_card": "Carte",
+    "payMethod_cash": "Espèces",
+    "payMethod_other": "Autre",
+    "payError_not_available": "Le paiement en ligne n’est pas disponible pour le moment. Payez à la caisse.",
+    "payError_not_yours": "Cette commande n’a pas été passée depuis ce téléphone.",
+    "payError_nothing_to_pay": "Il n’y a plus rien à payer.",
+    "payError_network": "Pas de connexion. Réessayez quand le réseau revient.",
+    "payError_error": "Le paiement n’a pas pu démarrer. Réessayez ou payez à la caisse.",
+    "payTitle": "Votre paiement",
+    "payWaiting": "En attente de la confirmation de votre paiement…",
+    "payWaitingSub": "Validez le paiement sur votre téléphone. Cette page se met à jour toute seule.",
+    "paySucceeded": "Paiement reçu. Merci !",
+    "payFailed": "Le paiement n’a pas abouti.",
+    "payFailedSub": "Aucun montant n’a été pris. Vous pouvez réessayer, ou payer à la caisse.",
+    "payRetry": "Réessayer",
+    "payBack": "Retour au menu",
+    "payAmount": "Montant : {amount}",
+    "payNotFound": "Paiement introuvable sur ce téléphone."
   },
   "seating": {
     "title": "Tables et salles",
@@ -4212,6 +4238,14 @@
       "no_key": "Impossible d’enregistrer des identifiants pour le moment (clé de chiffrement absente).",
       "credentials_missing": "Entrez les identifiants avant d’activer.",
       "not_available": "Ce moyen de paiement en ligne n’est pas encore disponible."
-    }
+    },
+    "webhookLabel": "Adresse de notification (webhook) à coller chez le prestataire :",
+    "howTitle": "Comment connecter votre Orange Money, Moov Money ou un agrégateur ?",
+    "how1": "Ouvrez un compte marchand (Orange Money, Moov Money) ou un compte chez un agrégateur (CinetPay, PayDunya, Ligdicash). Le prestataire vous donne des identifiants d’API.",
+    "how2": "Quand le prestataire est marqué « Bientôt », l’équipe RestoCool termine son branchement : écrivez-nous depuis 🛟 Aide et signalement.",
+    "how3": "Choisissez le mode « Test », collez vos identifiants ici et enregistrez. Ils sont chiffrés et ne s’affichent plus jamais.",
+    "how4": "Copiez l’adresse de notification (webhook) affichée sous le prestataire et collez-la dans votre espace marchand.",
+    "how5": "Touchez « Tester la connexion », puis faites un petit paiement de test depuis votre menu.",
+    "how6": "Quand tout fonctionne, passez en mode « Réel » et cochez « Activer ». Le bouton « Payer maintenant » apparaît alors pour vos clients ; l’argent arrive directement sur votre compte marchand."
   }
 }

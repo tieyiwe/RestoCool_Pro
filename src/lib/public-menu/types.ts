@@ -51,6 +51,8 @@ export type PublicMenuData = {
   features: { welcomeScreen: boolean; fortuneCookie: boolean; share: boolean; takeawayWhatsapp: boolean; localBadge: boolean; reviews: boolean; reservations: boolean };
   /** Current wait set by the business on a busy day (null: none). */
   wait: { minutes: number; note: string | null } | null;
+  /** Methods customers can pay online with (« Payer maintenant »); empty until the business connects a provider. */
+  onlinePay: string[];
   locales: Array<"fr" | "en" | "zh">;
   hours: PublicHours[];
   categories: PublicCategory[];

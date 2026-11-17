@@ -87,3 +87,18 @@ test("split in two: Orange Money needs its reference, then cash; the closing add
   expect(body).toContain("Espèces");
   await phone.context().close();
 });
+
+test("online payment stays hidden until a provider is connected; owners see the steps and their webhook address", async ({ page }) => {
+  await page.goto("/app/settings/payments");
+  await expect(page.getByTestId("payments-settings")).toBeVisible();
+  await expect(page.getByTestId("provider-soon").first()).toBeVisible();
+  await expect(page.getByTestId("webhook-url").first()).toContainText("/api/webhooks/payments/");
+  await page.getByTestId("connect-steps").locator("summary").click();
+  await expect(page.getByTestId("connect-steps")).toContainText("Tester la connexion");
+  // Customers never see « Payer maintenant » while nothing is connected.
+  await page.goto("/r/restaurant-demo");
+  await expect(page.getByTestId("pay-now")).toHaveCount(0);
+  // The return page answers calmly for a payment that is not on this phone.
+  await page.goto("/r/restaurant-demo/paiement/00000000-0000-4000-8000-000000000000");
+  await expect(page.getByTestId("payment-status")).toContainText("Paiement introuvable");
+});

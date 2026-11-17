@@ -95,6 +95,8 @@ No data is ever deleted.
 
 **Suspend / reactivate:** always with a reason. Reactivating restores what the plan says.
 
+**A business wants its customers to pay online** (its own Orange Money / Moov / aggregator): follow [Connecting mobile money](08-connecting-mobile-money.md), section B. Never ask for its API keys: the owner types them in Paramètres → « Paiements ».
+
 ## 5. Publishing, featuring, marketing
 
 - **Publish / unpublish** a business from its page (for example a test business left online by mistake).

@@ -50,6 +50,7 @@ const menu = (over: Partial<PublicMenuData> = {}): PublicMenuData => ({
   poweredBadge: true,
   features: { welcomeScreen: true, fortuneCookie: true, share: true, takeawayWhatsapp: true, localBadge: false, reviews: true, reservations: false },
   wait: null,
+  onlinePay: [],
   locales: ["fr", "en", "zh"],
   hours: [{ weekday: 0, opens: "11:00", closes: "23:00" }],
   categories: [
