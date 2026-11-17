@@ -267,3 +267,70 @@ export async function toCollect(ctx: ServiceCtx) {
   }
   return [...groups.values()].sort((a, b) => Number(b.served) - Number(a.served) || a.since.getTime() - b.since.getTime());
 }
+
+/* ------------------------------------------------------------------ daily closing */
+
+export type Closing = Awaited<ReturnType<typeof dailyClosing>>;
+
+/**
+ * « Clôture de caisse » for one business day (Africa/Ouagadougou = UTC): money by method, by the
+ * person who collected it, by menu category (paid dishes), bills, discounts and cancellations.
+ */
+export async function dailyClosing(ctx: ServiceCtx, day: string) {
+  need(ctx, "reports.read");
+  const rid = ctx.repo.restaurantId;
+  const db = ctx.db;
+  const [byMethod, byStaff, settled, discounts, cancelled, byCategory] = await Promise.all([
+    db.execute<{ method: string; n: number; amount: number; received: number; change: number }>(sql`
+      select method, count(*)::int as n, coalesce(sum(amount), 0)::int as amount,
+        coalesce(sum(received), 0)::int as received, coalesce(sum(change_given), 0)::int as change
+      from payments where restaurant_id = ${rid} and business_date = ${day} group by method order by amount desc`),
+    db.execute<{ staff_id: string | null; name: string | null; staff_no: number | null; n: number; amount: number }>(sql`
+      select p.staff_id, m.name, m.staff_no, count(*)::int as n, coalesce(sum(p.amount), 0)::int as amount
+      from payments p left join members m on m.id = p.staff_id
+      where p.restaurant_id = ${rid} and p.business_date = ${day}
+      group by p.staff_id, m.name, m.staff_no order by amount desc`),
+    db.execute<{ n: number; total: number; avg: number }>(sql`
+      select count(*)::int as n, coalesce(sum(total), 0)::int as total, coalesce(round(avg(total)), 0)::int as avg
+      from bills where restaurant_id = ${rid} and status = 'paid' and business_date = ${day}`),
+    db.execute<{ id: string; seat_label: string | null; discount: number; reason: string | null; name: string | null; staff_no: number | null }>(sql`
+      select b.id, b.seat_label, b.discount, b.discount_reason as reason, m.name, m.staff_no
+      from bills b left join members m on m.id = b.discount_by
+      where b.restaurant_id = ${rid} and b.status = 'paid' and b.business_date = ${day} and b.discount > 0
+      order by b.closed_at`),
+    db.execute<{ code: string | null; number: number; subtotal: number; reason: string | null; name: string | null; staff_no: number | null }>(sql`
+      select o.code, o.number, o.subtotal, o.cancelled_reason as reason, m.name, m.staff_no
+      from orders o left join members m on m.id = o.cancelled_by
+      where o.restaurant_id = ${rid} and o.status = 'cancelled' and o.cancelled_at::date = ${day}::date
+      order by o.cancelled_at`),
+    db.execute<{ category: string | null; qty: number; amount: number }>(sql`
+      select c.name->>'fr' as category, coalesce(sum(i.qty), 0)::int as qty, coalesce(sum(i.qty * coalesce(i.unit_price, 0)), 0)::int as amount
+      from bills b
+      join orders o on o.id = any(b.order_ids) and o.status = 'paid'
+      join order_items i on i.order_id = o.id and i.status <> 'cancelled'
+      left join menu_items mi on mi.id = i.item_id
+      left join menu_categories c on c.id = mi.category_id
+      where b.restaurant_id = ${rid} and b.status = 'paid' and b.business_date = ${day}
+      group by c.name->>'fr' order by amount desc`),
+  ]);
+  const total = byMethod.rows.reduce((s, r) => s + Number(r.amount), 0);
+  const s = settled.rows[0] ?? { n: 0, total: 0, avg: 0 };
+  return {
+    day,
+    total,
+    cash: byMethod.rows.filter((r) => r.method === "cash").reduce((a, r) => a + Number(r.amount), 0),
+    byMethod: byMethod.rows.map((r) => ({ method: r.method, n: Number(r.n), amount: Number(r.amount), received: Number(r.received), change: Number(r.change) })),
+    byStaff: byStaff.rows.map((r) => ({ staffId: r.staff_id, name: r.name, staffNo: r.staff_no, n: Number(r.n), amount: Number(r.amount) })),
+    bills: { n: Number(s.n), total: Number(s.total), average: Number(s.avg) },
+    discounts: { total: discounts.rows.reduce((a, r) => a + Number(r.discount), 0), list: discounts.rows.map((r) => ({ seat: r.seat_label, amount: Number(r.discount), reason: r.reason, by: r.name, staffNo: r.staff_no })) },
+    cancelled: { n: cancelled.rows.length, amount: cancelled.rows.reduce((a, r) => a + Number(r.subtotal), 0), list: cancelled.rows.map((r) => ({ code: r.code, number: Number(r.number), amount: Number(r.subtotal), reason: r.reason, by: r.name, staffNo: r.staff_no })) },
+    byCategory: byCategory.rows.map((r) => ({ category: r.category, qty: Number(r.qty), amount: Number(r.amount) })),
+  };
+}
+
+/** One bill with what a receipt needs (business, lines, payments). Same right as collecting. */
+export async function receiptData(ctx: ServiceCtx, billId: string) {
+  const view = await billView(ctx, billId);
+  const r = await ctx.repo.restaurant.get();
+  return { ...view, restaurant: r };
+}

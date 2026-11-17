@@ -20,8 +20,8 @@ function sentLabel(iso: string, locale: string) {
 }
 
 /** What the signed-in person may do to an order (from can() on the server): buttons follow it. */
-export type OrderPerms = { confirm: boolean; prepare: boolean; serve: boolean; cancel: boolean };
-const ALL: OrderPerms = { confirm: true, prepare: true, serve: true, cancel: true };
+export type OrderPerms = { confirm: boolean; prepare: boolean; serve: boolean; cancel: boolean; pay?: boolean };
+const ALL: OrderPerms = { confirm: true, prepare: true, serve: true, cancel: true, pay: false };
 const PermsContext = createContext<OrderPerms>(ALL);
 export function OrderPermsProvider({ perms, children }: { perms: OrderPerms; children: React.ReactNode }) {
   return <PermsContext.Provider value={perms}>{children}</PermsContext.Provider>;
@@ -365,6 +365,21 @@ export function OrderCard({ order, now, delays, onChanged, big = false, rank }: 
         </div>
       )}
       {cancelling && <CancelForm onCancel={(r) => void move("cancelled", r)} onClose={() => setCancelling(false)} />}
+      {/* « Encaisser »: a table or room pays its whole bill; other places pay this order. */}
+      {perms.pay && order.status !== "cancelled" && order.status !== "paid" && (
+        <a
+          href={order.sessionId && (order.seat?.type === "table" || order.seat?.type === "room") ? `/app/pay?session=${order.sessionId}` : `/app/pay?order=${order.id}`}
+          className={cn("flex min-h-11 items-center justify-center rounded-xl text-sm font-bold", done ? "bg-emerald-600 text-white" : "border border-emerald-600 text-emerald-700")}
+          data-testid="action-pay"
+        >
+          💰 {t("collect")}
+        </a>
+      )}
+      {order.status === "paid" && (
+        <p className="rounded-lg bg-emerald-50 px-2 py-1 text-center text-sm font-bold text-emerald-900" data-testid="order-paid">
+          ✓ {t("status.paid")}
+        </p>
+      )}
       {/* Last step at a table or room: the customers left, the table is free again. */}
       {done && order.tableOpen && perms.serve && order.sessionId && <ReleaseTable sessionId={order.sessionId} seat={order.seat} onDone={onChanged} />}
     </article>

@@ -53,6 +53,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       { href: "/app/service", label: t("frontDesk"), icon: "🛎️", need: "orders.read" },
       ...(transport ? ([{ href: "/app/trips", label: t("trips"), icon: "🛣️", need: "orders.confirm" }] as const) : []),
       { href: "/app/kitchen", label: t("kitchen"), icon: "👩‍🍳", need: "orders.read" },
+      { href: "/app/cashier", label: t("cashierNav"), icon: "💰", need: "orders.pay" },
       { href: "/app/scan", label: t("scan"), icon: "📷", need: null },
       { href: "/app/orders", label: t("history"), icon: "🧾", need: "reports.read" },
       ...(transport ? [] : ([{ href: "/app/reservations", label: t("reservationsNav"), icon: "📅", need: "reservations.write" }] as const)),
@@ -73,10 +74,13 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   if (await getSuperadmin().catch(() => null)) nav.push({ href: "/admin_pro" as "/app/guide", label: t("superadmin"), icon: "🛡️" as "🎓", need: null });
   // Phones: the 4 most used screens for this role as tabs, the rest under « Plus ».
   const kitchenOnly = allowed("orders.prepare") && !allowed("orders.confirm");
+  const cashierOnly = allowed("orders.pay") && !allowed("orders.confirm") && !allowed("orders.prepare");
   const order = transport
     ? ["/app", "/app/trips", "/app/scan", "/app/service"]
     : kitchenOnly
       ? ["/app/kitchen", "/app/scan", "/app"]
+      : cashierOnly
+        ? ["/app/cashier", "/app/scan", "/app"]
       : ["/app", "/app/service", "/app/scan", allowed("orders.prepare") && !allowed("reports.read") ? "/app/kitchen" : "/app/orders"];
   const tabs = order.map((h) => nav.find((n) => n.href === h)).filter((n): n is (typeof nav)[number] => Boolean(n)).slice(0, 4);
   const more = nav.filter((n) => !tabs.includes(n));
