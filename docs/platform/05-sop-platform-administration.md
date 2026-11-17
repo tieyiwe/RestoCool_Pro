@@ -189,6 +189,7 @@ Always send a message **before**:
 | `SESSION_SECRET` | Signs private links (reservations) | **Never change it**: links already sent would stop working |
 | `SMTP_PASS` | Password of the info@restocool.com mailbox (Titan) | Without it no email is sent |
 | `SUPERADMIN_EMAILS` | Console owners, comma separated | |
+| `PAYMENT_ENCRYPTION_KEY` | 32 random bytes (64 hex characters) that encrypt businesses' online payment credentials | Needed before any online payment provider is connected. **Never change it** once credentials are saved |
 | `SHANGRILA_OWNER_EMAIL` | Optional: Shangri-La's owner email | See [onboarding SOP](03-sop-onboarding-a-business.md), section H |
 
 Never paste a secret in a chat, an email or a document.

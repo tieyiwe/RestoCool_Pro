@@ -7,7 +7,7 @@ import { GuideTabs } from "@/components/guide/guide-tabs";
 import type { GuideId, Profile } from "@/components/guide/guide-scenes";
 
 // Server-side list (the scenes module is client-only: its values cannot be read here).
-const PUBLIC_PROFILES: readonly Profile[] = ["server", "host", "kitchen", "manager", "owner"];
+const PUBLIC_PROFILES: readonly Profile[] = ["server", "host", "kitchen", "cashier", "manager", "owner"];
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("guide");

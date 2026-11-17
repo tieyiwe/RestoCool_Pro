@@ -1344,6 +1344,19 @@
         "waitNow": "Businesses showing a wait now",
         "waitNowOne": "Wait time shown now",
         "waitSet": "Wait times set"
+      },
+      "cashier": {
+        "title": "Cash register",
+        "collected": "Collected",
+        "bills": "Bills settled",
+        "averageTicket": "Average ticket",
+        "m_cash": "Cash",
+        "m_orange_money": "Orange Money",
+        "m_moov_money": "Moov Money",
+        "m_card": "Card",
+        "m_other": "Other",
+        "discounts": "Discounts given",
+        "businesses": "Businesses using the register"
       }
     }
   },
@@ -2470,7 +2483,8 @@
       "manager": "Manager",
       "server": "Server",
       "host": "Host",
-      "kitchen": "Kitchen"
+      "kitchen": "Kitchen",
+      "cashier": "Cashier"
     },
     "prev": "Previous step",
     "next": "Next step",
@@ -2578,7 +2592,23 @@
       "serveByName": "Serve each dish to the right person",
       "offlineBanner": "Offline",
       "pendingSync": "⏳ waiting",
-      "backOnline": "Back online"
+      "backOnline": "Back online",
+      "cashierTitle": "Cash register",
+      "collectBtn": "Collect",
+      "received": "Amount received",
+      "changeDemo": "Change to give: 3,500 F",
+      "parts": "Equal parts",
+      "byDish": "By dish",
+      "partDemo": "Part 1 of 3: 2,167 F",
+      "referenceLabel": "Orange Money reference",
+      "paidDemo": "Paid: 6,500 F",
+      "receiptBtn": "Receipt",
+      "closingTitle": "Daily closing",
+      "collectedLabel": "Collected",
+      "cashLabel": "Cash",
+      "billsLabel": "Bills",
+      "avgLabel": "Average ticket",
+      "discountsLabel": "Discounts"
     },
     "items": {
       "menu": {
@@ -2727,6 +2757,21 @@
         "s1": "The “Offline” banner shows: keep confirming and serving.",
         "s2": "Your actions wait on the phone, marked “waiting”.",
         "s3": "When the network returns, everything is sent in order, by itself."
+      },
+      "collect": {
+        "title": "Collect a bill",
+        "intro": "The whole table or one order, in cash, Orange Money, Moov or card.",
+        "s1": "In “Cash register” (or “Collect” on the order), choose the table.",
+        "s2": "Choose the payment method. For cash, type the amount received: the change shows.",
+        "s3": "To split: “Equal parts” or “By dish”. Orange Money and Moov need the transaction reference.",
+        "s4": "Paid: the orders become “Paid”, the table frees itself. Print the receipt or send it on WhatsApp."
+      },
+      "closing": {
+        "title": "Do the daily closing",
+        "intro": "In the evening, check the day's money.",
+        "s1": "Open “Daily closing”: collected, cash in the drawer, bills, average ticket.",
+        "s2": "Check by payment method, by person, discounts and cancellations.",
+        "s3": "Download the CSV or print to PDF for your accounts."
       }
     },
     "profileHint": {
@@ -2734,7 +2779,8 @@
       "manager": "Manage the menu, the team, reservations, and follow the activity.",
       "server": "Take and serve orders, welcome reservations, free tables.",
       "host": "Welcome guests: reservations, arrival QR, wait time.",
-      "kitchen": "Prepare orders on the kitchen screen and flag sold-out dishes."
+      "kitchen": "Prepare orders on the kitchen screen and flag sold-out dishes.",
+      "cashier": "Collect bills, give change, hand the receipt, do the daily closing."
     },
     "trainHint": "You see what this profile sees."
   },
@@ -4125,6 +4171,47 @@
       "network": "No network: the payment was not recorded. Try again.",
       "forbidden": "You are not allowed to collect money.",
       "error": "The payment could not be recorded. Try again."
+    }
+  },
+  "payments": {
+    "title": "Payments",
+    "back": "Settings",
+    "intro": "The cash register and, soon, online payment for your customers.",
+    "settingsHint": "Cash register rules and online payment (Orange Money, Moov, card).",
+    "open": "Open payment settings",
+    "cashierTitle": "Cash register",
+    "cashierHint": "Discounts need a reason. Above this share of the bill, only a manager or the owner can give them.",
+    "discountApproval": "Maximum discount without a manager",
+    "save": "Save",
+    "onlineTitle": "Online payment",
+    "onlineHint": "Your customers will be able to pay from their phone (“Pay now”). Connections to the operators are coming soon: meanwhile, collect at the register (cash, Orange Money, Moov, card).",
+    "noKey": "The credentials encryption key is not installed on the platform yet. The RestoCool team sets it up before online payment opens.",
+    "providers": {
+      "cinetpay": "CinetPay",
+      "paydunya": "PayDunya",
+      "ligdicash": "Ligdicash",
+      "orange_money": "Orange Money (direct)",
+      "moov_money": "Moov Money (direct)"
+    },
+    "soon": "Soon",
+    "enabled": "On",
+    "disabled": "Off",
+    "enable": "Turn on for my customers",
+    "mode": "Mode",
+    "modeTest": "Test",
+    "modeLive": "Live",
+    "savedPlaceholder": "•••••• (saved)",
+    "writeOnly": "Credentials are never shown again. Leave empty to keep the saved ones.",
+    "test": "Test the connection",
+    "ok": {
+      "saved": "Settings saved.",
+      "tested": "Connection works.",
+      "cashier": "Cash register rules saved."
+    },
+    "errors": {
+      "no_key": "Credentials cannot be saved right now (encryption key missing).",
+      "credentials_missing": "Enter the credentials before turning it on.",
+      "not_available": "This online payment method is not available yet."
     }
   }
 }

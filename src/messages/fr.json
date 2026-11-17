@@ -1344,6 +1344,19 @@
         "waitNow": "Établissements affichant une attente",
         "waitNowOne": "Temps d’attente affiché",
         "waitSet": "Temps d’attente annoncés"
+      },
+      "cashier": {
+        "title": "Caisse",
+        "collected": "Encaissé",
+        "bills": "Additions réglées",
+        "averageTicket": "Ticket moyen",
+        "m_cash": "Espèces",
+        "m_orange_money": "Orange Money",
+        "m_moov_money": "Moov Money",
+        "m_card": "Carte",
+        "m_other": "Autre",
+        "discounts": "Remises accordées",
+        "businesses": "Établissements qui utilisent la caisse"
       }
     }
   },
@@ -2470,7 +2483,8 @@
       "manager": "Gérant",
       "server": "Serveur",
       "host": "Accueil",
-      "kitchen": "Cuisine"
+      "kitchen": "Cuisine",
+      "cashier": "Caisse"
     },
     "prev": "Étape précédente",
     "next": "Étape suivante",
@@ -2538,7 +2552,7 @@
       "openMenu": "Ouvrir le menu",
       "table": "Table",
       "orderNo": "N° 12",
-      "all": "Tous",
+      "all": "Tout",
       "grill": "Grill",
       "drinks": "Boissons",
       "owner": "Propriétaire",
@@ -2578,7 +2592,23 @@
       "serveByName": "Servez chaque plat à la bonne personne",
       "offlineBanner": "Hors ligne",
       "pendingSync": "⏳ en attente",
-      "backOnline": "De nouveau en ligne"
+      "backOnline": "De nouveau en ligne",
+      "cashierTitle": "Caisse",
+      "collectBtn": "Encaisser",
+      "received": "Montant reçu",
+      "changeDemo": "Monnaie à rendre : 3 500 F",
+      "parts": "Parts égales",
+      "byDish": "Par plat",
+      "partDemo": "Part 1 sur 3 : 2 167 F",
+      "referenceLabel": "Référence Orange Money",
+      "paidDemo": "Payé : 6 500 F",
+      "receiptBtn": "Reçu",
+      "closingTitle": "Clôture de caisse",
+      "collectedLabel": "Encaissé",
+      "cashLabel": "Espèces",
+      "billsLabel": "Additions",
+      "avgLabel": "Ticket moyen",
+      "discountsLabel": "Remises"
     },
     "items": {
       "menu": {
@@ -2727,6 +2757,21 @@
         "s1": "Le bandeau « Hors ligne » s’affiche : continuez à confirmer et servir.",
         "s2": "Vos actions attendent sur le téléphone avec « en attente ».",
         "s3": "Au retour du réseau, tout est envoyé dans l’ordre, tout seul."
+      },
+      "collect": {
+        "title": "Encaisser une addition",
+        "intro": "Toute la table ou une commande, en espèces, Orange Money, Moov ou carte.",
+        "s1": "Dans « Caisse » (ou « Encaisser » sur la commande), choisissez la table.",
+        "s2": "Choisissez le moyen de paiement. En espèces, tapez le montant reçu : la monnaie à rendre s’affiche.",
+        "s3": "Pour partager : « Parts égales » ou « Par plat ». Orange Money et Moov demandent la référence de la transaction.",
+        "s4": "Payé : les commandes passent « Payée », la table se libère. Imprimez le reçu ou envoyez-le sur WhatsApp."
+      },
+      "closing": {
+        "title": "Faire la clôture de caisse",
+        "intro": "Le soir, vérifiez l’argent du jour.",
+        "s1": "Ouvrez « Clôture de caisse » : encaissé, espèces en caisse, additions, ticket moyen.",
+        "s2": "Contrôlez par moyen de paiement, par personne, les remises et les annulations.",
+        "s3": "Téléchargez le CSV ou imprimez en PDF pour vos comptes."
       }
     },
     "profileHint": {
@@ -2734,7 +2779,8 @@
       "manager": "Gérer le menu, l’équipe, les réservations et suivre l’activité.",
       "server": "Prendre et servir les commandes, accueillir les réservations, libérer les tables.",
       "host": "Accueillir les clients : réservations, QR d’arrivée, temps d’attente.",
-      "kitchen": "Préparer les commandes à l’écran cuisine et signaler les plats épuisés."
+      "kitchen": "Préparer les commandes à l’écran cuisine et signaler les plats épuisés.",
+      "cashier": "Encaisser les additions, rendre la monnaie, donner le reçu, faire la clôture."
     },
     "trainHint": "Vous voyez ce que voit ce profil."
   },
@@ -4125,6 +4171,47 @@
       "network": "Pas de réseau : l’encaissement n’a pas été enregistré. Réessayez.",
       "forbidden": "Vous n’avez pas le droit d’encaisser.",
       "error": "L’encaissement n’a pas pu être enregistré. Réessayez."
+    }
+  },
+  "payments": {
+    "title": "Paiements",
+    "back": "Paramètres",
+    "intro": "La caisse et, bientôt, le paiement en ligne de vos clients.",
+    "settingsHint": "Règles de la caisse et paiement en ligne (Orange Money, Moov, carte).",
+    "open": "Ouvrir les réglages de paiement",
+    "cashierTitle": "Caisse",
+    "cashierHint": "Les remises demandent un motif. Au-delà de ce pourcentage de l’addition, seul un gérant ou le propriétaire peut les accorder.",
+    "discountApproval": "Remise maximale sans gérant",
+    "save": "Enregistrer",
+    "onlineTitle": "Paiement en ligne",
+    "onlineHint": "Vos clients pourront payer depuis leur téléphone (« Payer maintenant »). Les connexions aux opérateurs arrivent bientôt : en attendant, encaissez à la caisse (espèces, Orange Money, Moov, carte).",
+    "noKey": "La clé de chiffrement des identifiants n’est pas encore installée sur la plateforme. L’équipe RestoCool s’en occupe avant l’ouverture du paiement en ligne.",
+    "providers": {
+      "cinetpay": "CinetPay",
+      "paydunya": "PayDunya",
+      "ligdicash": "Ligdicash",
+      "orange_money": "Orange Money (direct)",
+      "moov_money": "Moov Money (direct)"
+    },
+    "soon": "Bientôt",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "enable": "Activer pour mes clients",
+    "mode": "Mode",
+    "modeTest": "Test",
+    "modeLive": "Réel",
+    "savedPlaceholder": "•••••• (enregistré)",
+    "writeOnly": "Les identifiants ne sont jamais réaffichés. Laissez vide pour garder ceux enregistrés.",
+    "test": "Tester la connexion",
+    "ok": {
+      "saved": "Réglages enregistrés.",
+      "tested": "Connexion réussie.",
+      "cashier": "Règles de la caisse enregistrées."
+    },
+    "errors": {
+      "no_key": "Impossible d’enregistrer des identifiants pour le moment (clé de chiffrement absente).",
+      "credentials_missing": "Entrez les identifiants avant d’activer.",
+      "not_available": "Ce moyen de paiement en ligne n’est pas encore disponible."
     }
   }
 }

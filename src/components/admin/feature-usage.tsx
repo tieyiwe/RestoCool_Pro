@@ -28,7 +28,20 @@ export function FeatureUsageCard({ u, t, version, perBusiness = false }: { u: Fe
           {version ? ` · ${t("features.version", { v: version.slice(0, 12) })}` : ""}
         </span>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <section data-testid="feature-cashier">
+          <h3 className="font-semibold">💰 {t("features.cashier.title")}</h3>
+          <ul className="divide-y divide-border">
+            <Row label={t("features.cashier.collected")} value={`${u.cashier.collected.toLocaleString("fr-FR")} F`} testId="fu-cash-collected" />
+            <Row label={t("features.cashier.bills")} value={u.cashier.bills} />
+            <Row label={t("features.cashier.averageTicket")} value={`${u.cashier.averageTicket.toLocaleString("fr-FR")} F`} />
+            {(["cash", "orange_money", "moov_money", "card", "other"] as const).map((m) => (
+              <Row key={m} label={`· ${t(`features.cashier.m_${m}`)}`} value={`${(u.cashier.byMethod[m] ?? 0).toLocaleString("fr-FR")} F`} />
+            ))}
+            <Row label={t("features.cashier.discounts")} value={`${u.cashier.discounts.toLocaleString("fr-FR")} F`} />
+            {!perBusiness && <Row label={t("features.cashier.businesses")} value={u.cashier.businesses} />}
+          </ul>
+        </section>
         <section data-testid="feature-reservations">
           <h3 className="font-semibold">📅 {t("features.reservations.title")}</h3>
           <ul className="divide-y divide-border">

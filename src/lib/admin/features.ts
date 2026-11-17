@@ -12,6 +12,7 @@ export type FeatureUsage = {
   tables: { releasedByStaff: number; closedFinished: number; closedInactive: number; closedExpired: number; closedStale: number; closedByStaff: number; closedByCustomer: number; openNow: number };
   reviews: { count: number; average: number | null; hidden: number; deleted: number };
   switches: { reviewsOff: number; attendanceOff: number; sharingBusinesses: number; reservationsOn: number };
+  cashier: { collected: number; payments: number; bills: number; averageTicket: number; discounts: number; businesses: number; byMethod: Record<string, number> };
   reservations: {
     total: number;
     covers: number;
@@ -82,6 +83,17 @@ export async function featureUsage(db: DB, restaurantId?: string, now = new Date
     select
       (select count(*) from restaurants x where x.deleted_at is null and (x.settings #>> '{waitTime,until}')::timestamptz > now() and (x.settings #>> '{waitTime,minutes}')::int > 0 ${only("x.id")})::int as now,
       (select count(*) from audit_log a where a.action = 'wait.set' and a.created_at >= ${since} ${only("a.restaurant_id")})::int as set`);
+  const cash = await one(sql`
+    select coalesce(sum(p.amount), 0)::bigint as collected, count(*)::int as n, count(distinct p.restaurant_id)::int as businesses,
+      coalesce(sum(p.amount) filter (where p.method = 'cash'), 0)::bigint as cash,
+      coalesce(sum(p.amount) filter (where p.method = 'orange_money'), 0)::bigint as orange_money,
+      coalesce(sum(p.amount) filter (where p.method = 'moov_money'), 0)::bigint as moov_money,
+      coalesce(sum(p.amount) filter (where p.method = 'card'), 0)::bigint as card,
+      coalesce(sum(p.amount) filter (where p.method = 'other'), 0)::bigint as other
+    from payments p where p.created_at >= ${since} ${only("p.restaurant_id")}`);
+  const billsRow = await one(sql`
+    select count(*)::int as n, coalesce(round(avg(b.total)), 0)::int as avg, coalesce(sum(b.discount), 0)::bigint as discounts
+    from bills b where b.status = 'paid' and b.closed_at >= ${since} ${only("b.restaurant_id")}`);
   const named = await one(sql`
     select count(*)::int as n from order_items i join orders o on o.id = i.order_id
     where o.id in (select c.order_id from shared_carts c where c.status = 'sent' and c.created_at >= ${since} ${only("c.restaurant_id")})`);
@@ -100,6 +112,15 @@ export async function featureUsage(db: DB, restaurantId?: string, now = new Date
     },
     reviews: { count: n(reviews.count), average: reviews.average == null ? null : Number(reviews.average), hidden: n(reviews.hidden), deleted: n(reviews.deleted) },
     switches: { reviewsOff: n(switches.reviews_off), attendanceOff: n(switches.attendance_off), sharingBusinesses: n(shared.businesses), reservationsOn: n(switches.reservations_on) },
+    cashier: {
+      collected: n(cash.collected),
+      payments: n(cash.n),
+      bills: n(billsRow.n),
+      averageTicket: n(billsRow.avg),
+      discounts: n(billsRow.discounts),
+      businesses: n(cash.businesses),
+      byMethod: { cash: n(cash.cash), orange_money: n(cash.orange_money), moov_money: n(cash.moov_money), card: n(cash.card), other: n(cash.other) },
+    },
     reservations: {
       total: n(resv.total),
       covers: n(resv.covers),

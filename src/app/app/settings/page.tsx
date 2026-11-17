@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Card } from "@/components/ui/card";
 import { AppearanceSection, ContactsSection, FeaturesSection, HoursSection, LocationSection, ProfileSection, PublishSection, ServiceSection } from "@/components/settings/sections";
@@ -8,6 +9,7 @@ export default async function SettingsPage() {
   const ctx = await requireMemberPage("settings.write");
   const t = await getTranslations("settings");
   const td = await getTranslations("danger");
+  const tp = await getTranslations("payments");
   const [r, hours] = await Promise.all([ctx.repo.restaurant.get(), ctx.repo.restaurant.openingHours()]);
   if (!r) return null;
   const sections: Array<[string, string, React.ReactNode]> = [
@@ -25,6 +27,16 @@ export default async function SettingsPage() {
     ["service", t("service.title"), <ServiceSection key="s" r={r} />],
     ["appearance", t("appearance.title"), <AppearanceSection key="a" r={r} />],
     ["features", t("features.title"), <FeaturesSection key="f" r={r} />],
+    [
+      "payments",
+      tp("title"),
+      <div key="pay" className="flex flex-col gap-2">
+        <p className="text-sm text-muted-foreground">{tp("settingsHint")}</p>
+        <Link href="/app/settings/payments" className="inline-flex min-h-11 w-fit items-center rounded-xl border border-border px-4 font-bold" data-testid="settings-payments-link">
+          💳 {tp("open")}
+        </Link>
+      </div>,
+    ],
   ];
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">

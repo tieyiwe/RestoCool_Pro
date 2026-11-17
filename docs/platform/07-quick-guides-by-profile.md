@@ -28,7 +28,7 @@ One page per job. Owners print the page for each person, or open the guide in th
 - change business settings and the plan;
 - delete the business.
 
-**Tutorials (« Propriétaire » tab):** all 20, including « Ajouter vos plats », « Imprimer et placer vos QR codes », « Publier et partager votre menu », « Ajouter votre personnel et le pointage », « Recevoir des réservations », « Annoncer un temps d’attente », « Gérer les avis clients », « Lire vos chiffres ».
+**Tutorials (« Propriétaire » tab):** all 22, including « Ajouter vos plats », « Imprimer et placer vos QR codes », « Publier et partager votre menu », « Ajouter votre personnel et le pointage », « Recevoir des réservations », « Annoncer un temps d’attente », « Gérer les avis clients », « Lire vos chiffres ».
 
 **Help:** 🛟 « Aide et signalement » (choose « Bloquant » if service is stopped).
 
@@ -78,6 +78,21 @@ One page per job. Owners print the page for each person, or open the guide in th
 5. No network: keep tapping; it is sent when the network returns.
 
 **Tutorials (« Cuisine » tab):** « Utiliser l’écran cuisine », « Marquer un plat épuisé », « Commande partagée par une table », « Travailler sans réseau », « Pointer à l’arrivée et au départ ».
+
+## Cashier (« Caisse »)
+
+1. **Start:** pointage; on the shared tablet, your name and PIN.
+2. **💰 Caisse** shows what is left to collect, table by table (served first). Tap **« Encaisser »**.
+3. Check the dishes; type the price of « sur demande » dishes. Discounts need a reason (and a manager above 20 %).
+4. **Split** if needed: « Parts égales » or « Par plat ».
+5. **Method:**
+   - Espèces: type the amount received, give back the change shown in yellow.
+   - Orange Money / Moov: the customer pays to the number shown; type the **transaction reference**.
+   - Carte / Autre: reference if any.
+6. **Reçu:** print or « Envoyer le reçu sur WhatsApp ».
+7. **End of day:** « Clôture de caisse » with the manager: count the drawer against « Espèces en caisse ».
+
+**Tutorials (« Caisse » tab):** « Encaisser une addition », « Faire la clôture de caisse », « Travailler sans réseau », « Pointer à l’arrivée et au départ ».
 
 ## Bus hostess (transport companies)
 

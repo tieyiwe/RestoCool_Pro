@@ -7,12 +7,13 @@ import { can, type Actor } from "@/lib/auth/can";
  * The first one is where the guide opens.
  */
 export function guideProfiles(actor: Actor, restaurantId: string): Profile[] {
-  if (actor.kind === "member" && actor.role === "owner") return ["owner", "manager", "server", "host", "kitchen"];
-  if (actor.kind === "member" && actor.role === "manager") return ["manager", "server", "host", "kitchen"];
+  if (actor.kind === "member" && actor.role === "owner") return ["owner", "manager", "server", "host", "kitchen", "cashier"];
+  if (actor.kind === "member" && actor.role === "manager") return ["manager", "server", "host", "kitchen", "cashier"];
   const r = { restaurantId };
   const out: Profile[] = [];
   if (can(actor, "orders.serve", r) || can(actor, "orders.confirm", r)) out.push("server");
   if (can(actor, "reservations.write", r)) out.push("host");
   if (can(actor, "orders.prepare", r)) out.push("kitchen");
+  if (can(actor, "orders.pay", r) && !out.includes("server")) out.push("cashier");
   return out.length ? out : ["server"];
 }

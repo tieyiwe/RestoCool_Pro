@@ -84,15 +84,32 @@ Good to know:
 - Payments, settings and personnel changes need the network.
 - If an action was already done by someone else meanwhile, the app says so: check the card.
 
-## 6. Closing
+## 6. Collecting money (« Caisse »)
 
-1. Make sure no order is left in progress on « Service » and « Cuisine ».
+1. When the customers ask for the bill: **💰 Caisse** lists every table and order still to collect (served ones first), or tap **« 💰 Encaisser »** on the order card.
+2. Check the dishes. **« Sur demande »** dishes: type their price (« Prix sur demande et remise »). A **discount** needs a reason; above 20 % of the bill only a manager or the owner can give it (Paramètres → Paiements to change the limit).
+3. Choose how they pay:
+   - **Tout:** one payment.
+   - **Parts égales:** set the number of people; each part is recorded one by one, with its own method.
+   - **Par plat:** tick the dishes this person pays for.
+4. Choose the method:
+   - **Espèces:** type the amount received; the change to give shows in yellow.
+   - **Orange Money / Moov:** the business's number shows with « Copier »; the **transaction reference is required**.
+   - **Carte / Autre:** a reference if you have one.
+5. **« Encaisser … »**. When the bill is settled, the orders become « Payée » (the customer's phone too) and the table frees itself.
+6. **Reçu:** print it (or « Enregistrer en PDF »), or « Envoyer le reçu sur WhatsApp ».
+
+Collecting needs the network.
+
+## 7. Closing
+
+1. Make sure no order is left in progress on « Service » and « Cuisine », and nothing is left in « Caisse ».
 2. Free the tables still marked as occupied.
 3. Remove the wait time if it is still shown (« Retirer l'attente »).
 4. Staff check out (pointage). Lock the shared tablet (« Verrouiller »).
-5. Owner/manager: check the dashboard figures and the order history (🧾), export a CSV if needed.
+5. Owner/manager: **« Clôture de caisse »** (from « Caisse »): count the cash drawer against « Espèces en caisse », check Orange Money and Moov against the phones, read the discounts and cancellations, then download the CSV or print to PDF.
 
-## 7. Weekly (owner / manager)
+## 8. Weekly (owner / manager)
 
 - Review the analytics and the personnel ranking on the dashboard.
 - Reservations figures:

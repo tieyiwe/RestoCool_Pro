@@ -1344,6 +1344,19 @@
         "waitNow": "Businesses showing a wait now",
         "waitNowOne": "Wait time shown now",
         "waitSet": "Wait times set"
+      },
+      "cashier": {
+        "title": "Cash register",
+        "collected": "Collected",
+        "bills": "Bills settled",
+        "averageTicket": "Average ticket",
+        "m_cash": "Cash",
+        "m_orange_money": "Orange Money",
+        "m_moov_money": "Moov Money",
+        "m_card": "Card",
+        "m_other": "Other",
+        "discounts": "Discounts given",
+        "businesses": "Businesses using the register"
       }
     }
   },
@@ -2470,7 +2483,8 @@
       "manager": "经理",
       "server": "服务员",
       "host": "迎宾",
-      "kitchen": "厨房"
+      "kitchen": "厨房",
+      "cashier": "收银"
     },
     "prev": "上一步",
     "next": "下一步",
@@ -2578,7 +2592,23 @@
       "serveByName": "把每道菜送给对的人",
       "offlineBanner": "离线",
       "pendingSync": "⏳ 等待中",
-      "backOnline": "已恢复在线"
+      "backOnline": "已恢复在线",
+      "cashierTitle": "收银",
+      "collectBtn": "收款",
+      "received": "实收金额",
+      "changeDemo": "找零：3 500 F",
+      "parts": "平均分",
+      "byDish": "按菜品",
+      "partDemo": "第 1/3 份：2 167 F",
+      "referenceLabel": "Orange Money 编号",
+      "paidDemo": "已付：6 500 F",
+      "receiptBtn": "收据",
+      "closingTitle": "日结",
+      "collectedLabel": "已收",
+      "cashLabel": "现金",
+      "billsLabel": "账单",
+      "avgLabel": "客单价",
+      "discountsLabel": "折扣"
     },
     "items": {
       "menu": {
@@ -2727,6 +2757,21 @@
         "s1": "显示“离线”横幅：继续确认和上菜。",
         "s2": "您的操作在手机上等待，标记为“等待中”。",
         "s3": "网络恢复后，所有操作按顺序自动发送。"
+      },
+      "collect": {
+        "title": "为账单收款",
+        "intro": "整桌或单个订单，现金、Orange Money、Moov 或银行卡。",
+        "s1": "在“收银”（或订单上的“收款”）中选择餐桌。",
+        "s2": "选择支付方式。现金时输入实收金额，自动显示找零。",
+        "s3": "分账：“平均分”或“按菜品”。Orange Money 和 Moov 需要填写交易编号。",
+        "s4": "已付：订单变为“已付”，餐桌自动释放。打印收据或通过 WhatsApp 发送。"
+      },
+      "closing": {
+        "title": "做日结",
+        "intro": "晚上核对当天的收入。",
+        "s1": "打开“日结”：已收、钱箱现金、账单数、客单价。",
+        "s2": "按支付方式、按人员核对，查看折扣和取消。",
+        "s3": "下载 CSV 或打印为 PDF 用于记账。"
       }
     },
     "profileHint": {
@@ -2734,7 +2779,8 @@
       "manager": "管理菜单、团队、预订并跟踪经营情况。",
       "server": "接单和上菜、接待预订、释放餐桌。",
       "host": "接待顾客：预订、到店二维码、等待时间。",
-      "kitchen": "在厨房屏幕备餐并标记售罄菜品。"
+      "kitchen": "在厨房屏幕备餐并标记售罄菜品。",
+      "cashier": "结账收款、找零、开收据、做日结。"
     },
     "trainHint": "您看到的是该岗位看到的内容。"
   },
@@ -4125,6 +4171,47 @@
       "network": "无网络：收款未记录，请重试。",
       "forbidden": "您无权收款。",
       "error": "收款未能记录，请重试。"
+    }
+  },
+  "payments": {
+    "title": "支付",
+    "back": "设置",
+    "intro": "收银，以及即将推出的顾客在线支付。",
+    "settingsHint": "收银规则和在线支付（Orange Money、Moov、银行卡）。",
+    "open": "打开支付设置",
+    "cashierTitle": "收银",
+    "cashierHint": "折扣需要填写原因。超过账单此比例的折扣，只有经理或店主可以给。",
+    "discountApproval": "无需经理的最高折扣",
+    "save": "保存",
+    "onlineTitle": "在线支付",
+    "onlineHint": "您的顾客将可以用手机付款（“立即支付”）。与运营商的对接即将推出；在此之前，请在收银处收款（现金、Orange Money、Moov、银行卡）。",
+    "noKey": "平台尚未安装凭证加密密钥。RestoCool 团队会在开放在线支付前完成设置。",
+    "providers": {
+      "cinetpay": "CinetPay",
+      "paydunya": "PayDunya",
+      "ligdicash": "Ligdicash",
+      "orange_money": "Orange Money（直连）",
+      "moov_money": "Moov Money（直连）"
+    },
+    "soon": "即将推出",
+    "enabled": "已开启",
+    "disabled": "已关闭",
+    "enable": "为我的顾客开启",
+    "mode": "模式",
+    "modeTest": "测试",
+    "modeLive": "正式",
+    "savedPlaceholder": "••••••（已保存）",
+    "writeOnly": "凭证不会再次显示。留空则保留已保存的凭证。",
+    "test": "测试连接",
+    "ok": {
+      "saved": "设置已保存。",
+      "tested": "连接成功。",
+      "cashier": "收银规则已保存。"
+    },
+    "errors": {
+      "no_key": "目前无法保存凭证（缺少加密密钥）。",
+      "credentials_missing": "开启前请输入凭证。",
+      "not_available": "该在线支付方式尚未推出。"
     }
   }
 }

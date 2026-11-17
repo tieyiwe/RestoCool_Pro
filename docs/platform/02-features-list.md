@@ -31,7 +31,7 @@
 | « Attente actuelle : environ 45 min » shown on busy days | P B | Live |
 | Reviews: 1–5 stars and a comment after being served; stars next to the business name | P B | Live |
 | Business offers and dish promotions (« Offres du moment ») | B | Live |
-| Pay online (Orange Money, Moov, card) | – | Coming |
+| Pay online from the phone (« Payer maintenant ») | – | Coming (the plumbing is ready; a provider must be connected) |
 | Loyalty card | – | Coming |
 
 ## For the business (app `/app`)
@@ -63,8 +63,11 @@
 | Scanner in the app: customer order QR, reservation QR, numéro RC | P B | Live |
 | Staff actions work offline (« ⏳ en attente ») and sync when the network returns | P B | Live |
 | Order history with filters and CSV export | P B | Live |
+| Orders show « Payée » to the customer when the bill is settled | P B | Live |
 | Staff take an order for a customer from the app | – | Coming |
-| Mark paid (cash / Orange Money / Moov), split bill, discounts, receipts, daily closing | – | Coming |
+| « Caisse »: bills to collect by table; « Encaisser »: cash with change, Orange Money / Moov with reference, card; split in equal parts or by dish; « sur demande » price; discounts with a reason (above 20 % only managers/owner); the table frees itself when paid | P B | Live |
+| Receipts (print / PDF, WhatsApp) and « Clôture de caisse » (by method, person, category, discounts, cancellations; CSV and PDF) | P B | Live |
+| Online payment plumbing (provider interface, « manual » provider, CinetPay / PayDunya / Ligdicash / Orange Money / Moov adapters waiting to be connected, webhooks, reconciliation, encrypted credentials) | – | Live (no provider connected yet) |
 
 ### Reservations
 
@@ -125,5 +128,6 @@
 | Marketing campaigns on the home page and free menus | Live |
 | Reviews moderation view (everything kept), deletion requests, activity and errors | Live |
 | Collaborators with roles and permissions, invitation emails, activity log | Live |
+| « Feature usage »: cash register (collected, by method, bills, average ticket, discounts) | Live |
 | Read-only impersonation of a business | Coming |
 | Automatic plan payment | Coming |

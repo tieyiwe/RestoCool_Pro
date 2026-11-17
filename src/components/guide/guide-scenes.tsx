@@ -26,13 +26,15 @@ export type GuideId =
   | "releaseTable"
   | "reviews"
   | "sharedOrder"
-  | "offline";
+  | "offline"
+  | "collect"
+  | "closing";
 
 /**
  * Who a tutorial is for. The owner sees every profile (to train the team or show a screen);
  * managers see their team's profiles; others see their own.
  */
-export const PROFILES = ["owner", "manager", "server", "host", "kitchen"] as const;
+export const PROFILES = ["owner", "manager", "server", "host", "kitchen", "cashier"] as const;
 export type Profile = (typeof PROFILES)[number];
 /** Kept for older imports. */
 export type Audience = Profile;
@@ -47,6 +49,8 @@ export const GUIDES: Array<{ id: GuideId; profiles: Profile[]; steps: number; ic
   { id: "reviews", profiles: ["owner", "manager"], steps: 3, icon: "⭐", href: "/app/reviews" },
   { id: "analytics", profiles: ["owner", "manager"], steps: 3, icon: "📊", href: "/app" },
   { id: "service", profiles: ["owner", "manager", "server"], steps: 4, icon: "🛎️", href: "/app/service" },
+  { id: "collect", profiles: ["owner", "manager", "server", "cashier"], steps: 4, icon: "💰", href: "/app/cashier" },
+  { id: "closing", profiles: ["owner", "manager", "cashier"], steps: 3, icon: "📊", href: "/app/closing" },
   { id: "confirm", profiles: ["manager", "server", "host"], steps: 3, icon: "✅", href: "/app/service" },
   { id: "serve", profiles: ["server"], steps: 3, icon: "🍛", href: "/app/service" },
   { id: "releaseTable", profiles: ["owner", "manager", "server"], steps: 3, icon: "🪑", href: "/app/service" },
@@ -55,8 +59,8 @@ export const GUIDES: Array<{ id: GuideId; profiles: Profile[]; steps: number; ic
   { id: "scan", profiles: ["server", "host"], steps: 3, icon: "📱", href: null },
   { id: "kitchen", profiles: ["kitchen"], steps: 4, icon: "👩🏾‍🍳", href: "/app/kitchen" },
   { id: "soldout", profiles: ["manager", "server", "kitchen"], steps: 3, icon: "🚫", href: "/app/kitchen" },
-  { id: "offline", profiles: ["manager", "server", "kitchen", "host"], steps: 3, icon: "📶", href: null },
-  { id: "checkin", profiles: ["manager", "server", "host", "kitchen"], steps: 4, icon: "🕘", href: "/pointage" },
+  { id: "offline", profiles: ["manager", "server", "kitchen", "host", "cashier"], steps: 3, icon: "📶", href: null },
+  { id: "checkin", profiles: ["manager", "server", "host", "kitchen", "cashier"], steps: 4, icon: "🕘", href: "/pointage" },
   { id: "rc", profiles: ["server", "host"], steps: 3, icon: "🔢", href: "/c" },
 ];
 
@@ -885,6 +889,80 @@ export function sceneFor(id: GuideId, step: number, L: (k: string) => string): S
         return { screen: <><span className="bg-red-700 px-2 py-1.5 text-center text-[10px] font-bold text-white">📶 {L("offlineBanner")}</span>{body(<OrderCard no={L("orderNo")} seat="4" status={L("sent")}><Btn on>{L("confirm")}</Btn></OrderCard>)}</>, tap: { x: 30, y: 58 } };
       if (step === 1) return { screen: <><span className="bg-red-700 px-2 py-1.5 text-center text-[10px] font-bold text-white">📶 {L("offlineBanner")}</span>{body(<OrderCard no={L("orderNo")} seat="4" status={L("pendingSync")} pop />)}</> };
       return { screen: <><span className="bg-emerald-700 px-2 py-1.5 text-center text-[10px] font-bold text-white">✓ {L("backOnline")}</span>{body(<OrderCard no={L("orderNo")} seat="4" status={L("inKitchen")} />)}</> };
+    }
+    case "collect": {
+      const till = (inner: React.ReactNode, tap?: { x: number; y: number }) => ({ screen: <><Bar title={L("cashierTitle")} />{body(inner)}</>, tap });
+      if (step === 0)
+        return till(
+          <div className="demo-pop flex flex-col gap-1 rounded-xl border-2 border-emerald-500 bg-white p-2">
+            <span className="text-[13px] font-extrabold text-[#17231C]">{L("table")} 4</span>
+            <span className="text-[13px] font-extrabold text-[#17231C]">6 500 F</span>
+            <Btn on>💰 {L("collectBtn")}</Btn>
+          </div>,
+          { x: 50, y: 52 },
+        );
+      if (step === 1)
+        return till(
+          <>
+            <span className="grid grid-cols-3 gap-1">{["💵", "🟠", "🔵"].map((i, n) => <span key={i} className={cn("rounded-lg border-2 py-1 text-center text-sm", n === 0 ? "demo-pulse border-[#0F6B3E] bg-[#0F6B3E]/10" : "border-[#E8DCC7] bg-white")}>{i}</span>)}</span>
+            <Field label={L("received")} value="10 000 F" focus />
+            <span className="rounded-lg bg-amber-100 p-1.5 text-[11px] font-extrabold text-amber-950">{L("changeDemo")}</span>
+          </>,
+          { x: 20, y: 22 },
+        );
+      if (step === 2)
+        return till(
+          <>
+            <span className="grid grid-cols-3 gap-1 rounded-lg bg-[#F6EEDF] p-1 text-[9px] font-bold">{[L("all"), L("parts"), L("byDish")].map((x, n) => <span key={x} className={cn("rounded py-1 text-center", n === 1 && "demo-pulse bg-white")}>{x}</span>)}</span>
+            <span className="text-[10px] text-[#17231C]">{L("partDemo")}</span>
+            <Field label={L("referenceLabel")} value="PP2311.1234" focus />
+          </>,
+          { x: 50, y: 20 },
+        );
+      return till(
+        <>
+          <span className="demo-pop rounded-xl bg-emerald-50 p-2 text-center text-[12px] font-extrabold text-emerald-900">✅ {L("paidDemo")}</span>
+          <Btn tone="ghost">🧾 {L("receiptBtn")}</Btn>
+          <Btn tone="green">💬 WhatsApp</Btn>
+        </>,
+      );
+    }
+    case "closing": {
+      if (step === 0)
+        return {
+          screen: (
+            <>
+              <Bar title={L("closingTitle")} />
+              {body(
+                <span className="grid grid-cols-2 gap-1">
+                  {[[L("collectedLabel"), "184 500 F"], [L("cashLabel"), "96 000 F"], [L("billsLabel"), "37"], [L("avgLabel"), "4 990 F"]].map(([k, v]) => (
+                    <span key={k} className="rounded-lg bg-white p-1.5 shadow-sm">
+                      <span className="block text-[8px] text-[#5B6B60]">{k}</span>
+                      <span className="text-[11px] font-extrabold text-[#17231C]">{v}</span>
+                    </span>
+                  ))}
+                </span>,
+              )}
+            </>
+          ),
+        };
+      if (step === 1)
+        return {
+          screen: (
+            <>
+              <Bar title={L("closingTitle")} />
+              {body(
+                <span className="flex flex-col gap-1 rounded-lg bg-white p-2 text-[10px] text-[#17231C] shadow-sm">
+                  <span className="flex justify-between"><span>💵 {L("cashLabel")}</span><b>96 000 F</b></span>
+                  <span className="flex justify-between"><span>🟠 Orange Money</span><b>61 500 F</b></span>
+                  <span className="flex justify-between"><span>🔵 Moov Money</span><b>27 000 F</b></span>
+                  <span className="demo-pulse flex justify-between text-red-700"><span>{L("discountsLabel")}</span><b>− 2 000 F</b></span>
+                </span>,
+              )}
+            </>
+          ),
+        };
+      return { screen: <><Bar title={L("closingTitle")} />{body(<span className="flex gap-1"><Btn on>⬇️ CSV</Btn><Btn tone="ghost">🖨️ PDF</Btn></span>)}</>, tap: { x: 25, y: 22 } };
     }
     case "rc": {
       if (step === 0)
