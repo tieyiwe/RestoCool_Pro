@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("the owner learns with animated tutorials (every profile); finishing one marks it watched on the dashboard", async ({ page }) => {
   await page.goto("/app");
-  await expect(page.getByTestId("learn-card")).toContainText("0 tutoriel(s) vu(s) sur 22");
+  await expect(page.getByTestId("learn-card")).toContainText("0 tutoriel(s) vu(s) sur 25");
   await page.getByTestId("learn-card").getByRole("link", { name: "Voir tous les tutoriels" }).click();
   await expect(page).toHaveURL(/\/app\/guide\?for=owner$/);
   await expect(page.getByTestId("guide-player")).toHaveAttribute("data-guide", "menu");
@@ -12,14 +12,14 @@ test("the owner learns with animated tutorials (every profile); finishing one ma
   // Step through « Ajouter vos plats » by hand (pauses autoplay) until the last step.
   for (let i = 0; i < 3; i++) await page.getByTestId("guide-next").click();
   await expect(page.getByTestId("guide-step").nth(3)).toHaveAttribute("aria-current", "step");
-  await expect(page.getByTestId("guide-progress")).toHaveText("1 tutoriel(s) vu(s) sur 22");
+  await expect(page.getByTestId("guide-progress")).toHaveText("1 tutoriel(s) vu(s) sur 25");
   await expect(page.getByTestId("guide-card").first()).toContainText("Vu");
 
   // « Essayer maintenant » opens the real feature.
   await page.getByTestId("guide-try").click();
   await expect(page).toHaveURL(/\/app\/menu$/, { timeout: 30_000 });
   await page.goto("/app");
-  await expect(page.getByTestId("learn-card")).toContainText("1 tutoriel(s) vu(s) sur 22");
+  await expect(page.getByTestId("learn-card")).toContainText("1 tutoriel(s) vu(s) sur 25");
 
   // Showing a server their tutorials: the « Serveur » tab, with the new ones.
   await page.goto("/app/guide?for=server");
@@ -47,7 +47,7 @@ test("personnel tutorials are public (no account) and linked from the check-in p
   // Staff-app links are hidden on the public page (they need a sign-in).
   await expect(page.getByTestId("guide-try")).toHaveCount(0);
   await page.getByTestId("guide-tab-manager").click();
-  await expect(page.getByTestId("guide-card")).toHaveCount(16);
+  await expect(page.getByTestId("guide-card")).toHaveCount(19);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
   await ctx.close();
 });
