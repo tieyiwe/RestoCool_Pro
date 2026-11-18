@@ -57,10 +57,11 @@ export const env = {
   },
   superadminEmails(): Set<string> {
     return new Set(
+      // Tolerant: commas, semicolons, spaces or new lines between emails; quotes and <…> ignored.
       (process.env.SUPERADMIN_EMAILS ?? "")
-        .split(",")
-        .map((e) => e.trim().toLowerCase())
-        .filter(Boolean),
+        .split(/[\s,;]+/)
+        .map((e) => e.replace(/^["'<]+|["'>]+$/g, "").trim().toLowerCase())
+        .filter((e) => e.includes("@")),
     );
   },
   appUrl(): string {
