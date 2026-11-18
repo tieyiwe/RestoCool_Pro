@@ -14,6 +14,8 @@ import { livePresence } from "@/lib/usage/presence";
 import { platformReviews, reviewsEnabled } from "@/lib/reviews";
 import { featureUsage } from "@/lib/admin/features";
 import { FeatureUsageCard } from "@/components/admin/feature-usage";
+import { PaymentsCard } from "@/components/admin/payments-card";
+import { adminPayments } from "@/lib/admin/payments";
 import { formatBfPhone, formatFCFA, telHref, whatsappHref } from "@/lib/format";
 import {
   changePlanAction,
@@ -60,6 +62,7 @@ export default async function AdminBusiness({
   const now = await ordersNow(getDb(), d.r.id);
   const rv = await platformReviews(getDb(), { restaurantId: d.r.id, limit: 5 });
   const usage = await featureUsage(getDb(), d.r.id);
+  const pay = hasPerm(sa, "billing.read") ? await adminPayments(getDb(), d.r.id) : null;
   const [t, tp, format, locale] = await Promise.all([
     adminI18n().then((x) => x.t),
     adminI18n().then((x) => x.tp),
@@ -223,6 +226,13 @@ export default async function AdminBusiness({
       </section>
 
       <FeatureUsageCard u={usage} t={t as never} perBusiness />
+
+      {pay && (
+        <section className="rounded-2xl border border-border bg-surface p-4" data-testid="admin-business-payments">
+          <h2 className="mb-3 text-lg font-bold">🌐 {t("payments.businessTitle")}</h2>
+          <PaymentsCard p={pay} t={t as never} perBusiness when={(iso) => (iso ? format.dateTime(new Date(iso), { dateStyle: "short", timeStyle: "short" }) : "—")} />
+        </section>
+      )}
 
       {/* Customer reviews: everything left, including what the business hid or deleted. */}
       <section className="rounded-2xl border border-border bg-surface p-4" data-testid="admin-business-reviews">

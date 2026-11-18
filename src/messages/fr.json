@@ -501,7 +501,8 @@
       "recovery": "Récupération d’accès",
       "marketing": "Marketing",
       "deletions": "Demandes de suppression",
-      "reviews": "Avis"
+      "reviews": "Avis",
+      "payments": "Paiements en ligne"
     },
     "empty": "Rien pour l’instant.",
     "draft": "Brouillon",
@@ -1357,6 +1358,63 @@
         "m_other": "Autre",
         "discounts": "Remises accordées",
         "businesses": "Établissements qui utilisent la caisse"
+      }
+    },
+    "payments": {
+      "title": "Paiements en ligne",
+      "businessTitle": "Paiements en ligne",
+      "intro": "Chaque établissement peut connecter son propre compte marchand Orange Money / Moov ou un agrégateur ; ses clients paient alors l’addition depuis leur téléphone. Les identifiants sont chiffrés et jamais affichés ici.",
+      "keyOk": "Clé de chiffrement en place (PAYMENT_ENCRYPTION_KEY)",
+      "keyMissing": "Clé de chiffrement manquante : ajoutez PAYMENT_ENCRYPTION_KEY dans les Secrets Replit avant qu’un établissement n’enregistre ses identifiants",
+      "keyHint": "64 caractères hexadécimaux. Ne la changez jamais une fois des identifiants enregistrés (voir le document 8, « Connecting mobile money »).",
+      "kpi": {
+        "online": "Tentatives en ligne (30 j)",
+        "succeeded": "Payées en ligne (30 j)",
+        "amount": "Encaissé en ligne (30 j)",
+        "pending": "En attente maintenant",
+        "failed": "Échouées / expirées (30 j)",
+        "webhooks": "Notifications reçues (30 j)",
+        "invalid": "Signatures invalides (30 j)"
+      },
+      "providers": "Prestataires",
+      "ready": "Connecteur prêt",
+      "stub": "Connecteur pas encore écrit",
+      "counts": "{saved} enregistrés · {on} actifs · {live} en réel",
+      "on": "Actif",
+      "off": "Inactif",
+      "saved": "Enregistré, pas actif",
+      "notSet": "Non connecté",
+      "live": "Réel",
+      "test": "Test",
+      "credsSaved": "identifiants enregistrés",
+      "credsMissing": "pas d’identifiants",
+      "configs": "Établissements ayant connecté un prestataire",
+      "noConfigs": "Aucun établissement n’a encore connecté de prestataire.",
+      "neverShown": "Les identifiants sont en écriture seule : personne dans la console ne peut les lire.",
+      "recent": "Dernières tentatives de paiement (en ligne, et tout ce qui n’a pas abouti)",
+      "noRecent": "Aucune tentative pour l’instant.",
+      "webhooksTitle": "Notifications des prestataires (webhooks)",
+      "noWebhooks": "Aucune notification reçue pour l’instant.",
+      "badSignature": "Signature invalide",
+      "hookFailed": "Traitement échoué",
+      "processed": "Traitée",
+      "received": "Reçue",
+      "names": {
+        "cinetpay": "CinetPay",
+        "paydunya": "PayDunya",
+        "ligdicash": "Ligdicash",
+        "orange_money": "Orange Money (direct)",
+        "moov_money": "Moov Money (direct)",
+        "manual": "Caisse (à la main)"
+      },
+      "status": {
+        "created": "Créée",
+        "pending": "En attente",
+        "succeeded": "Payée",
+        "failed": "Échouée",
+        "cancelled": "Annulée",
+        "expired": "Expirée",
+        "refunded": "Remboursée"
       }
     }
   },

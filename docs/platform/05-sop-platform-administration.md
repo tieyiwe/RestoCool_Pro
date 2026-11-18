@@ -17,12 +17,13 @@ Every action in the console is recorded with the person's email (Team → Activi
 1. **Overview:**
    - new businesses, orders today, open errors;
    - « Plans ending within 14 days »;
-   - « Feature usage » (reservations, shared selections, tables, reviews).
+   - « Feature usage » (cash register, reservations, shared selections, tables, reviews).
+   - **Online payments** (🌐): encryption key in place, providers, businesses that connected one, failed attempts and bad webhook signatures.
 2. **Support:**
    - answer « Blocking » requests first, then the oldest;
    - target: first answer within 2 hours in opening hours.
 3. **Deletions:** handle any pending deletion request (section 6).
-4. **Activity & errors:** look at new error groups; mark them resolved once understood.
+4. **Activity & errors:** look at new error groups; mark them resolved once understood. If a console figure shows 0 where you expect more, look here for `admin_feature_usage_failed` or `admin_payments_failed`: one figure failed (often a database change not applied at publish) and the rest of the console kept working.
 5. **Live:** during lunch and dinner, check « orders waiting » and « late > 15 min ». A business with many late orders may need a call.
 
 ## 2. Support requests
@@ -96,6 +97,16 @@ No data is ever deleted.
 **Suspend / reactivate:** always with a reason. Reactivating restores what the plan says.
 
 **A business wants its customers to pay online** (its own Orange Money / Moov / aggregator): follow [Connecting mobile money](08-connecting-mobile-money.md), section B. Never ask for its API keys: the owner types them in Paramètres → « Paiements ».
+
+**Online payments page** (🌐, needs « billing.read »):
+
+- the encryption key status (`PAYMENT_ENCRYPTION_KEY`);
+- each provider: « Connector ready » or « Connector not written yet », and how many businesses saved / switched on / went live;
+- the businesses that connected a provider (mode, on/off, credentials saved or not: the credentials themselves are never shown);
+- the latest attempts (paid, waiting, failed, expired, with the error);
+- the provider notifications (webhooks), with bad signatures in red.
+
+Each business page has the same « Online payments » section for that business.
 
 ## 5. Publishing, featuring, marketing
 

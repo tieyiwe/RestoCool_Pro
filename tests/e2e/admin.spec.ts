@@ -108,3 +108,15 @@ test("console: « Platform home » opens the public home page in a new tab", asy
   await expect(page).toHaveURL(/\/admin_pro/); // the console stays open
   await tab.close();
 });
+
+test("console: online payments page lists the providers (none written yet) and each business page has its payments section", async ({ page }) => {
+  await page.goto("/admin_pro/payments");
+  await expect(page.getByTestId("admin-payments")).toBeVisible();
+  await expect(page.getByTestId("admin-payments-key")).toBeVisible();
+  await expect(page.getByTestId("admin-provider")).toHaveCount(5);
+  await expect(page.locator('[data-testid="admin-provider"][data-provider="orange_money"]')).toContainText("Connector not written yet");
+  await page.goto("/admin_pro/businesses?q=Restaurant%20D%C3%A9mo");
+  await page.getByRole("link", { name: "Restaurant Démo" }).first().click();
+  await expect(page.getByTestId("admin-business-payments")).toBeVisible();
+  await expect(page.getByTestId("feature-usage").or(page.getByTestId("admin-business-payments")).first()).toBeVisible();
+});

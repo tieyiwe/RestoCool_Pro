@@ -30,12 +30,26 @@ export function UpdateWatcher({ version, text }: { version: string; text: { titl
   const [ready, setReady] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const lastTouch = useRef(Date.now());
+  const targetRef = useRef<string | null>(null);
+  const reload = () => {
+    try {
+      if (targetRef.current) sessionStorage.setItem("rc-reloaded-for", targetRef.current);
+    } catch {}
+    window.location.reload();
+  };
 
   const check = useCallback(async () => {
     if (!navigator.onLine) return;
     const res = await fetch("/api/version", { cache: "no-store" }).catch(() => null);
     const body = res?.ok ? ((await res.json().catch(() => null)) as { v?: string } | null) : null;
-    if (body?.v && body.v !== version) setReady(true);
+    if (!body?.v || body.v === version) return;
+    // Never loop: if a reload for this version already happened and the page is still older
+    // (a cache in between), stop reloading automatically; owners still get the pop-up.
+    try {
+      if (sessionStorage.getItem("rc-reloaded-for") === body.v && !asksFirst(window.location.pathname)) return;
+    } catch {}
+    targetRef.current = body.v;
+    setReady(true);
   }, [version]);
 
   useEffect(() => {
@@ -59,11 +73,11 @@ export function UpdateWatcher({ version, text }: { version: string; text: { titl
     if (!ready || asksFirst(path)) return;
     const tryNow = () => {
       if (!navigator.onLine || busy()) return;
-      if (document.visibilityState === "hidden" || Date.now() - lastTouch.current > IDLE_MS) window.location.reload();
+      if (document.visibilityState === "hidden" || Date.now() - lastTouch.current > IDLE_MS) reload();
     };
     const onVisible = () => {
       // Coming back to the screen: update before they start using it.
-      if (document.visibilityState === "visible" && navigator.onLine && !busy()) window.location.reload();
+      if (document.visibilityState === "visible" && navigator.onLine && !busy()) reload();
     };
     document.addEventListener("visibilitychange", onVisible);
     const id = window.setInterval(tryNow, 5000);

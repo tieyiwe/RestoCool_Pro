@@ -1,6 +1,7 @@
 import "server-only";
 import { sql } from "drizzle-orm";
 import type { DB } from "@/db";
+import { log } from "@/lib/log";
 
 /**
  * How the recent customer and service features are used (super admin only): shared selections,
@@ -35,7 +36,16 @@ const n = (v: unknown) => Number(v ?? 0) || 0;
 export async function featureUsage(db: DB, restaurantId?: string, now = new Date()): Promise<FeatureUsage> {
   const since = new Date(now.getTime() - 30 * 86_400_000);
   const only = (col: string) => (restaurantId ? sql`and ${sql.raw(col)} = ${restaurantId}` : sql``);
-  const one = async (s: ReturnType<typeof sql>) => ((await db.execute<Record<string, unknown>>(s)).rows[0] ?? {}) as Record<string, unknown>;
+  // One failing figure (e.g. a table a migration has not created yet) never breaks the console page:
+  // it shows 0 and the error goes to « Activity & errors ».
+  const one = async (s: ReturnType<typeof sql>) => {
+    try {
+      return ((await db.execute<Record<string, unknown>>(s)).rows[0] ?? {}) as Record<string, unknown>;
+    } catch (err) {
+      log.error("admin_feature_usage_failed", { error: err instanceof Error ? err.message : String(err) });
+      return {} as Record<string, unknown>;
+    }
+  };
 
   const [shared, tables, released, reviews, switches] = await Promise.all([
     one(sql`

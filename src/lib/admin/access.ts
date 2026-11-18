@@ -80,6 +80,7 @@ export const PAGE_PERM: Record<string, AdminPerm | null> = {
   "/admin_pro/deletions": "businesses.write",
   "/admin_pro/reviews": "businesses.read",
   "/admin_pro/billing": "billing.read",
+  "/admin_pro/payments": "billing.read",
   "/admin_pro/map": "businesses.read",
   "/admin_pro/support": "support",
   "/admin_pro/recovery": "recovery",

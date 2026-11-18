@@ -501,7 +501,8 @@
       "recovery": "Account recovery",
       "marketing": "Marketing",
       "deletions": "Deletion requests",
-      "reviews": "Reviews"
+      "reviews": "Reviews",
+      "payments": "Online payments"
     },
     "empty": "Nothing yet.",
     "draft": "Draft",
@@ -1357,6 +1358,63 @@
         "m_other": "Other",
         "discounts": "Discounts given",
         "businesses": "Businesses using the register"
+      }
+    },
+    "payments": {
+      "title": "Online payments",
+      "businessTitle": "Online payments",
+      "intro": "Each business can connect its own Orange Money / Moov merchant account or an aggregator; customers then pay their bill from their phone. Credentials are encrypted and never shown here.",
+      "keyOk": "Encryption key set (PAYMENT_ENCRYPTION_KEY)",
+      "keyMissing": "Encryption key missing: add PAYMENT_ENCRYPTION_KEY in Replit Secrets before any business saves credentials",
+      "keyHint": "64 hexadecimal characters. Never change it once credentials are saved (see document 8, « Connecting mobile money »).",
+      "kpi": {
+        "online": "Online attempts (30 d)",
+        "succeeded": "Paid online (30 d)",
+        "amount": "Collected online (30 d)",
+        "pending": "Waiting now",
+        "failed": "Failed / expired (30 d)",
+        "webhooks": "Notifications received (30 d)",
+        "invalid": "Bad signatures (30 d)"
+      },
+      "providers": "Providers",
+      "ready": "Connector ready",
+      "stub": "Connector not written yet",
+      "counts": "{saved} saved · {on} on · {live} live",
+      "on": "On",
+      "off": "Off",
+      "saved": "Saved, not on",
+      "notSet": "Not connected",
+      "live": "Live",
+      "test": "Test",
+      "credsSaved": "credentials saved",
+      "credsMissing": "no credentials",
+      "configs": "Businesses that connected a provider",
+      "noConfigs": "No business has connected a provider yet.",
+      "neverShown": "Credentials are write-only: nobody in the console can read them.",
+      "recent": "Latest payment attempts (online, and anything not completed)",
+      "noRecent": "No attempt yet.",
+      "webhooksTitle": "Provider notifications (webhooks)",
+      "noWebhooks": "No notification received yet.",
+      "badSignature": "Bad signature",
+      "hookFailed": "Processing failed",
+      "processed": "Processed",
+      "received": "Received",
+      "names": {
+        "cinetpay": "CinetPay",
+        "paydunya": "PayDunya",
+        "ligdicash": "Ligdicash",
+        "orange_money": "Orange Money (direct)",
+        "moov_money": "Moov Money (direct)",
+        "manual": "Cash register (by hand)"
+      },
+      "status": {
+        "created": "Created",
+        "pending": "Waiting",
+        "succeeded": "Paid",
+        "failed": "Failed",
+        "cancelled": "Cancelled",
+        "expired": "Expired",
+        "refunded": "Refunded"
       }
     }
   },
