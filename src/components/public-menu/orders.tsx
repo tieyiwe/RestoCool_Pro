@@ -146,7 +146,7 @@ export function useLiveOrders({
     const onVisible = () => document.visibilityState === "visible" && void refresh();
     document.addEventListener("visibilitychange", onVisible);
     // Safety net: a live connection can stall silently on mobile networks.
-    const safety = window.setInterval(() => document.visibilityState === "visible" && void refresh(), 20_000);
+    const safety = window.setInterval(() => document.visibilityState === "visible" && void refresh(), 2 * 60_000);
     return () => {
       es?.close();
       stopPolling();

@@ -5,7 +5,7 @@ import { CHANNEL, parseEvent, type RtEvent } from "./events";
 
 /** Receives every live event, or `null` once when the LISTEN connection is lost. */
 type Listener = (ev: RtEvent | null) => void;
-type State = { client: Client | null; connecting: Promise<void> | null; listeners: Set<Listener>; retry: number };
+type State = { client: Client | null; connecting: Promise<void> | null; listeners: Set<Listener>; retry: number; idleTimer?: ReturnType<typeof setTimeout> | null };
 
 // One LISTEN connection per server process, shared by every open stream (kept across hot reloads).
 const g = globalThis as unknown as { __rcRealtime?: State };
@@ -51,6 +51,10 @@ async function connect(): Promise<void> {
 /** Subscribe to every live event of this process. Returns the unsubscribe function. */
 export async function subscribe(fn: Listener): Promise<() => void> {
   state.listeners.add(fn);
+  if (state.idleTimer) {
+    clearTimeout(state.idleTimer);
+    state.idleTimer = null;
+  }
   try {
     await connect();
   } catch (err) {
@@ -58,6 +62,20 @@ export async function subscribe(fn: Listener): Promise<() => void> {
   }
   return () => {
     state.listeners.delete(fn);
+    // Nobody listening for a minute: close the LISTEN connection so the database can sleep.
+    if (state.listeners.size === 0 && !state.idleTimer) {
+      state.idleTimer = setTimeout(() => {
+        state.idleTimer = null;
+        if (state.listeners.size > 0 || !state.client) return;
+        const c = state.client;
+        state.client = null;
+        c.removeAllListeners("end");
+        c.removeAllListeners("error");
+        c.on("error", () => {});
+        c.end().catch(() => {});
+      }, 60_000);
+      state.idleTimer.unref?.();
+    }
   };
 }
 

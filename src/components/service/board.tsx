@@ -116,8 +116,9 @@ export function useServiceOrders(onNew: (o: StaffOrder, before: StaffOrder["stat
     }
     const onVisible = () => document.visibilityState === "visible" && void refresh();
     document.addEventListener("visibilitychange", onVisible);
-    // Safety net: a live connection can stall silently (tablet on a weak network).
-    const safety = window.setInterval(() => void refresh(), 20_000);
+    // Safety net: a live connection can stall silently (tablet on a weak network). Live events do
+    // the real work; this slow check keeps the server and database quiet (Replit bills usage).
+    const safety = window.setInterval(() => document.visibilityState === "visible" && void refresh(), 2 * 60_000);
     return () => {
       es?.close();
       window.clearInterval(poll);

@@ -50,7 +50,8 @@ export function MyTables({ initial, perms }: { initial: Data; perms: { take: boo
     es?.addEventListener("order", soon);
     es?.addEventListener("session", soon);
     es?.addEventListener("notice", soon);
-    const id = setInterval(() => document.visibilityState === "visible" && void load(), 20_000);
+    // Live events refresh it; this slow check is only a safety net.
+    const id = setInterval(() => document.visibilityState === "visible" && void load(), 2 * 60_000);
     return () => {
       es?.close();
       clearInterval(id);

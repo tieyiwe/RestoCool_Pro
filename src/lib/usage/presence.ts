@@ -12,13 +12,29 @@ export const AUDIENCES: Audience[] = ["owner", "manager", "staff", "customer", "
 export const DEVICES: Device[] = ["phone", "tablet", "desktop"];
 
 type Entry = { audience: Audience; device: Device; os: Os; standalone: boolean; restaurantId: string | null; at: number };
-type State = { live: Map<string, Entry>; seenToday: Set<string>; day: string; timer: ReturnType<typeof setInterval> | null };
+type State = { live: Map<string, Entry>; seenToday: Set<string>; day: string; timer: ReturnType<typeof setInterval> | null; lastActivity: number; prunedDay: string };
 
 /** Who has a screen open right now, in this server process (one long-lived process: Reserved VM). */
 const g = globalThis as unknown as { __rcPresence?: State };
-const state: State = (g.__rcPresence ??= { live: new Map(), seenToday: new Set(), day: usageDay(), timer: null });
+const state: State = (g.__rcPresence ??= { live: new Map(), seenToday: new Set(), day: usageDay(), timer: null, lastActivity: 0, prunedDay: "" });
+state.lastActivity ??= 0;
+state.prunedDay ??= "";
 
-export const LIVE_MS = 2 * 60_000;
+/** Open screens ping every 5 minutes (BEAT_MS in components/usage/beat.tsx): « live » = a ping in the last 6. */
+export const BEAT_MINUTES = 5;
+export const LIVE_MS = (BEAT_MINUTES + 1) * 60_000;
+
+/**
+ * Someone used RestoCool recently (a screen pinged, or the server answered a request). Background
+ * jobs only run then: at night, with nobody on the platform, the database can go to sleep, which is
+ * what Replit bills by. Everything those jobs do is also done when a page loads.
+ */
+export function markActivity(now = Date.now()) {
+  state.lastActivity = now;
+}
+export function recentlyActive(windowMs = 20 * 60_000, now = Date.now()) {
+  return now - state.lastActivity < windowMs;
+}
 
 /** Anonymous key: a hash, never the raw id. */
 export const visitorKey = (raw: string) => createHash("sha256").update(`rc-visitor:${raw}`).digest("base64url").slice(0, 22);
@@ -26,6 +42,7 @@ export const visitorKey = (raw: string) => createHash("sha256").update(`rc-visit
 /** A heartbeat: keep the person in « live now » and count them once per day. */
 export function touchPresence(key: string, e: Omit<Entry, "at">) {
   const now = Date.now();
+  state.lastActivity = now;
   state.live.set(`${key}:${e.audience}`, { ...e, at: now });
   // Never let the map grow without bound (bots…): drop the oldest entries.
   if (state.live.size > 50_000) prune(now);
@@ -90,10 +107,14 @@ export async function flushTrafficMinute(now = new Date()) {
     const [audience, device] = k.split("|") as [string, string];
     return { minute, audience, device, n };
   });
+  // Nobody on the platform: write nothing, so the database can sleep.
+  if (!rows.length) return;
   const db = getDb();
-  if (rows.length) await db.insert(trafficMinutes).values(rows).onConflictDoUpdate({ target: [trafficMinutes.minute, trafficMinutes.audience, trafficMinutes.device], set: { n: sql`excluded.n` } });
-  if (minute.getUTCMinutes() === 0) {
-    // Once an hour: keep 120 days of minutes and 400 days of visitors.
+  await db.insert(trafficMinutes).values(rows).onConflictDoUpdate({ target: [trafficMinutes.minute, trafficMinutes.audience, trafficMinutes.device], set: { n: sql`excluded.n` } });
+  const day = usageDay(now);
+  if (state.prunedDay !== day) {
+    state.prunedDay = day;
+    // Once a day (while someone is there): keep 120 days of minutes and 400 days of visitors.
     await db.delete(trafficMinutes).where(sql`${trafficMinutes.minute} < now() - interval '120 days'`);
     await db.delete(trafficVisitors).where(sql`${trafficVisitors.day} < (now() - interval '400 days')::date`);
   }

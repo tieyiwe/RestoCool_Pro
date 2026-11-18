@@ -135,7 +135,7 @@ export function useSeat({ slug, token, config, onToast, t, hold = false }: { slu
 
     const beat = () => {
       const now = Date.now();
-      if (now - lastBeat.current < 60_000) return;
+      if (now - lastBeat.current < 2 * 60_000) return;
       lastBeat.current = now;
       const s = seatRef.current;
       if (!s) return;

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 /** Refreshes a console page every `every` ms while it is visible, and shows when it last did. */
-export function AutoRefresh({ every = 30_000, label }: { every?: number; label: string }) {
+export function AutoRefresh({ every = 60_000, label }: { every?: number; label: string }) {
   const router = useRouter();
   const [at, setAt] = useState(() => new Date());
   useEffect(() => {

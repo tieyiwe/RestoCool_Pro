@@ -7,7 +7,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 type Popup = { id: string; kind: string; title: string; body: string; link: string | null };
 type Summary = { unread: number; support: number; popup: Popup | null };
 
-const POLL_MS = 45_000;
+/** The « notice » live event opens new messages at once; this is only a slow safety net. */
+const POLL_MS = 5 * 60_000;
 
 /**
  * Bell in the app header: unread messages from RestoCool + answers to support requests. Checks

@@ -20,10 +20,10 @@ export type PlatformSettings = { freeLaunch: boolean; announcement: Announcement
 const KEYS = ["freeLaunch", "announcement"] as const;
 
 let cache: { at: number; value: PlatformSettings } | null = null;
-const TTL_MS = 15_000;
+const TTL_MS = 5 * 60_000;
 
 /**
- * Platform settings (cached 15 s per server process). Never fails a page: on a database problem
+ * Platform settings (cached 5 min per server process; cleared at once when the console saves them). Never fails a page: on a database problem
  * the code defaults apply.
  */
 export async function getPlatformSettings(db: DB = getDb()): Promise<PlatformSettings> {

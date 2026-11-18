@@ -38,7 +38,8 @@ export function JoinPrompt({ initial }: { initial: Pending }) {
   useEffect(() => {
     const es = typeof EventSource === "undefined" ? null : new EventSource("/api/app/stream");
     es?.addEventListener("join", () => void refresh());
-    const id = setInterval(() => document.visibilityState === "visible" && void refresh(), 60_000);
+    // The « join » live event is the real signal; this is a slow safety net.
+    const id = setInterval(() => document.visibilityState === "visible" && void refresh(), 5 * 60_000);
     return () => {
       es?.close();
       clearInterval(id);

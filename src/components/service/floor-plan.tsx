@@ -55,7 +55,8 @@ export function FloorPlan({ initial, canRelease }: { initial: Floor; canRelease:
     const es = typeof EventSource === "undefined" ? null : new EventSource("/api/app/stream");
     es?.addEventListener("order", soon);
     es?.addEventListener("session", soon);
-    const id = setInterval(() => document.visibilityState === "visible" && void load(), 20_000);
+    // Live events refresh it; this slow check is only a safety net.
+    const id = setInterval(() => document.visibilityState === "visible" && void load(), 2 * 60_000);
     return () => {
       es?.close();
       clearInterval(id);

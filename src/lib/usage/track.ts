@@ -14,12 +14,13 @@ export async function recordUsage(db: DB, input: { restaurantId: string; memberI
   const view = input.kind === "view" ? 1 : 0;
   await db
     .insert(appUsage)
-    .values({ restaurantId: input.restaurantId, memberId: input.memberId, day: usageDay(), minutes: input.kind === "beat" ? 1 : 0, views: view, lastPath: path, via: input.via })
+    .values({ restaurantId: input.restaurantId, memberId: input.memberId, day: usageDay(), minutes: input.kind === "beat" ? 5 : 0, views: view, lastPath: path, via: input.via })
     .onConflictDoUpdate({
       target: [appUsage.restaurantId, appUsage.memberId, appUsage.day],
       set: {
         views: sql`${appUsage.views} + ${view}`,
-        minutes: sql`${appUsage.minutes} + case when ${input.kind} = 'beat' and ${appUsage.lastAt} < now() - interval '50 seconds' then 1 else 0 end`,
+        // A ping every 5 minutes counts 5 minutes (once, even with several tabs open).
+        minutes: sql`${appUsage.minutes} + case when ${input.kind} = 'beat' and ${appUsage.lastAt} < now() - interval '270 seconds' then 5 else 0 end`,
         lastPath: path,
         via: input.via,
         lastAt: sql`now()`,
@@ -27,5 +28,5 @@ export async function recordUsage(db: DB, input: { restaurantId: string; memberI
     });
 }
 
-/** « Live now »: a heartbeat in the last 2 minutes. */
-export const LIVE_WINDOW_SQL = sql`now() - interval '2 minutes'`;
+/** « Live now »: a heartbeat in the last 6 minutes (screens ping every 5). */
+export const LIVE_WINDOW_SQL = sql`now() - interval '6 minutes'`;

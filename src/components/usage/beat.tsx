@@ -3,7 +3,8 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-const BEAT_MS = 60_000;
+/** Every 5 minutes (server: BEAT_MINUTES / LIVE_MS in lib/usage/presence.ts). */
+const BEAT_MS = 5 * 60_000;
 
 function anonId(): string | undefined {
   try {
@@ -20,7 +21,7 @@ function anonId(): string | undefined {
 }
 
 /**
- * Live traffic: one tiny request when a page opens and every minute while it stays visible
+ * Live traffic: one tiny request when a page opens and every 5 minutes while it stays visible
  * (none while the screen is off or the tab hidden). The app screens also count usage time.
  * Nothing on the super admin console.
  */

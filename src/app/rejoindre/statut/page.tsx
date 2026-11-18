@@ -26,7 +26,7 @@ export default async function JoinStatusPage() {
         <p className="text-muted-foreground">{t("noRequest")}</p>
       ) : st.status === "pending" ? (
         <>
-          <AutoRefresh seconds={5} />
+          <AutoRefresh seconds={10} />
           <span className="relative flex size-16 items-center justify-center" aria-hidden>
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-or/40 motion-reduce:animate-none" />
             <span className="relative text-4xl">⏳</span>

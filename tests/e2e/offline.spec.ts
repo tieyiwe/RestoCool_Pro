@@ -75,27 +75,48 @@ test("staff offline: the board keeps the last orders, a « Confirmer » waits (�
   await phone.context().close();
 });
 
-test("a new version published: the owner on a computer gets « Mettre à jour »; a phone reloads by itself", async ({ page, browser }) => {
+test("a new version published: an open page checks once a week; the owner on a computer gets « Mettre à jour »; a phone reloads by itself", async ({ page, browser }) => {
   test.slow();
   const fakeNew = (p: Page) => p.route("**/api/version", (r) => r.fulfill({ json: { v: "new-version" } }));
+  // Count version requests: opening a page never asks (it is the current version).
+  let asked = 0;
+  const watch = (p: Page) => p.on("request", (r) => r.url().includes("/api/version") && asked++);
+  // « A week » shortened to 3 s for the test; the screen coming back triggers the check.
+  const shortWeek = () => ((window as unknown as { __rcUpdateCheckMs?: number }).__rcUpdateCheckMs = 3000);
+  const comeBack = (p: Page) => p.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
   if ((page.viewportSize()?.width ?? 0) >= 1024) {
+    await page.addInitScript(shortWeek);
     await fakeNew(page);
+    watch(page);
     await page.goto("/app");
+    await comeBack(page);
+    await expect(page.getByTestId("update-popup")).toHaveCount(0);
+    expect(asked).toBe(0);
+    await page.waitForTimeout(3500);
+    await comeBack(page);
     const popup = page.getByTestId("update-popup");
     await expect(popup).toBeVisible();
     await expect(popup).toContainText("Nouvelle version disponible");
+    expect(asked).toBe(1);
     const reloaded = page.waitForEvent("load");
     await popup.getByTestId("update-now").click();
     await reloaded;
   } else {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
     await ctx.addInitScript(skipWelcome);
+    await ctx.addInitScript(shortWeek);
     const phone = await ctx.newPage();
     await fakeNew(phone);
+    watch(phone);
     await phone.goto("/r/restaurant-demo");
     await expect(phone.getByTestId("update-popup")).toHaveCount(0);
-    // No touch for 20 s: the page reloads by itself (the cart and the seat are kept).
-    await phone.waitForEvent("load", { timeout: 45_000 });
+    expect(asked).toBe(0);
+    await phone.waitForTimeout(3500);
+    // No touch for 20 s after the check: the page reloads by itself (the cart and the seat are kept).
+    const reloaded = phone.waitForEvent("load", { timeout: 45_000 });
+    await comeBack(phone);
+    await reloaded;
+    expect(asked).toBeGreaterThanOrEqual(1);
     await ctx.close();
   }
 });

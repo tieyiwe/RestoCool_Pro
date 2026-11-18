@@ -20,7 +20,20 @@ export function LiveRefresh({ events = ["order"], every = 20_000 }: { events?: s
     for (const e of events) es?.addEventListener(e, refresh);
     // A message from the RestoCool team: the bell checks right away.
     es?.addEventListener("notice", () => window.dispatchEvent(new Event("rc:notice")));
-    const id = setInterval(() => document.visibilityState === "visible" && router.refresh(), every);
+    // Full page refreshes are costly: every `every` ms only while the live stream is down,
+    // otherwise a slow safety net every 5 minutes.
+    let down = !es;
+    if (es) {
+      es.onerror = () => (down = true);
+      es.addEventListener("ready", () => (down = false));
+    }
+    let last = Date.now();
+    const id = setInterval(() => {
+      if (document.visibilityState !== "visible") return;
+      if (!down && Date.now() - last < 5 * 60_000) return;
+      last = Date.now();
+      router.refresh();
+    }, every);
     return () => {
       es?.close();
       clearInterval(id);

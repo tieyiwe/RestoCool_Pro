@@ -1,7 +1,7 @@
 import { setErrorSink } from "./lib/log";
 import { recordError } from "./lib/platform/errors";
 import { getPlatformSettings } from "./lib/platform/settings";
-import { startTrafficClock } from "./lib/usage/presence";
+import { recentlyActive, startTrafficClock } from "./lib/usage/presence";
 import { getDb } from "./db";
 import { processDeletions } from "./lib/restaurants/deletion";
 import { sweepAllStale } from "./lib/seating/sessions";
@@ -20,21 +20,27 @@ export function startNode() {
   // Business deletions: carried out after 72 h once confirmed, purged after the 10 days to restore.
   const g = globalThis as unknown as { __rcDeletionTimer?: ReturnType<typeof setInterval> };
   if (!g.__rcDeletionTimer) {
+    // Every 30 min, and only after recent activity (the database may sleep otherwise; due deletions
+    // simply run at the next activity).
     g.__rcDeletionTimer = setInterval(() => {
+      if (!recentlyActive(60 * 60_000)) return;
       processDeletions(getDb()).catch((err) => log.warn("deletion.process_failed", { error: err instanceof Error ? err.message : String(err) }));
-    }, 5 * 60_000);
+    }, 30 * 60_000);
     g.__rcDeletionTimer.unref?.();
   }
   // Tables and rooms left « occupied » by customers who went away are freed, in every business.
   const gs = globalThis as unknown as { __rcSeatTimer?: ReturnType<typeof setInterval> };
   if (!gs.__rcSeatTimer) {
+    // Every 10 min while someone used RestoCool in the last 20 min. Pages and public endpoints
+    // also sweep their own business when they load, so nothing waits on this timer.
     gs.__rcSeatTimer = setInterval(() => {
+      if (!recentlyActive()) return;
       sweepAllStale(getDb()).catch((err) => log.warn("seating.sweep_failed", { error: err instanceof Error ? err.message : String(err) }));
       // Online payments left pending: ask the provider, expire abandoned ones (section 8b).
       reconcilePayments(getDb()).catch((err) => log.warn("payments.reconcile_failed", { error: err instanceof Error ? err.message : String(err) }));
       // Reservations past their time + expiry: confirmed → « Absent », never answered → « Expirée ».
       sweepReservations(getDb()).catch((err) => log.warn("reservations.sweep_failed", { error: err instanceof Error ? err.message : String(err) }));
-    }, 5 * 60_000);
+    }, 10 * 60_000);
     gs.__rcSeatTimer.unref?.();
   }
 }
