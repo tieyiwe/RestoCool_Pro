@@ -255,7 +255,10 @@ export function OrdersList({
   review,
   visitStart = 0,
   payNow,
+  bill,
 }: {
+  /** Seated at a table or room: « Demander l'addition » (the table's server is told). */
+  bill?: { slug: string; sessionId: string };
   /** Online payment through the business's own provider (hidden while none is connected). */
   payNow?: { slug: string; methods: string[] };
   /** Start of this visit (ms): orders from an earlier visit are never « en cours » again. */
@@ -405,6 +408,7 @@ export function OrdersList({
             {tableTotal === 0 && tableOnRequest ? t("onRequest") : `${formatFCFA(tableTotal)}${tableOnRequest ? " +" : ""}`}
           </p>
           <p className="text-xs text-muted-foreground">{t("tableBillHint")}</p>
+          {bill && live.some((o) => o.status !== "paid") && <AskBill slug={bill.slug} sessionId={bill.sessionId} t={t} />}
         </div>
       )}
       {current.length > 0 && (
@@ -688,5 +692,45 @@ export function HistoryList({
         );
       })}
     </ul>
+  );
+}
+
+/** « Demander l'addition »: tells the table's server (shown on « Mes tables »); once per table. */
+function AskBill({ slug, sessionId, t }: { slug: string; sessionId: string; t: T }) {
+  const key = `rc-bill-asked-${sessionId}`;
+  const [asked, setAsked] = useState(() => {
+    try {
+      return typeof window !== "undefined" && sessionStorage.getItem(key) === "1";
+    } catch {
+      return false;
+    }
+  });
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+  async function ask() {
+    setBusy(true);
+    setFailed(false);
+    const res = await fetch(`/api/public/sessions/${sessionId}/bill`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ slug, deviceId: deviceId() }) }).catch(() => null);
+    setBusy(false);
+    if (!res) reportNetwork(false);
+    if (!res?.ok) return setFailed(true);
+    try {
+      sessionStorage.setItem(key, "1");
+    } catch {}
+    setAsked(true);
+  }
+  if (asked)
+    return (
+      <p className="mt-2 rounded-lg bg-emerald-100 p-2 text-sm font-semibold text-emerald-900" data-testid="bill-asked">
+        ✓ {t("billAsked")}
+      </p>
+    );
+  return (
+    <>
+      <button type="button" disabled={busy} onClick={() => void ask()} className="mt-2 min-h-11 w-full rounded-xl border-2 border-[var(--accent)] font-bold disabled:opacity-60" data-testid="ask-bill">
+        🧾 {t("askBill")}
+      </button>
+      {failed && <p className="mt-1 text-sm text-red-700">{t("askBillFailed")}</p>}
+    </>
   );
 }

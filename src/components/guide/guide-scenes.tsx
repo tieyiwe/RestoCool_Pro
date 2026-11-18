@@ -28,7 +28,10 @@ export type GuideId =
   | "sharedOrder"
   | "offline"
   | "collect"
-  | "closing";
+  | "closing"
+  | "takeOrder"
+  | "myTables"
+  | "assignments";
 
 /**
  * Who a tutorial is for. The owner sees every profile (to train the team or show a screen);
@@ -54,6 +57,9 @@ export const GUIDES: Array<{ id: GuideId; profiles: Profile[]; steps: number; ic
   { id: "confirm", profiles: ["manager", "server", "host"], steps: 3, icon: "✅", href: "/app/service" },
   { id: "serve", profiles: ["server"], steps: 3, icon: "🍛", href: "/app/service" },
   { id: "releaseTable", profiles: ["owner", "manager", "server"], steps: 3, icon: "🪑", href: "/app/service" },
+  { id: "myTables", profiles: ["owner", "manager", "server"], steps: 3, icon: "🍽️", href: "/app/tables" },
+  { id: "takeOrder", profiles: ["owner", "manager", "server", "host"], steps: 3, icon: "📝", href: "/app/take" },
+  { id: "assignments", profiles: ["owner", "manager"], steps: 3, icon: "🗂️", href: "/app/staff/assignments" },
   { id: "sharedOrder", profiles: ["server", "kitchen", "host"], steps: 3, icon: "👥", href: null },
   { id: "resvCheckin", profiles: ["manager", "server", "host"], steps: 3, icon: "🎟️", href: "/app/scan" },
   { id: "scan", profiles: ["server", "host"], steps: 3, icon: "📱", href: null },
@@ -814,6 +820,168 @@ export function sceneFor(id: GuideId, step: number, L: (k: string) => string): S
             )}
           </>
         ),
+      };
+    }
+    case "takeOrder": {
+      if (step === 0)
+        return {
+          screen: (
+            <>
+              <Bar title={L("takeTitle")} />
+              {body(
+                <>
+                  <span className="text-[10px] font-bold text-[#17231C]">1. {L("takeWhere")}</span>
+                  <span className="flex flex-wrap gap-1.5">
+                    {["1", "2", "3", "4"].map((n) => (
+                      <Btn key={n} tone={n === "4" ? "green" : "ghost"} on={n === "4"}>
+                        {n}
+                      </Btn>
+                    ))}
+                  </span>
+                </>,
+              )}
+            </>
+          ),
+          tap: { x: 72, y: 38 },
+        };
+      if (step === 1)
+        return {
+          screen: (
+            <>
+              <Bar title={L("takeTitle")} />
+              {body(
+                <>
+                  <Dish name="Riz gras" price="2 500 F" isNew />
+                  <Dish name="Jus de bissap" price="500 F" />
+                  <Field label={L("comment")} value={L("noteValue")} focus />
+                </>,
+              )}
+            </>
+          ),
+          tap: { x: 85, y: 30 },
+        };
+      return {
+        screen: (
+          <>
+            <Bar title={L("takeTitle")} />
+            {body(
+              <>
+                <Btn on className="w-full">
+                  {L("takeSend")}
+                </Btn>
+                <span className="demo-pop rounded-xl bg-white p-2 text-center text-[11px] font-bold text-[#0F6B3E] shadow">✅ {L("takeSent")}</span>
+              </>,
+            )}
+          </>
+        ),
+        tap: { x: 50, y: 34 },
+      };
+    }
+    case "myTables": {
+      if (step === 0)
+        return {
+          screen: (
+            <>
+              <Bar title={L("myTablesTitle")} />
+              {body(
+                <span className="grid grid-cols-2 gap-1.5">
+                  {[
+                    ["3", L("ready"), "bg-amber-100 text-amber-950"],
+                    ["5", L("inKitchen"), "bg-orange-50 text-orange-950"],
+                    ["7", L("eating"), "bg-sky-100 text-sky-900"],
+                    ["8", L("free"), "bg-emerald-100 text-emerald-900"],
+                  ].map(([n, st, cls]) => (
+                    <span key={n} className={cn("flex h-12 flex-col justify-center rounded-lg px-2 text-[10px] font-bold", cls)}>
+                      {L("table")} {n}
+                      <span className="font-normal">{st}</span>
+                    </span>
+                  ))}
+                </span>,
+              )}
+            </>
+          ),
+        };
+      if (step === 1)
+        return {
+          screen: (
+            <>
+              <Bar title={L("myTablesTitle")} />
+              {body(
+                <>
+                  <span className="text-[10px] font-bold text-[#17231C]">🔔 {L("toServeLabel")}</span>
+                  <OrderCard no={L("orderNo")} seat="3" status={L("readyShort")} pop>
+                    <Btn on>{L("served")}</Btn>
+                  </OrderCard>
+                </>,
+              )}
+            </>
+          ),
+          tap: { x: 22, y: 62 },
+        };
+      return {
+        screen: (
+          <>
+            <Bar title={L("myTablesTitle")} />
+            {body(
+              <>
+                <span className="demo-pop rounded-xl border-2 border-amber-500 bg-amber-50 p-2 text-[11px] font-extrabold text-amber-950">🧾 {L("billAskedDemo")}</span>
+                <Btn on tone="gold">
+                  💰 {L("collectBtn")}
+                </Btn>
+              </>,
+            )}
+          </>
+        ),
+        tap: { x: 30, y: 45 },
+      };
+    }
+    case "assignments": {
+      if (step === 0)
+        return {
+          screen: (
+            <>
+              <Bar title={L("assignTitle")} />
+              {body(
+                <>
+                  <span className="demo-pop rounded-xl border-2 border-[#0F6B3E] bg-white p-2 text-[11px] font-bold text-[#17231C]">Awa · 002</span>
+                  <span className="rounded-xl border border-[#E8DCC7] bg-white p-2 text-[11px] font-bold text-[#17231C]">Ali · 003</span>
+                </>,
+              )}
+            </>
+          ),
+          tap: { x: 40, y: 22 },
+        };
+      if (step === 1)
+        return {
+          screen: (
+            <>
+              <Bar title={L("assignTitle")} />
+              {body(
+                <span className="flex flex-wrap gap-1.5">
+                  {["1", "2", "3", "4", "5", "6"].map((n) => (
+                    <Btn key={n} tone={["1", "2", "3"].includes(n) ? "green" : "ghost"} on={n === "3"}>
+                      {n}
+                    </Btn>
+                  ))}
+                </span>,
+              )}
+            </>
+          ),
+          tap: { x: 60, y: 22 },
+        };
+      return {
+        screen: (
+          <>
+            <Bar title={L("assignTitle")} />
+            {body(
+              <>
+                <Btn on>{L("assignSave")}</Btn>
+                <span className="demo-pop rounded-xl bg-white p-2 text-[11px] font-bold text-[#0F6B3E] shadow">✓ {L("assignSaved")}</span>
+              </>,
+            )}
+          </>
+        ),
+        tap: { x: 30, y: 22 },
       };
     }
     case "reviews": {

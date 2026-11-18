@@ -17,7 +17,7 @@ Every action in the console is recorded with the person's email (Team → Activi
 1. **Overview:**
    - new businesses, orders today, open errors;
    - « Plans ending within 14 days »;
-   - « Feature usage » (cash register, reservations, shared selections, tables, reviews).
+   - « Feature usage » (server tools, cash register, reservations, shared selections, tables, reviews).
    - **Online payments** (🌐): encryption key in place, providers, businesses that connected one, failed attempts and bad webhook signatures.
 2. **Support:**
    - answer « Blocking » requests first, then the oldest;

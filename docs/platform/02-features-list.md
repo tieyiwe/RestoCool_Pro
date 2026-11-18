@@ -31,6 +31,7 @@
 | « Attente actuelle : environ 45 min » shown on busy days | P B | Live |
 | Reviews: 1–5 stars and a comment after being served; stars next to the business name | P B | Live |
 | Business offers and dish promotions (« Offres du moment ») | B | Live |
+| « Demander l'addition » at a table or private room: the table's server is told on « Mes tables » | P B | Live |
 | Pay online from the phone (« Payer maintenant ») | – | Coming (the plumbing is ready; a provider must be connected) |
 | Loyalty card | – | Coming |
 
@@ -64,7 +65,8 @@
 | Staff actions work offline (« ⏳ en attente ») and sync when the network returns | P B | Live |
 | Order history with filters and CSV export | P B | Live |
 | Orders show « Payée » to the customer when the bill is settled | P B | Live |
-| Staff take an order for a customer from the app | – | Coming |
+| « Prendre une commande »: a server enters an order for a customer (table, takeaway, counter, delivery; variants, options, a note per dish); it goes to the kitchen confirmed in their name | P B | Live |
+| « Mes tables »: the server's phone screen with their tables (most urgent first), dishes ready to serve, new orders to confirm, bills asked for, « Commander », « Encaisser », « Table libérée » | P B | Live |
 | « Caisse »: bills to collect by table; « Encaisser »: cash with change, Orange Money / Moov with reference, card; split in equal parts or by dish; « sur demande » price; discounts with a reason (above 20 % only managers/owner); the table frees itself when paid | P B | Live |
 | Receipts (print / PDF, WhatsApp) and « Clôture de caisse » (by method, person, category, discounts, cancellations; CSV and PDF) | P B | Live |
 | Online payment plumbing (provider interface, « manual » provider, CinetPay / PayDunya / Ligdicash / Orange Money / Moov adapters waiting to be connected, webhooks, reconciliation, encrypted credentials) | – | Live (no provider connected yet) |
@@ -91,7 +93,7 @@
 | Pointage (check-in/out) by QR at the staff entrance or numéro RC + matricule + PIN | P B | Live |
 | Authorised devices + « mode poste » (shared tablet with PIN login, auto-lock) | P B | Live |
 | Former employees: archive, reinstate, erase personal data | P B | Live |
-| Shifts and table/area assignments | – | Coming |
+| « Affectations du jour »: each server gets tables, rooms or whole areas for the day (one server per table; « Reprendre le plan d'hier »); new orders go to that server, others to everyone; a manager reassigns an order from its page | P B | Live |
 
 ### Management
 

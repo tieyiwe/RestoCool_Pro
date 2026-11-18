@@ -11,6 +11,8 @@ import { staffOrder } from "@/lib/orders/serialize";
 import { personLookup, personnel } from "@/lib/personnel";
 import { getOrder } from "@/lib/orders/service";
 import { openTableSessionIds } from "@/lib/seating/floor";
+import { Reassign } from "@/components/my-tables/reassign";
+import { can } from "@/lib/auth/can";
 
 export const dynamic = "force-dynamic";
 
@@ -26,13 +28,16 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
     if (e instanceof NotFoundError) notFound();
     throw e;
   });
+  const people = await personnel(getDb(), ctx.repo.restaurantId);
+  const servers = people.filter((p) => p.active && !p.archivedAt && p.role !== "kitchen" && p.role !== "cashier").map((p) => ({ id: p.id, label: `${p.name ?? "—"}${p.staffNo != null ? ` · ${String(p.staffNo).padStart(3, "0")}` : ""}` }));
   return (
     <div className="flex flex-col gap-4">
       <Link href="/app/service" className="min-h-11 self-start rounded-lg border border-border px-4 py-2.5 font-semibold">
         ← {t("frontDesk")}
       </Link>
+      <Reassign orderId={order.id} current={order.assignedStaffId} people={servers} canEdit={can(ctx.actor, "staff.write", { restaurantId: ctx.repo.restaurantId })} />
       <OrderPermsProvider perms={perms}>
-        <OrderDetail initial={staffOrder(order, undefined, personLookup(await personnel(getDb(), ctx.repo.restaurantId)), await openTableSessionIds(getDb(), ctx.repo.restaurantId))} delays={delays} />
+        <OrderDetail initial={staffOrder(order, undefined, personLookup(people), await openTableSessionIds(getDb(), ctx.repo.restaurantId))} delays={delays} />
       </OrderPermsProvider>
     </div>
   );

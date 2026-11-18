@@ -80,7 +80,7 @@ export const tableSessions = pgTable(
     seatId: uuid("seat_id").notNull().references(() => seats.id, { onDelete: "cascade" }),
     status: sessionStatusEnum("status").notNull().default("open"),
     /** How the seat was chosen: scanning the seat's own QR, or the picker (generic QR). */
-    source: text("source").$type<"qr" | "picker">().notNull(),
+    source: text("source").$type<"qr" | "picker" | "staff">().notNull(),
     openedByDevice: text("opened_by_device"),
     openedAt: timestamp("opened_at", { withTimezone: true }).notNull().defaultNow(),
     lastActivityAt: timestamp("last_activity_at", { withTimezone: true }).notNull().defaultNow(),
@@ -88,6 +88,8 @@ export const tableSessions = pgTable(
     /** released (all phones left) | inactive (inactivity release) | expired (idle for hours) | staff | paid */
     closedReason: text("closed_reason"),
     closedBy: text("closed_by"),
+    /** The customer tapped « Demander l'addition » (cleared when the bill is paid or the table closes). */
+    billRequestedAt: timestamp("bill_requested_at", { withTimezone: true }),
     ...timestamps,
   },
   (t) => [

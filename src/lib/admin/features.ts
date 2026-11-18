@@ -13,6 +13,7 @@ export type FeatureUsage = {
   tables: { releasedByStaff: number; closedFinished: number; closedInactive: number; closedExpired: number; closedStale: number; closedByStaff: number; closedByCustomer: number; openNow: number };
   reviews: { count: number; average: number | null; hidden: number; deleted: number };
   switches: { reviewsOff: number; attendanceOff: number; sharingBusinesses: number; reservationsOn: number };
+  service: { staffOrders: number; staffBusinesses: number; assignedOrders: number; planDays: number; planBusinesses: number; billRequests: number };
   cashier: { collected: number; payments: number; bills: number; averageTicket: number; discounts: number; businesses: number; byMethod: Record<string, number> };
   reservations: {
     total: number;
@@ -104,6 +105,14 @@ export async function featureUsage(db: DB, restaurantId?: string, now = new Date
   const billsRow = await one(sql`
     select count(*)::int as n, coalesce(round(avg(b.total)), 0)::int as avg, coalesce(sum(b.discount), 0)::bigint as discounts
     from bills b where b.status = 'paid' and b.closed_at >= ${since} ${only("b.restaurant_id")}`);
+  const svc = await one(sql`
+    select
+      (select count(*) from orders o where o.source = 'staff' and o.created_at >= ${since} ${only("o.restaurant_id")})::int as staff_orders,
+      (select count(distinct o.restaurant_id) from orders o where o.source = 'staff' and o.created_at >= ${since} ${only("o.restaurant_id")})::int as staff_businesses,
+      (select count(*) from orders o where o.assigned_staff_id is not null and o.created_at >= ${since} ${only("o.restaurant_id")})::int as assigned_orders,
+      (select count(distinct (a.restaurant_id, a.business_date)) from staff_assignments a where a.created_at >= ${since} ${only("a.restaurant_id")})::int as plan_days,
+      (select count(distinct a.restaurant_id) from staff_assignments a where a.created_at >= ${since} ${only("a.restaurant_id")})::int as plan_businesses,
+      (select count(*) from audit_log l where l.action = 'session.bill_requested' and l.created_at >= ${since} ${only("l.restaurant_id")})::int as bill_requests`);
   const named = await one(sql`
     select count(*)::int as n from order_items i join orders o on o.id = i.order_id
     where o.id in (select c.order_id from shared_carts c where c.status = 'sent' and c.created_at >= ${since} ${only("c.restaurant_id")})`);
@@ -122,6 +131,14 @@ export async function featureUsage(db: DB, restaurantId?: string, now = new Date
     },
     reviews: { count: n(reviews.count), average: reviews.average == null ? null : Number(reviews.average), hidden: n(reviews.hidden), deleted: n(reviews.deleted) },
     switches: { reviewsOff: n(switches.reviews_off), attendanceOff: n(switches.attendance_off), sharingBusinesses: n(shared.businesses), reservationsOn: n(switches.reservations_on) },
+    service: {
+      staffOrders: n(svc.staff_orders),
+      staffBusinesses: n(svc.staff_businesses),
+      assignedOrders: n(svc.assigned_orders),
+      planDays: n(svc.plan_days),
+      planBusinesses: n(svc.plan_businesses),
+      billRequests: n(svc.bill_requests),
+    },
     cashier: {
       collected: n(cash.collected),
       payments: n(cash.n),

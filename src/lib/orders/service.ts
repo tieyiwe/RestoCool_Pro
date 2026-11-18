@@ -43,6 +43,7 @@ export class OrderError extends Error {
 
 import { GROUP_SEATS } from "@/lib/seating/group-seats";
 import { openTripOfBus } from "@/lib/transport/trips";
+import { assigneeFor } from "@/lib/assignments/route";
 export { GROUP_SEATS };
 /** Orders still being handled (the front desk and kitchen show these). */
 export const ACTIVE_STATUSES = ["sent", "confirmed", "preparing", "ready"] as const satisfies readonly OrderStatus[];
@@ -224,6 +225,8 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
   const mode = r.settings.orderValidation ?? "server_confirms";
   const actor: Actor = { kind: "customer", deviceId, restaurantId: r.id };
 
+  // The server of this table today (Personnel → Affectations), else the pool.
+  const assignee = await assigneeFor(db, r.id, { id: s.seat.id, areaId: s.seat.areaId }, now);
   const insert = () => db.transaction(async (tx) => {
     const day = businessDate(now);
     const number = await nextNumber(tx, r.id, day);
@@ -249,6 +252,7 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
         // Direct mode: the order goes straight to the kitchen.
         status: mode === "direct" ? "confirmed" : "sent",
         validationMode: mode,
+        assignedStaffId: assignee,
         subtotal: priced.subtotal,
         hasOnRequest: priced.hasOnRequest,
         note: input.note || null,

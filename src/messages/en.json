@@ -395,7 +395,9 @@
       "kitchen": "Kitchen",
       "history": "History",
       "scan": "Scan",
-      "trips": "Trips"
+      "trips": "Trips",
+      "tables": "Tables",
+      "take": "Order"
     },
     "buses": "Buses & itineraries",
     "trips": "Trips",
@@ -471,7 +473,10 @@
     },
     "reviewsNav": "Reviews",
     "reservationsNav": "Reservations",
-    "cashierNav": "Cash register"
+    "cashierNav": "Cash register",
+    "myTables": "My tables",
+    "takeOrder": "Take an order",
+    "assignmentsNav": "Today’s assignments"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -1358,6 +1363,15 @@
         "m_other": "Other",
         "discounts": "Discounts given",
         "businesses": "Businesses using the register"
+      },
+      "service": {
+        "title": "Server tools",
+        "staffOrders": "Orders taken by staff",
+        "assignedOrders": "Orders sent to an assigned server",
+        "planDays": "Days with a table plan",
+        "billRequests": "« Ask for the bill » taps",
+        "staffBusinesses": "Businesses taking orders by staff",
+        "planBusinesses": "Businesses planning tables"
       }
     },
     "payments": {
@@ -2100,7 +2114,10 @@
     "payRetry": "Try again",
     "payBack": "Back to the menu",
     "payAmount": "Amount: {amount}",
-    "payNotFound": "Payment not found on this phone."
+    "payNotFound": "Payment not found on this phone.",
+    "askBill": "Ask for the bill",
+    "billAsked": "Bill requested: your server is coming.",
+    "askBillFailed": "The request did not go through. Try again or call the server."
   },
   "seating": {
     "title": "Tables and rooms",
@@ -2692,7 +2709,18 @@
       "cashLabel": "Cash",
       "billsLabel": "Bills",
       "avgLabel": "Average ticket",
-      "discountsLabel": "Discounts"
+      "discountsLabel": "Discounts",
+      "takeTitle": "Take an order",
+      "takeWhere": "Where?",
+      "noteValue": "no chili",
+      "takeSend": "Send to the kitchen · 4",
+      "takeSent": "Order no. 12 sent to the kitchen",
+      "myTablesTitle": "My tables",
+      "toServeLabel": "Ready to serve",
+      "billAskedDemo": "Table 7 asks for the bill",
+      "assignTitle": "Today’s assignments",
+      "assignSave": "Save",
+      "assignSaved": "Tables 1, 2, 3 for Awa"
     },
     "items": {
       "menu": {
@@ -2856,6 +2884,27 @@
         "s1": "Open “Daily closing”: collected, cash in the drawer, bills, average ticket.",
         "s2": "Check by payment method, by person, discounts and cancellations.",
         "s3": "Download the CSV or print to PDF for your accounts."
+      },
+      "takeOrder": {
+        "title": "Take an order for a customer",
+        "intro": "For a customer without a smartphone, or who prefers to tell you.",
+        "s1": "Open « Take an order » and tap the table (or « Takeaway »).",
+        "s2": "Tap the dishes; add a note like « no chili ».",
+        "s3": "« Send to the kitchen »: the order goes out confirmed, in your name."
+      },
+      "myTables": {
+        "title": "My tables and the bill",
+        "intro": "Your service screen: your tables, what is ready, who asks for the bill.",
+        "s1": "« My tables » shows your tables today, most urgent first.",
+        "s2": "A dish is ready? Serve it, then tap « Served ».",
+        "s3": "A customer taps « Ask for the bill »: the table lights up, tap « Collect »."
+      },
+      "assignments": {
+        "title": "Assign today’s tables",
+        "intro": "Each server gets their tables: new orders go to the right server.",
+        "s1": "Personnel → « Today’s assignments »: tap a server.",
+        "s2": "Tap their tables, rooms or whole areas.",
+        "s3": "« Save ». Tomorrow, « Reuse yesterday’s plan » does it all in one tap."
       }
     },
     "profileHint": {
@@ -4305,5 +4354,93 @@
     "how4": "Copy the notification address (webhook) shown under the provider and paste it in your merchant account.",
     "how5": "Tap « Test the connection », then make a small test payment from your menu.",
     "how6": "When everything works, switch to « Live » and tick « Enable ». The « Pay now » button then appears for your customers; the money goes straight to your merchant account."
+  },
+  "takeOrder": {
+    "title": "Take an order",
+    "intro": "For a customer without a smartphone: choose the place, add the dishes, send to the kitchen.",
+    "where": "Where?",
+    "noSeats": "No table or place yet: add some in « Tables and rooms ».",
+    "group": {
+      "table": "Tables",
+      "room": "Private rooms",
+      "area": "Areas",
+      "counter": "Counter",
+      "takeaway": "Takeaway",
+      "delivery": "Delivery"
+    },
+    "customerName": "Customer’s first name",
+    "customerPhone": "Phone (optional)",
+    "address": "Delivery address",
+    "pickup": "Pickup at",
+    "dishes": "Dishes",
+    "search": "Search a dish or its number",
+    "soldOut": "Sold out",
+    "choices": "choices",
+    "onRequest": "On request",
+    "lines": "{n, plural, one {# dish} other {# dishes}} in the order",
+    "less": "One less",
+    "more": "One more",
+    "lineNote": "Note (e.g. no chili)",
+    "orderNote": "Note for the whole order",
+    "sending": "Sending…",
+    "pickSeat": "Choose the place first",
+    "addDishes": "Add dishes",
+    "send": "Send to the kitchen · {seat}",
+    "sent": "Order no. {n} sent to the kitchen",
+    "sentHint": "It is confirmed in your name for {seat}.",
+    "again": "New order",
+    "open": "Open the order",
+    "myTables": "My tables",
+    "cancel": "Cancel",
+    "add": "Add",
+    "errors": {
+      "no_seat": "This place no longer exists. Choose another one.",
+      "unavailable": "A dish is no longer available. Remove it and try again.",
+      "takeaway_required": "Enter the customer’s first name.",
+      "delivery_required": "Name, phone and address are needed for a delivery.",
+      "no_trip": "No trip in progress for this bus.",
+      "network": "No connection. Try again when the network is back.",
+      "error": "The order could not be sent. Try again."
+    }
+  },
+  "myTables": {
+    "title": "My tables",
+    "assignedHint": "Your tables today, orders to confirm and dishes ready to serve.",
+    "noPlanHint": "No table is assigned to you today: you see every table.",
+    "seeAll": "See every table",
+    "onlyMine": "Only mine",
+    "take": "Take an order",
+    "takeShort": "Order",
+    "bills": "{n, plural, one {# table asks for the bill} other {# tables ask for the bill}}",
+    "billAsked": "Bill requested",
+    "toServe": "Ready to serve",
+    "toConfirm": "New orders to confirm",
+    "nothing": "Nothing for now.",
+    "tables": "My tables",
+    "noTables": "No table.",
+    "ago": "{n} min ago",
+    "mine": "yours",
+    "confirm": "Confirm",
+    "served": "Served",
+    "collect": "Collect"
+  },
+  "assignments": {
+    "title": "Today’s assignments",
+    "intro": "Give each server their tables for today. New orders from those tables go to them; without an assignment, everyone sees them.",
+    "copyYesterday": "Reuse yesterday’s plan",
+    "none": "No table",
+    "noPeople": "Nobody on service yet: add personnel.",
+    "for": "{name}’s tables today",
+    "areas": "Whole areas",
+    "seats": "Tables and rooms",
+    "takenBy": "Already with {name}",
+    "oneServer": "A table has one server: giving it here takes it from the other.",
+    "save": "Save",
+    "saved": "Saved. New orders will go to the right server.",
+    "error": "Could not save. Try again.",
+    "copied": "{n} assignments reused from yesterday.",
+    "nothingToCopy": "Nothing to reuse (already done today, or nothing yesterday).",
+    "servedBy": "Server:",
+    "pool": "Everyone (not assigned)"
   }
 }

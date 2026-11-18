@@ -239,6 +239,13 @@
       "when": 1794927986083,
       "tag": "0033_payments",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1794985417762,
+      "tag": "0034_staff_assignments",
+      "breakpoints": true
     }
   ]
 }

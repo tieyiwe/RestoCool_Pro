@@ -29,6 +29,17 @@ export function FeatureUsageCard({ u, t, version, perBusiness = false }: { u: Fe
         </span>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <section data-testid="feature-service">
+          <h3 className="font-semibold">🍽️ {t("features.service.title")}</h3>
+          <ul className="divide-y divide-border">
+            <Row label={t("features.service.staffOrders")} value={u.service.staffOrders} testId="fu-staff-orders" />
+            <Row label={t("features.service.assignedOrders")} value={u.service.assignedOrders} />
+            <Row label={t("features.service.planDays")} value={u.service.planDays} />
+            <Row label={t("features.service.billRequests")} value={u.service.billRequests} />
+            {!perBusiness && <Row label={t("features.service.staffBusinesses")} value={u.service.staffBusinesses} />}
+            {!perBusiness && <Row label={t("features.service.planBusinesses")} value={u.service.planBusinesses} />}
+          </ul>
+        </section>
         <section data-testid="feature-cashier">
           <h3 className="font-semibold">💰 {t("features.cashier.title")}</h3>
           <ul className="divide-y divide-border">

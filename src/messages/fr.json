@@ -395,7 +395,9 @@
       "kitchen": "Cuisine",
       "history": "Historique",
       "scan": "Scanner",
-      "trips": "Voyages"
+      "trips": "Voyages",
+      "tables": "Tables",
+      "take": "Commander"
     },
     "buses": "Bus et itinéraires",
     "trips": "Voyages",
@@ -471,7 +473,10 @@
     },
     "reviewsNav": "Avis clients",
     "reservationsNav": "Réservations",
-    "cashierNav": "Caisse"
+    "cashierNav": "Caisse",
+    "myTables": "Mes tables",
+    "takeOrder": "Prendre une commande",
+    "assignmentsNav": "Affectations du jour"
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -1358,6 +1363,15 @@
         "m_other": "Autre",
         "discounts": "Remises accordées",
         "businesses": "Établissements qui utilisent la caisse"
+      },
+      "service": {
+        "title": "Outils des serveurs",
+        "staffOrders": "Commandes prises par le personnel",
+        "assignedOrders": "Commandes envoyées au serveur affecté",
+        "planDays": "Jours avec un plan de tables",
+        "billRequests": "Demandes d’addition",
+        "staffBusinesses": "Établissements qui prennent des commandes",
+        "planBusinesses": "Établissements qui affectent les tables"
       }
     },
     "payments": {
@@ -2100,7 +2114,10 @@
     "payRetry": "Réessayer",
     "payBack": "Retour au menu",
     "payAmount": "Montant : {amount}",
-    "payNotFound": "Paiement introuvable sur ce téléphone."
+    "payNotFound": "Paiement introuvable sur ce téléphone.",
+    "askBill": "Demander l’addition",
+    "billAsked": "Addition demandée : le serveur arrive.",
+    "askBillFailed": "La demande n’est pas partie. Réessayez ou appelez le serveur."
   },
   "seating": {
     "title": "Tables et salles",
@@ -2692,7 +2709,18 @@
       "cashLabel": "Espèces",
       "billsLabel": "Additions",
       "avgLabel": "Ticket moyen",
-      "discountsLabel": "Remises"
+      "discountsLabel": "Remises",
+      "takeTitle": "Prendre une commande",
+      "takeWhere": "Où ?",
+      "noteValue": "sans piment",
+      "takeSend": "Envoyer en cuisine · 4",
+      "takeSent": "Commande n° 12 envoyée en cuisine",
+      "myTablesTitle": "Mes tables",
+      "toServeLabel": "Prêt à servir",
+      "billAskedDemo": "Table 7 demande l’addition",
+      "assignTitle": "Affectations du jour",
+      "assignSave": "Enregistrer",
+      "assignSaved": "Tables 1, 2, 3 pour Awa"
     },
     "items": {
       "menu": {
@@ -2856,6 +2884,27 @@
         "s1": "Ouvrez « Clôture de caisse » : encaissé, espèces en caisse, additions, ticket moyen.",
         "s2": "Contrôlez par moyen de paiement, par personne, les remises et les annulations.",
         "s3": "Téléchargez le CSV ou imprimez en PDF pour vos comptes."
+      },
+      "takeOrder": {
+        "title": "Prendre une commande pour un client",
+        "intro": "Pour un client sans smartphone, ou qui préfère vous dire sa commande.",
+        "s1": "Ouvrez « Prendre une commande » et touchez la table (ou « À emporter »).",
+        "s2": "Touchez les plats ; ajoutez une note comme « sans piment ».",
+        "s3": "« Envoyer en cuisine » : la commande part confirmée, à votre nom."
+      },
+      "myTables": {
+        "title": "Mes tables et l’addition",
+        "intro": "Votre écran de service : vos tables, ce qui est prêt, qui demande l’addition.",
+        "s1": "« Mes tables » montre vos tables du jour, les plus urgentes d’abord.",
+        "s2": "Un plat est prêt ? Servez-le puis touchez « Servi ».",
+        "s3": "Un client touche « Demander l’addition » : la table s’allume, touchez « Encaisser »."
+      },
+      "assignments": {
+        "title": "Affecter les tables du jour",
+        "intro": "Chaque serveur reçoit ses tables : les nouvelles commandes vont au bon serveur.",
+        "s1": "Personnel → « Affectations du jour » : touchez un serveur.",
+        "s2": "Touchez ses tables, salons ou espaces entiers.",
+        "s3": "« Enregistrer ». Demain, « Reprendre le plan d’hier » refait tout en un geste."
       }
     },
     "profileHint": {
@@ -4305,5 +4354,93 @@
     "how4": "Copiez l’adresse de notification (webhook) affichée sous le prestataire et collez-la dans votre espace marchand.",
     "how5": "Touchez « Tester la connexion », puis faites un petit paiement de test depuis votre menu.",
     "how6": "Quand tout fonctionne, passez en mode « Réel » et cochez « Activer ». Le bouton « Payer maintenant » apparaît alors pour vos clients ; l’argent arrive directement sur votre compte marchand."
+  },
+  "takeOrder": {
+    "title": "Prendre une commande",
+    "intro": "Pour un client sans smartphone : choisissez la place, ajoutez les plats, envoyez en cuisine.",
+    "where": "Où ?",
+    "noSeats": "Aucune table ni place : ajoutez-en dans « Tables et salles ».",
+    "group": {
+      "table": "Tables",
+      "room": "Salons",
+      "area": "Espaces",
+      "counter": "Comptoir",
+      "takeaway": "À emporter",
+      "delivery": "Livraison"
+    },
+    "customerName": "Prénom du client",
+    "customerPhone": "Téléphone (facultatif)",
+    "address": "Adresse de livraison",
+    "pickup": "Retrait à",
+    "dishes": "Les plats",
+    "search": "Chercher un plat ou son numéro",
+    "soldOut": "Épuisé",
+    "choices": "au choix",
+    "onRequest": "Sur demande",
+    "lines": "{n, plural, one {# plat} other {# plats}} dans la commande",
+    "less": "Un de moins",
+    "more": "Un de plus",
+    "lineNote": "Note (ex. sans piment)",
+    "orderNote": "Note pour toute la commande",
+    "sending": "Envoi…",
+    "pickSeat": "Choisissez d’abord la place",
+    "addDishes": "Ajoutez des plats",
+    "send": "Envoyer en cuisine · {seat}",
+    "sent": "Commande n° {n} envoyée en cuisine",
+    "sentHint": "Elle est confirmée à votre nom pour {seat}.",
+    "again": "Nouvelle commande",
+    "open": "Voir la commande",
+    "myTables": "Mes tables",
+    "cancel": "Annuler",
+    "add": "Ajouter",
+    "errors": {
+      "no_seat": "Cette place n’existe plus. Choisissez-en une autre.",
+      "unavailable": "Un plat n’est plus disponible. Retirez-le et réessayez.",
+      "takeaway_required": "Indiquez le prénom du client.",
+      "delivery_required": "Prénom, téléphone et adresse sont nécessaires pour une livraison.",
+      "no_trip": "Aucun voyage en cours pour ce bus.",
+      "network": "Pas de connexion. Réessayez quand le réseau revient.",
+      "error": "La commande n’a pas pu être envoyée. Réessayez."
+    }
+  },
+  "myTables": {
+    "title": "Mes tables",
+    "assignedHint": "Vos tables du jour, les commandes à confirmer et les plats prêts à servir.",
+    "noPlanHint": "Aucune table ne vous est affectée aujourd’hui : vous voyez toutes les tables.",
+    "seeAll": "Voir toutes les tables",
+    "onlyMine": "Seulement les miennes",
+    "take": "Prendre une commande",
+    "takeShort": "Commander",
+    "bills": "{n, plural, one {# table demande l’addition} other {# tables demandent l’addition}}",
+    "billAsked": "Addition demandée",
+    "toServe": "Prêt à servir",
+    "toConfirm": "Nouvelles commandes à confirmer",
+    "nothing": "Rien pour l’instant.",
+    "tables": "Mes tables",
+    "noTables": "Aucune table.",
+    "ago": "il y a {n} min",
+    "mine": "pour vous",
+    "confirm": "Confirmer",
+    "served": "Servi",
+    "collect": "Encaisser"
+  },
+  "assignments": {
+    "title": "Affectations du jour",
+    "intro": "Donnez ses tables à chaque serveur pour aujourd’hui. Les nouvelles commandes de ces tables vont à lui ; sans affectation, tout le monde les voit.",
+    "copyYesterday": "Reprendre le plan d’hier",
+    "none": "Aucune table",
+    "noPeople": "Personne au service pour l’instant : ajoutez du personnel.",
+    "for": "Tables de {name} aujourd’hui",
+    "areas": "Espaces entiers",
+    "seats": "Tables et salons",
+    "takenBy": "Déjà à {name}",
+    "oneServer": "Une table n’a qu’un serveur : la donner ici la retire à l’autre.",
+    "save": "Enregistrer",
+    "saved": "Enregistré. Les nouvelles commandes iront au bon serveur.",
+    "error": "Échec de l’enregistrement. Réessayez.",
+    "copied": "{n} affectations reprises d’hier.",
+    "nothingToCopy": "Rien à reprendre (déjà fait aujourd’hui, ou rien hier).",
+    "servedBy": "Serveur :",
+    "pool": "Tout le monde (pas d’affectation)"
   }
 }

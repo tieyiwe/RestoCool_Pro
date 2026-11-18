@@ -395,7 +395,9 @@
       "kitchen": "厨房",
       "history": "记录",
       "scan": "扫码",
-      "trips": "行程"
+      "trips": "行程",
+      "tables": "餐桌",
+      "take": "点单"
     },
     "buses": "巴士与线路",
     "trips": "行程",
@@ -471,7 +473,10 @@
     },
     "reviewsNav": "顾客评价",
     "reservationsNav": "预订",
-    "cashierNav": "收银"
+    "cashierNav": "收银",
+    "myTables": "我的餐桌",
+    "takeOrder": "代客点单",
+    "assignmentsNav": "今日分配"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -1358,6 +1363,15 @@
         "m_other": "Other",
         "discounts": "Discounts given",
         "businesses": "Businesses using the register"
+      },
+      "service": {
+        "title": "Server tools",
+        "staffOrders": "Orders taken by staff",
+        "assignedOrders": "Orders sent to an assigned server",
+        "planDays": "Days with a table plan",
+        "billRequests": "« Ask for the bill » taps",
+        "staffBusinesses": "Businesses taking orders by staff",
+        "planBusinesses": "Businesses planning tables"
       }
     },
     "payments": {
@@ -2100,7 +2114,10 @@
     "payRetry": "重试",
     "payBack": "返回菜单",
     "payAmount": "金额：{amount}",
-    "payNotFound": "在这部手机上找不到该付款。"
+    "payNotFound": "在这部手机上找不到该付款。",
+    "askBill": "要求结账",
+    "billAsked": "已要求结账：服务员马上来。",
+    "askBillFailed": "请求未发出，请重试或叫服务员。"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -2692,7 +2709,18 @@
       "cashLabel": "现金",
       "billsLabel": "账单",
       "avgLabel": "客单价",
-      "discountsLabel": "折扣"
+      "discountsLabel": "折扣",
+      "takeTitle": "代客点单",
+      "takeWhere": "位置？",
+      "noteValue": "不要辣",
+      "takeSend": "发送到厨房 · 4",
+      "takeSent": "12 号订单已发送到厨房",
+      "myTablesTitle": "我的餐桌",
+      "toServeLabel": "待上菜",
+      "billAskedDemo": "7 号桌要求结账",
+      "assignTitle": "今日分配",
+      "assignSave": "保存",
+      "assignSaved": "1、2、3 号桌分给 Awa"
     },
     "items": {
       "menu": {
@@ -2856,6 +2884,27 @@
         "s1": "打开“日结”：已收、钱箱现金、账单数、客单价。",
         "s2": "按支付方式、按人员核对，查看折扣和取消。",
         "s3": "下载 CSV 或打印为 PDF 用于记账。"
+      },
+      "takeOrder": {
+        "title": "为顾客点单",
+        "intro": "适用于没有智能手机或更愿意口头点单的顾客。",
+        "s1": "打开「代客点单」，点选餐桌（或「外带」）。",
+        "s2": "点选菜品；可添加备注，如「不要辣」。",
+        "s3": "「发送到厨房」：订单以您的名义直接确认。"
+      },
+      "myTables": {
+        "title": "我的餐桌与结账",
+        "intro": "您的服务界面：您的餐桌、已做好的菜、谁要求结账。",
+        "s1": "「我的餐桌」显示您今天的餐桌，最紧急的在前。",
+        "s2": "菜做好了？上菜后点「已上菜」。",
+        "s3": "顾客点了「要求结账」：餐桌亮起，点「收款」。"
+      },
+      "assignments": {
+        "title": "分配今天的餐桌",
+        "intro": "每位服务员负责自己的餐桌：新订单交给对应的服务员。",
+        "s1": "员工 → 「今日分配」：点选一位服务员。",
+        "s2": "点选他的餐桌、包间或整个区域。",
+        "s3": "「保存」。明天点「沿用昨天的安排」一键完成。"
       }
     },
     "profileHint": {
@@ -4305,5 +4354,93 @@
     "how4": "复制服务商下方显示的通知地址（webhook），粘贴到您的商户后台。",
     "how5": "点击「测试连接」，然后从您的菜单做一笔小额测试付款。",
     "how6": "一切正常后，切换到「正式」模式并勾选「启用」。顾客就会看到「立即付款」按钮，款项直接进入您的商户账户。"
+  },
+  "takeOrder": {
+    "title": "代客点单",
+    "intro": "为没有智能手机的顾客点单：选择位置，添加菜品，发送到厨房。",
+    "where": "位置？",
+    "noSeats": "还没有餐桌或位置：请在「餐桌和包间」中添加。",
+    "group": {
+      "table": "餐桌",
+      "room": "包间",
+      "area": "区域",
+      "counter": "柜台",
+      "takeaway": "外带",
+      "delivery": "外送"
+    },
+    "customerName": "顾客名字",
+    "customerPhone": "电话（可选）",
+    "address": "外送地址",
+    "pickup": "取餐时间",
+    "dishes": "菜品",
+    "search": "搜索菜品或编号",
+    "soldOut": "已售完",
+    "choices": "可选",
+    "onRequest": "时价",
+    "lines": "订单中有 {n} 道菜",
+    "less": "减一份",
+    "more": "加一份",
+    "lineNote": "备注（例如：不要辣）",
+    "orderNote": "整单备注",
+    "sending": "发送中…",
+    "pickSeat": "请先选择位置",
+    "addDishes": "请添加菜品",
+    "send": "发送到厨房 · {seat}",
+    "sent": "{n} 号订单已发送到厨房",
+    "sentHint": "已以您的名义为 {seat} 确认。",
+    "again": "新订单",
+    "open": "查看订单",
+    "myTables": "我的餐桌",
+    "cancel": "取消",
+    "add": "添加",
+    "errors": {
+      "no_seat": "该位置已不存在，请另选。",
+      "unavailable": "有菜品已不可点，请删除后重试。",
+      "takeaway_required": "请填写顾客名字。",
+      "delivery_required": "外送需要名字、电话和地址。",
+      "no_trip": "该巴士没有进行中的行程。",
+      "network": "没有网络，请在网络恢复后重试。",
+      "error": "订单发送失败，请重试。"
+    }
+  },
+  "myTables": {
+    "title": "我的餐桌",
+    "assignedHint": "您今天的餐桌、待确认的订单和待上菜的菜品。",
+    "noPlanHint": "今天没有给您分配餐桌：您可以看到所有餐桌。",
+    "seeAll": "查看所有餐桌",
+    "onlyMine": "只看我的",
+    "take": "代客点单",
+    "takeShort": "点单",
+    "bills": "{n} 桌要求结账",
+    "billAsked": "已要求结账",
+    "toServe": "待上菜",
+    "toConfirm": "待确认的新订单",
+    "nothing": "暂时没有。",
+    "tables": "我的餐桌",
+    "noTables": "没有餐桌。",
+    "ago": "{n} 分钟前",
+    "mine": "给您的",
+    "confirm": "确认",
+    "served": "已上菜",
+    "collect": "收款"
+  },
+  "assignments": {
+    "title": "今日分配",
+    "intro": "为每位服务员分配今天的餐桌。这些餐桌的新订单会交给他；没有分配时，所有人都能看到。",
+    "copyYesterday": "沿用昨天的安排",
+    "none": "没有餐桌",
+    "noPeople": "目前没有服务人员：请添加员工。",
+    "for": "{name} 今天的餐桌",
+    "areas": "整个区域",
+    "seats": "餐桌和包间",
+    "takenBy": "已分给 {name}",
+    "oneServer": "每张餐桌只有一位服务员：在这里分配会从另一位那里移除。",
+    "save": "保存",
+    "saved": "已保存。新订单会交给对应的服务员。",
+    "error": "保存失败，请重试。",
+    "copied": "已沿用昨天的 {n} 项分配。",
+    "nothingToCopy": "没有可沿用的（今天已安排，或昨天没有）。",
+    "servedBy": "服务员：",
+    "pool": "所有人（未分配）"
   }
 }

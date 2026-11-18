@@ -52,6 +52,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       { href: "/app", label: t("dashboard"), icon: "🏠", need: null },
       { href: "/app/service", label: t("frontDesk"), icon: "🛎️", need: "orders.read" },
       ...(transport ? ([{ href: "/app/trips", label: t("trips"), icon: "🛣️", need: "orders.confirm" }] as const) : []),
+      ...(transport ? [] : ([{ href: "/app/tables", label: t("myTables"), icon: "🍽️", need: "orders.serve" }, { href: "/app/take", label: t("takeOrder"), icon: "📝", need: "orders.create" }] as const)),
       { href: "/app/kitchen", label: t("kitchen"), icon: "👩‍🍳", need: "orders.read" },
       { href: "/app/cashier", label: t("cashierNav"), icon: "💰", need: "orders.pay" },
       { href: "/app/scan", label: t("scan"), icon: "📷", need: null },
@@ -62,6 +63,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
         ? ({ href: "/app/buses", label: t("buses"), icon: "🚌", need: "seats.write" } as const)
         : ({ href: "/app/seating", label: t("seating"), icon: "🪑", need: "seats.write" } as const),
       { href: "/app/staff", label: t("staff"), icon: "👥", need: "staff.write" },
+      ...(transport ? [] : ([{ href: "/app/staff/assignments", label: t("assignmentsNav"), icon: "🗂️", need: "staff.write" }] as const)),
       { href: "/app/promotions", label: t("promotions"), icon: "🔥", need: "settings.write" },
       { href: "/app/reviews", label: t("reviewsNav"), icon: "⭐", need: "reports.read" },
       { href: "/app/settings", label: t("settings"), icon: "⚙️", need: "settings.write" },
@@ -81,11 +83,16 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       ? ["/app/kitchen", "/app/scan", "/app"]
       : cashierOnly
         ? ["/app/cashier", "/app/scan", "/app"]
-      : ["/app", "/app/service", "/app/scan", allowed("orders.prepare") && !allowed("reports.read") ? "/app/kitchen" : "/app/orders"];
+      : allowed("orders.serve") && !allowed("reports.read") && !allowed("orders.prepare")
+        ? // Servers: their tables first, then taking an order, the scanner and the full board.
+          ["/app/tables", "/app/take", "/app/scan", "/app/service"]
+        : ["/app", "/app/service", "/app/scan", allowed("orders.prepare") && !allowed("reports.read") ? "/app/kitchen" : "/app/orders"];
   const tabs = order.map((h) => nav.find((n) => n.href === h)).filter((n): n is (typeof nav)[number] => Boolean(n)).slice(0, 4);
   const more = nav.filter((n) => !tabs.includes(n));
   const toTab = (n: (typeof nav)[number]) => ({ href: n.href, label: n.label, icon: n.icon });
-  const SHORT: Record<string, "home" | "service" | "kitchen" | "history" | "scan" | "trips"> = {
+  const SHORT: Record<string, "home" | "service" | "kitchen" | "history" | "scan" | "trips" | "tables" | "take"> = {
+    "/app/tables": "tables",
+    "/app/take": "take",
     "/app": "home",
     "/app/service": "service",
     "/app/kitchen": "kitchen",
@@ -102,6 +109,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     "/app/seating": "manage",
     "/app/buses": "manage",
     "/app/staff": "manage",
+    "/app/staff/assignments": "manage",
     "/app/promotions": "manage",
     "/app/reviews": "manage",
     "/app/settings": "manage",

@@ -34,6 +34,8 @@ export type FloorTable = {
   phones: number;
   orders: number;
   total: number;
+  /** The customer tapped « Demander l'addition ». */
+  billRequestedAt: string | null;
 };
 
 export type Floor = {
@@ -60,6 +62,7 @@ export async function floorStatus(db: DB, restaurantId: string, now = new Date()
         id: tableSessions.id,
         seatId: tableSessions.seatId,
         openedAt: tableSessions.openedAt,
+        billRequestedAt: tableSessions.billRequestedAt,
         phones: sql<number>`(select count(*)::int from ${sessionDevices} d where d.session_id = ${sid} and d.left_at is null)`,
         statuses: sql<string[]>`coalesce((select array_agg(o.status::text) from ${orders} o where o.session_id = ${sid}), '{}')`,
         total: sql<number>`coalesce((select sum(o.subtotal)::int from ${orders} o where o.session_id = ${sid} and o.status <> 'cancelled'), 0)`,
@@ -101,6 +104,7 @@ export async function floorStatus(db: DB, restaurantId: string, now = new Date()
         phones: sess?.phones ?? 0,
         orders: live.length,
         total: sess?.total ?? 0,
+        billRequestedAt: sess?.billRequestedAt?.toISOString() ?? null,
       };
     })
     .sort((a, b) => a.type.localeCompare(b.type) || a.label.localeCompare(b.label, "fr", { numeric: true }));

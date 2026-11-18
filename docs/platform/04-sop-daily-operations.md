@@ -16,7 +16,8 @@ How a business runs a service day with RestoCool. Owners use it to train their t
    - Tap **« Verrouiller »** when leaving the tablet.
 3. **Kitchen:** open « Cuisine » (👩‍🍳) on the kitchen tablet and keep it on.
 4. **Sold out:** mark dishes not available today with « Épuisé ». Customers see it at once, and it resets the next day.
-5. **Busy day expected?** Set the wait time: 📅 Réservations → « Temps d'attente » → choose minutes → « Afficher l'attente ».
+5. **Plan the tables (manager):** Personnel → « Affectations du jour » → tap a server → tap their tables, rooms or areas → « Enregistrer ». Same as yesterday? « Reprendre le plan d'hier ». New orders then go to the right server; without a plan, everyone sees every order.
+6. **Busy day expected?** Set the wait time: 📅 Réservations → « Temps d'attente » → choose minutes → « Afficher l'attente ».
 
 ## 2. Taking and serving orders
 
@@ -27,10 +28,14 @@ How a business runs a service day with RestoCool. Owners use it to train their t
 | Confirm | Server / front desk | « Confirmer ». In « Direct » mode, orders arrive already confirmed |
 | Prepare | Kitchen | Tap each dish when starting (« En cours »), then « Tout est prêt » |
 | Serve | Server | « Servi » when the dishes are on the table. The customer's phone shows « Vous avez été servi ! » |
+| Bill | Customer / server | The customer taps « Demander l'addition »; the table lights up on « Mes tables » → « Encaisser » |
 | Free the table | Server | « Table libérée » → « Oui, la table 4 est libre » once the customers have left |
 
 Good to know:
 
+- **Servers work from « Mes tables »** (🍽️, first tab on their phone): their tables most urgent first, dishes ready to serve, new orders to confirm and bills asked for. « Voir toutes les tables » shows the others.
+- **Customer without a smartphone:** « Prendre une commande » (📝) → the table (or « À emporter ») → the dishes, a note per dish if needed → « Envoyer en cuisine ». The order goes straight to the kitchen, confirmed in the server's name.
+- **Wrong server?** A manager opens the order and changes « Serveur » (or « Tout le monde »).
 - **Customer shows their phone** (« Montrer au serveur »): scan the QR on their screen with the phone camera or « Scanner » (📷) in the app. The order opens directly.
 - **Shared order:** each dish carries the person's name (« Moussa · sans piment »). Serve each dish to the right person.
 - **Takeaway:** the card shows the name, a tap-to-call phone and « Retrait à 12:30 ».

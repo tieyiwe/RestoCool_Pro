@@ -29,7 +29,7 @@ One page per job. Owners print the page for each person, or open the guide in th
 - delete the business;
 - connect online payment (Paramètres → « Paiements », see [document 8](08-connecting-mobile-money.md)).
 
-**Tutorials (« Propriétaire » tab):** all 22, including « Ajouter vos plats », « Imprimer et placer vos QR codes », « Publier et partager votre menu », « Ajouter votre personnel et le pointage », « Recevoir des réservations », « Annoncer un temps d’attente », « Gérer les avis clients », « Lire vos chiffres ».
+**Tutorials (« Propriétaire » tab):** all 25, including « Affecter les tables du jour », « Ajouter vos plats », « Imprimer et placer vos QR codes », « Publier et partager votre menu », « Ajouter votre personnel et le pointage », « Recevoir des réservations », « Annoncer un temps d’attente », « Gérer les avis clients », « Lire vos chiffres ».
 
 **Help:** 🛟 « Aide et signalement » (choose « Bloquant » if service is stopped).
 
@@ -38,6 +38,7 @@ One page per job. Owners print the page for each person, or open the guide in th
 - Same as the owner for daily work: service, menu, tables, team, reservations, reports.
 - Can add staff and give non-lead roles. Cannot change roles or business-wide settings reserved to the owner.
 - **Opening checklist:**
+  - « Affectations du jour »: each server's tables (or « Reprendre le plan d'hier »);
   - kitchen screen on;
   - shared tablet in « mode poste »;
   - sold-out dishes marked;
@@ -51,7 +52,10 @@ One page per job. Owners print the page for each person, or open the guide in th
 ## Server (« Serveur »)
 
 1. **Start:** pointage (matricule + PIN). On the shared tablet, tap your name and type your PIN.
-2. **New order:** « Service » rings → check the table badge → « Confirmer » (unless the business is in « Direct » mode).
+2. **Your screen: « Mes tables »** (🍽️): your tables of the day, dishes ready, new orders, bills asked for (🧾).
+   - **New order:** « Confirmer » (unless the business is in « Direct » mode).
+   - **Customer without a phone:** « Commander » on the table (or 📝 « Prendre une commande ») → dishes → « Envoyer en cuisine ».
+   - **Bill asked:** the table lights up → « Encaisser ».
 3. **Customer shows their phone:** scan their QR with « Scanner » (📷) → the order opens.
 4. **Ready:** take the dishes → « Servi ». For shared orders, each dish has the person's name.
 5. **They leave:** « Table libérée » → « Oui, la table … est libre ».
@@ -59,7 +63,7 @@ One page per job. Owners print the page for each person, or open the guide in th
 7. **No network:** keep working; actions show « ⏳ en attente » and leave by themselves.
 8. **End:** pointage to check out; « Verrouiller » the tablet.
 
-**Tutorials (« Serveur » tab):** « Suivre les commandes en salle », « Confirmer une nouvelle commande », « Servir une commande prête », « Libérer une table », « Commande partagée par une table », « Scanner le QR d’une réservation », « Lire la commande d’un client », « Marquer un plat épuisé », « Travailler sans réseau », « Pointer à l’arrivée et au départ », « Aider un client qui ne peut pas scanner ».
+**Tutorials (« Serveur » tab):** « Mes tables et l’addition », « Prendre une commande pour un client », « Suivre les commandes en salle », « Confirmer une nouvelle commande », « Servir une commande prête », « Libérer une table », « Commande partagée par une table », « Scanner le QR d’une réservation », « Lire la commande d’un client », « Marquer un plat épuisé », « Travailler sans réseau », « Pointer à l’arrivée et au départ », « Aider un client qui ne peut pas scanner ».
 
 ## Host / reception (« Accueil »)
 
