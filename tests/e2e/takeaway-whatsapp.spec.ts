@@ -3,6 +3,7 @@ import { openMenu, sql } from "./helpers";
 
 test("the owner chooses which WhatsApp receives takeaway orders; « À emporter » opens that one", async ({ page, context }) => {
   const [before] = await sql<{ settings: Record<string, unknown> }>("select settings from restaurants where slug = 'restaurant-demo'");
+  await sql("delete from orders where channel = 'whatsapp' and restaurant_id = (select id from restaurants where slug = 'restaurant-demo')");
   await context.route("https://wa.me/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "ok" }));
   try {
     await page.goto("/app/settings#contacts");

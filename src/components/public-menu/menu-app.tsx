@@ -1102,7 +1102,7 @@ export function MenuApp({
                   requestId: `wa${Date.now().toString(36)}${Math.random().toString(36).slice(2, 12)}`.padEnd(16, "0"),
                   lines: lines.map((l) => ({ itemId: l.itemId, variantId: l.variantId, optionIds: l.optionIds, qty: l.qty, note: l.note || undefined })),
                 }),
-                signal: AbortSignal.timeout(4000),
+                signal: AbortSignal.timeout(8000),
               }).catch(() => null);
               if (res?.ok) ref = (await res.json().catch(() => null)) as typeof ref;
             }

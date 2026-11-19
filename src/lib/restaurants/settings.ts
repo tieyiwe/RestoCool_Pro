@@ -125,13 +125,14 @@ export async function saveProfile(ctx: SettingsCtx, input: z.input<typeof Profil
   const p = ProfileInput.safeParse(input);
   if (!p.success) throw new SettingsValidationError("invalid");
   const slug = slugify(p.data.slug);
-  if (RESERVED_SLUGS.has(slug)) throw new SettingsValidationError("slug_reserved");
+  const r0 = await current(ctx);
+  // A reserved address is refused only when choosing it, never for the business that already has it.
+  if (slug !== r0.slug && RESERVED_SLUGS.has(slug)) throw new SettingsValidationError("slug_reserved");
   const taken = await ctx.db.query.restaurants.findFirst({
     where: and(eq(restaurants.slug, slug), ne(restaurants.id, ctx.repo.restaurantId)),
     columns: { id: true },
   });
   if (taken) throw new SettingsValidationError("slug_taken");
-  const r0 = await current(ctx);
   try {
     await update(
       ctx,
