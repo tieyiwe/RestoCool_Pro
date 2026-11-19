@@ -37,7 +37,11 @@ const Hhmm = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/);
 export const ProfileInput = z.object({
   name: z.string().trim().min(2).max(80),
   slug: z.string().trim().min(2).max(48),
-  description: z.object({ fr: opt(240), en: opt(240), zh: opt(240) }),
+  /** Older form: one box per language. */
+  description: z.object({ fr: opt(240), en: opt(240), zh: opt(240) }).optional(),
+  /** One box, written in the owner's app language (`descriptionLang`). */
+  descriptionText: z.string().trim().max(240).optional(),
+  descriptionLang: z.enum(["fr", "en", "zh"]).optional(),
   city: z.string().trim().min(2).max(60),
   address: opt(200),
   /** Left out = unchanged (the location widget manages it). */
@@ -106,6 +110,17 @@ async function mergeSettings(ctx: SettingsCtx, patch: Partial<RestaurantSettings
 const i18nOrNull = (t: { fr: string; en: string; zh: string }) =>
   t.fr ? { fr: t.fr, ...(t.en ? { en: t.en } : {}), ...(t.zh ? { zh: t.zh } : {}) } : null;
 
+/**
+ * The slogan typed once, in the owner's language. Unchanged text keeps its translations; new text
+ * replaces them (no stale translation of an old slogan). French is the fallback every visitor sees,
+ * so text written in English or Chinese is also kept as the French version.
+ */
+function oneLanguage(prev: { fr: string; en?: string; zh?: string } | null, text: string, lang: "fr" | "en" | "zh") {
+  if (!text) return null;
+  if (prev && (prev[lang] ?? (lang === "fr" ? prev.fr : undefined)) === text) return prev;
+  return lang === "fr" ? { fr: text } : { fr: text, [lang]: text };
+}
+
 export async function saveProfile(ctx: SettingsCtx, input: z.input<typeof ProfileInput>) {
   const p = ProfileInput.safeParse(input);
   if (!p.success) throw new SettingsValidationError("invalid");
@@ -116,13 +131,14 @@ export async function saveProfile(ctx: SettingsCtx, input: z.input<typeof Profil
     columns: { id: true },
   });
   if (taken) throw new SettingsValidationError("slug_taken");
+  const r0 = await current(ctx);
   try {
     await update(
       ctx,
       {
         name: p.data.name,
         slug,
-        description: i18nOrNull(p.data.description),
+        description: p.data.descriptionText !== undefined ? oneLanguage(r0.description, p.data.descriptionText, p.data.descriptionLang ?? "fr") : p.data.description ? i18nOrNull(p.data.description) : r0.description,
         city: p.data.city,
         address: p.data.address || null,
         ...(p.data.gmapsUrl !== undefined ? { gmapsUrl: p.data.gmapsUrl || null } : {}),

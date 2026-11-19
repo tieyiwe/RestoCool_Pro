@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { openingHours, restaurants } from "@/db/schema";
 import { FEATURE_FLAGS } from "@/db/schema";
 import {
@@ -31,6 +31,8 @@ type SectionProps = { r: Restaurant; next?: string; submitLabel?: string };
 
 export async function ProfileSection({ r, next, submitLabel }: SectionProps) {
   const t = await getTranslations("settings.profile");
+  const l = await getLocale();
+  const locale = (l === "en" || l === "zh" ? l : "fr") as "fr" | "en" | "zh";
   return (
     <SettingsForm action={saveProfileAction} next={next} submitLabel={submitLabel} testId="profile-form">
       <label>
@@ -42,12 +44,12 @@ export async function ProfileSection({ r, next, submitLabel }: SectionProps) {
         <input name="slug" defaultValue={r.slug} required maxLength={48} pattern="[a-z0-9-]+" className={input} autoCapitalize="none" />
         <span className="mt-1 block text-xs text-muted-foreground">{t("slugHint", { url: `${env.appUrl().replace(/^https?:\/\//, "")}/r/${r.slug}` })}</span>
       </label>
-      <fieldset className="grid gap-2">
-        <legend className={label}>{t("description")}</legend>
-        <input name="description_fr" defaultValue={r.description?.fr ?? ""} maxLength={240} placeholder={t("descriptionPlaceholder")} aria-label={`${t("description")} FR`} className={input} />
-        <input name="description_en" defaultValue={r.description?.en ?? ""} maxLength={240} placeholder="EN" aria-label={`${t("description")} EN`} className={input} />
-        <input name="description_zh" defaultValue={r.description?.zh ?? ""} maxLength={240} placeholder="中文" aria-label={`${t("description")} ZH`} className={input} />
-      </fieldset>
+      {/* One box, in the language the owner uses the app in. */}
+      <label>
+        <span className={label}>{t("description")}</span>
+        <input type="hidden" name="description_lang" value={locale} />
+        <input name="description" defaultValue={r.description?.[locale] ?? r.description?.fr ?? ""} maxLength={240} placeholder={t("descriptionPlaceholder")} className={input} data-testid="description-input" />
+      </label>
       <div className="grid gap-3 sm:grid-cols-2">
         <CityField defaultValue={r.city ?? ""} label={t("city")} className={input} required />
         <label>
@@ -160,7 +162,7 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
             ] as const
           ).map(([k, icon, on]) => (
             <label key={k} className={opt + " min-h-14 font-semibold"}>
-              <input type="checkbox" name="serviceTypes" value={k} defaultChecked={on} className="peer h-5 w-5 shrink-0" data-testid={`type-${k}`} />
+              <input type="checkbox" name="serviceTypes" value={k} defaultChecked={on} id={k === "dine_in" ? "svc-dine-in" : undefined} className="h-5 w-5 shrink-0" data-testid={`type-${k}`} />
               <span>
                 {icon} {t(`type.${k}`)}
                 <span className="block text-xs font-normal text-muted-foreground">{t(`typeHint.${k}`)}</span>
@@ -170,7 +172,7 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
         </div>
       </fieldset>
       {/* Dine-in details: only when « Sur place » is ticked. */}
-      <div className="hidden flex-col gap-4 [form:has(input[value=dine_in]:checked)_&]:flex" data-testid="dine-in-details">
+      <div className="hidden flex-col gap-4 [form:has(#svc-dine-in:checked)_&]:flex" data-testid="dine-in-details">
         <fieldset>
           <legend className={label}>{t("seating")}</legend>
           <p className="mb-2 text-xs text-muted-foreground">{t("seatingHint")}</p>

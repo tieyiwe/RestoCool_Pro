@@ -34,7 +34,8 @@ export async function saveProfileAction(_p: SettingsResult, fd: FormData) {
     settings.saveProfile(ctx, {
       name: s(fd, "name"),
       slug: s(fd, "slug"),
-      description: { fr: s(fd, "description_fr"), en: s(fd, "description_en"), zh: s(fd, "description_zh") },
+      descriptionText: s(fd, "description"),
+      descriptionLang: (["fr", "en", "zh"].includes(s(fd, "description_lang")) ? s(fd, "description_lang") : "fr") as "fr" | "en" | "zh",
       city: s(fd, "city"),
       address: s(fd, "address"),
       ...(fd.has("gmapsUrl") ? { gmapsUrl: s(fd, "gmapsUrl") } : {}),

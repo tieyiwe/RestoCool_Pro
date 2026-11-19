@@ -117,8 +117,11 @@ test("takeaway by WhatsApp sends a prefilled French message with numbers and tot
   const popup = context.waitForEvent("page");
   await page.getByRole("button", { name: "Envoyer sur WhatsApp" }).click();
   const wa = await popup;
+  // The window opens at the tap; WhatsApp loads once the order is recorded on RestoCool.
+  await wa.waitForURL(/wa\.me/);
   const url = decodeURIComponent(wa.url());
   expect(url).toContain("wa.me/22670000001");
+  expect(url).toMatch(/Commande n° \d+/);
   expect(url).toContain("1 × 40. Jus de bissap");
   expect(url).toContain("Nom : Awa");
   expect(url).toContain("Retrait vers : 12:30");
