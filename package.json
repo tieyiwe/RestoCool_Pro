@@ -66,6 +66,7 @@
   "overrides": {
     "next": {
       "postcss": "^8.5.32"
-    }
+    },
+    "vite": "8.3.8"
   }
 }
