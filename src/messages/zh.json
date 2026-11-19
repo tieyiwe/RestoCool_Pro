@@ -476,7 +476,8 @@
     "cashierNav": "收银",
     "myTables": "我的餐桌",
     "takeOrder": "代客点单",
-    "assignmentsNav": "今日分配"
+    "assignmentsNav": "今日分配",
+    "qrNav": "二维码"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -1615,7 +1616,8 @@
       "publish_empty": "发布菜单前请至少添加一道可见菜品。",
       "unknown": "出现错误，请稍后重试。",
       "qr_plan": "每桌一个二维码包含在专业版中。免费版请使用全店通用二维码。",
-      "takeaway_whatsapp_missing": "请填写接收外带订单的 WhatsApp，或勾选“是”使用您的主 WhatsApp。"
+      "takeaway_whatsapp_missing": "请填写接收外带订单的 WhatsApp，或勾选“是”使用您的主 WhatsApp。",
+      "no_service": "请至少选择一种服务方式：堂食、外带或外送。"
     },
     "profile": {
       "title": "资料",
@@ -1685,7 +1687,19 @@
       "tableCountHint": "我们会创建 1 到 N 号桌，每张桌子都有自己的二维码。可在“座位与二维码”中修改。没有编号桌子请填 0。",
       "delays": "服务提醒时间（分钟）",
       "warnMin": "橙色：超过",
-      "lateMin": "红色：超过"
+      "lateMin": "红色：超过",
+      "types": "您如何为顾客服务？",
+      "typesHint": "勾选您提供的所有方式。仪表板和菜单会随之调整；您可以随时在设置中更改。",
+      "type": {
+        "dine_in": "堂食",
+        "takeaway": "外带",
+        "delivery": "外送"
+      },
+      "typeHint": {
+        "dine_in": "顾客在店内用餐（餐桌、包间、柜台）",
+        "takeaway": "顾客下单后自取",
+        "delivery": "您送餐到顾客处"
+      }
     },
     "appearance": {
       "title": "品牌形象",
@@ -2117,7 +2131,9 @@
     "payNotFound": "在这部手机上找不到该付款。",
     "askBill": "要求结账",
     "billAsked": "已要求结账：服务员马上来。",
-    "askBillFailed": "请求未发出，请重试或叫服务员。"
+    "askBillFailed": "请求未发出，请重试或叫服务员。",
+    "deliveryQuick": "外送",
+    "deliveryQuickHint": "填写您的地址"
   },
   "seating": {
     "title": "餐桌和包间",
@@ -2354,7 +2370,8 @@
       "room": "{label}包间",
       "busy": "这张桌还有订单在处理中：请先上菜或取消。"
     },
-    "collect": "收款"
+    "collect": "收款",
+    "viaWhatsapp": "通过 WhatsApp"
   },
   "personnel": {
     "title": "员工",
@@ -4442,5 +4459,28 @@
     "nothingToCopy": "没有可沿用的（今天已安排，或昨天没有）。",
     "servedBy": "服务员：",
     "pool": "所有人（未分配）"
+  },
+  "whatsappOrders": {
+    "title": "外带订单（WhatsApp）",
+    "today": "今天：已交付 {done}，已取消 {cancelled}",
+    "empty": "暂无待处理订单。顾客从您的菜单通过 WhatsApp 发送的外带订单会显示在这里。",
+    "number": "{n} 号",
+    "received": "{time} 收到",
+    "pickup": "{time} 取餐",
+    "onRequest": "时价菜品",
+    "confirm": "确认",
+    "ready": "已备好",
+    "done": "已交给顾客",
+    "cancel": "取消",
+    "cancelAsk": "取消 {n} 号订单？",
+    "forbidden": "您的角色无权执行此操作。",
+    "error": "操作未成功，请重试。",
+    "hint": "顾客也会在 WhatsApp 上联系您：在那里回复，在这里跟进订单。「已交给顾客」表示订单完成。",
+    "status": {
+      "sent": "已收到",
+      "confirmed": "已确认",
+      "preparing": "准备中",
+      "ready": "已备好"
+    }
   }
 }

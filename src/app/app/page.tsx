@@ -26,6 +26,9 @@ import { pendingJoinCount } from "@/lib/personnel/join";
 import { hasFeature } from "@/lib/plan";
 import { floorStatus } from "@/lib/seating/floor";
 import { FloorPlan } from "@/components/service/floor-plan";
+import { WhatsappOrders } from "@/components/service/whatsapp-orders";
+import { whatsappOrders, whatsappTakeawayOn } from "@/lib/orders/whatsapp";
+import { serviceTypes } from "@/lib/restaurants/service-types";
 
 export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
   const t = await getTranslations("app");
@@ -67,6 +70,9 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   // Live floor plan: businesses with tables or private rooms, for anyone who follows the service.
   const hasFloor = r.kind !== "transport" && seats.some((s) => s.active && (s.type === "table" || s.type === "room")) && hasFeature(r, "kitchenDisplay") && allowed("orders.read");
   const floor = hasFloor ? await floorStatus(db, rid) : null;
+  // WhatsApp takeaway orders recorded on RestoCool (every plan): shown while the WhatsApp button is on, or while some are open.
+  const wa = allowed("orders.read") ? await whatsappOrders(db, rid).catch(() => null) : null;
+  const showWa = Boolean(wa && (wa.open.length > 0 || whatsappTakeawayOn(r)));
   // Reservations of the day (owner, managers, hosts): expected, arrived, absent, to confirm.
   const resvDay = reservationsOpen(r) && allowed("reservations.write") ? await reservationSummary(db, rid) : null;
   const trv = await getTranslations("reservations");
@@ -105,7 +111,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       ...(r.kind === "transport"
         ? ([{ key: "buses", href: "/app/buses", icon: "🚌", need: "seats.write" }] as const)
         : ([
-            { key: "seating", href: "/app/seating", icon: "🪑", need: "seats.write" },
+            ...(serviceTypes(r.settings).dineIn ? ([{ key: "seating", href: "/app/seating", icon: "🪑", need: "seats.write" }] as const) : []),
             { key: "qr", href: "/app/seating/print?qr=main&layout=grid", icon: "🖨️", need: "seats.write" },
           ] as const)),
       { key: "staff", href: "/app/staff", icon: "👥", need: "staff.write" },
@@ -120,20 +126,26 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   const canManage = can(ctx.actor, "settings.write", { restaurantId: ctx.repo.restaurantId });
   const canSeats = can(ctx.actor, "seats.write", { restaurantId: ctx.repo.restaurantId });
   const placeSeats = seats.filter((s) => s.type === "table" || s.type === "room" || s.type === "area");
+  // Takeaway / delivery only: no tables to set up, no tables or areas to count.
+  const dineIn = r.kind === "transport" || serviceTypes(r.settings).dineIn;
   const steps = [
     { key: "branding", done: Boolean(r.logoUrl), href: "/app/settings#appearance" },
     { key: "dishes", done: itemCount > 0, href: "/app/menu" },
-    { key: "seats", done: placeSeats.length > 0, href: "/app/seating" },
+    ...(dineIn ? ([{ key: "seats", done: placeSeats.length > 0, href: "/app/seating" }] as const) : []),
     { key: "print", done: false, href: "/app/seating/print?qr=main&layout=grid" },
     { key: "publish", done: r.published, href: "/app/settings#publish" },
   ] as const;
-  const showSteps = canManage && !(r.logoUrl && itemCount > 0 && placeSeats.length > 0 && r.published);
+  const showSteps = canManage && !(r.logoUrl && itemCount > 0 && (placeSeats.length > 0 || !dineIn) && r.published);
 
   const stats = [
     { label: t("stats.categories"), value: categories.length },
     { label: t("stats.items"), value: itemCount },
-    { label: t("stats.seats"), value: seats.length },
-    { label: t("stats.areas"), value: areas.length },
+    ...(dineIn
+      ? [
+          { label: t("stats.seats"), value: seats.length },
+          { label: t("stats.areas"), value: areas.length },
+        ]
+      : []),
   ];
 
   return (
@@ -196,6 +208,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           </span>
         </Link>
       )}
+      {showWa && wa && <WhatsappOrders initial={wa} perms={{ confirm: allowed("orders.confirm"), prepare: allowed("orders.prepare"), serve: allowed("orders.serve"), cancel: allowed("orders.cancel") }} />}
       {floor && <FloorPlan initial={floor} canRelease={allowed("orders.serve")} />}
       {canReports && <Alerts alerts={alerts} />}
       <Shortcuts items={[...shortcuts]} />

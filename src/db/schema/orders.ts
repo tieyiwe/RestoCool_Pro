@@ -29,6 +29,8 @@ export const orders = pgTable(
     /** Full order number « SL-261112-007 » (initials, date, number of the day): unique per business, for searching. */
     code: text("code"),
     source: orderSourceEnum("source").notNull().default("customer"),
+    /** How the order reached the business: on RestoCool (« app ») or as a takeaway message sent by WhatsApp. */
+    channel: text("channel").$type<"app" | "whatsapp">().notNull().default("app"),
     customerDeviceId: text("customer_device_id"),
     /** Random id the phone sends with an order: a resend (lost answer on a bad network) returns the same order. */
     clientRequestId: text("client_request_id"),

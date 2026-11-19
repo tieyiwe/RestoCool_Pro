@@ -309,6 +309,7 @@ export function OrderCard({ order, now, delays, onChanged, big = false, rank }: 
       {/* Full order number and when it arrived: easy to find again in the history. */}
       <p className="flex flex-wrap gap-x-2 text-xs text-muted-foreground" data-testid="order-meta">
         {order.code && <span className="font-mono font-semibold text-foreground" data-testid="order-code">{order.code}</span>}
+        {order.channel === "whatsapp" && <span className="rounded-full bg-[#25D366]/20 px-2 font-bold text-[#0b5d2a] dark:text-[#7be3a3]" data-testid="order-whatsapp">💬 {t("viaWhatsapp")}</span>}
         <span>{sentLabel(order.sentAt, locale)}</span>
       </p>
       {order.area && <p className="text-xs font-semibold text-muted-foreground">{pick(order.area.name, locale)}</p>}

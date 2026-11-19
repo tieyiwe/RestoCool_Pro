@@ -16,6 +16,7 @@ import { addTables, syncSingletonSeats } from "@/lib/seating/admin";
 export type SettingsCtx = { db: DB; actor: Actor; repo: TenantRepo };
 export type SettingsError =
   | "invalid"
+  | "no_service"
   | "slug_taken"
   | "slug_reserved"
   | "phone_invalid"
@@ -180,6 +181,8 @@ export async function saveHours(ctx: SettingsCtx, input: z.input<typeof HoursInp
 }
 
 export async function saveService(ctx: SettingsCtx, input: z.input<typeof ServiceInput>) {
+  // « Sur place », « À emporter » or « Livraison »: at least one.
+  if (!input.seatingModes?.length) throw new SettingsValidationError("no_service");
   const p = ServiceInput.safeParse(input);
   if (!p.success) throw new SettingsValidationError("invalid");
   const enabledLocales = Array.from(new Set(["fr", ...p.data.enabledLocales]));

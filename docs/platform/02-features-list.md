@@ -25,6 +25,7 @@
 | « Partager ma sélection avec ma table »: friends add their dishes by link (name first); one order with each person's name on their dishes; only the person who started confirms | P B | Live |
 | « Montrer au serveur »: full-screen order with a QR the staff scan | P B | Live |
 | Takeaway on the platform: name, phone, pickup time | P B | Live |
+| Takeaway by WhatsApp is also recorded on RestoCool: the business sees it on its dashboard (« Commandes à emporter (WhatsApp) ») and marks it Confirmée / Prête / « Remise au client » / Annulée; the message carries the order number | G P B | Live |
 | Orders confirmed without network wait on the phone and leave by themselves | P B | Live |
 | « Réserver une table »: day, time, guests, name, email, phone, note; email from RestoCool with a private link to see or cancel | P B (all plans during the launch offer) | Live |
 | Confirmed reservation: email with a one-time arrival QR | P B | Live |

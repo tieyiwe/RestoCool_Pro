@@ -15,6 +15,7 @@ import { hasFeature } from "@/lib/plan";
 import { freeLaunchActive } from "@/lib/platform/flags";
 import { notify } from "@/lib/realtime/events";
 import { sha256 } from "@/lib/tokens";
+import { serviceTypes } from "@/lib/restaurants/service-types";
 
 /* ------------------------------------------------------------------ settings */
 
@@ -53,7 +54,8 @@ export const reservationConfig = (r: Pick<Restaurant, "settings">): ReservationC
 export const reservationsInPlan = (r: R) => freeLaunchActive() || hasFeature(r, "reservations");
 
 /** Reservations open on the public page: turned on by the business and allowed by its plan. */
-export const reservationsOpen = (r: R) => r.kind !== "transport" && reservationConfig(r).enabled && reservationsInPlan(r);
+// Reserving a table only makes sense for a business that serves on site (« Sur place »).
+export const reservationsOpen = (r: R) => r.kind !== "transport" && serviceTypes(r.settings).dineIn && reservationConfig(r).enabled && reservationsInPlan(r);
 
 /* ------------------------------------------------------------------ slots */
 

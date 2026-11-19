@@ -30,6 +30,7 @@ import { StaffOfflineSync } from "@/components/offline/staff-offline-sync";
 import { SideNav } from "@/components/app-shell/side-nav";
 import { notificationSummary } from "@/lib/platform/notifications";
 import { currentDeletion } from "@/lib/restaurants/deletion";
+import { serviceTypes } from "@/lib/restaurants/service-types";
 
 /** Private area: never in search results (robots.txt closes it too). */
 export const metadata: Metadata = { robots: NOINDEX };
@@ -46,24 +47,28 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   // Each person only sees the sections their role can open (the server checks again on every page).
   const allowed = (a: Action | null) => !a || (ctx ? can(ctx.actor, a, { restaurantId: ctx.repo.restaurantId }) : false);
   // A bus company manages buses and itineraries instead of tables and rooms.
-  const transport = ctx ? (await ctx.repo.restaurant.get().catch(() => null))?.kind === "transport" : false;
+  const biz = ctx ? await ctx.repo.restaurant.get().catch(() => null) : null;
+  const transport = biz?.kind === "transport";
+  // Takeaway / delivery only (no « Sur place »): no tables, floor, « Mes tables », assignments or reservations.
+  const dineIn = transport || serviceTypes(biz?.settings).dineIn;
   const nav = (
     [
       { href: "/app", label: t("dashboard"), icon: "🏠", need: null },
       { href: "/app/service", label: t("frontDesk"), icon: "🛎️", need: "orders.read" },
       ...(transport ? ([{ href: "/app/trips", label: t("trips"), icon: "🛣️", need: "orders.confirm" }] as const) : []),
-      ...(transport ? [] : ([{ href: "/app/tables", label: t("myTables"), icon: "🍽️", need: "orders.serve" }, { href: "/app/take", label: t("takeOrder"), icon: "📝", need: "orders.create" }] as const)),
+      ...(transport || !dineIn ? [] : ([{ href: "/app/tables", label: t("myTables"), icon: "🍽️", need: "orders.serve" }] as const)),
+      ...(transport ? [] : ([{ href: "/app/take", label: t("takeOrder"), icon: "📝", need: "orders.create" }] as const)),
       { href: "/app/kitchen", label: t("kitchen"), icon: "👩‍🍳", need: "orders.read" },
       { href: "/app/cashier", label: t("cashierNav"), icon: "💰", need: "orders.pay" },
       { href: "/app/scan", label: t("scan"), icon: "📷", need: null },
       { href: "/app/orders", label: t("history"), icon: "🧾", need: "reports.read" },
-      ...(transport ? [] : ([{ href: "/app/reservations", label: t("reservationsNav"), icon: "📅", need: "reservations.write" }] as const)),
+      ...(transport || !dineIn ? [] : ([{ href: "/app/reservations", label: t("reservationsNav"), icon: "📅", need: "reservations.write" }] as const)),
       { href: "/app/menu", label: t("menu"), icon: "📖", need: "menu.write" },
       transport
         ? ({ href: "/app/buses", label: t("buses"), icon: "🚌", need: "seats.write" } as const)
-        : ({ href: "/app/seating", label: t("seating"), icon: "🪑", need: "seats.write" } as const),
+        : ({ href: "/app/seating", label: dineIn ? t("seating") : t("qrNav"), icon: dineIn ? "🪑" : "🔳", need: "seats.write" } as const),
       { href: "/app/staff", label: t("staff"), icon: "👥", need: "staff.write" },
-      ...(transport ? [] : ([{ href: "/app/staff/assignments", label: t("assignmentsNav"), icon: "🗂️", need: "staff.write" }] as const)),
+      ...(transport || !dineIn ? [] : ([{ href: "/app/staff/assignments", label: t("assignmentsNav"), icon: "🗂️", need: "staff.write" }] as const)),
       { href: "/app/promotions", label: t("promotions"), icon: "🔥", need: "settings.write" },
       { href: "/app/reviews", label: t("reviewsNav"), icon: "⭐", need: "reports.read" },
       { href: "/app/settings", label: t("settings"), icon: "⚙️", need: "settings.write" },
@@ -85,7 +90,9 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
         ? ["/app/cashier", "/app/scan", "/app"]
       : allowed("orders.serve") && !allowed("reports.read") && !allowed("orders.prepare")
         ? // Servers: their tables first, then taking an order, the scanner and the full board.
-          ["/app/tables", "/app/take", "/app/scan", "/app/service"]
+          dineIn
+          ? ["/app/tables", "/app/take", "/app/scan", "/app/service"]
+          : ["/app/service", "/app/take", "/app/scan", "/app"]
         : ["/app", "/app/service", "/app/scan", allowed("orders.prepare") && !allowed("reports.read") ? "/app/kitchen" : "/app/orders"];
   const tabs = order.map((h) => nav.find((n) => n.href === h)).filter((n): n is (typeof nav)[number] => Boolean(n)).slice(0, 4);
   const more = nav.filter((n) => !tabs.includes(n));

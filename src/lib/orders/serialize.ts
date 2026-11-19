@@ -63,6 +63,7 @@ export function staffOrder(
     status: o.status,
     validationMode: o.validationMode,
     source: o.source,
+    channel: o.channel,
     seat: o.seatType ? { type: o.seatType, label: o.seatLabel ?? "" } : null,
     seatId: o.seatId,
     sessionId: o.sessionId,

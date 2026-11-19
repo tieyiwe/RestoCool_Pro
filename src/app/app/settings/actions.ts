@@ -7,6 +7,7 @@ import { log } from "@/lib/log";
 import { FEATURE_FLAGS } from "@/db/schema";
 import * as settings from "@/lib/restaurants/settings";
 import type { SettingsError } from "@/lib/restaurants/settings";
+import { modesFor } from "@/lib/restaurants/service-types";
 
 export type SettingsResult = { ok: boolean; error?: SettingsError | "unknown"; at: number } | null;
 
@@ -71,7 +72,13 @@ export async function saveHoursAction(_p: SettingsResult, fd: FormData) {
 export async function saveServiceAction(_p: SettingsResult, fd: FormData) {
   return run((ctx) =>
     settings.saveService(ctx, {
-      seatingModes: fd.getAll("seatingModes").map(String) as never,
+      // « Comment servez-vous vos clients ? »: dine-in (with its places), takeaway, delivery.
+      seatingModes: (fd.has("serviceTypesForm")
+        ? modesFor(
+            { dineIn: fd.getAll("serviceTypes").includes("dine_in"), takeaway: fd.getAll("serviceTypes").includes("takeaway"), delivery: fd.getAll("serviceTypes").includes("delivery") },
+            fd.getAll("seatingModes").map(String),
+          )
+        : fd.getAll("seatingModes").map(String)) as never,
       qrStrategy: s(fd, "qrStrategy") as never,
       orderValidation: s(fd, "orderValidation") as never,
       enabledLocales: fd.getAll("enabledLocales").map(String) as never,

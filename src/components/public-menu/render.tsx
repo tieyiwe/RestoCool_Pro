@@ -13,6 +13,7 @@ import en from "@/messages/en.json";
 import fr from "@/messages/fr.json";
 import zh from "@/messages/zh.json";
 import { MenuApp } from "./menu-app";
+import { serviceTypes } from "@/lib/restaurants/service-types";
 
 /** Published restaurant, or an unpublished one previewed by its own member. */
 export const loadRestaurant = cache(async (slug: string) => {
@@ -59,7 +60,7 @@ export async function PublicMenu({ slug, seatToken, busToken = null }: { slug: s
       messages={messages}
       whatsappQr={whatsappQr}
       seatToken={seatToken}
-      seating={{ enabled, pickerAvailable, inactivity: r.settings.inactivity ?? DEFAULT_INACTIVITY, ...(transport ? { transport: { busToken } } : {}) }}
+      seating={{ enabled, pickerAvailable, inactivity: r.settings.inactivity ?? DEFAULT_INACTIVITY, dineIn: transport || serviceTypes(r.settings).dineIn, delivery: serviceTypes(r.settings).delivery, ...(transport ? { transport: { busToken } } : {}) }}
     />
   );
 }

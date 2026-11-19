@@ -952,11 +952,21 @@ export function MenuApp({
               {!guest && seating.enabled && !seat && quickTakeaway && (
                 <div className="mt-4" data-testid="order-mode">
                   <p className="mb-2 font-semibold">{t("howToOrder")}</p>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button type="button" onClick={() => setPicker(true)} className="flex min-h-16 flex-col items-center justify-center rounded-xl border-2 border-border px-2 text-center" data-testid="mode-eat-in">
-                      <span className="font-bold">🍽️ {t("eatHere")}</span>
-                      <span className="text-xs text-muted-foreground">{t("eatHereHint")}</span>
-                    </button>
+                  <div className={cn("grid gap-2", seating.dineIn === false && !seating.delivery ? "grid-cols-1" : "grid-cols-2")}>
+                    {seating.dineIn !== false ? (
+                      <button type="button" onClick={() => setPicker(true)} className="flex min-h-16 flex-col items-center justify-center rounded-xl border-2 border-border px-2 text-center" data-testid="mode-eat-in">
+                        <span className="font-bold">🍽️ {t("eatHere")}</span>
+                        <span className="text-xs text-muted-foreground">{t("eatHereHint")}</span>
+                      </button>
+                    ) : (
+                      // No dine-in at this business: takeaway, and delivery when it delivers.
+                      seating.delivery && (
+                        <button type="button" onClick={() => setPicker(true)} className="flex min-h-16 flex-col items-center justify-center rounded-xl border-2 border-border px-2 text-center" data-testid="mode-delivery">
+                          <span className="font-bold">🛵 {t("deliveryQuick")}</span>
+                          <span className="text-xs text-muted-foreground">{t("deliveryQuickHint")}</span>
+                        </button>
+                      )
+                    )}
                     <button
                       type="button"
                       onClick={() => void choose(quickTakeaway)}
@@ -1075,9 +1085,32 @@ export function MenuApp({
         <TakeawaySheet
           t={t}
           onClose={closePanel}
-          onSend={(name, pickup) => {
-            const href = whatsappHref(data.takeawayWhatsapp!, takeawayMessage(data, items, lines, { name, pickup }));
-            if (href) window.open(href, "_blank", "noopener");
+          onSend={async (name, pickup) => {
+            // Opened now (a tap), filled once the order is recorded: browsers block windows opened later.
+            const win = window.open("", "_blank");
+            let ref: { number: number; code: string | null } | null = null;
+            if (!data.preview) {
+              // The same order is recorded on RestoCool so the business sees it on its dashboard.
+              const res = await fetch("/api/public/takeaway", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  slug: data.slug,
+                  deviceId: deviceId(),
+                  customerName: name.trim().slice(0, 40) || "Client",
+                  pickupTime: /^([01]\d|2[0-3]):[0-5]\d$/.test(pickup) ? pickup : undefined,
+                  requestId: `wa${Date.now().toString(36)}${Math.random().toString(36).slice(2, 12)}`.padEnd(16, "0"),
+                  lines: lines.map((l) => ({ itemId: l.itemId, variantId: l.variantId, optionIds: l.optionIds, qty: l.qty, note: l.note || undefined })),
+                }),
+                signal: AbortSignal.timeout(4000),
+              }).catch(() => null);
+              if (res?.ok) ref = (await res.json().catch(() => null)) as typeof ref;
+            }
+            // Never blocked by RestoCool: without network the WhatsApp message still goes.
+            const href = whatsappHref(data.takeawayWhatsapp!, takeawayMessage(data, items, lines, { name, pickup }, ref));
+            if (!href) return win?.close();
+            if (win) win.location.href = href;
+            else window.location.href = href;
           }}
         />
       )}

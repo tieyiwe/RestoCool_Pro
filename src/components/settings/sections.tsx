@@ -13,12 +13,12 @@ import {
 } from "@/app/app/settings/actions";
 import { env } from "@/lib/env";
 import { formatBfPhone } from "@/lib/format";
-import { SEATING_MODES } from "@/lib/restaurants/settings";
 import { BrandingEditor } from "./branding-editor";
 import { WhatsappFields } from "./whatsapp-fields";
 import { CityField } from "@/components/forms/city-field";
 import { LocationField } from "./location-field";
 import { SettingsForm } from "./settings-form";
+import { DINE_IN_MODES, serviceTypes } from "@/lib/restaurants/service-types";
 
 type Restaurant = typeof restaurants.$inferSelect;
 type Hours = Array<typeof openingHours.$inferSelect>;
@@ -141,22 +141,48 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
   const t = await getTranslations("settings.service");
   const s = r.settings;
   const modes = s.seatingModes ?? ["table", "takeaway"];
+  const types = serviceTypes(s);
   const locales = s.enabledLocales ?? ["fr", "en", "zh"];
   const opt = "flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm has-checked:border-primary has-checked:bg-muted";
   return (
     <SettingsForm action={saveServiceAction} next={next} submitLabel={submitLabel} testId="service-form">
-      <fieldset>
-        <legend className={label}>{t("seating")}</legend>
-        <p className="mb-2 text-xs text-muted-foreground">{t("seatingHint")}</p>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {SEATING_MODES.map((m) => (
-            <label key={m} className={opt}>
-              <input type="checkbox" name="seatingModes" value={m} defaultChecked={modes.includes(m)} className="h-5 w-5 shrink-0" />
-              {t(`modes.${m}`)}
+      {/* « Comment servez-vous vos clients ? »: the rest of the app follows this choice. */}
+      <input type="hidden" name="serviceTypesForm" value="1" />
+      <fieldset data-testid="service-types">
+        <legend className={label}>{t("types")}</legend>
+        <p className="mb-2 text-xs text-muted-foreground">{t("typesHint")}</p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {(
+            [
+              ["dine_in", "🍽️", types.dineIn],
+              ["takeaway", "🛍️", types.takeaway],
+              ["delivery", "🛵", types.delivery],
+            ] as const
+          ).map(([k, icon, on]) => (
+            <label key={k} className={opt + " min-h-14 font-semibold"}>
+              <input type="checkbox" name="serviceTypes" value={k} defaultChecked={on} className="peer h-5 w-5 shrink-0" data-testid={`type-${k}`} />
+              <span>
+                {icon} {t(`type.${k}`)}
+                <span className="block text-xs font-normal text-muted-foreground">{t(`typeHint.${k}`)}</span>
+              </span>
             </label>
           ))}
         </div>
       </fieldset>
+      {/* Dine-in details: only when « Sur place » is ticked. */}
+      <div className="hidden flex-col gap-4 [form:has(input[value=dine_in]:checked)_&]:flex" data-testid="dine-in-details">
+        <fieldset>
+          <legend className={label}>{t("seating")}</legend>
+          <p className="mb-2 text-xs text-muted-foreground">{t("seatingHint")}</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {DINE_IN_MODES.map((m) => (
+              <label key={m} className={opt}>
+                <input type="checkbox" name="seatingModes" value={m} defaultChecked={modes.includes(m) || (!types.dineIn && m === "table")} className="h-5 w-5 shrink-0" />
+                {t(`modes.${m}`)}
+              </label>
+            ))}
+          </div>
+        </fieldset>
       {askTableCount && (
         <label className="text-sm">
           <span className={label}>{t("tableCount")}</span>
@@ -164,6 +190,7 @@ export async function ServiceSection({ r, next, submitLabel, askTableCount }: Se
           <span className="mt-1 block text-xs text-muted-foreground">{t("tableCountHint")}</span>
         </label>
       )}
+      </div>
       <fieldset>
         <legend className={label}>{t("qr")}</legend>
         <div className="grid gap-2">

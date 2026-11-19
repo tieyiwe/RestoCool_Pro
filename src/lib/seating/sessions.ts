@@ -34,7 +34,9 @@ export async function expireUnhandledOrders(db: DB, restaurantId?: string, now =
   const rows = await db
     .update(orders)
     .set({ status: "cancelled", cancelledAt: now, cancelledReason: UNHANDLED_REASON, updatedAt: now })
-    .where(and(eq(orders.status, "sent"), lt(orders.updatedAt, cutoff), restaurantId ? eq(orders.restaurantId, restaurantId) : undefined))
+    // WhatsApp takeaway orders are handled in the conversation: they wait for the business to tap
+    // « Remise au client » or « Annuler » (shown on the dashboard), never closed after 2 h.
+    .where(and(eq(orders.status, "sent"), eq(orders.channel, "app"), lt(orders.updatedAt, cutoff), restaurantId ? eq(orders.restaurantId, restaurantId) : undefined))
     .returning({ id: orders.id, r: orders.restaurantId, s: orders.sessionId, d: orders.customerDeviceId });
   for (const o of rows) await notify(db, { k: "order", r: o.r, o: o.id, s: o.s, d: o.d }).catch(() => {});
   return rows.length;

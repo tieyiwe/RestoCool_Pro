@@ -476,7 +476,8 @@
     "cashierNav": "Caisse",
     "myTables": "Mes tables",
     "takeOrder": "Prendre une commande",
-    "assignmentsNav": "Affectations du jour"
+    "assignmentsNav": "Affectations du jour",
+    "qrNav": "QR codes"
   },
   "admin": {
     "title": "Administration RestoCool",
@@ -1615,7 +1616,8 @@
       "publish_empty": "Ajoutez au moins un plat visible avant de publier votre menu.",
       "unknown": "Une erreur est survenue. Réessayez dans un instant.",
       "qr_plan": "Un QR code par table est inclus dans la formule Pro. Avec la formule Gratuit, utilisez le QR code unique.",
-      "takeaway_whatsapp_missing": "Indiquez le WhatsApp qui reçoit les commandes à emporter, ou cochez « Oui » pour utiliser votre WhatsApp principal."
+      "takeaway_whatsapp_missing": "Indiquez le WhatsApp qui reçoit les commandes à emporter, ou cochez « Oui » pour utiliser votre WhatsApp principal.",
+      "no_service": "Choisissez au moins une façon de servir vos clients : sur place, à emporter ou livraison."
     },
     "profile": {
       "title": "Profil",
@@ -1685,7 +1687,19 @@
       "tableCountHint": "Nous créons les tables 1 à N, chacune avec son QR code. Vous pourrez les modifier dans « Places et QR ». Laissez 0 si vous n’avez pas de tables numérotées.",
       "delays": "Délais d’alerte du service (minutes)",
       "warnMin": "Orange après",
-      "lateMin": "Rouge après"
+      "lateMin": "Rouge après",
+      "types": "Comment servez-vous vos clients ?",
+      "typesHint": "Cochez tout ce que vous proposez. Votre tableau de bord et votre menu s’adaptent ; vous pourrez changer cela à tout moment dans Paramètres.",
+      "type": {
+        "dine_in": "Sur place",
+        "takeaway": "À emporter",
+        "delivery": "Livraison"
+      },
+      "typeHint": {
+        "dine_in": "Les clients mangent chez vous (tables, salons, comptoir)",
+        "takeaway": "Les clients commandent et viennent chercher",
+        "delivery": "Vous livrez chez le client"
+      }
     },
     "appearance": {
       "title": "Image de marque",
@@ -2117,7 +2131,9 @@
     "payNotFound": "Paiement introuvable sur ce téléphone.",
     "askBill": "Demander l’addition",
     "billAsked": "Addition demandée : le serveur arrive.",
-    "askBillFailed": "La demande n’est pas partie. Réessayez ou appelez le serveur."
+    "askBillFailed": "La demande n’est pas partie. Réessayez ou appelez le serveur.",
+    "deliveryQuick": "Livraison",
+    "deliveryQuickHint": "Indiquez votre adresse"
   },
   "seating": {
     "title": "Tables et salles",
@@ -2354,7 +2370,8 @@
       "room": "le salon {label}",
       "busy": "Une autre commande de cette table est encore en cours : servez-la ou annulez-la d’abord."
     },
-    "collect": "Encaisser"
+    "collect": "Encaisser",
+    "viaWhatsapp": "Par WhatsApp"
   },
   "personnel": {
     "title": "Personnel",
@@ -4442,5 +4459,28 @@
     "nothingToCopy": "Rien à reprendre (déjà fait aujourd’hui, ou rien hier).",
     "servedBy": "Serveur :",
     "pool": "Tout le monde (pas d’affectation)"
+  },
+  "whatsappOrders": {
+    "title": "Commandes à emporter (WhatsApp)",
+    "today": "Aujourd’hui : {done} remises, {cancelled} annulées",
+    "empty": "Aucune commande en attente. Les commandes à emporter envoyées par WhatsApp depuis votre menu arrivent ici.",
+    "number": "N° {n}",
+    "received": "Reçue à {time}",
+    "pickup": "Retrait à {time}",
+    "onRequest": "articles sur demande",
+    "confirm": "Confirmer",
+    "ready": "Prête",
+    "done": "Remise au client",
+    "cancel": "Annuler",
+    "cancelAsk": "Annuler la commande n° {n} ?",
+    "forbidden": "Votre rôle ne permet pas cette action.",
+    "error": "L’action n’a pas abouti. Réessayez.",
+    "hint": "Le client vous écrit aussi sur WhatsApp : répondez-lui là-bas, et suivez la commande ici. « Remise au client » la marque comme terminée.",
+    "status": {
+      "sent": "Reçue",
+      "confirmed": "Confirmée",
+      "preparing": "En préparation",
+      "ready": "Prête"
+    }
   }
 }

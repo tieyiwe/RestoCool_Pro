@@ -476,7 +476,8 @@
     "cashierNav": "Cash register",
     "myTables": "My tables",
     "takeOrder": "Take an order",
-    "assignmentsNav": "Today’s assignments"
+    "assignmentsNav": "Today’s assignments",
+    "qrNav": "QR codes"
   },
   "admin": {
     "title": "RestoCool administration",
@@ -1615,7 +1616,8 @@
       "publish_empty": "Add at least one visible dish before publishing your menu.",
       "unknown": "Something went wrong. Please try again in a moment.",
       "qr_plan": "One QR code per table is included in the Pro plan. On the Free plan, use the single QR code.",
-      "takeaway_whatsapp_missing": "Enter the WhatsApp that receives takeaway orders, or tick “Yes” to use your main WhatsApp."
+      "takeaway_whatsapp_missing": "Enter the WhatsApp that receives takeaway orders, or tick “Yes” to use your main WhatsApp.",
+      "no_service": "Choose at least one way to serve your customers: dine-in, takeaway or delivery."
     },
     "profile": {
       "title": "Profile",
@@ -1685,7 +1687,19 @@
       "tableCountHint": "We create tables 1 to N, each with its own QR code. You can change them in “Seats & QR”. Leave 0 if you have no numbered tables.",
       "delays": "Service alert delays (minutes)",
       "warnMin": "Orange after",
-      "lateMin": "Red after"
+      "lateMin": "Red after",
+      "types": "How do you serve your customers?",
+      "typesHint": "Tick everything you offer. Your dashboard and menu adapt; you can change this any time in Settings.",
+      "type": {
+        "dine_in": "Dine-in",
+        "takeaway": "Takeaway",
+        "delivery": "Delivery"
+      },
+      "typeHint": {
+        "dine_in": "Customers eat at your place (tables, rooms, counter)",
+        "takeaway": "Customers order and pick up",
+        "delivery": "You deliver to the customer"
+      }
     },
     "appearance": {
       "title": "Branding",
@@ -2117,7 +2131,9 @@
     "payNotFound": "Payment not found on this phone.",
     "askBill": "Ask for the bill",
     "billAsked": "Bill requested: your server is coming.",
-    "askBillFailed": "The request did not go through. Try again or call the server."
+    "askBillFailed": "The request did not go through. Try again or call the server.",
+    "deliveryQuick": "Delivery",
+    "deliveryQuickHint": "Give your address"
   },
   "seating": {
     "title": "Tables and rooms",
@@ -2354,7 +2370,8 @@
       "room": "room {label}",
       "busy": "Another order at this table is still in progress: serve or cancel it first."
     },
-    "collect": "Collect"
+    "collect": "Collect",
+    "viaWhatsapp": "By WhatsApp"
   },
   "personnel": {
     "title": "Personnel",
@@ -4442,5 +4459,28 @@
     "nothingToCopy": "Nothing to reuse (already done today, or nothing yesterday).",
     "servedBy": "Server:",
     "pool": "Everyone (not assigned)"
+  },
+  "whatsappOrders": {
+    "title": "Takeaway orders (WhatsApp)",
+    "today": "Today: {done} handed over, {cancelled} cancelled",
+    "empty": "No order waiting. Takeaway orders sent by WhatsApp from your menu arrive here.",
+    "number": "No. {n}",
+    "received": "Received at {time}",
+    "pickup": "Pickup at {time}",
+    "onRequest": "items on request",
+    "confirm": "Confirm",
+    "ready": "Ready",
+    "done": "Handed over",
+    "cancel": "Cancel",
+    "cancelAsk": "Cancel order no. {n}?",
+    "forbidden": "Your role does not allow this.",
+    "error": "That did not work. Try again.",
+    "hint": "The customer also writes to you on WhatsApp: reply there, and follow the order here. « Handed over » marks it as done.",
+    "status": {
+      "sent": "Received",
+      "confirmed": "Confirmed",
+      "preparing": "Being prepared",
+      "ready": "Ready"
+    }
   }
 }

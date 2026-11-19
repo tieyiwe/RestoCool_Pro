@@ -39,6 +39,7 @@ Good to know:
 - **Customer shows their phone** (« Montrer au serveur »): scan the QR on their screen with the phone camera or « Scanner » (📷) in the app. The order opens directly.
 - **Shared order:** each dish carries the person's name (« Moussa · sans piment »). Serve each dish to the right person.
 - **Takeaway:** the card shows the name, a tap-to-call phone and « Retrait à 12:30 ».
+- **Takeaway by WhatsApp:** the customer's WhatsApp message arrives as usual, and the order also appears on the dashboard in « Commandes à emporter (WhatsApp) » (and on « Service » with « 💬 Par WhatsApp »). Reply on WhatsApp, then tap « Prête » and « Remise au client » when the customer has it (or « Annuler »). These orders never close by themselves.
 - **Cancel:** only roles allowed to cancel; a reason is required and the customer sees it.
 - **Orders nobody picked up:** an order left « En attente de l'établissement » for 2 hours closes itself as « Non prise en charge ». Avoid this: someone must always watch « Service » during opening hours.
 - **Tables free themselves when abandoned:**

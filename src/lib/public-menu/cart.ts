@@ -71,6 +71,8 @@ export function takeawayMessage(
   items: Map<string, PublicItem>,
   lines: CartLine[],
   customer: { name: string; pickup: string },
+  /** The order recorded on RestoCool (« n° 12 · SL-261119-012 »), when it could be. */
+  ref?: { number: number; code: string | null } | null,
 ): string {
   const rows: string[] = [];
   for (const l of lines) {
@@ -86,6 +88,7 @@ export function takeawayMessage(
   const t = cartTotals(items, lines);
   return [
     `Bonjour ${data.name}, je souhaite commander à emporter :`,
+    ref ? `Commande n° ${ref.number}${ref.code ? ` (${ref.code})` : ""}` : null,
     ...rows,
     `Total : ${formatFCFA(t.total)}${t.hasOnRequest ? " + articles sur demande" : ""}`,
     `Nom : ${customer.name}`,

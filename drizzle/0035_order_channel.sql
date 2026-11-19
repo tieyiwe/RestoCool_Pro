@@ -1,0 +1,1 @@
+ALTER TABLE "orders" ADD COLUMN "channel" text DEFAULT 'app' NOT NULL;

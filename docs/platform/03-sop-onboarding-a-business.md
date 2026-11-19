@@ -36,7 +36,7 @@
 | 2. « Profil » | « Slogan ou présentation courte », location (« Je suis à mon établissement » with GPS, or a Google Maps link) | Do the GPS step **inside** the business |
 | 3. « Contacts » | Phone(s), WhatsApp, Orange Money and Moov numbers | Confirm whether takeaway orders go to the same WhatsApp |
 | 4. « Horaires » | Opening hours per day | Hours drive « Ouvert / Fermé » and the reservation times |
-| 5. « Service et tables » | Tables (how many: tables 1..N are created with their QR), private rooms, takeaway, delivery; QR strategy | Prefer « one QR per table » |
+| 5. « Service et tables » | **« Comment servez-vous vos clients ? »**: Sur place, À emporter, Livraison (tick all that apply). With « Sur place »: how customers sit (tables, areas, private rooms, counter) and how many tables (1..N are created with their QR); QR strategy | A takeaway/delivery-only business unticks « Sur place »: no tables, and the app hides table screens. Changeable any time in Paramètres → Service |
 | 6. « Image de marque » | Logo, cover photo of the business, theme and colours | A real photo of the front or the room makes a big difference |
 
 At the end, the app unlocks and shows « Prochaines étapes » and the main QR card.

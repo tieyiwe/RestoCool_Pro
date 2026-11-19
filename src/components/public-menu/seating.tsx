@@ -14,6 +14,9 @@ export type SeatingConfig = {
   enabled: boolean;
   pickerAvailable: boolean;
   inactivity: InactivityTimings;
+  /** Service types (Paramètres → Service): without dine-in, the cart offers takeaway / delivery only. */
+  dineIn?: boolean;
+  delivery?: boolean;
   /** Bus companies: the picker is the bus seat map (`busToken`: opened from that bus's QR). */
   transport?: { busToken: string | null };
 };
