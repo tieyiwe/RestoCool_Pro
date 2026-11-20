@@ -92,7 +92,7 @@ At the end, the app unlocks and shows « Prochaines étapes » and the main QR c
 
 ## H. Prepared businesses (created by RestoCool, claimed by the owner)
 
-Some businesses were created by RestoCool before the owner signed up. Today this is the case for **Shangri-La**.
+Some businesses were created by RestoCool before the owner signed up. Today this is the case for **Shangri-La** and **La Terrace**.
 
 Such a business carries an **owner email**. The first person who signs in with that exact email, **verified**, becomes the owner (matricule 001). The email is then removed from the business.
 
@@ -112,6 +112,14 @@ Such a business carries an **owner email**. The first person who signs in with t
 6. Then the team (section F), reservations if wanted (section G), and a test order (section E, step 4).
 
 If the owner signs up with a **different** email, nothing happens: they see « create your business ». Do not let them create a second Shangri-La. Fix the secret (or have them use the right email), republish, then they sign in again.
+
+### La Terrace: steps
+
+Same as Shangri-La, with the secret `LATERRACE_OWNER_EMAIL` (logs: « ✓ La Terrace: owner email recorded (…) »). The difference: La Terrace's setup is **not** marked done, so after signing in the owner goes through the setup wizard (prefilled: name, slogan, phone, address, location, colours, logo, menu). With them:
+- check the phone and add their **WhatsApp** (it receives takeaway orders) and Orange Money / Moov numbers;
+- set the **opening hours** (Google only says « closes at 3 AM »);
+- choose the **number of tables** (none were created; takeaway and delivery already exist);
+- add the photos of their dishes and of the place (the menu was imported without photos).
 
 ## I. Go-live checklist (tick with the owner)
 
