@@ -8,7 +8,7 @@ These documents describe the platform as it works today. Screen labels are quote
 |---|---|---|
 | 1 | [Platform overview](01-platform-overview.md) | Everyone (start here) |
 | 2 | [Features list](02-features-list.md) | Sales, support, owners |
-| 3 | [SOP: onboarding a business](03-sop-onboarding-a-business.md) | Sales agents, support, owners |
+| 3 | [SOP: onboarding a business](03-sop-onboarding-a-business.md) · [version française](03-sop-onboarding-a-business.fr.md) | Sales agents, support, owners |
 | 4 | [SOP: daily operations in a business](04-sop-daily-operations.md) | Owners, managers, staff trainers |
 | 5 | [SOP: platform administration (console)](05-sop-platform-administration.md) | TIBLOGICS team |
 | 6 | [Sales and onboarding playbook](06-sales-and-onboarding-playbook.md) | Field sales agents |
@@ -24,6 +24,7 @@ Every document is also available as **PDF** (to print or send) and **Word** (to 
 | 1. Platform overview | [PDF](downloads/01-platform-overview.pdf) | [DOCX](downloads/01-platform-overview.docx) |
 | 2. Features list | [PDF](downloads/02-features-list.pdf) | [DOCX](downloads/02-features-list.docx) |
 | 3. SOP: onboarding a business | [PDF](downloads/03-sop-onboarding-a-business.pdf) | [DOCX](downloads/03-sop-onboarding-a-business.docx) |
+| 3. Procédure : mettre en service un établissement (FR) | [PDF](downloads/03-sop-onboarding-a-business.fr.pdf) | [DOCX](downloads/03-sop-onboarding-a-business.fr.docx) |
 | 4. SOP: daily operations | [PDF](downloads/04-sop-daily-operations.pdf) | [DOCX](downloads/04-sop-daily-operations.docx) |
 | 5. SOP: platform administration | [PDF](downloads/05-sop-platform-administration.pdf) | [DOCX](downloads/05-sop-platform-administration.docx) |
 | 6. Sales and onboarding playbook | [PDF](downloads/06-sales-and-onboarding-playbook.pdf) | [DOCX](downloads/06-sales-and-onboarding-playbook.docx) |
@@ -32,7 +33,7 @@ Every document is also available as **PDF** (to print or send) and **Word** (to 
 
 All of them in one file: [`restocool-documentation.zip`](downloads/restocool-documentation.zip).
 
-The Markdown files (`0*.md`) are the source: edit them, then rebuild the downloads (pandoc for Word, the browser's « print to PDF » or the same pandoc + Chromium steps for PDF).
+Document 3 has a styled layout and a French version (build steps in [`build/`](build/README.md)). The Markdown files (`0*.md`) are the source: edit them, then rebuild the downloads (pandoc for Word, the browser's « print to PDF » or the same pandoc + Chromium steps for PDF).
 
 Related technical notes: [`docs/BACKUP.md`](../BACKUP.md) (backups and restore), [`CLAUDE.md`](../../CLAUDE.md) (build decisions).
 

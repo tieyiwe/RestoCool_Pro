@@ -115,7 +115,8 @@ If the owner signs up with a **different** email, nothing happens: they see « c
 
 ### La Terrace: steps
 
-Same as Shangri-La, with the secret `LATERRACE_OWNER_EMAIL` (logs: « ✓ La Terrace: owner email recorded (…) »). The difference: La Terrace's setup is **not** marked done, so after signing in the owner goes through the setup wizard (prefilled: name, slogan, phone, address, location, colours, logo, menu). With them:
+Same as Shangri-La, with the secret `LATERRACE_OWNER_EMAIL` (logs: « ✓ La Terrace: owner email recorded (…) »). The difference: La Terrace's setup is **not** marked done, so after signing in the owner goes through the setup wizard (prefilled: name, slogan, phone, address, location, colours, logo, front photo, menu). With them:
+
 - check the phone and add their **WhatsApp** (it receives takeaway orders) and Orange Money / Moov numbers;
 - set the **opening hours** (Google only says « closes at 3 AM »);
 - choose the **number of tables** (none were created; takeaway and delivery already exist);
