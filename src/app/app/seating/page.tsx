@@ -38,8 +38,11 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
   const locale = await getLocale();
   const format = await getFormatter();
   const { ok, error } = await searchParams;
-  const [r, areaRows, seatRows] = await Promise.all([ctx.repo.restaurant.get(), ctx.repo.seating.areas(), ctx.repo.seating.seats()]);
+  const [r, areaRows, allSeats] = await Promise.all([ctx.repo.restaurant.get(), ctx.repo.seating.areas(), ctx.repo.seating.seats()]);
   if (!r) return null;
+  // The automatic « Sur place » (dine-in without tables yet) is managed by RestoCool, not listed.
+  const onsite = allSeats.find((s) => s.id === r.settings.onsiteSeatId && s.active) ?? null;
+  const seatRows = allSeats.filter((s) => s.id !== r.settings.onsiteSeatId);
   // A bus company has buses and itineraries instead of tables and rooms.
   if (r.kind === "transport") redirect("/app/buses");
   const sessions = await openSessions({ db: getDb(), actor: ctx.actor, repo: ctx.repo });
@@ -72,6 +75,11 @@ export default async function SeatingPage({ searchParams }: { searchParams: Prom
         <h1 className="text-2xl font-extrabold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("intro")}</p>
       </div>
+      {onsite && (
+        <p className="rounded-lg bg-sky-50 p-3 text-sm text-sky-950" data-testid="onsite-note">
+          🍽️ {t("onsiteNote")}
+        </p>
+      )}
       {okMessage && (
         <p role="status" className="rounded-lg bg-emerald-50 p-3 text-sm font-semibold text-emerald-900">
           ✓ {okMessage}

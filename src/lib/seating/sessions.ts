@@ -4,6 +4,7 @@ import { and, asc, eq, inArray, isNull, lt, or, sql } from "drizzle-orm";
 import type { DB } from "@/db";
 import { areas, buses, orders, restaurants, seats, sessionDevices, tableSessions, trips } from "@/db/schema";
 import { DEFAULT_INACTIVITY } from "./tables";
+import { syncOnsiteSeat } from "./onsite";
 import { notify } from "@/lib/realtime/events";
 
 /**
@@ -241,7 +242,9 @@ const PRINTED_SEATS = new Set(["table", "room", "area"]);
  * are chosen by scanning their printed token only: a seat id seen once (it comes back from a
  * join) must not let a phone rejoin that table later from anywhere.
  */
-export function pickable(r: Pick<Restaurant, "settings">, seat: { type: string }): boolean {
+export function pickable(r: Pick<Restaurant, "settings">, seat: { id?: string; type: string }): boolean {
+  // The automatic « Sur place » (dine-in without tables yet) is always chosen in the picker.
+  if (seat.id && seat.id === r.settings.onsiteSeatId) return true;
   // Bus seats are chosen on the bus map (the traveler may have scanned the bus QR, not the seat's).
   if (seat.type === "seat") return true;
   const perSeat = (r.settings.qrStrategy ?? "per_seat") === "per_seat";
@@ -251,6 +254,7 @@ export function pickable(r: Pick<Restaurant, "settings">, seat: { type: string }
 /** Seats the customer may pick, with an « occupied » flag (open session). Tokens are never returned. */
 export async function pickerSeats(db: DB, r: Restaurant) {
   await sweepStale(db, r);
+  const onsite = await syncOnsiteSeat(db, r);
   const [rows, areaRows, open] = await Promise.all([
     db.select().from(seats).where(and(eq(seats.restaurantId, r.id), eq(seats.active, true))),
     db.select().from(areas).where(eq(areas.restaurantId, r.id)),
@@ -267,6 +271,7 @@ export async function pickerSeats(db: DB, r: Restaurant) {
       capacity: s.capacity,
       area: s.areaId ? (areaRows.find((a) => a.id === s.areaId)?.name ?? null) : null,
       occupied: OCCUPIABLE.has(s.type) && occupied.has(s.id),
+      ...(s.id === onsite ? { onsite: true } : {}),
     }));
 }
 

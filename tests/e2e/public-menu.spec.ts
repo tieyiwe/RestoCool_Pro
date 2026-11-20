@@ -137,11 +137,13 @@ test("photos: thumbnails open full screen and swipe; low-data mode hides all pho
   await page.keyboard.press("Escape");
   await expect(box).toHaveCount(0);
 
-  await page.getByRole("button", { name: /Économie de données/ }).click();
+  await page.getByTestId("low-data-toggle").click();
   await expect(page.getByTestId("menu-item").locator("img")).toHaveCount(0);
   await page.reload();
   await expect(page.getByTestId("menu-item").locator("img")).toHaveCount(0); // remembered on this device
-  await page.getByRole("button", { name: /Économie de données/ }).click();
+  await expect(page.getByTestId("low-data-on")).toBeVisible();
+  await page.getByRole("button", { name: "Afficher les photos" }).click();
+  await expect(page.getByTestId("menu-item").locator("img").first()).toBeVisible();
 });
 
 test("contact shows open/closed, call links, mobile money numbers; fortune cookie opens", async ({ page }) => {

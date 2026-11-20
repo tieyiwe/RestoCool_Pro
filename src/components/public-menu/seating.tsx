@@ -8,7 +8,17 @@ import { cn } from "@/lib/utils";
 type T = ReturnType<typeof makeT>;
 export type SeatType = "table" | "room" | "area" | "counter" | "takeaway" | "delivery";
 export type MySeat = { sessionId: string; seat: { id: string; type: SeatType; label: string }; source: "qr" | "picker"; name?: string };
-type PickerSeat = { id: string; type: SeatType; label: string; capacity: number | null; area: ({ fr: string } & Partial<Record<string, string>>) | null; occupied: boolean };
+type PickerSeat = { id: string; type: SeatType; label: string; capacity: number | null; area: ({ fr: string } & Partial<Record<string, string>>) | null; occupied: boolean; onsite?: boolean };
+
+/** Label of the automatic « Sur place » place (src/lib/seating/onsite.ts ONSITE_LABEL). */
+export const ONSITE_LABEL = "Sur place";
+/** The automatic « Sur place » (dine-in, no tables yet): a counter-type place the customer names. */
+export const isOnsite = (seat: { type: string; label: string }) => seat.type === "counter" && seat.label === ONSITE_LABEL;
+/** « Table 3 », « Salon Ouaga », « Sur place », « Comptoir »… in the visitor's language. */
+export function placeText(seat: { type: string; label: string }, t: T): string {
+  if (isOnsite(seat)) return t("seat_onsite");
+  return `${t(`seat_${seat.type}`)} ${["table", "room", "area", "seat"].includes(seat.type) ? seat.label : ""}`.trim();
+}
 
 export type SeatingConfig = {
   enabled: boolean;
@@ -247,7 +257,7 @@ export function useSeat({ slug, token, config, onToast, t, hold = false }: { slu
 export function SeatBadge({ seat, t, onChange }: { seat: MySeat; t: T; onChange: (() => void) | null }) {
   return (
     <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface py-1 pr-1 pl-3 text-sm font-bold" data-testid="seat-badge">
-      📍 {t(`seat_${seat.seat.type}`)} {["table", "room", "area", "seat"].includes(seat.seat.type) ? seat.seat.label : ""}
+      📍 {placeText(seat.seat, t)}
       {seat.name ? ` · ${seat.name}` : ""}
       {onChange && (
         <button type="button" onClick={onChange} className="min-h-9 rounded-full bg-muted px-3 text-xs font-semibold">
@@ -285,12 +295,12 @@ function SeatToken({ s, t, lang, showArea }: { s: PickerSeat; t: T; lang: string
       </span>
     );
   }
-  const icon = s.type === "takeaway" ? "🛍️" : s.type === "delivery" ? "🛵" : s.type === "counter" ? "🛎️" : "🌿";
+  const icon = s.onsite ? "🍽️" : s.type === "takeaway" ? "🛍️" : s.type === "delivery" ? "🛵" : s.type === "counter" ? "🛎️" : "🌿";
   return (
     <span className="relative flex min-h-12 items-center gap-2 rounded-lg bg-vert py-2 pr-4 pl-6 font-bold text-creme shadow-md">
       <span className="absolute top-1/2 left-2 h-2 w-2 -translate-y-1/2 rounded-full bg-creme/80" aria-hidden />
       <span aria-hidden>{icon}</span>
-      {s.type === "area" ? s.label : t(`seat_${s.type}`)}
+      {s.onsite ? t("seat_onsite") : s.type === "area" ? s.label : t(`seat_${s.type}`)}
     </span>
   );
 }
@@ -373,7 +383,7 @@ export function SeatPicker({ slug, lang, t, onChoose, onClose }: { slug: string;
               <span className="mb-1 block font-semibold">{t("counterName")}</span>
               <input value={name} onChange={(e) => setName(e.target.value)} maxLength={40} autoComplete="given-name" required className="h-12 w-full rounded-xl border border-border bg-surface px-3" />
             </label>
-            <p className="text-sm text-muted-foreground">{t("counterHint")}</p>
+            <p className="text-sm text-muted-foreground">{t(counter.onsite ? "onsiteHint" : "counterHint")}</p>
             <button type="submit" disabled={busy} className="min-h-12 rounded-xl font-bold" style={{ background: "var(--accent)", color: "var(--on-accent)" }}>
               {t("confirm")}
             </button>
@@ -398,7 +408,7 @@ export function SeatPicker({ slug, lang, t, onChoose, onClose }: { slug: string;
               const showArea = new Set(g.list.map((x) => x.area?.fr ?? "")).size > 1;
               return (
               <section key={g.type}>
-                <h3 className="mb-2 font-semibold">{t(`group_${g.type}`)}</h3>
+                <h3 className="mb-2 font-semibold">{t(g.type === "counter" && g.list.every((x) => x.onsite) ? "group_onsite" : `group_${g.type}`)}</h3>
                 <div className="flex flex-wrap gap-3">
                   {g.list.map((s) => (
                     <button
@@ -407,7 +417,7 @@ export function SeatPicker({ slug, lang, t, onChoose, onClose }: { slug: string;
                       disabled={busy}
                       onClick={() => pick(s)}
                       className={cn("relative rounded-2xl p-1 focus-visible:outline-3", s.occupied && "opacity-60")}
-                      aria-label={`${t(`seat_${s.type}`)} ${s.label}${s.occupied ? ` (${t("occupied")})` : ""}`}
+                      aria-label={`${s.onsite ? t("seat_onsite") : `${t(`seat_${s.type}`)} ${s.label}`}${s.occupied ? ` (${t("occupied")})` : ""}`}
                       data-testid="picker-seat"
                     >
                       <SeatToken s={s} t={t} lang={lang} showArea={showArea} />

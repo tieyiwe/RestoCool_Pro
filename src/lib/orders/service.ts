@@ -207,6 +207,7 @@ export async function placeCustomerOrder(db: DB, r: Restaurant, deviceId: string
   if (!s) throw new OrderError("no_seat");
   const type = s.seat.type;
   const name = input.customerName ?? s.device.customerName ?? null;
+  // Counter and the automatic « Sur place »: staff call the customer by their first name.
   if (type === "counter" && !name) throw new OrderError("name_required");
   // Takeaway: the business must be able to call the customer back.
   if (type === "takeaway" && (!name || !input.customerPhone)) throw new OrderError("takeaway_required");

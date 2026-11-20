@@ -9,6 +9,7 @@ import { whatsappHref } from "@/lib/format";
 import { hasFeature } from "@/lib/plan";
 import { loadPublicMenu } from "@/lib/public-menu/load";
 import { DEFAULT_INACTIVITY } from "@/lib/seating/tables";
+import { syncOnsiteSeat } from "@/lib/seating/onsite";
 import en from "@/messages/en.json";
 import fr from "@/messages/fr.json";
 import zh from "@/messages/zh.json";
@@ -53,7 +54,9 @@ export async function PublicMenu({ slug, seatToken, busToken = null }: { slug: s
   const modes = r.settings.seatingModes ?? ["table", "takeaway"];
   // A bus company: travelers always pick their seat on the bus map (or scan the seat-back QR).
   const transport = r.kind === "transport";
-  const pickerAvailable = enabled && (transport || generic || modes.some((m) => m === "counter" || m === "takeaway" || m === "delivery"));
+  // Dine-in without any table or room yet: an automatic « Sur place » place (first name only).
+  const onsite = enabled && !transport ? await syncOnsiteSeat(getDb(), r) : null;
+  const pickerAvailable = enabled && (transport || generic || !!onsite || modes.some((m) => m === "counter" || m === "takeaway" || m === "delivery"));
   return (
     <MenuApp
       data={data}

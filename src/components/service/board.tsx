@@ -213,7 +213,7 @@ export function SeatBadgeLarge({ seat, name }: { seat: StaffOrder["seat"]; name:
   const showLabel = seat.type === "table" || seat.type === "room" || seat.type === "area";
   return (
     <span className={cn("inline-flex min-h-14 min-w-14 items-center justify-center px-3 font-display text-2xl leading-none font-extrabold", SEAT_STYLE[seat.type])} data-testid="seat-big">
-      {showLabel ? seat.label : t(`seat.${seat.type}`)}
+      {showLabel ? seat.label : seat.type === "counter" && seat.label === "Sur place" ? t("seat.onsite") : t(`seat.${seat.type}`)}
       {!showLabel && name ? <span className="ml-2 text-base font-bold">· {name}</span> : null}
     </span>
   );

@@ -15,7 +15,7 @@ import { GuestBanner, GuestNameGate, GuestShare, HostShare, useAutoSave, useShar
 import { ReviewsSection, Stars, useReviews } from "./reviews";
 import { OfflineBanner } from "@/components/offline/offline-banner";
 import { HistoryList, newRequestId, OrderDetailsFields, OrdersList, sendOrder, ServedCelebration, ShowToServer, useHiddenOrders, useHistory, useLiveOrders, type CustomerOrder } from "./orders";
-import { deviceId, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
+import { deviceId, placeText, SeatBadge, SeatPicker, StillThere, useSeat, type SeatingConfig } from "./seating";
 import dynamic from "next/dynamic";
 import { PromoDetails, PromoStrip, SponsorBanner } from "./promos";
 import { rememberPlace } from "@/lib/public-menu/recent";
@@ -146,7 +146,11 @@ export function MenuApp({
   useEffect(() => {
     const l = readStore("session", "rc-lang");
     if (l === "en" || l === "zh") setLang(data.locales.includes(l) ? l : "fr");
-    setLowData(readStore("local", "rc-lowdata") === "1");
+    // Photos off when the customer chose it on this phone, or when the phone's own data saver is on
+    // (until they ask for the photos: « 0 » remembers that choice).
+    const lowPref = readStore("local", "rc-lowdata");
+    const saver = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+    setLowData(lowPref === "1" || (lowPref !== "0" && saver));
     // A visit ends after VISIT_GAP_MS away, even if the phone kept the tab (or the installed
     // app) open: the customer comes back to a fresh start. Nothing is lost: the cart goes to
     // « Sélections précédentes », sent orders stay saved.
@@ -527,7 +531,7 @@ export function MenuApp({
   }
   function toggleLowData() {
     setLowData((v) => {
-      writeStore("local", "rc-lowdata", v ? null : "1");
+      writeStore("local", "rc-lowdata", v ? "0" : "1");
       return !v;
     });
   }
@@ -706,10 +710,15 @@ export function MenuApp({
               🌿 {t("filterLocal")}
             </Chip>
           )}
-          <Chip on={lowData} onClick={toggleLowData} title={t("lowDataHint")}>
-            📶 {t("lowData")}
-          </Chip>
         </div>
+        {lowData && (
+          <p className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-2 px-4 pb-2 text-sm text-muted-foreground" data-testid="low-data-on">
+            📶 {t("lowDataOn")}
+            <button type="button" onClick={toggleLowData} className="min-h-11 font-semibold text-[var(--accent)] underline underline-offset-2">
+              {t("lowDataShow")}
+            </button>
+          </p>
+        )}
         {!filtering && (
           <nav aria-label={t("categories")} className="mx-auto flex max-w-3xl gap-2 overflow-x-auto px-3 pb-2 [scrollbar-width:none]">
             {categories.map((c) => (
@@ -786,6 +795,14 @@ export function MenuApp({
               🥠 {t("fortune")}
             </button>
           </div>
+        )}
+
+        {!lowData && (
+          <p className="my-4 text-center">
+            <button type="button" onClick={toggleLowData} className="min-h-11 px-3 text-sm text-muted-foreground underline underline-offset-2" data-testid="low-data-toggle">
+              📶 {t("lowDataHide")}
+            </button>
+          </p>
         )}
 
         {data.sponsor && (
@@ -983,7 +1000,7 @@ export function MenuApp({
               {guest ? null : seating.enabled ? (
                 <>
                   {seat && <OrderDetailsFields seat={seat} t={t} values={details} onChange={(v) => setDetails((d) => ({ ...d, ...v }))} />}
-                  {seat && <p className="mt-3 text-sm text-muted-foreground">{t("orderFor", { seat: `${t(`seat_${seat.seat.type}`)} ${["table", "room", "area"].includes(seat.seat.type) ? seat.seat.label : ""}`.trim() })}</p>}
+                  {seat && <p className="mt-3 text-sm text-muted-foreground">{t("orderFor", { seat: placeText(seat.seat, t) })}</p>}
                 </>
               ) : (
                 <p className="mt-3 rounded-lg bg-muted p-3 text-sm">{t("showWaiterHint")}</p>

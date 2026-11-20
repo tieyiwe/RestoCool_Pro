@@ -6,7 +6,7 @@ import { formatFCFA } from "@/lib/format";
 import type { makeT } from "@/lib/public-menu/translate";
 import type { CartLine } from "@/lib/public-menu/types";
 import { cn } from "@/lib/utils";
-import { deviceId, type MySeat } from "./seating";
+import { deviceId, placeText, type MySeat } from "./seating";
 import { OUTBOX_AUTO_MS } from "./outbox-config";
 import { reportNetwork } from "@/components/offline/offline-banner";
 import type { QueuedOrder } from "./outbox";
@@ -437,7 +437,7 @@ export function ShowToServer({ order, slug, lang, t, onClose }: { order: Custome
   const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => closeRef.current?.focus(), []);
   const qs = new URLSearchParams({ slug, deviceId: deviceId() });
-  const seatText = order.seat ? `${t(`seat_${order.seat.type}`)} ${order.seat.type === "takeaway" || order.seat.type === "delivery" || order.seat.type === "counter" ? "" : order.seat.label}`.trim() : "";
+  const seatText = order.seat ? placeText(order.seat, t) : "";
   const takeaway = order.seat?.type === "takeaway" || order.seat?.type === "delivery";
   const many = order.items.length > 5;
   return (

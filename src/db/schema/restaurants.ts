@@ -24,6 +24,8 @@ export type RestaurantSettings = {
   importedFrom?: string;
   /** Version of the cover photo the import put in place (replaced by a newer one only while unowned). */
   importedCover?: number;
+  /** The automatic « Sur place » place (dine-in without tables yet), see src/lib/seating/onsite.ts. */
+  onsiteSeatId?: string;
   /**
    * Account recovery (verified by TIBLOGICS): the ownerEmail account replaces the current owner,
    * whose account is switched off (kept for history).
