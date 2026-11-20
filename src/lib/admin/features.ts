@@ -13,6 +13,8 @@ export type FeatureUsage = {
   tables: { releasedByStaff: number; closedFinished: number; closedInactive: number; closedExpired: number; closedStale: number; closedByStaff: number; closedByCustomer: number; openNow: number };
   reviews: { count: number; average: number | null; hidden: number; deleted: number };
   switches: { reviewsOff: number; attendanceOff: number; sharingBusinesses: number; reservationsOn: number };
+  whatsapp: { orders: number; handedOver: number; cancelled: number; open: number; amount: number; businesses: number };
+  serviceTypes: { dineIn: number; takeawayOnly: number; takeaway: number; delivery: number };
   service: { staffOrders: number; staffBusinesses: number; assignedOrders: number; planDays: number; planBusinesses: number; billRequests: number };
   cashier: { collected: number; payments: number; bills: number; averageTicket: number; discounts: number; businesses: number; byMethod: Record<string, number> };
   reservations: {
@@ -113,6 +115,22 @@ export async function featureUsage(db: DB, restaurantId?: string, now = new Date
       (select count(distinct (a.restaurant_id, a.business_date)) from staff_assignments a where a.created_at >= ${since} ${only("a.restaurant_id")})::int as plan_days,
       (select count(distinct a.restaurant_id) from staff_assignments a where a.created_at >= ${since} ${only("a.restaurant_id")})::int as plan_businesses,
       (select count(*) from audit_log l where l.action = 'session.bill_requested' and l.created_at >= ${since} ${only("l.restaurant_id")})::int as bill_requests`);
+  // WhatsApp takeaway orders recorded on RestoCool (last 30 days), and how businesses serve.
+  const wa = await one(sql`
+    select count(*)::int as n,
+      count(*) filter (where o.status in ('served', 'paid'))::int as done,
+      count(*) filter (where o.status = 'cancelled')::int as cancelled,
+      count(*) filter (where o.status in ('sent', 'confirmed', 'preparing', 'ready'))::int as open,
+      coalesce(sum(o.subtotal) filter (where o.status <> 'cancelled'), 0)::bigint as amount,
+      count(distinct o.restaurant_id)::int as businesses
+    from orders o where o.channel = 'whatsapp' and o.created_at >= ${since} ${only("o.restaurant_id")}`);
+  const types = await one(sql`
+    select
+      count(*) filter (where coalesce(x.settings -> 'seatingModes', '["table","takeaway"]'::jsonb) ?| array['table','area','room','counter'])::int as dine_in,
+      count(*) filter (where not (coalesce(x.settings -> 'seatingModes', '["table","takeaway"]'::jsonb) ?| array['table','area','room','counter']))::int as takeaway_only,
+      count(*) filter (where coalesce(x.settings -> 'seatingModes', '["table","takeaway"]'::jsonb) ? 'takeaway')::int as takeaway,
+      count(*) filter (where x.settings -> 'seatingModes' ? 'delivery')::int as delivery
+    from restaurants x where x.deleted_at is null and x.kind = 'restaurant' ${only("x.id")}`);
   const named = await one(sql`
     select count(*)::int as n from order_items i join orders o on o.id = i.order_id
     where o.id in (select c.order_id from shared_carts c where c.status = 'sent' and c.created_at >= ${since} ${only("c.restaurant_id")})`);
@@ -131,6 +149,8 @@ export async function featureUsage(db: DB, restaurantId?: string, now = new Date
     },
     reviews: { count: n(reviews.count), average: reviews.average == null ? null : Number(reviews.average), hidden: n(reviews.hidden), deleted: n(reviews.deleted) },
     switches: { reviewsOff: n(switches.reviews_off), attendanceOff: n(switches.attendance_off), sharingBusinesses: n(shared.businesses), reservationsOn: n(switches.reservations_on) },
+    whatsapp: { orders: n(wa.n), handedOver: n(wa.done), cancelled: n(wa.cancelled), open: n(wa.open), amount: n(wa.amount), businesses: n(wa.businesses) },
+    serviceTypes: { dineIn: n(types.dine_in), takeawayOnly: n(types.takeaway_only), takeaway: n(types.takeaway), delivery: n(types.delivery) },
     service: {
       staffOrders: n(svc.staff_orders),
       staffBusinesses: n(svc.staff_businesses),

@@ -1373,6 +1373,26 @@
         "billRequests": "« Ask for the bill » taps",
         "staffBusinesses": "Businesses taking orders by staff",
         "planBusinesses": "Businesses planning tables"
+      },
+      "whatsapp": {
+        "title": "WhatsApp takeaway orders",
+        "orders": "Orders sent by WhatsApp",
+        "handedOver": "Handed over",
+        "open": "Still open",
+        "cancelled": "Cancelled",
+        "amount": "Value (not cancelled)",
+        "businesses": "Businesses receiving them"
+      },
+      "serviceTypes": {
+        "title": "How businesses serve",
+        "dineIn": "Dine-in",
+        "takeawayOnly": "Takeaway / delivery only",
+        "takeaway": "Offer takeaway",
+        "delivery": "Offer delivery",
+        "this": "This business",
+        "dineInShort": "Dine-in",
+        "takeawayShort": "Takeaway",
+        "deliveryShort": "Delivery"
       }
     },
     "payments": {

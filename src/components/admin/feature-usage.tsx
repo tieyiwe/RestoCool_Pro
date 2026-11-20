@@ -29,6 +29,35 @@ export function FeatureUsageCard({ u, t, version, perBusiness = false }: { u: Fe
         </span>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <section data-testid="feature-whatsapp">
+          <h3 className="font-semibold">💬 {t("features.whatsapp.title")}</h3>
+          <ul className="divide-y divide-border">
+            <Row label={t("features.whatsapp.orders")} value={u.whatsapp.orders} testId="fu-wa-orders" />
+            <Row label={t("features.whatsapp.handedOver")} value={u.whatsapp.handedOver} />
+            <Row label={t("features.whatsapp.open")} value={u.whatsapp.open} />
+            <Row label={t("features.whatsapp.cancelled")} value={u.whatsapp.cancelled} />
+            <Row label={t("features.whatsapp.amount")} value={`${u.whatsapp.amount.toLocaleString("fr-FR")} F`} />
+            {!perBusiness && <Row label={t("features.whatsapp.businesses")} value={u.whatsapp.businesses} />}
+          </ul>
+        </section>
+        <section data-testid="feature-service-types">
+          <h3 className="font-semibold">🍽️🛍️🛵 {t("features.serviceTypes.title")}</h3>
+          <ul className="divide-y divide-border">
+            {perBusiness ? (
+              <Row
+                label={t("features.serviceTypes.this")}
+                value={[u.serviceTypes.dineIn ? t("features.serviceTypes.dineInShort") : null, u.serviceTypes.takeaway ? t("features.serviceTypes.takeawayShort") : null, u.serviceTypes.delivery ? t("features.serviceTypes.deliveryShort") : null].filter(Boolean).join(" · ") || "—"}
+              />
+            ) : (
+              <>
+                <Row label={t("features.serviceTypes.dineIn")} value={u.serviceTypes.dineIn} testId="fu-dine-in" />
+                <Row label={t("features.serviceTypes.takeawayOnly")} value={u.serviceTypes.takeawayOnly} />
+                <Row label={t("features.serviceTypes.takeaway")} value={u.serviceTypes.takeaway} />
+                <Row label={t("features.serviceTypes.delivery")} value={u.serviceTypes.delivery} />
+              </>
+            )}
+          </ul>
+        </section>
         <section data-testid="feature-service">
           <h3 className="font-semibold">🍽️ {t("features.service.title")}</h3>
           <ul className="divide-y divide-border">

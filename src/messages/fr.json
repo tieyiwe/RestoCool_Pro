@@ -1373,6 +1373,26 @@
         "billRequests": "Demandes d’addition",
         "staffBusinesses": "Établissements qui prennent des commandes",
         "planBusinesses": "Établissements qui affectent les tables"
+      },
+      "whatsapp": {
+        "title": "Commandes à emporter par WhatsApp",
+        "orders": "Commandes envoyées par WhatsApp",
+        "handedOver": "Remises au client",
+        "open": "Encore ouvertes",
+        "cancelled": "Annulées",
+        "amount": "Montant (hors annulées)",
+        "businesses": "Établissements concernés"
+      },
+      "serviceTypes": {
+        "title": "Façons de servir",
+        "dineIn": "Sur place",
+        "takeawayOnly": "À emporter / livraison seulement",
+        "takeaway": "Proposent l’emporter",
+        "delivery": "Proposent la livraison",
+        "this": "Cet établissement",
+        "dineInShort": "Sur place",
+        "takeawayShort": "À emporter",
+        "deliveryShort": "Livraison"
       }
     },
     "payments": {
