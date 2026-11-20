@@ -9,8 +9,10 @@
  *   1. listen on PORT immediately (Replit health-checks "/" within seconds);
  *   2. backup (never blocks: errors and a 90 s timeout are ignored) → migrations (must succeed)
  *      → prepared-business imports (--if-missing, never block);
- *   3. start `next start` on 127.0.0.1:INTERNAL_PORT, wait until it answers /api/health and warm
- *      the main pages, then forward every request to it (headers untouched, streams included).
+ *   3. start `next start` on 127.0.0.1 (a free port chosen by the system, or INTERNAL_PORT), wait
+ *      until it answers (any status; 90 s at most), warm the main pages, then forward every request
+ *      to it (headers untouched, streams included). If Next.js stops, it is restarted (5 times at
+ *      most) while the public port stays open.
  *
  * While starting: "/" answers at once with a small page that reloads itself (the health check
  * passes); every other request is held until the app is ready (up to HOLD_MS), then forwarded.
@@ -24,7 +26,7 @@ import net from "node:net";
 
 const port = Number(process.env.PORT || 5000);
 const hostname = "0.0.0.0";
-const internalPort = Number(process.env.INTERNAL_PORT || port + 1000);
+let internalPort = Number(process.env.INTERNAL_PORT || 0); // 0 = a free port chosen by the system
 const internalHost = "127.0.0.1";
 const HOLD_MS = 30_000;
 
@@ -139,26 +141,55 @@ function probe(path, timeoutMs = 15_000) {
   });
 }
 
-async function main() {
-  await run("backup", ["db:backup"], { timeoutMs: 90_000, optional: true });
-  await run("migrations", ["db:migrate"], {});
-  await run("Shangri-La import", ["import:shangri-la", "--", "--if-missing"], { timeoutMs: 120_000, optional: true });
-  await run("La Terrace import", ["import:la-terrace", "--", "--if-missing"], { timeoutMs: 60_000, optional: true });
+/** A free local port, chosen by the system (never one another process already holds). */
+function freePort() {
+  return new Promise((resolve, reject) => {
+    const s = net.createServer();
+    s.unref();
+    s.on("error", reject);
+    s.listen(0, internalHost, () => {
+      const { port: p } = s.address();
+      s.close(() => resolve(p));
+    });
+  });
+}
 
-  console.log(`✓ database ready, starting Next.js on ${internalHost}:${internalPort}`);
+let stopping = false;
+let restarts = 0;
+
+/** Starts Next.js behind the front server; restarts it if it stops (the public port stays open). */
+function startNext() {
+  console.log(`▶ starting Next.js on ${internalHost}:${internalPort}`);
   app = spawn("npx", ["next", "start", "-H", internalHost, "-p", String(internalPort)], { stdio: "inherit", env: { ...process.env, PORT: String(internalPort) } });
   app.on("exit", (code, signal) => {
-    console.error(`✗ Next.js stopped (${code ?? signal})`);
-    process.exit(code ?? 1);
+    if (stopping) return process.exit(code ?? 0);
+    ready = false;
+    restarts++;
+    console.error(`✗ Next.js stopped (${code ?? signal}), restart ${restarts}`);
+    if (restarts > 5) process.exit(1);
+    setTimeout(() => void boot(), 1_000);
   });
+}
 
-  // Ready = answers /api/health; then load the busiest pages once so the first visitors are fast.
+/** Waits until Next.js answers (any status: it is up), warms the main pages, then forwards. */
+async function boot() {
+  if (!process.env.INTERNAL_PORT || restarts > 0) internalPort = await freePort();
+  startNext();
   const t0 = Date.now();
-  while ((await probe("/api/health", 3_000)) !== 200) {
-    if (Date.now() - t0 > 120_000) throw new Error("Next.js did not answer /api/health within 120 s");
-    await new Promise((r) => setTimeout(r, 300));
+  let last = -1;
+  for (;;) {
+    const status = await probe("/api/health", 3_000);
+    if (status !== last) console.log(`  Next.js /api/health → ${status || "no answer yet"}`);
+    last = status;
+    if (status > 0) break;
+    // Never stay on the waiting page: after 90 s, forward anyway (errors still get the friendly page).
+    if (Date.now() - t0 > 90_000) {
+      console.error("! Next.js did not answer within 90 s: forwarding anyway");
+      break;
+    }
+    await new Promise((r) => setTimeout(r, 500));
   }
-  await Promise.all(["/", "/restaurants", "/sign-in"].map((p) => probe(p)));
+  if (last > 0) await Promise.all(["/", "/restaurants", "/sign-in"].map((p) => probe(p)));
   ready = true;
   console.log(`✓ RestoCool serving (ready in ${((Date.now() - t0) / 1000).toFixed(1)} s, ${waiting.size} waiting request(s) released)`);
   for (const entry of waiting) {
@@ -168,9 +199,19 @@ async function main() {
   waiting.clear();
 }
 
+async function main() {
+  await run("backup", ["db:backup"], { timeoutMs: 90_000, optional: true });
+  await run("migrations", ["db:migrate"], {});
+  await run("Shangri-La import", ["import:shangri-la", "--", "--if-missing"], { timeoutMs: 120_000, optional: true });
+  await run("La Terrace import", ["import:la-terrace", "--", "--if-missing"], { timeoutMs: 60_000, optional: true });
+  console.log("✓ database ready");
+  await boot();
+}
+
 // Replit stops the old version with SIGTERM: finish the requests in progress, then stop.
 for (const sig of ["SIGTERM", "SIGINT"]) {
   process.on(sig, () => {
+    stopping = true;
     server.close();
     if (app) app.kill(sig);
     else process.exit(0);
