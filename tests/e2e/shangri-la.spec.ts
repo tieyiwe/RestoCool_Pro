@@ -127,7 +127,10 @@ test("selection: Champagne variants, « sur demande » never 0 F, contact and fo
   await page.getByLabel("Heure de retrait").fill("19:30");
   const popup = context.waitForEvent("page");
   await page.getByRole("button", { name: "Envoyer sur WhatsApp" }).click();
-  const url = decodeURIComponent((await popup).url());
+  // The WhatsApp window opens at the tap (blank), then goes to wa.me once the order is recorded.
+  const wa = await popup;
+  await wa.waitForURL(/wa\.me/, { timeout: 15_000 });
+  const url = decodeURIComponent(wa.url());
   expect(url).toContain("wa.me/22677299878");
   expect(url).toContain("Champagne");
 });
