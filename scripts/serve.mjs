@@ -1,58 +1,106 @@
 /**
  * Production start (Replit deployment run command).
  *
- * Replit health-checks "/" a few seconds after starting the run command and stops the deployment
- * if nothing answers. The start steps (database backup, migrations, Shangri-La import) take longer
- * than that, so this server opens the port at once and runs them while it is already listening:
+ * One small front server owns PORT for the whole life of the deployment; Next.js runs behind it
+ * on an internal port. So the public port never closes, not even for a second, and a visitor who
+ * taps or refreshes while a new version starts simply waits a little instead of getting
+ * « Internal Server Error »:
  *
- *   1. listen on PORT immediately;
+ *   1. listen on PORT immediately (Replit health-checks "/" within seconds);
  *   2. backup (never blocks: errors and a 90 s timeout are ignored) → migrations (must succeed)
- *      → Shangri-La import (--if-missing, never blocks);
- *   3. close this placeholder and run the regular `next start` on the same port (about a second
- *      without an answer, after the health check has passed).
+ *      → prepared-business imports (--if-missing, never block);
+ *   3. start `next start` on 127.0.0.1:INTERNAL_PORT, wait until it answers /api/health and warm
+ *      the main pages, then forward every request to it (headers untouched, streams included).
  *
- * While starting, "/" answers at once with a small 200 page that reloads itself (so the health
- * check passes); other requests wait up to 8 s for the app, then get a 503 with Retry-After.
+ * While starting: "/" answers at once with a small page that reloads itself (the health check
+ * passes); every other request is held until the app is ready (up to HOLD_MS), then forwarded.
+ * Past that, pages get a friendly self-reloading « mise à jour » page and APIs a 503 with
+ * Retry-After (the apps already retry / queue on their own).
  * If the migrations fail, the process exits with an error: the previous version keeps serving.
  */
 import { spawn } from "node:child_process";
 import http from "node:http";
+import net from "node:net";
 
 const port = Number(process.env.PORT || 5000);
 const hostname = "0.0.0.0";
-const HOLD_MS = 8_000;
+const internalPort = Number(process.env.INTERNAL_PORT || port + 1000);
+const internalHost = "127.0.0.1";
+const HOLD_MS = 30_000;
 
+let ready = false;
+let app = null;
 const waiting = new Set();
 
-const starting = (req, res) => {
-  if (res.headersSent) return;
-  if (req.url === "/" || req.url?.startsWith("/?")) {
+const wantsHtml = (req) => req.method === "GET" && (req.headers.accept ?? "").includes("text/html") && !req.headers.rsc;
+
+const waitPage = (title, text) =>
+  '<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+  `<meta http-equiv="refresh" content="3"><title>${title}</title>` +
+  '<body style="font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:90vh;margin:0;color:#0b3d26;background:#fff8ec;text-align:center">' +
+  `<div><p style="font-size:18px;font-weight:600">${text}</p><p style="color:#5b6b60">Cette page se recharge toute seule · This page reloads by itself</p></div></body></html>`;
+
+/** The answer while the app is not there (start, or a crash being restarted by Replit). */
+function notReady(req, res) {
+  if (res.headersSent || res.writableEnded) return;
+  if (req.url === "/" || req.url?.startsWith("/?") || wantsHtml(req)) {
     res.writeHead(200, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex" });
-    res.end(
-      '<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
-        '<meta http-equiv="refresh" content="3"><title>RestoCool</title>' +
-        '<body style="font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:90vh;color:#0b3d26;background:#fff8ec">' +
-        "<p>RestoCool démarre… · Starting…</p></body></html>",
-    );
+    res.end(waitPage("RestoCool", "RestoCool se met à jour… · Updating…"));
   } else {
     res.writeHead(503, { "retry-after": "5", "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
-    res.end("RestoCool démarre, réessayez dans quelques secondes. Starting, try again in a few seconds.");
+    res.end("RestoCool se met à jour, réessayez dans quelques secondes. Updating, try again in a few seconds.");
   }
-};
+}
 
-const server = http.createServer((req, res) => {
-  // The health check (and anyone opening the home page) gets an answer right away.
-  if (req.url === "/" || req.url?.startsWith("/?")) return starting(req, res);
+/** Forwards one request to Next.js, untouched (headers, body, streamed answers such as SSE). */
+function forward(req, res) {
+  const upstream = http.request(
+    { host: internalHost, port: internalPort, method: req.method, path: req.url, headers: req.headers },
+    (up) => {
+      res.writeHead(up.statusCode ?? 502, up.statusMessage, up.rawHeaders);
+      up.pipe(res);
+    },
+  );
+  upstream.on("error", () => notReady(req, res));
+  res.on("close", () => upstream.destroy());
+  req.pipe(upstream);
+}
+
+function hold(req, res) {
   const entry = { req, res };
   waiting.add(entry);
   entry.timer = setTimeout(() => {
     waiting.delete(entry);
-    starting(req, res);
+    notReady(req, res);
   }, HOLD_MS);
   res.on("close", () => {
     clearTimeout(entry.timer);
     waiting.delete(entry);
   });
+}
+
+const server = http.createServer((req, res) => {
+  if (ready) return forward(req, res);
+  // The health check (and anyone opening the home page) gets an answer right away.
+  if (req.url === "/" || req.url?.startsWith("/?")) return notReady(req, res);
+  hold(req, res);
+});
+server.keepAliveTimeout = 65_000; // longer than the platform proxy's, so it never reuses a closed socket
+server.headersTimeout = 66_000;
+server.requestTimeout = 0; // live streams (SSE) stay open
+
+// WebSocket / upgrade requests (none today): passed straight through once ready.
+server.on("upgrade", (req, socket, head) => {
+  if (!ready) return socket.destroy();
+  const up = net.connect(internalPort, internalHost, () => {
+    up.write(`${req.method} ${req.url} HTTP/${req.httpVersion}\r\n`);
+    for (let i = 0; i < req.rawHeaders.length; i += 2) up.write(`${req.rawHeaders[i]}: ${req.rawHeaders[i + 1]}\r\n`);
+    up.write("\r\n");
+    if (head?.length) up.write(head);
+    up.pipe(socket).pipe(up);
+  });
+  up.on("error", () => socket.destroy());
+  socket.on("error", () => up.destroy());
 });
 
 server.listen(port, hostname, () => console.log(`▶ listening on ${hostname}:${port} (starting)`));
@@ -79,31 +127,61 @@ function run(label, args, { timeoutMs, optional }) {
   });
 }
 
+/** One GET to the internal app; resolves with the status (0 when it does not answer). */
+function probe(path, timeoutMs = 15_000) {
+  return new Promise((resolve) => {
+    const req = http.get({ host: internalHost, port: internalPort, path, headers: { accept: "text/html", "user-agent": "restocool-warmup" } }, (res) => {
+      res.resume();
+      res.on("end", () => resolve(res.statusCode ?? 0));
+    });
+    req.setTimeout(timeoutMs, () => req.destroy());
+    req.on("error", () => resolve(0));
+  });
+}
+
 async function main() {
   await run("backup", ["db:backup"], { timeoutMs: 90_000, optional: true });
   await run("migrations", ["db:migrate"], {});
   await run("Shangri-La import", ["import:shangri-la", "--", "--if-missing"], { timeoutMs: 120_000, optional: true });
   await run("La Terrace import", ["import:la-terrace", "--", "--if-missing"], { timeoutMs: 60_000, optional: true });
 
-  // Hand the port to the regular `next start` (the same server as before this script existed).
-  for (const { req, res, timer } of waiting) {
-    clearTimeout(timer);
-    starting(req, res);
+  console.log(`✓ database ready, starting Next.js on ${internalHost}:${internalPort}`);
+  app = spawn("npx", ["next", "start", "-H", internalHost, "-p", String(internalPort)], { stdio: "inherit", env: { ...process.env, PORT: String(internalPort) } });
+  app.on("exit", (code, signal) => {
+    console.error(`✗ Next.js stopped (${code ?? signal})`);
+    process.exit(code ?? 1);
+  });
+
+  // Ready = answers /api/health; then load the busiest pages once so the first visitors are fast.
+  const t0 = Date.now();
+  while ((await probe("/api/health", 3_000)) !== 200) {
+    if (Date.now() - t0 > 120_000) throw new Error("Next.js did not answer /api/health within 120 s");
+    await new Promise((r) => setTimeout(r, 300));
+  }
+  await Promise.all(["/", "/restaurants", "/sign-in"].map((p) => probe(p)));
+  ready = true;
+  console.log(`✓ RestoCool serving (ready in ${((Date.now() - t0) / 1000).toFixed(1)} s, ${waiting.size} waiting request(s) released)`);
+  for (const entry of waiting) {
+    clearTimeout(entry.timer);
+    forward(entry.req, entry.res);
   }
   waiting.clear();
-  await new Promise((resolve) => {
-    server.close(() => resolve());
-    server.closeAllConnections?.();
+}
+
+// Replit stops the old version with SIGTERM: finish the requests in progress, then stop.
+for (const sig of ["SIGTERM", "SIGINT"]) {
+  process.on(sig, () => {
+    server.close();
+    if (app) app.kill(sig);
+    else process.exit(0);
+    setTimeout(() => process.exit(0), 10_000).unref();
   });
-  console.log("✓ database ready, starting Next.js");
-  const app = spawn("npx", ["next", "start", "-H", hostname, "-p", String(port)], { stdio: "inherit", env: process.env });
-  for (const sig of ["SIGTERM", "SIGINT"]) process.on(sig, () => app.kill(sig));
-  app.on("exit", (code, signal) => process.exit(code ?? (signal ? 1 : 0)));
 }
 
 main().catch((err) => {
   console.error(`✗ start failed: ${err instanceof Error ? err.message : err}`);
-  for (const { req, res } of waiting) starting(req, res);
+  for (const { req, res } of waiting) notReady(req, res);
   server.close();
+  app?.kill("SIGTERM");
   process.exit(1);
 });
