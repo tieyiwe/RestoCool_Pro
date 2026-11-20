@@ -20,6 +20,8 @@ export type RestaurantSettings = {
    * in with this verified email becomes its owner. Lower case; removed once claimed.
    */
   ownerEmail?: string;
+  /** Set by a prepared-business import script (for example « la-terrace-menu »): it may update only what it created. */
+  importedFrom?: string;
   /**
    * Account recovery (verified by TIBLOGICS): the ownerEmail account replaces the current owner,
    * whose account is switched off (kept for history).

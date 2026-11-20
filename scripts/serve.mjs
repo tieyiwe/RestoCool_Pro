@@ -83,6 +83,7 @@ async function main() {
   await run("backup", ["db:backup"], { timeoutMs: 90_000, optional: true });
   await run("migrations", ["db:migrate"], {});
   await run("Shangri-La import", ["import:shangri-la", "--", "--if-missing"], { timeoutMs: 120_000, optional: true });
+  await run("La Terrace import", ["import:la-terrace", "--", "--if-missing"], { timeoutMs: 60_000, optional: true });
 
   // Hand the port to the regular `next start` (the same server as before this script existed).
   for (const { req, res, timer } of waiting) {

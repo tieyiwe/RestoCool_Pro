@@ -1,0 +1,1390 @@
+{
+ "SOURCE": "https://laterrace-menu.pages.dev/ (food-menu.pdf, drinks-menu.pdf)",
+ "CATEGORIES": [
+  {
+   "id": "entrees",
+   "fr": "Entrées",
+   "en": "Starters",
+   "station": "kitchen",
+   "items": [
+    {
+     "name": "Crevette panée",
+     "p": 5500
+    },
+    {
+     "name": "Crispy Tenders",
+     "p": 3500
+    },
+    {
+     "name": "Crispy Tenders : 1 pièce en supplément",
+     "p": 1000
+    },
+    {
+     "name": "Saumon fumé",
+     "p": 10000,
+     "d": "Fromage • Citron"
+    },
+    {
+     "name": "Nems de bœuf",
+     "p": 5500,
+     "d": "5 pièces avec la sauce"
+    },
+    {
+     "name": "Nems printemps",
+     "p": 6000,
+     "d": "Avocat • Carotte • Concombre • Crevette"
+    },
+    {
+     "name": "Garlic Bread",
+     "p": 3500
+    },
+    {
+     "name": "Mix La Terrace",
+     "p": 18000,
+     "d": "Brochette poulet • Brochette kefta et filet • Pain pimenté • Frite • Sauces différentes"
+    },
+    {
+     "name": "Big Bucket Burger",
+     "p": 18000,
+     "d": "Chicken burger • Cheese burger • Escalope burger • Crispy burger au barbecue"
+    },
+    {
+     "name": "Tomate mozzarella",
+     "p": 4000
+    }
+   ]
+  },
+  {
+   "id": "salades",
+   "fr": "Salades",
+   "en": "Salads",
+   "station": "kitchen",
+   "items": [
+    {
+     "name": "Salade composée",
+     "p": 4000,
+     "d": "Laitue • Tomate • Oignons • Œuf • Carotte • Olives • Concombre"
+    },
+    {
+     "name": "Salade César",
+     "p": 5000,
+     "d": "Laitue • Parmesan • Pain de mie"
+    },
+    {
+     "name": "Salade César au poulet",
+     "p": 7000,
+     "d": "Laitue • Parmesan • Pain de mie • Poulet"
+    },
+    {
+     "name": "Salade verte",
+     "p": 2500,
+     "d": "Laitue • Concombre • Oignons"
+    },
+    {
+     "name": "Salade fruits de mer",
+     "p": 14000,
+     "d": "Gambas • Crevette • Filet de capitaine • Laitue • Olive"
+    },
+    {
+     "name": "Salade niçoise",
+     "p": 7000,
+     "d": "Laitue • Tomate • Poisson thon • Œuf • Carotte • Concombre • Poivron • Oignons"
+    },
+    {
+     "name": "Salade grecque",
+     "p": 8000,
+     "d": "Fromage grec • Olive • Tomate • Concombre • Oignon • Sauce vinaigrette"
+    },
+    {
+     "name": "Salade pêcheur",
+     "p": 9000,
+     "d": "Laitue • Tomate • Oignons • Crevettes"
+    },
+    {
+     "name": "Escalope César",
+     "p": 8000,
+     "d": "Poulet pané • Salade • Parmesan • Pain de mie"
+    }
+   ]
+  },
+  {
+   "id": "pasta",
+   "fr": "Pâtes",
+   "en": "Pasta",
+   "station": "kitchen",
+   "items": [
+    {
+     "name": "Bolognaise",
+     "p": 5000,
+     "d": "Carottes • Oignons • Viande hachée • Poivron • Parmesan"
+    },
+    {
+     "name": "Tagliatelles à l’escalope de poulet",
+     "p": 8000,
+     "d": "Tagliatelles • Escalope de poulet • Parmesan • Crème fraîche"
+    },
+    {
+     "name": "Tagliatelles au poulet",
+     "p": 8000,
+     "d": "Tagliatelles • Poulet • Champignons • Parmesan • Crème fraîche"
+    },
+    {
+     "name": "Tagliatelles aux crevettes",
+     "p": 9000,
+     "d": "Tagliatelles • Crevette • Parmesan • Crème fraîche"
+    },
+    {
+     "name": "Tagliatelles au saumon",
+     "p": 12000,
+     "d": "Tagliatelles • Saumon • Parmesan • Crème fraîche"
+    },
+    {
+     "name": "Tagliatelles au steak",
+     "p": 9000,
+     "d": "Tagliatelles • Steak • Parmesan • Crème fraîche"
+    },
+    {
+     "name": "Tagliatelles",
+     "p": 6000,
+     "d": "Champignons • Parmesan • Crème fraîche"
+    }
+   ]
+  },
+  {
+   "id": "pizza",
+   "fr": "Pizzas",
+   "en": "Pizzas",
+   "station": "kitchen",
+   "items": [
+    {
+     "name": "Pizza Margherita",
+     "p": 4500,
+     "d": "Sauce rouge • Fromage"
+    },
+    {
+     "name": "Pizza sicilienne",
+     "p": 5500,
+     "d": "Sauce rouge • Jambon • Fromage"
+    },
+    {
+     "name": "Pizza au poulet",
+     "p": 7000,
+     "d": "Sauce rouge • Fromage • Poulet • Sauce barbecue"
+    },
+    {
+     "name": "Pizza aux crevettes",
+     "p": 9000,
+     "d": "Sauce rouge • Fromage • Crevette"
+    },
+    {
+     "name": "Pizza au thon",
+     "p": 7000,
+     "d": "Sauce rouge • Fromage • Poisson thon"
+    },
+    {
+     "name": "Pizza Mix",
+     "p": 8500,
+     "d": "Sauce rouge • Fromage • Viande hachée • Poulet • Jambon"
+    },
+    {
+     "name": "Pizza végétarienne",
+     "p": 5500,
+     "d": "Sauce rouge • Oignons • Poivron • Olives • Maïs • Champignons"
+    },
+    {
+     "name": "Pizza Royale",
+     "p": 7000,
+     "d": "Sauce rouge • Oignon • Poivron • Olive • Maïs • Champignon • Jambon"
+    },
+    {
+     "name": "Pizza viande hachée",
+     "p": 6000,
+     "d": "Sauce rouge • Fromage • Viande hachée"
+    },
+    {
+     "name": "Pizza pepperoni",
+     "p": 7000,
+     "d": "Sauce rouge • Fromage • Pepperoni halal"
+    },
+    {
+     "name": "Pizza steak",
+     "p": 10000,
+     "d": "Sauce crème fraîche • Fromage • Steak • Champignon"
+    },
+    {
+     "name": "Taouk Pizza",
+     "p": 10000,
+     "d": "Sauce crème fraîche • Blanc de poulet"
+    }
+   ]
+  },
+  {
+   "id": "supplements",
+   "fr": "Suppléments",
+   "en": "Extras",
+   "station": "kitchen",
+   "items": [
+    {
+     "name": "Supplément fromage",
+     "p": 1000
+    },
+    {
+     "name": "Supplément viande hachée",
+     "p": 1000
+    },
+    {
+     "name": "Supplément maïs",
+     "p": 1000
+    },
+    {
+     "name": "Supplément champignons",
+     "p": 1000
+    },
+    {
+     "name": "Supplément olive",
+     "p": 1000
+    },
+    {
+     "name": "Supplément jambon",
+     "p": 1000
+    },
+    {
+     "name": "Supplément crevette",
+     "p": 3000
+    },
+    {
+     "name": "Supplément riz",
+     "p": 1500
+    },
+    {
+     "name": "Supplément légumes sautés",
+     "p": 1500
+    }
+   ]
+  },
+  {
+   "id": "plats",
+   "fr": "Nos plats et viandes",
+   "en": "Mains and meats",
+   "station": "kitchen",
+   "items": [
+    {
+     "name": "Blanc de poulet 400 g",
+     "p": 12000,
+     "d": "Blanc de poulet • Riz • Sauce ail-piment"
+    },
+    {
+     "name": "Steak à la crème",
+     "p": 9000,
+     "d": "Steak filet • Crème fraîche • Purée de pommes de terre"
+    },
+    {
+     "name": "Steak au poivre",
+     "p": 10000,
+     "d": "Filet • Crème fraîche au poivre • Purée de pommes de terre"
+    },
+    {
+     "name": "Steak grillé",
+     "p": 8000,
+     "d": "Filet • Purée de pommes de terre"
+    },
+    {
+     "name": "Steak à la provinciale",
+     "p": 9000,
+     "d": "Tranche de viande à la crème fraîche • Frites • Champignons"
+    },
+    {
+     "name": "Blanc de poulet provincial",
+     "p": 9000,
+     "d": "Poulet finement tranché • Crème fraîche • Frites"
+    },
+    {
+     "name": "Stroganoff de viande",
+     "p": 8000,
+     "d": "Filet de bœuf • Oignon • Olive • Maïs • Crème fraîche"
+    },
+    {
+     "name": "Stroganoff de viande au poivre",
+     "p": 9000,
+     "d": "Filet de bœuf • Oignon • Olive • Maïs • Crème fraîche • Poivre"
+    },
+    {
+     "name": "Côtelette de bœuf",
+     "p": 10000,
+     "d": "Côtelette • Crème au poivre • Frites"
+    },
+    {
+     "name": "Plat gambas",
+     "p": 14000,
+     "d": "Gambas sauce • Frites"
+    },
+    {
+     "name": "Riz aux crevettes",
+     "p": 9500,
+     "d": "Riz • Crevette • Crème fraîche • Carotte • Poivron"
+    },
+    {
+     "name": "Riz au poulet",
+     "p": 8000,
+     "d": "Riz • Poulet • Viande hachée • Crème fraîche"
+    },
+    {
+     "name": "Riz à la viande hachée",
+     "p": 4500,
+     "d": "Riz • Viande hachée • Mayonnaise"
+    },
+    {
+     "name": "Filet de saumon",
+     "p": 13000,
+     "d": "Légumes sautés • Crème fraîche"
+    },
+    {
+     "name": "Chawarma viande",
+     "p": 7000,
+     "d": "Chawarma avec pain libanais • Frites • Mayonnaise • Ketchup • Persil"
+    },
+    {
+     "name": "Chawarma poulet",
+     "p": 7000,
+     "d": "Chawarma poulet avec pain libanais • Frites • Sauce ail • Cornichons"
+    },
+    {
+     "name": "Brochette de filet",
+     "p": 8000,
+     "d": "Filet de bœuf • Pain pimenté • Frites • Piment"
+    },
+    {
+     "name": "Brochette de poulet",
+     "p": 8000,
+     "d": "Blanc de poulet • Pain pimenté • Frites • Piment"
+    },
+    {
+     "name": "Brochette de kefta",
+     "p": 8000,
+     "d": "Kefta • Pain pimenté • Frites • Piment"
+    },
+    {
+     "name": "Cordon bleu",
+     "p": 9000,
+     "d": "Poulet • Jambon • Fromage • Sauce crème • Frites"
+    },
+    {
+     "name": "Poulet pané",
+     "p": 7000,
+     "d": "Frites • Sauce"
+    },
+    {
+     "name": "Poulet pané entier",
+     "p": 12000,
+     "d": "Frites • Sauce"
+    },
+    {
+     "name": "Poulet grillé",
+     "p": 7000,
+     "d": "Sauce ail • Piment • Frites"
+    },
+    {
+     "name": "Poulet grillé entier",
+     "p": 12000,
+     "d": "Sauce ail • Piment • Frites"
+    },
+    {
+     "name": "Poulet sauté",
+     "p": 7500,
+     "d": "Poulet • Riz"
+    },
+    {
+     "name": "Poulet sauté entier",
+     "p": 12000,
+     "d": "Poulet • Riz"
+    },
+    {
+     "name": "Côtelette de porc",
+     "p": 8500,
+     "d": "Purée de pommes de terre • Sauce crème fraîche • Légumes sautés"
+    },
+    {
+     "name": "Fajita",
+     "p": 7500,
+     "d": "Blanc de poulet • Fromage • Maïs • Poivron • Champignons • Pain"
+    },
+    {
+     "name": "Philadelphia",
+     "p": 7500,
+     "d": "Blanc de poulet • Fromage • Maïs • Poivron • Champignons • Pain"
+    },
+    {
+     "name": "Escalope",
+     "p": 8000,
+     "d": "Blanc de poulet • Citron • Sauce • Frites"
+    },
+    {
+     "name": "Filet de capitaine grillé",
+     "p": 8500,
+     "d": "Poisson • Citron • Frites • Riz"
+    },
+    {
+     "name": "Filet de capitaine à la crème",
+     "p": 10000,
+     "d": "Poisson • Crème fraîche • Frites • Riz"
+    },
+    {
+     "name": "Filet de capitaine pané",
+     "p": 8500,
+     "d": "Poisson pané • Sauce • Frites"
+    },
+    {
+     "name": "Filet mignon aux gambas",
+     "p": 13000,
+     "d": "Purée de pommes de terre • Sauce crème fraîche au poivre"
+    }
+   ]
+  },
+  {
+   "id": "burgers",
+   "fr": "Nos burgers",
+   "en": "Burgers",
+   "station": "kitchen",
+   "items": [
+    {
+     "name": "Cheese burger",
+     "p": 7000,
+     "d": "Fromage cheddar • Oignons • Tomate • Sauce • Frites • Laitue"
+    },
+    {
+     "name": "Chicken cheese burger",
+     "p": 8500,
+     "d": "Blanc de poulet • Fromage cheddar • Sauce ail • Oignons • Frites • Laitue"
+    },
+    {
+     "name": "Hamburger",
+     "p": 6000,
+     "d": "Viande • Sauce • Tomate • Oignons • Laitue • Frites"
+    },
+    {
+     "name": "Double hamburger",
+     "p": 8500,
+     "d": "Deux viandes • Sauce tomate • Oignons • Laitue • Frites"
+    },
+    {
+     "name": "Double cheese burger",
+     "p": 9500,
+     "d": "Double viande • Fromage cheddar • Oignon • Tomate • Sauce • Laitue • Frites"
+    },
+    {
+     "name": "Escalope burger",
+     "p": 7000,
+     "d": "Blanc de poulet • Maïs • Sauce • Cornichons • Frites • Laitue"
+    }
+   ]
+  },
+  {
+   "id": "crepes",
+   "fr": "Crêpes et desserts",
+   "en": "Crêpes and desserts",
+   "station": "desserts",
+   "items": [
+    {
+     "name": "Crêpe sucrée",
+     "p": 1500
+    },
+    {
+     "name": "Crêpe Nutella",
+     "p": 2500
+    },
+    {
+     "name": "Crêpe Nutella banane",
+     "p": 3000
+    },
+    {
+     "name": "Crêpe Nutella Oreo",
+     "p": 4000
+    },
+    {
+     "name": "Crêpe jambon fromage",
+     "p": 5000
+    },
+    {
+     "name": "Plat de fruits",
+     "p": 4000
+    },
+    {
+     "name": "Plat de fruits au chocolat",
+     "p": 5000
+    },
+    {
+     "name": "Banana split",
+     "p": 4000
+    },
+    {
+     "name": "Crêpe La Terrace (3 personnes)",
+     "p": 13000
+    }
+   ]
+  },
+  {
+   "id": "the",
+   "fr": "Thés",
+   "en": "Teas",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Thé nature",
+     "p": 1000
+    },
+    {
+     "name": "Thé au citron",
+     "p": 1000
+    },
+    {
+     "name": "Thé au miel",
+     "p": 1500
+    },
+    {
+     "name": "Thé au gingembre",
+     "p": 2000
+    }
+   ]
+  },
+  {
+   "id": "milkshake",
+   "fr": "Milkshakes",
+   "en": "Milkshakes",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Milkshake banane",
+     "p": 4000
+    },
+    {
+     "name": "Milkshake Oreo",
+     "p": 5000
+    },
+    {
+     "name": "Milkshake chocolat",
+     "p": 4000
+    },
+    {
+     "name": "Milkshake vanille",
+     "p": 4000
+    }
+   ]
+  },
+  {
+   "id": "jus",
+   "fr": "Jus et cocktails sans alcool",
+   "en": "Juices and mocktails",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Virgin mojito menthe",
+     "p": 3500
+    },
+    {
+     "name": "Virgin mojito grenadine",
+     "p": 3500
+    },
+    {
+     "name": "Virgin mojito citron",
+     "p": 3500
+    },
+    {
+     "name": "Virgin mojito fraise",
+     "p": 3500
+    },
+    {
+     "name": "Jus d’ananas",
+     "p": 3000
+    },
+    {
+     "name": "Jus d’orange",
+     "p": 3000
+    },
+    {
+     "name": "Jus de mangue",
+     "p": 3000
+    },
+    {
+     "name": "Jus de pomme",
+     "p": 4000
+    },
+    {
+     "name": "Jus de pastèque",
+     "p": 2500
+    },
+    {
+     "name": "Jus de fraise",
+     "p": 6000
+    },
+    {
+     "name": "Cocktail de fruits",
+     "p": 4000
+    },
+    {
+     "name": "Forgen glace",
+     "p": 3000
+    },
+    {
+     "name": "Tropical",
+     "p": 2500
+    },
+    {
+     "name": "Limonade",
+     "p": 5000
+    },
+    {
+     "name": "Virgin Piña Colada",
+     "p": 4000
+    },
+    {
+     "name": "Virgin Banana Piña Colada",
+     "p": 4000
+    },
+    {
+     "name": "Virgin Pin Glow",
+     "p": 4500
+    },
+    {
+     "name": "Tropical Pink",
+     "p": 4500
+    },
+    {
+     "name": "Cocktail La Terrace",
+     "p": 5000
+    },
+    {
+     "name": "Ice tea framboise",
+     "p": 3500
+    },
+    {
+     "name": "Ice tea pêche",
+     "p": 3500
+    }
+   ]
+  },
+  {
+   "id": "soft",
+   "fr": "Boissons sans alcool",
+   "en": "Soft drinks",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Eau minérale",
+     "p": 1500
+    },
+    {
+     "name": "Red Bull",
+     "p": 3000
+    },
+    {
+     "name": "Coca / Fanta / Sprite",
+     "p": 1500
+    },
+    {
+     "name": "Lafi gazeuse",
+     "p": 1500
+    },
+    {
+     "name": "Malta",
+     "p": 1500
+    }
+   ]
+  },
+  {
+   "id": "chicha",
+   "fr": "Nos chichas",
+   "en": "Shisha",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Chicha love",
+     "p": 7500
+    },
+    {
+     "name": "Chicha hawaï",
+     "p": 7500
+    },
+    {
+     "name": "Chicha 2 pommes",
+     "p": 7500
+    },
+    {
+     "name": "Chicha menthe citron",
+     "p": 7500
+    },
+    {
+     "name": "Chicha ananas",
+     "p": 11000
+    },
+    {
+     "name": "Renouvellement",
+     "p": 5000
+    }
+   ]
+  },
+  {
+   "id": "bieres",
+   "fr": "Bières",
+   "en": "Beers",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Pression 3 L",
+     "p": 11000
+    },
+    {
+     "name": "Pression 5 L",
+     "p": 18000
+    },
+    {
+     "name": "Pression",
+     "variants": [
+      {
+       "name": "33 cl",
+       "p": 1500
+      },
+      {
+       "name": "50 cl",
+       "p": 2000
+      }
+     ]
+    },
+    {
+     "name": "Monaco pression",
+     "p": 3000
+    },
+    {
+     "name": "Beaufort",
+     "variants": [
+      {
+       "name": "33 cl",
+       "p": 1500
+      },
+      {
+       "name": "66 cl",
+       "p": 2000
+      }
+     ]
+    },
+    {
+     "name": "Castel",
+     "variants": [
+      {
+       "name": "33 cl",
+       "p": 1500
+      },
+      {
+       "name": "66 cl",
+       "p": 2000
+      }
+     ]
+    },
+    {
+     "name": "Sobebra / Brakina",
+     "p": 1500
+    },
+    {
+     "name": "Chill 66 cl",
+     "p": 1500
+    },
+    {
+     "name": "Dopel",
+     "variants": [
+      {
+       "name": "Dopel",
+       "p": 1500
+      },
+      {
+       "name": "Dopel Énergie",
+       "p": 1500
+      }
+     ]
+    },
+    {
+     "name": "Guinness",
+     "p": 2500
+    },
+    {
+     "name": "Heineken",
+     "p": 2000
+    },
+    {
+     "name": "Desperados",
+     "p": 2000
+    }
+   ]
+  },
+  {
+   "id": "shots",
+   "fr": "Shots",
+   "en": "Shots",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "BMW",
+     "p": 2000
+    },
+    {
+     "name": "Gin",
+     "p": 2500
+    },
+    {
+     "name": "Tequila",
+     "p": 2000
+    },
+    {
+     "name": "Vodka",
+     "p": 1500
+    },
+    {
+     "name": "B15",
+     "p": 2000
+    },
+    {
+     "name": "B53",
+     "p": 3000
+    },
+    {
+     "name": "Bon voyage (shot)",
+     "p": 2500
+    },
+    {
+     "name": "Lemon Drop",
+     "p": 1500
+    },
+    {
+     "name": "Kamikaze",
+     "p": 2000
+    },
+    {
+     "name": "Kamikaze bleu",
+     "p": 2500
+    },
+    {
+     "name": "Cervelet du singe",
+     "p": 2000
+    }
+   ]
+  },
+  {
+   "id": "cocktails",
+   "fr": "Cocktails",
+   "en": "Cocktails",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Margarita",
+     "p": 4500
+    },
+    {
+     "name": "Devil Margarita",
+     "p": 6000
+    },
+    {
+     "name": "Mojito alcoolisé",
+     "p": 5000
+    },
+    {
+     "name": "Tequila Sunrise",
+     "p": 5000
+    },
+    {
+     "name": "Piña Colada",
+     "p": 7000
+    },
+    {
+     "name": "Banane Colada",
+     "p": 6000
+    },
+    {
+     "name": "Pin Glow",
+     "p": 6000
+    },
+    {
+     "name": "Storm",
+     "p": 5500
+    },
+    {
+     "name": "Bob Marley",
+     "p": 3500
+    },
+    {
+     "name": "Bob Marley alcoolisé",
+     "p": 5500
+    },
+    {
+     "name": "Rainbow",
+     "p": 4500
+    },
+    {
+     "name": "Bora-Bora",
+     "p": 3500
+    },
+    {
+     "name": "Mémorial",
+     "p": 7000,
+     "d": "Avec champagne"
+    },
+    {
+     "name": "Blue Lagoon",
+     "p": 6500
+    },
+    {
+     "name": "Bon voyage",
+     "p": 6500
+    },
+    {
+     "name": "Apple Royale",
+     "p": 7500,
+     "d": "Avec champagne"
+    },
+    {
+     "name": "Mimosa Lover",
+     "p": 7500,
+     "d": "Champagne"
+    },
+    {
+     "name": "Tropical Blue",
+     "p": 5000
+    },
+    {
+     "name": "Sangria",
+     "p": 7000
+    },
+    {
+     "name": "Sex on the Beach",
+     "p": 5000
+    },
+    {
+     "name": "Cosmopolitan",
+     "p": 5500
+    },
+    {
+     "name": "Espresso Martini",
+     "p": 6500
+    },
+    {
+     "name": "Cocktail dégradé",
+     "p": 5000
+    },
+    {
+     "name": "Americano",
+     "p": 5000
+    },
+    {
+     "name": "Pêche Negreuner",
+     "p": 4500
+    },
+    {
+     "name": "Cocktail gin",
+     "p": 4500
+    },
+    {
+     "name": "Jacker Bombe",
+     "p": 5500
+    },
+    {
+     "name": "Jacker Sour",
+     "p": 4500
+    },
+    {
+     "name": "Surfer acide",
+     "p": 5000
+    },
+    {
+     "name": "Blue Hawaiian",
+     "p": 6500
+    },
+    {
+     "name": "Tequirados",
+     "p": 7000
+    }
+   ]
+  },
+  {
+   "id": "punch",
+   "fr": "Punchs",
+   "en": "Punches",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Blue Vodka",
+     "p": 14500
+    },
+    {
+     "name": "Rhum au citron",
+     "p": 11500
+    },
+    {
+     "name": "Punch au vin",
+     "p": 13500
+    },
+    {
+     "name": "Tequila Punch",
+     "p": 25000
+    }
+   ]
+  },
+  {
+   "id": "whisky",
+   "fr": "Whiskies et spiritueux",
+   "en": "Whisky and spirits",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Red Label",
+     "variants": [
+      {
+       "name": "Verre",
+       "p": 3000
+      },
+      {
+       "name": "Bouteille",
+       "p": 30000
+      }
+     ]
+    },
+    {
+     "name": "Black Label",
+     "variants": [
+      {
+       "name": "Verre",
+       "p": 5000
+      },
+      {
+       "name": "Bouteille",
+       "p": 50000
+      }
+     ]
+    },
+    {
+     "name": "Double Black",
+     "variants": [
+      {
+       "name": "Verre",
+       "p": 6000
+      },
+      {
+       "name": "Bouteille",
+       "p": 60000
+      }
+     ]
+    },
+    {
+     "name": "Jack Daniel’s",
+     "variants": [
+      {
+       "name": "Verre",
+       "p": 4000
+      },
+      {
+       "name": "Bouteille",
+       "p": 40000
+      }
+     ]
+    },
+    {
+     "name": "Baileys",
+     "variants": [
+      {
+       "name": "Verre",
+       "p": 4000
+      },
+      {
+       "name": "Bouteille",
+       "p": 40000
+      }
+     ]
+    },
+    {
+     "name": "Martini blanc",
+     "variants": [
+      {
+       "name": "Verre",
+       "p": 3000
+      },
+      {
+       "name": "Bouteille",
+       "p": 25000
+      }
+     ]
+    },
+    {
+     "name": "Martini rouge",
+     "variants": [
+      {
+       "name": "Verre",
+       "p": 3000
+      },
+      {
+       "name": "Bouteille",
+       "p": 25000
+      }
+     ]
+    },
+    {
+     "name": "Whisky J",
+     "variants": [
+      {
+       "name": "Verre",
+       "p": 3500
+      },
+      {
+       "name": "Bouteille",
+       "p": 40000
+      }
+     ]
+    },
+    {
+     "name": "Ricard",
+     "variants": [
+      {
+       "name": "Verre",
+       "p": 3000
+      },
+      {
+       "name": "Bouteille",
+       "p": 30000
+      }
+     ]
+    },
+    {
+     "name": "Hennessy (bouteille)",
+     "p": 60000
+    },
+    {
+     "name": "Hennessy (petite bouteille)",
+     "p": 50000
+    },
+    {
+     "name": "Gentleman Jack (bouteille)",
+     "p": 60000
+    },
+    {
+     "name": "Johnnie Walker 18 ans (bouteille)",
+     "p": 105000
+    },
+    {
+     "name": "Gold Label (bouteille)",
+     "p": 55000
+    },
+    {
+     "name": "Green Label (bouteille)",
+     "p": 70000
+    },
+    {
+     "name": "Blue Label (bouteille)",
+     "p": 200000
+    }
+   ]
+  },
+  {
+   "id": "vins",
+   "fr": "Vins",
+   "en": "Wines",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Baron Romero",
+     "p": 10000
+    },
+    {
+     "name": "JP Chenet",
+     "p": 13000
+    },
+    {
+     "name": "DBX Calvet",
+     "p": 20000
+    },
+    {
+     "name": "Corsica",
+     "p": 180000
+    },
+    {
+     "name": "Baron de Lirondeaux",
+     "p": 12000
+    },
+    {
+     "name": "Baron de Nestac",
+     "p": 14000
+    },
+    {
+     "name": "Frangine",
+     "p": 22000
+    },
+    {
+     "name": "Eyquems",
+     "p": 15000
+    }
+   ]
+  },
+  {
+   "id": "champagnes",
+   "fr": "Champagnes",
+   "en": "Champagne",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Moët Impérial",
+     "p": 60000
+    },
+    {
+     "name": "Moët Nectar",
+     "p": 70000
+    },
+    {
+     "name": "Veuve Clicquot",
+     "p": 70000
+    },
+    {
+     "name": "Nicolas Feuillatte",
+     "p": 50000
+    },
+    {
+     "name": "Perrier-Jouët Blanc de Blancs",
+     "p": 110000
+    },
+    {
+     "name": "Moët Impérial Ice",
+     "p": 65000
+    },
+    {
+     "name": "Elexium",
+     "p": 75000
+    }
+   ]
+  },
+  {
+   "id": "rouges",
+   "fr": "Vins rouges",
+   "en": "Red wines",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "JP Chenet Cabernet Syrah",
+     "p": 10000
+    },
+    {
+     "name": "JP Chenet rouge sucré",
+     "p": 14000
+    },
+    {
+     "name": "Grand Sud Merlot",
+     "p": 14000
+    },
+    {
+     "name": "Roche Mazet rouge Merlot",
+     "p": 13000
+    },
+    {
+     "name": "Roche Mazet rouge Cabernet",
+     "p": 10000
+    }
+   ]
+  },
+  {
+   "id": "blancs",
+   "fr": "Vins blancs",
+   "en": "White wines",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "JP Chenet blanc sucré",
+     "p": 13000
+    },
+    {
+     "name": "La Verrière blanc sec",
+     "p": 18000
+    },
+    {
+     "name": "Grand Sud blanc sucré",
+     "p": 15000
+    },
+    {
+     "name": "Rosenhof blanc",
+     "p": 18000
+    }
+   ]
+  },
+  {
+   "id": "mousseux",
+   "fr": "Vins mousseux et crémants",
+   "en": "Sparkling wines",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Pierlant demi-sec",
+     "p": 15000
+    },
+    {
+     "name": "Pierlant Or demi-sec",
+     "p": 30000
+    },
+    {
+     "name": "Calvet Ice demi-sec",
+     "p": 18000
+    },
+    {
+     "name": "Kraemer demi-sec",
+     "p": 12000
+    }
+   ]
+  },
+  {
+   "id": "castel",
+   "fr": "Vins Castel",
+   "en": "Castel wines",
+   "station": "drinks",
+   "items": [
+    {
+     "name": "Cabernet Sauvignon",
+     "p": 13000
+    },
+    {
+     "name": "Gewurztraminer",
+     "p": 14000
+    },
+    {
+     "name": "Ice Cuvée Blanche",
+     "p": 17000
+    },
+    {
+     "name": "Ice Cuvée Rosée",
+     "p": 18000
+    },
+    {
+     "name": "Cuvée Blanche",
+     "p": 15000
+    },
+    {
+     "name": "Laville Pavillon Blanc",
+     "p": 15000
+    },
+    {
+     "name": "Muscat",
+     "p": 14000
+    },
+    {
+     "name": "Crémant de Bordeaux",
+     "p": 20000
+    },
+    {
+     "name": "Grenache",
+     "p": 13000
+    },
+    {
+     "name": "Merlot Maison Castel",
+     "p": 13000
+    },
+    {
+     "name": "Côtes de Provence",
+     "p": 25000
+    },
+    {
+     "name": "Chardonnay",
+     "p": 15000
+    }
+   ]
+  }
+ ]
+}
