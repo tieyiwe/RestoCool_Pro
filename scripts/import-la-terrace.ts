@@ -2,7 +2,8 @@
  * Prepares the real « La Terrace » (Restaurant · Bar · Lounge, Ouagadougou) from its menu site
  * (laterrace-menu.pages.dev: food-menu.pdf and drinks-menu.pdf, copied in imports/la-terrace):
  * 24 categories, 250 dishes and drinks in French with prices (beers 33/50/66 cl and spirits
- * « verre / bouteille » as variants), no photos (the owner adds them), the logo (transparent).
+ * « verre / bouteille » as variants), no dish photos (the owner adds them), the logo (transparent)
+ * and the front photo (neon sign at night) as the cover.
  *
  *   npm run import:la-terrace [-- --owner-email=owner@example.com] [--draft] [--replace] [--if-missing]
  *
@@ -37,8 +38,38 @@ type Data = { CATEGORIES: Category[] };
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const arg = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
 
-/** Width × height of a PNG. */
-const pngSize = (b: Buffer) => ({ width: b.readUInt32BE(16), height: b.readUInt32BE(20) });
+/** Width × height of a PNG or a JPEG. */
+function imageSize(b: Buffer): { width: number; height: number } {
+  if (b[0] === 0x89 && b[1] === 0x50) return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
+  let i = 2;
+  while (i < b.length && b[i] === 0xff) {
+    const marker = b[i + 1]!;
+    if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) return { height: b.readUInt16BE(i + 5), width: b.readUInt16BE(i + 7) };
+    i += 2 + b.readUInt16BE(i + 2);
+  }
+  return { width: 0, height: 0 };
+}
+
+/** Stores a picture (and its thumbnail) and records it in `media`; returns its public address. */
+async function storePicture(db: ReturnType<typeof getDb>, rid: string, kind: "logo" | "cover", file: string, thumbFile?: string) {
+  const store = getStore();
+  const full = readFileSync(path.join(DIR, file));
+  const small = thumbFile ? readFileSync(path.join(DIR, thumbFile)) : full;
+  const ext = file.endsWith(".png") ? "png" : "jpg";
+  const id = randomBytes(18).toString("base64url");
+  const fullKey = `r/${rid}/${id}.${ext}`;
+  const thumbKey = `r/${rid}/${id}-t.${ext}`;
+  await store.put(fullKey, full);
+  await store.put(thumbKey, small);
+  await db.insert(media).values({ restaurantId: rid, kind, fullKey, thumbKey, bytes: full.length + small.length, ...imageSize(full), uploadedBy: "import" });
+  return mediaUrl(fullKey);
+}
+
+/** The front of the restaurant at night (neon sign), cropped for the banner. */
+async function addCover(db: ReturnType<typeof getDb>, rid: string) {
+  const coverUrl = await storePicture(db, rid, "cover", "cover.jpg", "cover-t.jpg");
+  await db.update(restaurants).set({ coverUrl }).where(eq(restaurants.id, rid));
+}
 
 async function main() {
   const rawEmail = (arg("owner-email") ?? process.env.LATERRACE_OWNER_EMAIL ?? "").trim().toLowerCase();
@@ -67,6 +98,15 @@ async function main() {
     if (ownerEmail && !owner && existing.settings.ownerEmail !== ownerEmail) {
       await db.update(restaurants).set({ settings: { ...existing.settings, ownerEmail } }).where(eq(restaurants.id, existing.id));
       console.log(`✓ La Terrace: owner email recorded (${ownerEmail}).`);
+    }
+    // The front photo, for a La Terrace imported before it existed (only while nobody owns it).
+    if (!owner && !existing.coverUrl && !replace) {
+      try {
+        await addCover(db, existing.id);
+        console.log("✓ La Terrace: front photo added.");
+      } catch (err) {
+        console.error(`✗ La Terrace: front photo could not be stored: ${err instanceof Error ? err.message : err}`);
+      }
     }
     if (!replace) {
       console.log(ifMissing ? "✓ La Terrace already exists." : `« ${existing.name} » already exists (/r/${SLUG}). Use --replace to recreate it.`);
@@ -120,15 +160,9 @@ async function main() {
   const rid = r!.id;
 
   // Logo: the emblem in the restaurant's leather brown on a transparent background.
-  const store = getStore();
-  const logo = readFileSync(path.join(DIR, "logo.png"));
-  const id = randomBytes(18).toString("base64url");
-  const fullKey = `r/${rid}/${id}.png`;
-  const thumbKey = `r/${rid}/${id}-t.png`;
-  await store.put(fullKey, logo);
-  await store.put(thumbKey, logo);
-  await db.insert(media).values({ restaurantId: rid, kind: "logo", fullKey, thumbKey, bytes: logo.length * 2, ...pngSize(logo), uploadedBy: "import" });
-  await db.update(restaurants).set({ logoUrl: mediaUrl(fullKey) }).where(eq(restaurants.id, rid));
+  const logoUrl = await storePicture(db, rid, "logo", "logo.png");
+  await db.update(restaurants).set({ logoUrl }).where(eq(restaurants.id, rid));
+  await addCover(db, rid);
 
   // Takeaway and delivery places; the main QR and its numéro RC.
   const placeRows = await db

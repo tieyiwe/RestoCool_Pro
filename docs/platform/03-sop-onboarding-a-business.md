@@ -119,7 +119,7 @@ Same as Shangri-La, with the secret `LATERRACE_OWNER_EMAIL` (logs: « ✓ La Ter
 - check the phone and add their **WhatsApp** (it receives takeaway orders) and Orange Money / Moov numbers;
 - set the **opening hours** (Google only says « closes at 3 AM »);
 - choose the **number of tables** (none were created; takeaway and delivery already exist);
-- add the photos of their dishes and of the place (the menu was imported without photos).
+- add the photos of their dishes (the menu was imported without dish photos; the front photo is already there).
 
 ## I. Go-live checklist (tick with the owner)
 
