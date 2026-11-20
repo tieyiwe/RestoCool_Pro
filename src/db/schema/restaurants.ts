@@ -22,6 +22,8 @@ export type RestaurantSettings = {
   ownerEmail?: string;
   /** Set by a prepared-business import script (for example « la-terrace-menu »): it may update only what it created. */
   importedFrom?: string;
+  /** Version of the cover photo the import put in place (replaced by a newer one only while unowned). */
+  importedCover?: number;
   /**
    * Account recovery (verified by TIBLOGICS): the ownerEmail account replaces the current owner,
    * whose account is switched off (kept for history).

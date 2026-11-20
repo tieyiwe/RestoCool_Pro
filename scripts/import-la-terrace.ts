@@ -65,10 +65,17 @@ async function storePicture(db: ReturnType<typeof getDb>, rid: string, kind: "lo
   return mediaUrl(fullKey);
 }
 
-/** The front of the restaurant at night (neon sign), cropped for the banner. */
+/** Bumped when imports/la-terrace/cover.jpg changes: an unowned La Terrace gets the new one. */
+const COVER_VERSION = 2;
+
+/**
+ * The front of the restaurant at night (neon sign), cropped to the public page banner
+ * (2.44:1 = 390 × 160 on phones, sign in the vertical centre so wider screens keep it).
+ */
 async function addCover(db: ReturnType<typeof getDb>, rid: string) {
   const coverUrl = await storePicture(db, rid, "cover", "cover.jpg", "cover-t.jpg");
-  await db.update(restaurants).set({ coverUrl }).where(eq(restaurants.id, rid));
+  const [row] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, rid));
+  await db.update(restaurants).set({ coverUrl, settings: { ...row!.settings, importedCover: COVER_VERSION } }).where(eq(restaurants.id, rid));
 }
 
 async function main() {
@@ -99,8 +106,11 @@ async function main() {
       await db.update(restaurants).set({ settings: { ...existing.settings, ownerEmail } }).where(eq(restaurants.id, existing.id));
       console.log(`✓ La Terrace: owner email recorded (${ownerEmail}).`);
     }
-    // The front photo, for a La Terrace imported before it existed (only while nobody owns it).
-    if (!owner && !existing.coverUrl && !replace) {
+    // The front photo, for a La Terrace imported before it existed or with an older crop
+    // (only while nobody owns it, and never over a photo someone uploaded).
+    const importedCover = existing.settings.importedCover ?? (existing.coverUrl ? 1 : 0);
+    const ownCover = !existing.coverUrl || importedCover > 0;
+    if (!owner && !replace && ownCover && importedCover < COVER_VERSION) {
       try {
         await addCover(db, existing.id);
         console.log("✓ La Terrace: front photo added.");
