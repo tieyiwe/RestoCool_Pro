@@ -27,7 +27,9 @@ import net from "node:net";
 const port = Number(process.env.PORT || 5000);
 const hostname = "0.0.0.0";
 let internalPort = Number(process.env.INTERNAL_PORT || 0); // 0 = a free port chosen by the system
-const internalHost = "127.0.0.1";
+// « localhost », not 127.0.0.1: Next.js names its own address « localhost »; with another name, the
+// sign-in middleware's rewrite looks like an outside site and Next proxies it over https (500).
+const internalHost = "localhost";
 const HOLD_MS = 30_000;
 
 let ready = false;
