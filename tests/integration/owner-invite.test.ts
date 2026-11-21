@@ -75,6 +75,20 @@ describe.skipIf(!hasDb)("owner invitations for prepared businesses (database)", 
     await expect(inv.inviteOwner(ctx(), r.id, { email: "x@example.com", lang: "fr" })).rejects.toBeInstanceOf(inv.OwnerExistsError);
   });
 
+  it("never touches a business created through the normal sign-up (its creator is the owner)", async () => {
+    const db = getDb();
+    const self = await createRestaurantForUser(db, { clerkUserId: "it-invite-self", email: "self@example.com" }, { name: "Maquis Inscrit Seul", city: "Ouagadougou" });
+    try {
+      await expect(inv.inviteOwner(ctx(), self.id, { email: "other@example.com", lang: "fr" })).rejects.toBeInstanceOf(inv.OwnerExistsError);
+      const [row] = await db.select().from(restaurants).where(eq(restaurants.id, self.id));
+      expect(row!.settings.ownerInvite).toBeUndefined();
+      expect(row!.settings.ownerEmail).toBeUndefined();
+      expect(await claimBusinessesByEmail(db, { clerkUserId: "it-invite-thief", verifiedEmail: "other@example.com" })).toEqual([]);
+    } finally {
+      await db.delete(restaurants).where(eq(restaurants.id, self.id));
+    }
+  });
+
   it("masks the email on the public page", () => {
     expect(inv.maskEmail("awatraore@gmail.com")).toBe("aw••••••@gmail.com");
     expect(inv.maskEmail("ab@x.bf")).toBe("ab••@x.bf");
