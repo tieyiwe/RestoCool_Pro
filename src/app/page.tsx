@@ -121,8 +121,8 @@ export default async function HomePage() {
       {promoStrip && <HomePromo p={promoStrip} variant="strip" />}
       {/* ---------------- Header ---------------- */}
       <header className="sticky top-0 z-40 border-b border-ligne/70 bg-creme/90 backdrop-blur">
-        <div className={cn(section, "flex h-16 items-center justify-between gap-3")}>
-          <Link href="/" aria-label="RestoCool" className="mr-2 shrink-0">
+        <div className={cn(section, "flex h-16 items-center justify-between gap-2")}>
+          <Link href="/" aria-label="RestoCool" className="shrink-0 sm:mr-2">
             <Logo />
           </Link>
           <nav aria-label={t("nav.menu")} className="hidden items-center gap-0.5 text-sm font-semibold whitespace-nowrap xl:flex">
@@ -132,7 +132,9 @@ export default async function HomePage() {
             <a href="#how" className="rounded-lg px-3 py-2 hover:bg-sable">
               {t("nav.how")}
             </a>
-            <Link href="/restaurants" className="rounded-lg px-3 py-2 hover:bg-sable">
+            {/* The directory is what visitors use most: a gold pill, unlike the other links. */}
+            <Link href="/restaurants" className="mx-1 inline-flex items-center gap-1.5 rounded-full bg-or px-4 py-2 font-bold text-encre shadow-sm ring-1 ring-or/60 hover:brightness-105" data-testid="nav-explore">
+              <span aria-hidden>🔎</span>
               {t("nav.restaurants")}
             </Link>
             <a href="/tarifs" className="rounded-lg px-3 py-2 hover:bg-sable">
@@ -142,7 +144,7 @@ export default async function HomePage() {
               {t("nav.faq")}
             </a>
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <div className="hidden sm:block">
               <LocaleSwitcher />
             </div>
@@ -151,6 +153,10 @@ export default async function HomePage() {
             </Link>
             <Link href="/sign-in" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold whitespace-nowrap hover:bg-sable md:flex">
               {t("nav.signIn")}
+            </Link>
+            <Link href="/restaurants" aria-label={t("nav.restaurants")} className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-full bg-or px-2.5 text-sm font-bold whitespace-nowrap text-encre shadow-sm ring-1 ring-or/60 hover:brightness-105 sm:px-3 xl:hidden" data-testid="nav-explore-mobile">
+              <span aria-hidden>🔎</span>
+              <span className="hidden min-[380px]:inline">{t("nav.restaurants")}</span>
             </Link>
             <Link href="/sign-up" className="inline-flex min-h-11 items-center rounded-xl bg-vert px-3 text-sm font-bold whitespace-nowrap text-creme hover:opacity-90 sm:px-4">
               <span className="sm:hidden">{t("nav.ctaShort")}</span>
@@ -161,7 +167,7 @@ export default async function HomePage() {
               links={[
                 { href: "#features", label: t("nav.features"), icon: "✨" },
                 { href: "#how", label: t("nav.how"), icon: "🧭" },
-                { href: "/restaurants", label: t("nav.restaurants"), icon: "🍽️" },
+                { href: "/restaurants", label: t("nav.restaurants"), icon: "🔎", highlight: true },
                 { href: "/c", label: tc("short"), icon: "🔢" },
                 { href: "/tarifs", label: t("nav.pricing"), icon: "💰" },
                 { href: "#faq", label: t("nav.faq"), icon: "❓" },

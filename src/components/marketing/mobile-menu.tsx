@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-export type MobileMenuLink = { href: string; label: string; icon: string };
+export type MobileMenuLink = { href: string; label: string; icon: string; highlight?: boolean };
 
 /**
  * Phones and tablets (below the desktop menu): a « Menu » button that opens a full-screen panel
@@ -97,7 +97,11 @@ export function MobileMenu({
             <ul className="flex flex-col">
               {links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} onClick={follow} className="flex min-h-14 items-center gap-3 border-b border-ligne/60 text-lg font-semibold">
+                  <Link
+                    href={l.href}
+                    onClick={follow}
+                    className={l.highlight ? "my-2 flex min-h-14 items-center gap-3 rounded-2xl bg-or px-3 text-lg font-bold text-encre shadow-sm" : "flex min-h-14 items-center gap-3 border-b border-ligne/60 text-lg font-semibold"}
+                  >
                     <span aria-hidden className="w-7 text-center text-xl">
                       {l.icon}
                     </span>
