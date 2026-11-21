@@ -92,35 +92,27 @@ At the end, the app unlocks and shows « Prochaines étapes » and the main QR c
 
 ## H. Prepared businesses (created by RestoCool, claimed by the owner)
 
-Some businesses were created by RestoCool before the owner signed up. Today this is the case for **Shangri-La** and **La Terrace**.
+Some businesses are created by RestoCool before the owner signs up (today **Shangri-La** and **La Terrace**): the menu, photos, logo and page are already done. The owner takes it over with an **invitation from the console**.
 
-Such a business carries an **owner email**. The first person who signs in with that exact email, **verified**, becomes the owner (matricule 001). The email is then removed from the business.
+### Invite the owner (RestoCool team)
 
-### Shangri-La: steps
+1. Open the console: `restocool.com/admin_pro` → **Businesses** → the business. While it has no owner, an **« Owner invitation »** card is at the top.
+2. Type the **owner's email** (the one they read; a Gmail address also lets them use « Continuer avec Google »), choose the email language (French or English), tap **« Send the invitation »**.
+3. RestoCool emails them a link that carries the business address: `restocool.com/r/<business>/proprietaire/<code>` (valid 30 days). The card also shows the link: **« Copy the link »** or **« Send by WhatsApp »** (to the business's number), useful if the email is not set up or lands in spam.
+4. Wrong email or link lost: type the right email and tap **« Send a new link »** (the old link stops working). **« Cancel the invitation »** stops it altogether.
 
-1. **RestoCool team:** in Replit → Secrets, add `SHANGRILA_OWNER_EMAIL` with the owner's email (lower case, exactly as they gave it).
-2. **RestoCool team:** republish. On start, the import sees Shangri-La already exists and only records the owner email. The publish logs show « ✓ Shangri-La: owner email recorded (…) ».
-3. **The owner:**
-   - opens `restocool.com/sign-up` and creates an account with **that same email**;
-   - or signs in with Google if it is a Gmail address;
-   - enters the code received by email (this verifies the address).
-4. They land on `restocool.com/app`. The app recognises the email and gives them Shangri-La with full owner rights. There is no setup wizard: setup is already marked done.
-5. With the owner, check and complete:
-   - Paramètres: contacts, Orange Money / Moov numbers, location;
-   - **opening hours** (none are set: the page hides « Ouvert / Fermé » until they are);
-   - cover photo.
-6. Then the team (section F), reservations if wanted (section G), and a test order (section E, step 4).
+### What the owner does
 
-If the owner signs up with a **different** email, nothing happens: they see « create your business ». Do not let them create a second Shangri-La. Fix the secret (or have them use the right email), republish, then they sign in again.
+1. Opens the link: the page shows their business and « Invitation pour : ab•••@gmail.com ».
+2. Taps **« Créer mon compte »** (or « J’ai déjà un compte »), with **that same email**, then types the code received by email (or uses Google).
+3. They come back to the link by themselves and become the owner (matricule 001), then land in the app:
+   - a business whose setup was not finished (**La Terrace**) opens the setup wizard, already filled in: they add their WhatsApp, opening hours and number of tables, then add dish photos;
+   - a business already set up (**Shangri-La**) opens the dashboard: check contacts, Orange Money / Moov numbers, location and **opening hours** (none are set: the page hides « Ouvert / Fermé » until they are).
+4. Then the team (section F), reservations if wanted (section G), and a test order (section E, step 4).
 
-### La Terrace: steps
+If they sign in with **another** account, the page says « Ce n’est pas le bon compte » with a button to switch account. Nothing is handed over to another email. Once taken, the console card disappears and the link says the business already has an owner.
 
-Same as Shangri-La, with the secret `LATERRACE_OWNER_EMAIL` (logs: « ✓ La Terrace: owner email recorded (…) »). The difference: La Terrace's setup is **not** marked done, so after signing in the owner goes through the setup wizard (prefilled: name, slogan, phone, address, location, colours, logo, front photo, menu). With them:
-
-- check the phone and add their **WhatsApp** (it receives takeaway orders) and Orange Money / Moov numbers;
-- set the **opening hours** (Google only says « closes at 3 AM »);
-- choose the **number of tables** (none were created; takeaway and delivery already exist);
-- add the photos of their dishes (the menu was imported without dish photos; the front photo is already there).
+The older way still works (Replit Secrets `SHANGRILA_OWNER_EMAIL` / `LATERRACE_OWNER_EMAIL`, then republish), but the console invitation is simpler and needs no publish.
 
 ## I. Go-live checklist (tick with the owner)
 

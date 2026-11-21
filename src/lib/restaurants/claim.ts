@@ -35,7 +35,12 @@ export async function claimBusinessesByEmail(db: DB, user: { clerkUserId: string
       }
       await tx
         .update(restaurants)
-        .set({ settings: sql`${restaurants.settings} - 'ownerEmail' - 'ownerTransfer'` })
+        // The invitation link that was used keeps saying « already taken » (not « invalid »).
+        .set({
+          settings: r.settings.ownerInvite
+            ? sql`(${restaurants.settings} - 'ownerEmail' - 'ownerTransfer' - 'ownerInvite') || jsonb_build_object('ownerInviteUsed', ${r.settings.ownerInvite.token}::text)`
+            : sql`${restaurants.settings} - 'ownerEmail' - 'ownerTransfer' - 'ownerInvite'`,
+        })
         .where(eq(restaurants.id, id));
       if (transfer) {
         await writeAudit(tx, { kind: "member", userId: user.clerkUserId, restaurantId: id, role: "owner" }, { restaurantId: id, action: "restaurant.owner_recovered", entity: "restaurant", entityId: id, data: { email, previousOwner: owner?.id ?? null } });

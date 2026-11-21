@@ -17,6 +17,9 @@ import { FeatureUsageCard } from "@/components/admin/feature-usage";
 import { PaymentsCard } from "@/components/admin/payments-card";
 import { adminPayments } from "@/lib/admin/payments";
 import { formatBfPhone, formatFCFA, telHref, whatsappHref } from "@/lib/format";
+import { OwnerInviteCard } from "@/components/admin/owner-invite-card";
+import { inviteUrl } from "@/lib/restaurants/owner-invite";
+import { publicBaseUrl } from "@/lib/urls";
 import {
   changePlanAction,
   featuredAction,
@@ -40,6 +43,11 @@ const OK = [
   "unpublished",
   "featured",
   "note",
+  "ownerInviteSent",
+  "ownerInviteNotSent",
+  "ownerInviteFailed",
+  "ownerInviteCancelled",
+  "ownerInviteOwnerExists",
 ];
 
 /** One business, for TIBLOGICS: contact, figures, plan & payments, controls, read-only view, notes, activity. */
@@ -73,6 +81,7 @@ export default async function AdminBusiness({
   const F = (n: number | null) => formatFCFA(n ?? 0) ?? "0 F";
   const owner = d.team.find((m) => m.role === "owner");
   const contact = r.whatsapp ?? r.phones[0] ?? null;
+  const base = await publicBaseUrl();
   const date = (x: Date | null) =>
     x ? format.dateTime(x, { dateStyle: "medium" }) : "—";
   return (
@@ -182,6 +191,21 @@ export default async function AdminBusiness({
           )}
         </div>
       </header>
+
+      {/* A business prepared by RestoCool, nobody owns it yet: invite its owner. */}
+      {!owner && (
+        <OwnerInviteCard
+          t={t as never}
+          id={r.id}
+          name={r.name}
+          invite={r.settings.ownerInvite ?? null}
+          expectedEmail={r.settings.ownerEmail ?? null}
+          link={r.settings.ownerInvite ? inviteUrl(base, r.slug, r.settings.ownerInvite.token) : null}
+          phone={r.whatsapp ?? r.phones[0] ?? null}
+          canEdit={canEdit}
+          date={(x) => format.dateTime(x, { dateStyle: "medium" })}
+        />
+      )}
 
       <section className="rounded-2xl border border-emerald-300 bg-emerald-50/60 p-4 dark:bg-emerald-950/20" data-testid="admin-business-live">
         <h2 className="mb-2 flex items-center gap-2 text-sm font-bold">

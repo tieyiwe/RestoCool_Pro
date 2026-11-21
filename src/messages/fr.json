@@ -624,7 +624,12 @@
       "inviteResent": "Invitation renvoyée.",
       "promoCreated": "Campagne publiée.",
       "promoSaved": "Campagne mise à jour.",
-      "promoDeleted": "Campagne supprimée."
+      "promoDeleted": "Campagne supprimée.",
+      "ownerInviteSent": "Invitation envoyée par e-mail au propriétaire.",
+      "ownerInviteNotSent": "Invitation prête, mais aucun e-mail n’est parti (l’e-mail n’est pas configuré) : copiez le lien ou envoyez-le par WhatsApp.",
+      "ownerInviteFailed": "Invitation prête, mais l’e-mail n’a pas pu partir : copiez le lien ou envoyez-le par WhatsApp.",
+      "ownerInviteCancelled": "Invitation annulée : le lien ne fonctionne plus.",
+      "ownerInviteOwnerExists": "Cet établissement a déjà un propriétaire : pas besoin d’invitation."
     },
     "detail": {
       "orders30": "Commandes (30 jours)",
@@ -1451,6 +1456,24 @@
         "expired": "Expirée",
         "refunded": "Remboursée"
       }
+    },
+    "ownerInvite": {
+      "title": "Invitation du propriétaire",
+      "intro": "Cet établissement a été préparé par RestoCool et n’a pas encore de propriétaire. Saisissez l’e-mail du propriétaire : il reçoit un lien vers la page de l’établissement, crée son compte (ou se connecte) avec cet e-mail, devient propriétaire et termine la configuration là où nous l’avons laissée.",
+      "email": "E-mail du propriétaire",
+      "lang": "Langue de l’e-mail",
+      "send": "Envoyer l’invitation",
+      "resend": "Envoyer un nouveau lien",
+      "pending": "Invitation envoyée à",
+      "expired": "Invitation expirée :",
+      "sentOn": "envoyée le {date} ({count}×, par {by})",
+      "validUntil": "lien valable jusqu’au {date}",
+      "copy": "Copier le lien",
+      "copied": "Copié",
+      "whatsapp": "Envoyer par WhatsApp",
+      "whatsappText": "Laafi ! RestoCool a préparé la page de {name}. Pour en prendre la main, ouvrez ce lien et créez votre compte avec votre adresse e-mail : {link}",
+      "cancel": "Annuler l’invitation",
+      "cancelConfirm": "Annuler cette invitation ? Le lien ne fonctionnera plus."
     }
   },
   "demo": {
@@ -4510,5 +4533,51 @@
       "preparing": "En préparation",
       "ready": "Prête"
     }
+  },
+  "ownerInvite": {
+    "title": "Invitation propriétaire",
+    "subtitle": "Invitation de l’équipe RestoCool",
+    "heading": "{name} vous attend",
+    "intro": "L’équipe RestoCool a préparé la page de {name} : votre menu ({items} plats et boissons), votre logo et votre photo sont déjà en ligne.",
+    "introNoItems": "L’équipe RestoCool a préparé la page de {name} : elle est déjà en ligne.",
+    "forEmail": "Invitation pour : {email}",
+    "steps": "Comment faire ?",
+    "step1": "Créez votre compte (ou connectez-vous) avec cette adresse e-mail.",
+    "step2": "Saisissez le code reçu par e-mail pour confirmer l’adresse.",
+    "step3": "Complétez ce qui manque (WhatsApp, horaires, tables) et c’est parti !",
+    "signUp": "Créer mon compte",
+    "signIn": "J’ai déjà un compte",
+    "google": "Avec une adresse Gmail, vous pouvez aussi choisir « Continuer avec Google ».",
+    "seePage": "Voir la page de {name}",
+    "wrongTitle": "Ce n’est pas le bon compte",
+    "wrongText": "Vous êtes connecté(e) avec {email}. Cette invitation est pour {invited}.",
+    "switch": "Changer de compte",
+    "unverifiedTitle": "Confirmez votre adresse e-mail",
+    "unverifiedText": "Votre compte est ouvert, mais son adresse e-mail n’est pas encore confirmée. Confirmez-la avec le code reçu par e-mail, puis revenez sur ce lien.",
+    "expiredTitle": "Ce lien a expiré",
+    "expiredText": "Demandez un nouveau lien à l’équipe RestoCool : il vous sera renvoyé par e-mail.",
+    "invalidTitle": "Ce lien n’est pas valide",
+    "invalidText": "Vérifiez que vous avez ouvert le lien complet reçu par e-mail, ou demandez un nouveau lien à l’équipe RestoCool.",
+    "ownedTitle": "{name} a déjà un propriétaire",
+    "ownedText": "Si c’est vous, ouvrez simplement votre espace.",
+    "openApp": "Ouvrir mon espace",
+    "help": "Besoin d’aide ?",
+    "expires": "Lien personnel, valable jusqu’au {date}.",
+    "email": {
+      "subject": "{name} vous attend sur RestoCool",
+      "hello": "Laafi !",
+      "now": "Il ne vous reste qu’à en prendre la main : créez votre compte avec cette adresse e-mail ({email}), puis complétez en quelques minutes ce qui manque (WhatsApp, horaires, tables).",
+      "cta": "Prendre en main {name}",
+      "get": "Ensuite, depuis votre téléphone :",
+      "get1": "recevez les commandes de vos clients en direct ;",
+      "get2": "imprimez les QR codes de vos tables ;",
+      "get3": "ajoutez votre équipe et suivez vos ventes.",
+      "page": "Votre page :",
+      "rc": "Votre numéro RC :",
+      "linkText": "Si le bouton ne s’ouvre pas, copiez ce lien dans votre navigateur :",
+      "private": "Ce lien est personnel et valable jusqu’au {date}. Une question ? Répondez simplement à cet e-mail."
+    },
+    "failedTitle": "Impossible de prendre en main l’établissement pour le moment",
+    "failedText": "Votre compte est bien le bon, mais l’établissement n’a pas pu vous être confié. Demandez un nouveau lien à l’équipe RestoCool."
   }
 }

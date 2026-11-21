@@ -624,7 +624,12 @@
       "inviteResent": "Invitation sent again.",
       "promoCreated": "Campaign published.",
       "promoSaved": "Campaign updated.",
-      "promoDeleted": "Campaign deleted."
+      "promoDeleted": "Campaign deleted.",
+      "ownerInviteSent": "Invitation emailed to the owner.",
+      "ownerInviteNotSent": "Invitation ready, but no email was sent (email is not configured): copy the link or send it by WhatsApp.",
+      "ownerInviteFailed": "Invitation ready, but the email could not be sent: copy the link or send it by WhatsApp.",
+      "ownerInviteCancelled": "Invitation cancelled: the link no longer works.",
+      "ownerInviteOwnerExists": "This business already has an owner: no invitation needed."
     },
     "detail": {
       "orders30": "Orders (30 days)",
@@ -1451,6 +1456,24 @@
         "expired": "Expired",
         "refunded": "Refunded"
       }
+    },
+    "ownerInvite": {
+      "title": "Owner invitation",
+      "intro": "This business was prepared by RestoCool and has no owner yet. Type the owner's email: they get a link to the business page where they create their account (or sign in) with that email, become the owner and finish the setup where we left it.",
+      "email": "Owner's email",
+      "lang": "Email language",
+      "send": "Send the invitation",
+      "resend": "Send a new link",
+      "pending": "Invitation sent to",
+      "expired": "Invitation expired:",
+      "sentOn": "sent {date} ({count}×, by {by})",
+      "validUntil": "link valid until {date}",
+      "copy": "Copy the link",
+      "copied": "Copied",
+      "whatsapp": "Send by WhatsApp",
+      "whatsappText": "Laafi ! RestoCool a préparé la page de {name}. Pour en prendre la main, ouvrez ce lien et créez votre compte avec votre adresse e-mail : {link}",
+      "cancel": "Cancel the invitation",
+      "cancelConfirm": "Cancel this invitation? The link will stop working."
     }
   },
   "demo": {
@@ -4510,5 +4533,51 @@
       "preparing": "准备中",
       "ready": "已备好"
     }
+  },
+  "ownerInvite": {
+    "title": "店主邀请",
+    "subtitle": "来自 RestoCool 团队的邀请",
+    "heading": "{name} 正在等您",
+    "intro": "RestoCool 团队已为 {name} 准备好页面：您的菜单（{items} 道菜品和饮品）、标志和照片已经上线。",
+    "introNoItems": "RestoCool 团队已为 {name} 准备好页面：页面已经上线。",
+    "forEmail": "邀请对象：{email}",
+    "steps": "操作步骤",
+    "step1": "使用此电子邮箱创建账户（或登录）。",
+    "step2": "输入邮件中收到的验证码以确认邮箱。",
+    "step3": "补充缺少的信息（WhatsApp、营业时间、餐桌），即可开始使用！",
+    "signUp": "创建我的账户",
+    "signIn": "我已有账户",
+    "google": "如果是 Gmail 邮箱，也可以选择“使用 Google 继续”。",
+    "seePage": "查看 {name} 的页面",
+    "wrongTitle": "账户不正确",
+    "wrongText": "您当前登录的是 {email}。此邀请发给 {invited}。",
+    "switch": "切换账户",
+    "unverifiedTitle": "请确认您的电子邮箱",
+    "unverifiedText": "您的账户已创建，但邮箱尚未确认。请用邮件中的验证码确认后，再打开此链接。",
+    "expiredTitle": "此链接已过期",
+    "expiredText": "请向 RestoCool 团队申请新链接，我们会重新通过邮件发送给您。",
+    "invalidTitle": "此链接无效",
+    "invalidText": "请确认您打开的是邮件中的完整链接，或向 RestoCool 团队申请新链接。",
+    "ownedTitle": "{name} 已有店主",
+    "ownedText": "如果是您本人，请直接打开您的空间。",
+    "openApp": "打开我的空间",
+    "help": "需要帮助？",
+    "expires": "个人专属链接，有效期至 {date}。",
+    "email": {
+      "subject": "{name} 在 RestoCool 上等您",
+      "hello": "您好！",
+      "now": "只需接手即可：使用此邮箱（{email}）创建账户，然后几分钟内补充缺少的信息（WhatsApp、营业时间、餐桌）。",
+      "cta": "接手 {name}",
+      "get": "之后，您可以用手机：",
+      "get1": "实时接收顾客订单；",
+      "get2": "打印餐桌二维码；",
+      "get3": "添加团队成员并查看销售情况。",
+      "page": "您的页面：",
+      "rc": "您的 RC 编号：",
+      "linkText": "如果按钮无法打开，请将此链接复制到浏览器：",
+      "private": "此链接为个人专属，有效期至 {date}。有问题？直接回复此邮件即可。"
+    },
+    "failedTitle": "暂时无法接手该店铺",
+    "failedText": "您的账户正确，但店铺未能交接给您。请向 RestoCool 团队申请新链接。"
   }
 }

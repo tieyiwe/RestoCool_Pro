@@ -19,6 +19,10 @@ import { after } from "next/server";
 import { addCollaborator, getCollaborator, markInvited, removeCollaborator, updateCollaborator } from "@/lib/admin/team";
 import { sendCollaboratorInvite } from "@/lib/email/collaborator-invite";
 import { Announcement, clearPlatformSetting, savePlatformSetting } from "@/lib/platform/settings";
+import { and, eq, isNull, sql } from "drizzle-orm";
+import { accessCodes, menuItems } from "@/db/schema";
+import { OwnerExistsError, cancelOwnerInvite, inviteOwner, inviteUrl } from "@/lib/restaurants/owner-invite";
+import { sendOwnerInvite } from "@/lib/email/owner-invite";
 
 const s = (fd: FormData, k: string) => String(fd.get(k) ?? "");
 const Id = z.uuid();
@@ -322,5 +326,47 @@ export async function deletionAction(fd: FormData) {
     else if (what === "restore") await restoreDeleted(db, actor, id);
     else throw new z.ZodError([]);
     return `deletion_${what}#d-${id}`;
+  });
+}
+
+/**
+ * Invites the future owner of a business prepared by RestoCool: records their email, emails them
+ * the link `/r/<slug>/proprietaire/<token>` (the console can also copy it or send it by WhatsApp).
+ * Sending again renews the link. Refused once the business has an owner.
+ */
+export async function inviteOwnerAction(fd: FormData) {
+  const id = Id.parse(s(fd, "id"));
+  await run(`/admin_pro/businesses/${id}`, async () => {
+    const c = await ctx("businesses.write");
+    const lang = s(fd, "lang") === "en" ? "en" : "fr";
+    let made: Awaited<ReturnType<typeof inviteOwner>>;
+    try {
+      made = await inviteOwner(c, id, { email: s(fd, "email"), lang });
+    } catch (err) {
+      if (err instanceof OwnerExistsError) return "ownerInviteOwnerExists";
+      throw err;
+    }
+    const { restaurant: r, invite } = made;
+    const base = await publicBaseUrl();
+    const [rc] = await c.db.select({ code: accessCodes.code }).from(accessCodes).where(and(eq(accessCodes.restaurantId, r.id), isNull(accessCodes.seatId))).limit(1);
+    const [count] = await c.db.select({ n: sql<number>`count(*)::int` }).from(menuItems).where(eq(menuItems.restaurantId, r.id));
+    const sent = await sendOwnerInvite({
+      to: invite.email,
+      lang,
+      business: { name: r.name, slug: r.slug, logoUrl: r.logoUrl, rc: rc?.code ?? null, items: count?.n ?? 0 },
+      link: inviteUrl(base, r.slug, invite.token),
+      baseUrl: base,
+      expiresAt: new Date(invite.expiresAt),
+    });
+    await writeAudit(c.db, c.actor, { restaurantId: r.id, action: "admin.owner_invite_email", entity: "restaurant", entityId: r.id, data: { status: sent.status } });
+    return sent.status === "sent" ? "ownerInviteSent" : sent.status === "skipped" ? "ownerInviteNotSent" : "ownerInviteFailed";
+  });
+}
+
+export async function cancelOwnerInviteAction(fd: FormData) {
+  const id = Id.parse(s(fd, "id"));
+  await run(`/admin_pro/businesses/${id}`, async () => {
+    await cancelOwnerInvite(await ctx("businesses.write"), id);
+    return "ownerInviteCancelled";
   });
 }

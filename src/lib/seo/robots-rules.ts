@@ -18,6 +18,7 @@ export const DISALLOW = [
   "/sign-up",
   "/r/*/t/",
   "/r/*/b/",
+  "/r/*/proprietaire/",
   "/*?*preview",
   "/__clerk",
 ] as const;

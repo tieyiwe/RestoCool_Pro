@@ -21,6 +21,13 @@ export type RestaurantSettings = {
    */
   ownerEmail?: string;
   /** Set by a prepared-business import script (for example « la-terrace-menu »): it may update only what it created. */
+  /**
+   * Invitation sent from the console to the future owner of a business prepared by RestoCool:
+   * the link `/r/<slug>/proprietaire/<token>` (see src/lib/restaurants/owner-invite.ts).
+   */
+  ownerInvite?: { token: string; email: string; lang: "fr" | "en"; sentAt: string; expiresAt: string; count: number; by: string };
+  /** The invitation link that was used to take the business (it then says « already taken »). */
+  ownerInviteUsed?: string;
   importedFrom?: string;
   /** Version of the cover photo the import put in place (replaced by a newer one only while unowned). */
   importedCover?: number;

@@ -92,35 +92,27 @@
 
 ## H. Établissements préparés (créés par RestoCool, réclamés par le propriétaire)
 
-Certains établissements ont été créés par RestoCool avant l’inscription du propriétaire. C’est le cas aujourd’hui de **Shangri-La** et de **La Terrace**.
+Certains établissements sont créés par RestoCool avant l’inscription du propriétaire (aujourd’hui **Shangri-La** et **La Terrace**) : le menu, les photos, le logo et la page sont déjà faits. Le propriétaire en prend la main grâce à une **invitation envoyée depuis la console**.
 
-Un tel établissement porte un **e-mail du propriétaire**. La première personne qui se connecte avec exactement cet e-mail, **vérifié**, devient propriétaire (matricule 001). L’e-mail est ensuite retiré de l’établissement.
+### Inviter le propriétaire (équipe RestoCool)
 
-### Shangri-La : étapes
+1. Ouvrez la console : `restocool.com/admin_pro` → **Établissements** → l’établissement. Tant qu’il n’a pas de propriétaire, une carte **« Invitation du propriétaire »** apparaît en haut.
+2. Saisissez l’**e-mail du propriétaire** (celui qu’il lit ; avec une adresse Gmail, il peut aussi utiliser « Continuer avec Google »), choisissez la langue de l’e-mail (français ou anglais), touchez **« Envoyer l’invitation »**.
+3. RestoCool lui envoie par e-mail un lien qui porte l’adresse de l’établissement : `restocool.com/r/<établissement>/proprietaire/<code>` (valable 30 jours). La carte affiche aussi le lien : **« Copier le lien »** ou **« Envoyer par WhatsApp »** (au numéro de l’établissement), utile si l’e-mail n’est pas configuré ou arrive dans les indésirables.
+4. Mauvais e-mail ou lien perdu : saisissez le bon e-mail et touchez **« Envoyer un nouveau lien »** (l’ancien lien ne fonctionne plus). **« Annuler l’invitation »** l’arrête complètement.
 
-1. **Équipe RestoCool :** dans Replit → Secrets, ajoutez `SHANGRILA_OWNER_EMAIL` avec l’e-mail du propriétaire (en minuscules, exactement comme il l’a donné).
-2. **Équipe RestoCool :** republiez. Au démarrage, l’import voit que Shangri-La existe déjà et enregistre seulement l’e-mail du propriétaire. Les journaux de publication affichent « ✓ Shangri-La: owner email recorded (…) ».
-3. **Le propriétaire :**
-   - ouvre `restocool.com/sign-up` et crée un compte avec **ce même e-mail** ;
-   - ou se connecte avec Google s’il s’agit d’une adresse Gmail ;
-   - saisit le code reçu par e-mail (cela vérifie l’adresse).
-4. Il arrive sur `restocool.com/app`. L’application reconnaît l’e-mail et lui donne Shangri-La avec tous les droits de propriétaire. Pas d’assistant de configuration : la configuration est déjà marquée comme terminée.
-5. Avec le propriétaire, vérifiez et complétez :
-   - Paramètres : contacts, numéros Orange Money / Moov, emplacement ;
-   - **horaires d’ouverture** (aucun n’est défini : la page masque « Ouvert / Fermé » tant qu’ils ne le sont pas) ;
-   - photo de l’établissement.
-6. Ensuite l’équipe (section F), les réservations si souhaité (section G) et une commande test (section E, étape 4).
+### Ce que fait le propriétaire
 
-Si le propriétaire s’inscrit avec un **autre** e-mail, rien ne se passe : il voit « créer votre établissement ». Ne le laissez pas créer un deuxième Shangri-La. Corrigez le secret (ou faites-lui utiliser le bon e-mail), republiez, puis il se reconnecte.
+1. Il ouvre le lien : la page affiche son établissement et « Invitation pour : ab•••@gmail.com ».
+2. Il touche **« Créer mon compte »** (ou « J’ai déjà un compte »), avec **ce même e-mail**, puis saisit le code reçu par e-mail (ou utilise Google).
+3. Il revient tout seul sur le lien, devient propriétaire (matricule 001) et arrive dans l’application :
+   - un établissement dont la configuration n’est pas terminée (**La Terrace**) ouvre l’assistant de configuration, déjà prérempli : il ajoute son WhatsApp, ses horaires et son nombre de tables, puis les photos des plats ;
+   - un établissement déjà configuré (**Shangri-La**) ouvre le tableau de bord : vérifiez les contacts, les numéros Orange Money / Moov, l’emplacement et les **horaires** (aucun n’est défini : la page masque « Ouvert / Fermé » tant qu’ils ne le sont pas).
+4. Ensuite l’équipe (section F), les réservations si souhaité (section G) et une commande test (section E, étape 4).
 
-### La Terrace : étapes
+S’il se connecte avec un **autre** compte, la page indique « Ce n’est pas le bon compte » avec un bouton pour changer de compte. Rien n’est confié à un autre e-mail. Une fois l’établissement pris en main, la carte disparaît de la console et le lien indique que l’établissement a déjà un propriétaire.
 
-Comme pour Shangri-La, avec le secret `LATERRACE_OWNER_EMAIL` (journaux : « ✓ La Terrace: owner email recorded (…) »). La différence : la configuration de La Terrace n’est **pas** marquée comme terminée. Après sa connexion, le propriétaire passe donc par l’assistant de configuration (déjà prérempli : nom, slogan, téléphone, adresse, emplacement, couleurs, logo, photo de la devanture, menu). Avec lui :
-
-- vérifiez le téléphone et ajoutez son **WhatsApp** (il reçoit les commandes à emporter) et ses numéros Orange Money / Moov ;
-- définissez les **horaires d’ouverture** (Google indique seulement « ferme à 3 h ») ;
-- choisissez le **nombre de tables** (aucune n’a été créée ; la vente à emporter et la livraison existent déjà) ;
-- ajoutez les photos des plats (le menu a été importé sans photos de plats ; la photo de la devanture est déjà en place).
+L’ancienne méthode fonctionne toujours (Secrets Replit `SHANGRILA_OWNER_EMAIL` / `LATERRACE_OWNER_EMAIL`, puis republier), mais l’invitation depuis la console est plus simple et ne demande pas de republier.
 
 ## I. Liste de mise en service (à cocher avec le propriétaire)
 

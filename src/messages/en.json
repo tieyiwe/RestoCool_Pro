@@ -624,7 +624,12 @@
       "inviteResent": "Invitation sent again.",
       "promoCreated": "Campaign published.",
       "promoSaved": "Campaign updated.",
-      "promoDeleted": "Campaign deleted."
+      "promoDeleted": "Campaign deleted.",
+      "ownerInviteSent": "Invitation emailed to the owner.",
+      "ownerInviteNotSent": "Invitation ready, but no email was sent (email is not configured): copy the link or send it by WhatsApp.",
+      "ownerInviteFailed": "Invitation ready, but the email could not be sent: copy the link or send it by WhatsApp.",
+      "ownerInviteCancelled": "Invitation cancelled: the link no longer works.",
+      "ownerInviteOwnerExists": "This business already has an owner: no invitation needed."
     },
     "detail": {
       "orders30": "Orders (30 days)",
@@ -1451,6 +1456,24 @@
         "expired": "Expired",
         "refunded": "Refunded"
       }
+    },
+    "ownerInvite": {
+      "title": "Owner invitation",
+      "intro": "This business was prepared by RestoCool and has no owner yet. Type the owner's email: they get a link to the business page where they create their account (or sign in) with that email, become the owner and finish the setup where we left it.",
+      "email": "Owner's email",
+      "lang": "Email language",
+      "send": "Send the invitation",
+      "resend": "Send a new link",
+      "pending": "Invitation sent to",
+      "expired": "Invitation expired:",
+      "sentOn": "sent {date} ({count}×, by {by})",
+      "validUntil": "link valid until {date}",
+      "copy": "Copy the link",
+      "copied": "Copied",
+      "whatsapp": "Send by WhatsApp",
+      "whatsappText": "Laafi ! RestoCool a préparé la page de {name}. Pour en prendre la main, ouvrez ce lien et créez votre compte avec votre adresse e-mail : {link}",
+      "cancel": "Cancel the invitation",
+      "cancelConfirm": "Cancel this invitation? The link will stop working."
     }
   },
   "demo": {
@@ -4510,5 +4533,51 @@
       "preparing": "Being prepared",
       "ready": "Ready"
     }
+  },
+  "ownerInvite": {
+    "title": "Owner invitation",
+    "subtitle": "Invitation from the RestoCool team",
+    "heading": "{name} is waiting for you",
+    "intro": "The RestoCool team has prepared the page of {name}: your menu ({items} dishes and drinks), your logo and your photo are already online.",
+    "introNoItems": "The RestoCool team has prepared the page of {name}: it is already online.",
+    "forEmail": "Invitation for: {email}",
+    "steps": "How it works",
+    "step1": "Create your account (or sign in) with this email address.",
+    "step2": "Type the code you receive by email to confirm the address.",
+    "step3": "Complete what is missing (WhatsApp, opening hours, tables) and you are ready!",
+    "signUp": "Create my account",
+    "signIn": "I already have an account",
+    "google": "With a Gmail address, you can also choose “Continue with Google”.",
+    "seePage": "See the page of {name}",
+    "wrongTitle": "This is not the right account",
+    "wrongText": "You are signed in as {email}. This invitation is for {invited}.",
+    "switch": "Switch account",
+    "unverifiedTitle": "Confirm your email address",
+    "unverifiedText": "Your account is open, but its email address is not confirmed yet. Confirm it with the code you received by email, then come back to this link.",
+    "expiredTitle": "This link has expired",
+    "expiredText": "Ask the RestoCool team for a new link: it will be emailed to you again.",
+    "invalidTitle": "This link is not valid",
+    "invalidText": "Check that you opened the full link from the email, or ask the RestoCool team for a new link.",
+    "ownedTitle": "{name} already has an owner",
+    "ownedText": "If it is you, just open your space.",
+    "openApp": "Open my space",
+    "help": "Need help?",
+    "expires": "Personal link, valid until {date}.",
+    "email": {
+      "subject": "{name} is waiting for you on RestoCool",
+      "hello": "Hello!",
+      "now": "All that is left is to take it over: create your account with this email address ({email}), then complete in a few minutes what is missing (WhatsApp, opening hours, tables).",
+      "cta": "Take over {name}",
+      "get": "Then, from your phone:",
+      "get1": "receive your customers’ orders live;",
+      "get2": "print the QR codes of your tables;",
+      "get3": "add your team and follow your sales.",
+      "page": "Your page:",
+      "rc": "Your RC number:",
+      "linkText": "If the button does not open, copy this link into your browser:",
+      "private": "This link is personal and valid until {date}. A question? Just reply to this email."
+    },
+    "failedTitle": "The business could not be handed over right now",
+    "failedText": "Your account is the right one, but the business could not be handed over to you. Ask the RestoCool team for a new link."
   }
 }
