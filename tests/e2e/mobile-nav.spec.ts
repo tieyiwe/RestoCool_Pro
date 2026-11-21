@@ -14,7 +14,7 @@ test.describe("phones: home menu and console navigation", () => {
     await page.getByTestId("mobile-menu-button").click();
     const menu = page.getByTestId("mobile-menu");
     await expect(menu).toBeVisible();
-    for (const name of ["Fonctionnalités", "Comment ça marche", "Explorer", "Tarifs", "Questions", "Entrer un numéro RC", "Se connecter", "Essayer gratuitement"]) {
+    for (const name of ["Fonctionnalités", "Comment ça marche", "Les Bons Coins", "Tarifs", "Questions", "Entrer un numéro RC", "Se connecter", "Essayer gratuitement"]) {
       await expect(menu.getByRole("link", { name })).toBeVisible();
     }
     await expect(menu.getByRole("button", { name: "en", exact: true })).toBeVisible(); // language switch
@@ -24,7 +24,7 @@ test.describe("phones: home menu and console navigation", () => {
     await expect(page).toHaveURL(/\/$/);
     // A link goes where it says.
     await page.getByTestId("mobile-menu-button").click();
-    await page.getByTestId("mobile-menu").getByRole("link", { name: "Explorer" }).click();
+    await page.getByTestId("mobile-menu").getByRole("link", { name: "Les Bons Coins" }).click();
     await expect(page).toHaveURL(/\/restaurants/);
   });
 

@@ -51,7 +51,8 @@
       "signIn": "Sign in",
       "cta": "Try it free",
       "menu": "Menu",
-      "restaurants": "Businesses",
+      "restaurants": "Places to go",
+      "restaurantsShort": "Places",
       "openMenu": "Open the menu",
       "closeMenu": "Close the menu",
       "ctaShort": "Try it"

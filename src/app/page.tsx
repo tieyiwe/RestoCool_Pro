@@ -151,12 +151,14 @@ export default async function HomePage() {
             <Link href="/c" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold whitespace-nowrap hover:bg-sable lg:flex">
               {tc("short")}
             </Link>
-            <Link href="/sign-in" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold whitespace-nowrap hover:bg-sable md:flex">
+            <Link href="/sign-in" className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-semibold whitespace-nowrap hover:bg-sable lg:flex">
               {t("nav.signIn")}
             </Link>
             <Link href="/restaurants" aria-label={t("nav.restaurants")} className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-full bg-or px-2.5 text-sm font-bold whitespace-nowrap text-encre shadow-sm ring-1 ring-or/60 hover:brightness-105 sm:px-3 xl:hidden" data-testid="nav-explore-mobile">
-              <span aria-hidden>🔎</span>
-              <span className="hidden min-[380px]:inline">{t("nav.restaurants")}</span>
+              {/* Under 380 px: 🔎 only; phones: « Bons Coins »; tablets: 🔎 + short; from lg: 🔎 + full name. */}
+              <span aria-hidden className="min-[380px]:max-sm:hidden">🔎</span>
+              <span className="hidden min-[380px]:inline lg:hidden">{t("nav.restaurantsShort")}</span>
+              <span className="hidden lg:inline">{t("nav.restaurants")}</span>
             </Link>
             <Link href="/sign-up" className="inline-flex min-h-11 items-center rounded-xl bg-vert px-3 text-sm font-bold whitespace-nowrap text-creme hover:opacity-90 sm:px-4">
               <span className="sm:hidden">{t("nav.ctaShort")}</span>

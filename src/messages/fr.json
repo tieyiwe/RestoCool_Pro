@@ -51,7 +51,8 @@
       "signIn": "Se connecter",
       "cta": "Essayer gratuitement",
       "menu": "Menu",
-      "restaurants": "Explorer",
+      "restaurants": "Les Bons Coins",
+      "restaurantsShort": "Bons Coins",
       "openMenu": "Ouvrir le menu",
       "closeMenu": "Fermer le menu",
       "ctaShort": "Essayer"
