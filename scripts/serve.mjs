@@ -47,7 +47,8 @@ const waitPage = (title, text) =>
 /** The answer while the app is not there (start, or a crash being restarted by Replit). */
 function notReady(req, res) {
   if (res.headersSent || res.writableEnded) return;
-  if (req.url === "/" || req.url?.startsWith("/?") || wantsHtml(req)) {
+  const bot = PREVIEW_BOT.test(req.headers["user-agent"] ?? "");
+  if (!bot && (req.url === "/" || req.url?.startsWith("/?") || wantsHtml(req))) {
     res.writeHead(200, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex" });
     res.end(waitPage("RestoCool", "RestoCool se met à jour… · Updating…"));
   } else {
@@ -83,10 +84,14 @@ function hold(req, res) {
   });
 }
 
+// Link-preview and search robots: they keep the first page they get (often for days), so during a
+// restart they wait for the real page (with its share image) instead of the waiting page.
+const PREVIEW_BOT = /facebookexternalhit|facebot|whatsapp|twitterbot|telegrambot|slackbot|linkedinbot|discordbot|skypeuripreview|pinterest|redditbot|embedly|googlebot|bingbot|applebot|yandex|duckduckbot|snapchat|viber|instagram/i;
+
 const server = http.createServer((req, res) => {
   if (ready) return forward(req, res);
-  // The health check (and anyone opening the home page) gets an answer right away.
-  if (req.url === "/" || req.url?.startsWith("/?")) return notReady(req, res);
+  // The health check (and people opening the home page) get an answer right away.
+  if ((req.url === "/" || req.url?.startsWith("/?")) && !PREVIEW_BOT.test(req.headers["user-agent"] ?? "")) return notReady(req, res);
   hold(req, res);
 });
 server.keepAliveTimeout = 65_000; // longer than the platform proxy's, so it never reuses a closed socket

@@ -4,7 +4,7 @@ import { loadMenuData, loadRestaurant, PublicMenu } from "@/components/public-me
 import { getDb } from "@/db";
 import { businessMeta, mainRc } from "@/lib/seo/business";
 import { businessJsonLd } from "@/lib/seo/json-ld";
-import { NOINDEX, OG_BASE, siteBase } from "@/lib/seo/site";
+import { NOINDEX, OG_BASE_OWN_IMAGE, siteBase } from "@/lib/seo/site";
 import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     // An unpublished menu previewed by its owner is never indexed.
     robots: found.preview ? NOINDEX : { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
     alternates: found.preview ? undefined : { canonical: url },
-    openGraph: { ...OG_BASE, title, description, url, type: "website" },
+    openGraph: { ...OG_BASE_OWN_IMAGE, title, description, url, type: "website" },
     twitter: { card: "summary_large_image", title, description },
     appleWebApp: { capable: true, title: r.name, statusBarStyle: "default" },
   };

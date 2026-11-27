@@ -63,7 +63,9 @@ test("a business page: title, canonical, Open Graph, and Restaurant JSON-LD with
 
   const og = await request.get((body.match(/<meta property="og:image" content="https?:\/\/[^/]+([^"]+)"/) ?? [])[1]!);
   expect(og.status()).toBe(200);
-  expect(og.headers()["content-type"]).toBe("image/png");
+  // JPEG: light enough for WhatsApp previews (a photo card as PNG is over 1 MB).
+  expect(og.headers()["content-type"]).toBe("image/jpeg");
+  expect(Number(og.headers()["content-length"])).toBeLessThan(300_000);
 });
 
 test("a bus company is a LocalBusiness; the home page carries Organization, WebSite search, offers and FAQ", async ({ request }) => {
