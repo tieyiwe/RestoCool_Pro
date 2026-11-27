@@ -51,8 +51,8 @@
       "signIn": "Sign in",
       "cta": "Try it free",
       "menu": "Menu",
-      "restaurants": "Places to go",
-      "restaurantsShort": "Places",
+      "restaurants": "Must-Try Places",
+      "restaurantsShort": "Must-Try",
       "openMenu": "Open the menu",
       "closeMenu": "Close the menu",
       "ctaShort": "Try it"
@@ -2523,7 +2523,7 @@
     }
   },
   "directory": {
-    "title": "Businesses on RestoCool",
+    "title": "Must-Try Places on RestoCool",
     "intro": "Find a restaurant, maquis, bar, café or shop and open its menu. Search by name, city or RC number.",
     "featured": "Featured",
     "featuredBadge": "Featured",
