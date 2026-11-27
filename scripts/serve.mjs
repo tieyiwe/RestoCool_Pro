@@ -21,8 +21,10 @@
  * If the migrations fail, the process exits with an error: the previous version keeps serving.
  */
 import { spawn } from "node:child_process";
+import fs from "node:fs";
 import http from "node:http";
 import net from "node:net";
+import path from "node:path";
 
 const port = Number(process.env.PORT || 5000);
 const hostname = "0.0.0.0";
@@ -88,8 +90,34 @@ function hold(req, res) {
 // restart they wait for the real page (with its share image) instead of the waiting page.
 const PREVIEW_BOT = /facebookexternalhit|facebot|whatsapp|twitterbot|telegrambot|slackbot|linkedinbot|discordbot|skypeuripreview|pinterest|redditbot|embedly|googlebot|bingbot|applebot|yandex|duckduckbot|snapchat|viber|instagram/i;
 
+// Next's built files (/_next/static/…) never change for a given build: while Next.js starts or
+// restarts, the front server serves them itself from disk, so a page that is already open keeps
+// its scripts and styles instead of crashing. A file that is not there (a page of the previous
+// version) gets a 404 at once; the page then reloads itself into the new version.
+const STATIC_DIR = path.resolve(".next/static");
+const TYPES = { ".js": "application/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".json": "application/json", ".woff2": "font/woff2", ".woff": "font/woff", ".ttf": "font/ttf", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml", ".webp": "image/webp", ".ico": "image/x-icon", ".txt": "text/plain; charset=utf-8", ".map": "application/json" };
+
+function serveStatic(req, res) {
+  const rel = decodeURIComponent((req.url ?? "").split("?")[0].slice("/_next/static/".length));
+  const file = path.resolve(STATIC_DIR, rel);
+  if (!file.startsWith(STATIC_DIR + path.sep)) {
+    res.writeHead(400).end();
+    return;
+  }
+  fs.stat(file, (err, st) => {
+    if (err || !st.isFile()) {
+      res.writeHead(404, { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
+      return res.end("Not found");
+    }
+    res.writeHead(200, { "content-type": TYPES[path.extname(file)] ?? "application/octet-stream", "content-length": st.size, "cache-control": "public, max-age=31536000, immutable" });
+    if (req.method === "HEAD") return res.end();
+    fs.createReadStream(file).pipe(res);
+  });
+}
+
 const server = http.createServer((req, res) => {
   if (ready) return forward(req, res);
+  if ((req.method === "GET" || req.method === "HEAD") && req.url?.startsWith("/_next/static/")) return serveStatic(req, res);
   // The health check (and people opening the home page) get an answer right away.
   if ((req.url === "/" || req.url?.startsWith("/?")) && !PREVIEW_BOT.test(req.headers["user-agent"] ?? "")) return notReady(req, res);
   hold(req, res);
@@ -196,7 +224,11 @@ async function boot() {
     }
     await new Promise((r) => setTimeout(r, 500));
   }
-  if (last > 0) await Promise.all(["/", "/restaurants", "/sign-in"].map((p) => probe(p)));
+  // Load the main pages once so the first visitors don't wait for them (two at a time).
+  if (last > 0) {
+    const pages = ["/", "/restaurants", "/sign-in", "/tarifs", "/c", "/guide", "/app", "/r/shangri-la", "/r/la-terrace", "/r/restaurant-demo"];
+    for (let i = 0; i < pages.length; i += 2) await Promise.all(pages.slice(i, i + 2).map((p) => probe(p, 10_000)));
+  }
   ready = true;
   console.log(`✓ RestoCool serving (ready in ${((Date.now() - t0) / 1000).toFixed(1)} s, ${waiting.size} waiting request(s) released)`);
   for (const entry of waiting) {

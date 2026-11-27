@@ -1,6 +1,7 @@
 import { Beat } from "@/components/usage/beat";
 import { UpdateWatcher } from "@/components/update-watcher";
 import { buildVersion } from "@/lib/version";
+import { EARLY_RECOVER_SCRIPT } from "@/lib/recover";
 import type { Metadata, Viewport } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { BRAND } from "@/config/brand";
@@ -35,6 +36,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const tu = await getTranslations("update");
   return (
     <html lang={locale}>
+      <head>
+        {/* Right after a publish: a file of the previous version that no longer exists → reload once. */}
+        <script dangerouslySetInnerHTML={{ __html: EARLY_RECOVER_SCRIPT }} />
+      </head>
       <body className="min-h-dvh antialiased">
         {children}
         <Beat />
